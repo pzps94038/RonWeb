@@ -26,6 +26,20 @@ jobs:
             - name: Upload build artifact
               uses: actions/upload-artifact@v2
               with:
-                  name: build
+                  name: prerender
                   path: dist
                   retention-days: 1
+            - run: npm run build
+            - name: Upload build artifact
+              uses: actions/upload-artifact@v2
+              with:
+                  name: csr
+                  path: dist/RonWeb/browser
+                  retention-days: 1
+            - run: npm run build:gitHubPage
+            - name: Deploy to GitHub Pages
+              uses: JamesIves/github-pages-deploy-action@4.1.5
+              with:
+                branch: gh-pages
+                folder: dist/RonWeb/browser
+                token: ${{ secrets.TOKEN }}

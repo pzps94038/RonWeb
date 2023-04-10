@@ -9,6 +9,7 @@
     "start:local:darwin": "ng serve --open --proxy-config proxy.conf.local.json",
     "start:default": "ng serve --open --proxy-config proxy.conf.local.json",
     "build": "ng build",
+    "build:gitHubPage": "ng build --base-href /RonWeb/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "mock-service:win32": "cd osprey-mock-service && start cmd /c osprey-mock-service -f api.raml -p 3000",
