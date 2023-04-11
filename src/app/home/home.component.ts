@@ -1,11 +1,12 @@
-import { HeaderComponent } from './../shared/components/header/header.component';
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BannerComponent } from '../shared/components/banner/banner.component';
-import { AboutComponent } from '../shared/components/about/about.component';
-import { ServicesComponent } from '../shared/components/services/services.component';
-import { WorkComponent } from '../shared/components/work/work.component';
-import { ContactComponent } from '../shared/components/contact/contact.component';
+import { Component } from '@angular/core';
+import { AboutComponent } from './about/about.component';
+import { BannerComponent } from './banner/banner.component';
+import { ContactComponent } from './contact/contact.component';
+import { HeaderComponent } from './header/header.component';
+import { ServicesComponent } from './services/services.component';
+import { WorkComponent } from './work/work.component';
+import { NgTypedComponent } from '../shared/components/ng-typed/ng-typed.component';
 
 @Component({
   selector: 'app-home',
@@ -18,8 +19,15 @@ import { ContactComponent } from '../shared/components/contact/contact.component
     ServicesComponent,
     WorkComponent,
     ContactComponent,
+    NgTypedComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {}
+export class HomeComponent {
+  options = {
+    strings: ['Web Full-stack Develope'],
+    typeSpeed: 100,
+    loop: true,
+  };
+}
