@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AboutComponent } from './about/about.component';
-import { BannerComponent } from './banner/banner.component';
 import { ContactComponent } from './contact/contact.component';
 import { HeaderComponent } from './header/header.component';
 import { ServicesComponent } from './services/services.component';
@@ -14,7 +13,6 @@ import { NgTypedComponent } from '../shared/components/ng-typed/ng-typed.compone
   imports: [
     CommonModule,
     HeaderComponent,
-    BannerComponent,
     AboutComponent,
     ServicesComponent,
     WorkComponent,
