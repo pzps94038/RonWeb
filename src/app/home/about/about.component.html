@@ -1,11 +1,28 @@
-<div id="about" class="flex justify-around mt-[70px]">
-  <div class="font-medium">
-    <h5 class="text-xl">Hello, <span class="text-[#0872BF]">I'm</span></h5>
-    <h2 class="text-[#0872BF] text-3xl">Ron</h2>
-    <h3 class="text-[#0872BF] animate-textRgb text-2xl">Full-Stack Engineer</h3>
-    <p class="mt-7 font-open-sans text-lg">
-      <ng-typed [options]="options"></ng-typed>
-    </p>
+<div id="about" class="flex justify-around flex-wrap pt-5">
+  <div class="w-1/2 font-medium">
+    <h5 class="text-sm md:text-base lg:text-xl">Hello, <span class="text-[#0872BF]">I'm</span></h5>
+    <h2 class="text-[#0872BF] text-xl md:text-2xl lg:text-3xl">Ron</h2>
+    <h3 class="text-[#0872BF] animate-textRgb text-lg md:text-xl lg:text-2xl">
+      Full-Stack Engineer
+    </h3>
+    <ng-typed class="mt-7 font-open-sans text-sm md:text-base lg:text-lg" [options]="typedOptions">
+    </ng-typed>
   </div>
-  <div class="w-[500px] h-[636px]">image預留</div>
+  <div class="w-1/2 h-[300px] relative">
+    <ng-lottie class="absolute top-0 left-0 z-10" [speed]="0.8" [options]="astronotOptions">
+    </ng-lottie>
+    <ng-lottie class="w-24 md:w-36 lg:w-60 left-0 absolute z-0" [options]="moonOptions"></ng-lottie>
+  </div>
+</div>
+<div>
+  <a href="assets/pdf/RonResume.pdf" target="_blank" download="RonResume"> Download CV </a>
+</div>
+<div class="flex">
+  <span>查看我的</span>
+  <div>
+    <ul class="flex">
+      <li>github</li>
+      <li>linkedin</li>
+    </ul>
+  </div>
 </div>

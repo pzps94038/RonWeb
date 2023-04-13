@@ -10,6 +10,7 @@ import Typed, { TypedOptions } from 'typed.js';
 })
 export class NgTypedComponent implements AfterViewInit, OnDestroy {
   @Input() options!: TypedOptions;
+  @Input() class: string = '';
   @ViewChild('element') el?: ElementRef<HTMLSpanElement>;
   private _typed?: Typed;
 
