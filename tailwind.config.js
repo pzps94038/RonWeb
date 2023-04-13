@@ -25,7 +25,14 @@ module.exports = {
       // 設定圖片背景 使用bg-site
       backgroundImage: {},
       fontFamily: {
-        'open-sans': ['Open Sans', 'sans-serif'],
+        'open-sans': [
+          'Open Sans',
+          'Noto Sans CJK TC',
+          'Microsoft JhengHei',
+          'PingFang',
+          'STHeiti',
+          'sans-serif',
+        ],
       },
       animation: {
         textRgb: 'textRgb 3s infinite linear',
