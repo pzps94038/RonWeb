@@ -1,8 +1,9 @@
-<div
-  class="hidden lg:flex py-3 justify-between items-center top-0 bg-[#141A1A] w-full static lg:sticky z-50">
+<header
+  #header
+  class="hidden lg:flex py-3 justify-between items-center top-0 w-full absolute z-50 bg-transparent">
   <div class="ml-14 flex items-center">
     <a href="/">
-      <img src="assets/images/logo.png" class="w-16 h-10 object-cover" />
+      <img src="assets/images/logo.png" class="w-12 object-cover" />
     </a>
   </div>
   <div class="mr-14">
@@ -22,4 +23,30 @@
       </li>
     </ul>
   </div>
-</div>
+</header>
+
+<header #mobile>
+  <nav class="flex lg:hidden fixed flex-wrap bg-black top-0 left-0 right-0 z-50 py-2">
+    <div class="flex justify-between w-full">
+      <div class="ml-5 flex items-center">
+        <a href="/">
+          <img src="assets/images/logo.png" class="w-12 object-cover" />
+        </a>
+      </div>
+      <div class="menu-icon" [class.open]="mobileToggle" (click)="mobileToggle = !mobileToggle">
+        <div class="menu-icon_hamburger"></div>
+      </div>
+    </div>
+    <ul class="w-full h-0 overflow-hidden" [class.h-auto]="mobileToggle">
+      <li class="flex justify-center border-2 border-white p-2 text-xl" (click)="mobileGoToTop()">
+        <a href="javascript:void(0)">首頁</a>
+      </li>
+      <li class="flex justify-center border-2 border-white p-2 text-xl">
+        <a href="javascript:void(0)">Projects</a>
+      </li>
+      <li class="flex justify-center border-2 border-white p-2 text-xl">
+        <a href="javascript:void(0)">Resume</a>
+      </li>
+    </ul>
+  </nav>
+</header>

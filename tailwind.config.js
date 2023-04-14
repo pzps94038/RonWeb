@@ -23,7 +23,9 @@ module.exports = {
         accent: '#B809C3',
       },
       // 設定圖片背景 使用bg-site
-      backgroundImage: {},
+      backgroundImage: {
+        banner: "url('./assets/images/banner-bg.png')",
+      },
       fontFamily: {
         'open-sans': [
           'Open Sans',

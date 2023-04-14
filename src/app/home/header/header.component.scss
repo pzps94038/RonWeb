@@ -1,0 +1,55 @@
+$menu-color: rgb(255, 255, 255);
+$fatness: 5px;
+@mixin transition {
+  transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.menu-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  margin-left: 5px;
+  z-index: 1;
+  &_hamburger {
+    width: 100%;
+    height: $fatness;
+    background: $menu-color;
+    position: relative;
+    border-radius: 5px;
+    transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    &:before,
+    &:after {
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: $fatness;
+      background: $menu-color;
+      border-radius: 5px;
+      transform: translateY(-15px);
+      transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    &:before {
+      transform: translateY(-15px);
+    }
+    &:after {
+      transform: translateY(15px);
+    }
+  }
+  &.open {
+    .menu-icon_hamburger {
+      transform: translateX(-30px);
+      background: transparent;
+      &:before {
+        transform: translate(30px) rotate(45deg);
+        background: $menu-color;
+      }
+      &:after {
+        transform: translate(30px) rotate(-45deg);
+        background: $menu-color;
+      }
+    }
+  }
+}

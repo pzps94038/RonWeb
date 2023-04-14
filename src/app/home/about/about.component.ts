@@ -6,11 +6,12 @@ import {
   AnimationPathConfig,
   NgLottieComponent,
 } from 'src/app/shared/components/ng-lottie/ng-lottie.component';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [CommonModule, NgTypedComponent, NgLottieComponent],
+  imports: [CommonModule, NgTypedComponent, NgLottieComponent, HeaderComponent],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
 })
