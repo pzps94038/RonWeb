@@ -10,6 +10,12 @@ MIT
 @angular/router
 MIT
 
+@ng-icons/core
+MIT
+
+@ng-icons/heroicons
+MIT
+
 lottie-web
 MIT
 The MIT License (MIT)
