@@ -1,28 +1,54 @@
-<div id="about" class="flex justify-around flex-wrap pt-14 container">
-  <div class="w-1/2 font-medium">
-    <h5 class="text-sm md:text-base lg:text-xl">Hello, <span class="text-[#0872BF]">I'm</span></h5>
-    <h2 class="text-[#0872BF] text-xl md:text-2xl lg:text-3xl">Ron</h2>
-    <h3 class="text-[#0872BF] animate-textRgb text-lg md:text-xl lg:text-2xl">
-      Full-Stack Engineer
+<div id="about" class="pt-14 flex flex-wrap justify-center mx-auto container h-screen items-center">
+  <div class="w-full md:w-1/2 font-medium my-5 text-center md:text-left">
+    <h3 class="border-2 inline-block p-2 mb-2 mt-5 md:mt-0 bg-opacity-50 bg-indigo-800">
+      Welcome to my Portfolio
     </h3>
-    <ng-typed class="mt-7 font-open-sans text-sm md:text-base lg:text-lg" [options]="typedOptions">
+    <h5 class="text-sm md:text-base lg:text-2xl">Hello, <span class="text-[#0872BF]">I'm</span></h5>
+    <h2 class="text-[#0872BF] text-xl md:text-2xl lg:text-3xl">Ron</h2>
+    <ng-typed
+      class="text-[#0872BF] animate-textRgb text-lg md:text-xl lg:text-2xl"
+      [options]="typedOptions">
     </ng-typed>
-  </div>
-  <div class="w-1/2 h-[300px] relative">
-    <ng-lottie class="absolute top-0 left-0 z-10" [speed]="0.8" [options]="astronotOptions">
-    </ng-lottie>
-    <ng-lottie class="w-24 md:w-36 lg:w-60 left-0 absolute z-0" [options]="moonOptions"></ng-lottie>
-  </div>
-</div>
-<div>
-  <a href="assets/pdf/RonResume.pdf" target="_blank" download="RonResume"> Download CV </a>
-</div>
-<div class="flex">
-  <span>查看我的</span>
-  <div>
-    <ul class="flex">
-      <li>github</li>
-      <li>linkedin</li>
+    <ul>
+      <li>喜愛精進開發技術</li>
+      <li>保持自我學習的熱情</li>
+      <li>執行從零到有的後台系統</li>
+      <li>構想多種錯誤情況處理</li>
     </ul>
+    <ul class="my-2 flex">
+      <li class="mr-2">
+        <a
+          href="https://www.linkedin.com/in/%E9%9B%B2%E8%81%98-%E7%BE%85-524564233/"
+          target="_blank">
+          <img src="assets/images/linkedin.svg" alt="linkedin" width="38" height="38" />
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/pzps94038?tab=repositories" target="_blank">
+          <img src="assets/images/github.svg" alt="linkedin" width="38" height="38" />
+        </a>
+      </li>
+    </ul>
+    <div class="my-2">
+      <a
+        href="assets/pdf/RonResume.pdf"
+        target="_blank"
+        download="RonResume"
+        class="relative inline-block text-lg group">
+        <span
+          class="relative z-10 block px-5 py-3 overflow-hidden font-medium leading-tight text-gray-800 transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white">
+          <span class="absolute inset-0 w-full h-full px-5 py-3 rounded-lg bg-gray-50"></span>
+          <span
+            class="absolute left-0 w-48 h-48 -ml-2 transition-all duration-300 origin-top-right -rotate-90 -translate-x-full translate-y-12 bg-gray-900 group-hover:-rotate-180 ease"></span>
+          <span class="relative">Download CV</span>
+        </span>
+        <span
+          class="absolute bottom-0 right-0 w-full h-12 -mb-1 -mr-1 transition-all duration-200 ease-linear bg-gray-900 rounded-lg group-hover:mb-0 group-hover:mr-0"
+          data-rounded="rounded-lg"></span>
+      </a>
+    </div>
+  </div>
+  <div class="w-full md:w-1/3 hidden md:flex items-center justify-center">
+    <ng-lottie [speed]="0.8" [options]="astronotOptions"> </ng-lottie>
   </div>
 </div>
