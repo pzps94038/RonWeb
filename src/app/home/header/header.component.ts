@@ -10,10 +10,16 @@ import { CommonModule } from '@angular/common';
 import { Subject, debounceTime, filter, fromEvent, takeUntil } from 'rxjs';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroBars3 } from '@ng-icons/heroicons/outline';
+import { FormsModule } from '@angular/forms';
+export type Option = {
+  name: string;
+  value: string;
+};
+export type Options = Option[];
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, NgIconComponent],
+  imports: [CommonModule, NgIconComponent, FormsModule],
   providers: [provideIcons({ heroBars3 })],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
@@ -21,6 +27,20 @@ import { heroBars3 } from '@ng-icons/heroicons/outline';
 export class HeaderComponent implements AfterViewInit, OnDestroy {
   @ViewChild('header') header?: ElementRef<HTMLElement>;
   @ViewChild('mobile') mobile?: ElementRef<HTMLElement>;
+  links: Options = [
+    {
+      name: '首頁',
+      value: 'about',
+    },
+    {
+      name: '技能',
+      value: 'skills',
+    },
+    {
+      name: '聯絡我們',
+      value: 'contact',
+    },
+  ];
   mobileToggle: boolean = false;
   private _destroy$ = new Subject<any>();
   constructor(private render: Renderer2) {}
@@ -33,30 +53,12 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   /**
    * 滾到特定元素
    */
-  scrollToElement(id: string) {
+  scrollToElement(id: string, toggle?: boolean) {
     const dom = document.getElementById(id) as HTMLElement | undefined;
     dom?.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  /**
-   * 滾動最上面
-   */
-  goToTop() {
-    window.scroll({ top: 0, behavior: 'smooth' });
-  }
-
-  /**
-   * 手機滾動最上面
-   */
-  mobileGoToTop() {
-    window.scroll({ top: 0, behavior: 'smooth' });
-    this.mobileToggle = false;
-  }
-
-  mobileScrollToElement(id: string) {
-    const dom = document.getElementById(id) as HTMLElement | undefined;
-    dom?.scrollIntoView({ behavior: 'smooth' });
-    this.mobileToggle = false;
+    if (toggle !== undefined) {
+      this.mobileToggle = toggle;
+    }
   }
 
   ngAfterViewInit() {

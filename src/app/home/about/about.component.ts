@@ -17,7 +17,7 @@ import { HeaderComponent } from '../header/header.component';
 })
 export class AboutComponent {
   typedOptions: TypedOptions = {
-    strings: ['Full-Stack Engineer'],
+    strings: ['Full-Stack Developer'],
     loop: true,
     typeSpeed: 100,
     backSpeed: 30,
