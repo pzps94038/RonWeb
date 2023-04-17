@@ -1,0 +1,32 @@
+<label
+  *ngIf="labelName"
+  [for]="control?.name"
+  [ngClass]="{
+      'text-green-700 dark:text-green-500': control?.touched && !control?.errors,
+      'text-red-700 dark:text-red-500': control?.touched && control?.errors
+    }"
+  class="block mb-2 text-sm font-medium"
+  >{{ labelName }}</label
+>
+<input
+  [type]="type"
+  [id]="control?.name"
+  [(ngModel)]="val"
+  (ngModelChange)="change()"
+  [ngClass]="{
+    class,
+    'input-error': control?.touched && control?.errors,
+    'input-accent': control?.touched && !control?.errors
+  }"
+  [class.input-xs]="size === 'xs'"
+  [class.input-sm]="size === 'sm'"
+  [class.input-md]="size === 'md'"
+  [class.input-lg]="size === 'lg'"
+  [disabled]="disabled"
+  class="input input-bordered w-full max-w-xs"
+  [placeholder]="placeholder" />
+<ng-container *ngIf="control?.touched && control?.errors">
+  <p *ngIf="control?.errors?.['required']" class="mt-2 text-sm text-red-600 dark:text-red-500">
+    <span class="font-medium">此欄位必填</span>
+  </p>
+</ng-container>

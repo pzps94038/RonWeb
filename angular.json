@@ -31,9 +31,13 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/assets/scss/font.scss"
+              "src/assets/scss/font.scss",
+              "node_modules/swiper/swiper-bundle.min.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "aos"
+            ]
           },
           "configurations": {
             "production": {
