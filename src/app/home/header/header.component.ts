@@ -7,9 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject, debounceTime, filter, fromEvent, takeUntil } from 'rxjs';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroBars3 } from '@ng-icons/heroicons/outline';
+import { Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 export type Option = {
   name: string;
@@ -19,8 +17,7 @@ export type Options = Option[];
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, NgIconComponent, FormsModule],
-  providers: [provideIcons({ heroBars3 })],
+  imports: [CommonModule, FormsModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
@@ -42,10 +39,14 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     },
   ];
   mobileToggle: boolean = false;
+  private _observers: IntersectionObserver[] = [];
   private _destroy$ = new Subject<any>();
   constructor(private render: Renderer2) {}
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
+    for (const observer of this._observers) {
+      observer.disconnect();
+    }
     this._destroy$.next(null);
     this._destroy$.complete();
   }
@@ -75,6 +76,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
         }
       });
       observer.observe(header);
+      this._observers.push(observer);
       fromEvent(window, 'scroll')
         .pipe(
           filter(() => !!!window.scrollY),

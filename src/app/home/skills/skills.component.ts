@@ -8,30 +8,32 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import Swiper from 'swiper';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { heroArrowLeftCircle, heroArrowRightCircle, heroBars3 } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-skills',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgIconComponent],
+  providers: [provideIcons({ heroArrowLeftCircle, heroArrowRightCircle })],
   templateUrl: './skills.component.html',
   styleUrls: ['./skills.component.scss'],
 })
 export class SkillsComponent implements AfterViewInit {
-  private _swiper?: Swiper;
-  @ViewChild('swiper') private _el?: ElementRef<HTMLDivElement>;
+  swiper?: Swiper;
+  @ViewChild('el') private _el?: ElementRef<HTMLDivElement>;
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     if (this._el?.nativeElement) {
-      this._swiper = new Swiper(this._el?.nativeElement, {
-        pagination: {
-          el: '.swiper-pagination',
-        },
-        navigation: true,
-        slidesPerView: 1,
+      this.swiper = new Swiper(this._el?.nativeElement, {
         breakpoints: {
-          768: {
+          320: {
             slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 3,
             spaceBetween: 20,
           },
           1024: {
