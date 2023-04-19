@@ -3,7 +3,7 @@
   class="hidden lg:flex py-3 justify-between items-center top-0 w-full absolute z-50 bg-transparent">
   <div class="ml-14 flex items-center">
     <a href="/">
-      <img src="assets/images/logo.png" class="w-12 object-cover" />
+      <img src="assets/images/logo.png" class="w-12 object-cover" alt="logo" />
     </a>
   </div>
   <div class="mr-14">
@@ -23,14 +23,13 @@
     <div class="flex justify-between w-full">
       <div class="ml-5 flex items-center">
         <a href="/">
-          <img src="assets/images/logo.png" class="w-12 object-cover" />
+          <img src="assets/images/logo.png" class="w-12 object-cover" alt="logo" />
         </a>
       </div>
       <div class="menu-icon" [class.open]="mobileToggle" (click)="mobileToggle = !mobileToggle">
         <div class="menu-icon_hamburger"></div>
       </div>
     </div>
-    <!-- <input type="checkbox" [(ngModel)]="mobileToggle" /> -->
     <div class="collapse w-full">
       <input type="checkbox" [hidden]="true" [(ngModel)]="mobileToggle" />
       <div class="collapse-content">
