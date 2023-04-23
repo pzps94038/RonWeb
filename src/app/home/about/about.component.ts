@@ -1,3 +1,4 @@
+import { ScrollAnimateDirective } from './../../shared/directive/scroll-animate.directive';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgTypedComponent } from 'src/app/shared/components/ng-typed/ng-typed.component';
@@ -11,7 +12,7 @@ import { HeaderComponent } from '../header/header.component';
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [CommonModule, NgTypedComponent, NgLottieComponent, HeaderComponent],
+  imports: [CommonModule, NgTypedComponent, NgLottieComponent, HeaderComponent, ScrollAnimateDirective],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
 })

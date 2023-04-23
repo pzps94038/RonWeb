@@ -34,6 +34,10 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
       value: 'skills',
     },
     {
+      name: '專案經歷',
+      value: 'experience',
+    },
+    {
       name: '聯絡我們',
       value: 'contact',
     },
