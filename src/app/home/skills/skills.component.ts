@@ -25,7 +25,8 @@ export class SkillsComponent implements AfterViewInit, OnDestroy {
   swiper?: Swiper;
   @ViewChild('el') private _el?: ElementRef<HTMLDivElement>;
   constructor(
-    private render: Renderer2
+    private render: Renderer2,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngAfterViewInit() {
@@ -82,6 +83,7 @@ export class SkillsComponent implements AfterViewInit, OnDestroy {
       for(let i = start; i <= end; i++) {
         observer.observe(this.swiper.slides[i]);
       }
+      this.cdr.detectChanges();
     }
   }
 
