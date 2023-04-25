@@ -24,27 +24,24 @@ import { heroArrowLeftCircle, heroArrowRightCircle, heroBars3 } from '@ng-icons/
 export class SkillsComponent implements AfterViewInit, OnDestroy {
   swiper?: Swiper;
   @ViewChild('el') private _el?: ElementRef<HTMLDivElement>;
-  constructor(
-    private render: Renderer2,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private render: Renderer2, private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     if (this._el?.nativeElement) {
       const animate = 'animate__fadeIn';
       // 進畫面
-      const observer = new IntersectionObserver((entrys)=> {
-        for(const entry of entrys) {
+      const observer = new IntersectionObserver(entries => {
+        for (const entry of entries) {
           const el = entry.target as Element;
-          if(entry.isIntersecting) {
+          if (entry.isIntersecting) {
             this.render.addClass(el, 'animate__animated');
             this.render.addClass(el, animate);
           } else {
             let classList: string[] = [];
-            el.classList.forEach(a=> classList.push(a));
+            el.classList.forEach(a => classList.push(a));
             // 移除swiper以外的class
-            classList = classList.filter(a=> !new RegExp(/^swiper-slide/).test(a));
-            for(const ngClass of classList) {
+            classList = classList.filter(a => !new RegExp(/^swiper-slide/).test(a));
+            for (const ngClass of classList) {
               this.render.removeClass(el, ngClass);
             }
           }
@@ -52,15 +49,15 @@ export class SkillsComponent implements AfterViewInit, OnDestroy {
       });
       this.swiper = new Swiper(this._el?.nativeElement, {
         on: {
-          slideChange: (e) => {
+          slideChange: e => {
             const slidesPerView = e.params.slidesPerView as number;
             const start = e.activeIndex;
             const end = e.activeIndex + slidesPerView - 1;
-            for(let i = start; i <= end; i++) {
+            for (let i = start; i <= end; i++) {
               observer.observe(e.slides[i]);
             }
           },
-          destroy: () => observer.disconnect()
+          destroy: () => observer.disconnect(),
         },
         breakpoints: {
           320: {
@@ -80,7 +77,7 @@ export class SkillsComponent implements AfterViewInit, OnDestroy {
       const slidesPerView = this.swiper.params.slidesPerView as number;
       const start = this.swiper.activeIndex;
       const end = this.swiper.activeIndex + slidesPerView - 1;
-      for(let i = start; i <= end; i++) {
+      for (let i = start; i <= end; i++) {
         observer.observe(this.swiper.slides[i]);
       }
       this.cdr.detectChanges();
