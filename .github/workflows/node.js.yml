@@ -16,19 +16,6 @@ jobs:
 
         steps:
             - uses: actions/checkout@v2
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v2
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: 'npm'
-            - run: npm ci
-            - run: npm run prerender
-            - name: Upload build artifact
-              uses: actions/upload-artifact@v2
-              with:
-                  name: prerender
-                  path: dist
-                  retention-days: 1
             - run: npm run build
             - name: Upload build artifact
               uses: actions/upload-artifact@v2
@@ -44,8 +31,16 @@ jobs:
                 folder: dist/RonWeb/browser
                 token: ${{ secrets.TOKEN }}
             #heroku-deploy
-            - uses: akhileshns/heroku-deploy@v3.12.13 # This is the action
+            - name: Login to Heroku
+              uses: akhileshns/heroku-deploy@v3.12.13
               with:
-                heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-                heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-                heroku_email: ${{secrets.HEROKU_EMAIL}}
+                heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+                heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v2.7.0
+              with:
+                context: .
+                push: true
+                tags: ${{ secrets.HEROKU_APP_NAME }}
+            - name: Release to Heroku
+              run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
