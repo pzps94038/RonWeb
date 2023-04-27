@@ -43,3 +43,9 @@ jobs:
                 branch: gh-pages
                 folder: dist/RonWeb/browser
                 token: ${{ secrets.TOKEN }}
+            #heroku-deploy
+            - uses: akhileshns/heroku-deploy@v3.12.13 # This is the action
+              with:
+                heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+                heroku_email: ${{secrets.HEROKU_EMAIL}}
