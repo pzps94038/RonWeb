@@ -20,7 +20,8 @@
     "serve:ssr": "node dist/RonWeb/server/main.js",
     "build:ssr": "ng build && ng run RonWeb:server",
     "prerender": "ng run RonWeb:prerender",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "heroku-postbuild": "npm run prerender && npm run start"
   },
   "private": true,
   "dependencies": {
