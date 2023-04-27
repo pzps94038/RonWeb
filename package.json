@@ -21,7 +21,8 @@
     "build:ssr": "ng build && ng run RonWeb:server",
     "prerender": "ng run RonWeb:prerender",
     "prepare": "husky install",
-    "heroku-postbuild": "npm run prerender"
+    "heroku-postbuild": "npm run prerender",
+    "build:docker": "docker build -t ronweb . --no-cache"
   },
   "private": true,
   "dependencies": {
