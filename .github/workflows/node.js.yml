@@ -8,12 +8,9 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-
         strategy:
             matrix:
                 node-version: [16.x]
-                # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
         steps:
             - uses: actions/checkout@v2
             - name: Use Node.js ${{ matrix.node-version }}
@@ -24,19 +21,23 @@ jobs:
             - run: npm ci
             - run: npm run prerender
             - name: Upload build artifact
+              if: github.ref == 'main'
               uses: actions/upload-artifact@v2
               with:
                   name: prerender
                   path: dist
                   retention-days: 1
             - run: npm run build:gitHubPage
+              if: github.ref == 'main'
             - name: Deploy to GitHub Pages
+              if: github.ref == 'main'
               uses: JamesIves/github-pages-deploy-action@4.1.5
               with:
                 branch: gh-pages
                 folder: dist/RonWeb/browser
                 token: ${{ secrets.TOKEN }}
             - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
+              if: github.ref == 'main'
               uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
               with:
                 email: ${{ secrets.HEROKU_EMAIL }}
