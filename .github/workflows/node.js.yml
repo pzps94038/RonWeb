@@ -16,12 +16,18 @@ jobs:
 
         steps:
             - uses: actions/checkout@v2
-            - run: npm run build
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v2
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+            - run: npm ci
+            - run: npm run prerender
             - name: Upload build artifact
               uses: actions/upload-artifact@v2
               with:
-                  name: csr
-                  path: dist/RonWeb/browser
+                  name: prerender
+                  path: dist
                   retention-days: 1
             - run: npm run build:gitHubPage
             - name: Deploy to GitHub Pages
