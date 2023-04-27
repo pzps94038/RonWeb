@@ -43,3 +43,11 @@ jobs:
                 branch: gh-pages
                 folder: dist/RonWeb/browser
                 token: ${{ secrets.TOKEN }}
+            - run: deploy heroku
+            - uses: actions/checkout@v2
+            - uses: akhileshns/heroku-deploy@v3.12.13 # This is the action
+              with:
+                heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                heroku_app_name: "ronweb"
+                heroku_email: "pzps94038@yahoo.com.tw"
+                usedocker: true
