@@ -36,16 +36,11 @@ jobs:
                 branch: gh-pages
                 folder: dist/RonWeb/browser
                 token: ${{ secrets.TOKEN }}
-            - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
+            - name: Deploy Heroku
               if: github.ref == 'refs/heads/main'
-              uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
+              uses: akhileshns/heroku-deploy@v3.12.13
               with:
                 email: ${{ secrets.HEROKU_EMAIL }}
                 heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
                 heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-            - name: Deploy to Heroku
-              if: github.ref == 'refs/heads/main'
-              run: |
-                heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
-                heroku stack:set container
-                git push heroku main
+                stack: "container"
