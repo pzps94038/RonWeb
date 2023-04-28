@@ -2,7 +2,7 @@
   #header
   class="hidden lg:flex py-3 justify-between items-center top-0 w-full absolute z-50 bg-transparent">
   <div class="ml-14 flex items-center">
-    <a href="javascript:void(0)" (click)="scrollToElement('about')">
+    <a href="https://ronweb.herokuapp.com/" (click)="scrollToElement('about')">
       <img src="assets/images/logo.png" class="w-12 object-cover" alt="logo" loading="lazy" />
     </a>
   </div>
@@ -12,7 +12,7 @@
         *ngFor="let link of links"
         class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-[#0872BF] cursor-pointer mx-8"
         (click)="scrollToElement(link.value)">
-        <a href="javascript:void(0)">{{ link.name }}</a>
+        <div>{{ link.name }}</div>
       </li>
     </ul>
   </div>
@@ -22,7 +22,7 @@
   <nav class="flex lg:hidden fixed flex-wrap bg-black top-0 left-0 right-0 z-50 py-2">
     <div class="flex justify-between w-full">
       <div class="ml-5 flex items-center">
-        <a href="javascript:void(0)" (click)="scrollToElement('about')">
+        <a href="https://ronweb.herokuapp.com/" (click)="scrollToElement('about')">
           <img src="assets/images/logo.png" class="w-12 object-cover" alt="logo" loading="lazy" />
         </a>
       </div>
@@ -38,7 +38,7 @@
             *ngFor="let link of links"
             class="flex justify-center border-2 border-white p-2 text-xl cursor-pointer"
             (click)="scrollToElement(link.value, false)">
-            <a href="javascript:void(0)">{{ link.name }}</a>
+            <div>{{ link.name }}</div>
           </li>
         </ul>
       </div>
