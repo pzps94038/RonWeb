@@ -43,15 +43,9 @@ jobs:
                 email: ${{ secrets.HEROKU_EMAIL }}
                 heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
                 heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-                # Dockerfile directory.
-                dockerfile_directory: ./
-                # Dockerfile name.
-                dockerfile_name: Dockerfile
-                # (Optional, default: "")
-                # Additional options of docker build command.
-                docker_options: "--no-cache"
-                # (Optional, default: "web")
-                # Select the process type for which you want the docker container to be uploaded.
-                # By default, this argument is set to "web".
-                # For more information look at https://devcenter.heroku.com/articles/process-model
-                process_type: web
+            - name: Deploy to Heroku
+              if: github.ref == 'refs/heads/main'
+              run: |
+                heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
+                heroku stack:set container
+                git push heroku main
