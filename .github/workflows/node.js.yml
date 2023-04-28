@@ -36,14 +36,6 @@ jobs:
                 branch: gh-pages
                 folder: dist/RonWeb/browser
                 token: ${{ secrets.TOKEN }}
-            - name: Login to Heroku
-              if: github.ref == 'refs/heads/main'
-              run: |
-                echo ${{ secrets.HEROKU_API_KEY }} | base64 --decode | tr -d '\r' | heroku login
-            - name: Add Heroku Git Remote
-              if: github.ref == 'refs/heads/main'
-              run: |
-                heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
             - name: Deploy Heroku
               if: github.ref == 'refs/heads/main'
               uses: akhileshns/heroku-deploy@v3.12.13
