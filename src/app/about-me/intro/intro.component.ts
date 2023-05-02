@@ -1,4 +1,4 @@
-import { ScrollAnimateDirective } from './../../shared/directive/scroll-animate.directive';
+import { ScrollAnimateDirective } from '../../shared/directive/scroll-animate.directive';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgTypedComponent } from 'src/app/shared/components/ng-typed/ng-typed.component';
@@ -7,16 +7,22 @@ import {
   AnimationPathConfig,
   NgLottieComponent,
 } from 'src/app/shared/components/ng-lottie/ng-lottie.component';
-import { HeaderComponent } from '../header/header.component';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 
 @Component({
-  selector: 'app-about',
+  selector: 'app-intro',
   standalone: true,
-  imports: [CommonModule, NgTypedComponent, NgLottieComponent, HeaderComponent, ScrollAnimateDirective],
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.scss'],
+  imports: [
+    CommonModule,
+    NgTypedComponent,
+    NgLottieComponent,
+    HeaderComponent,
+    ScrollAnimateDirective,
+  ],
+  templateUrl: './intro.component.html',
+  styleUrls: ['./intro.component.scss'],
 })
-export class AboutComponent {
+export class IntroComponent {
   typedOptions: TypedOptions = {
     strings: ['Full-Stack Developer'],
     loop: true,

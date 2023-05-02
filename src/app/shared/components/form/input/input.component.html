@@ -23,7 +23,7 @@
   [class.input-md]="size === 'md'"
   [class.input-lg]="size === 'lg'"
   [disabled]="disabled"
-  class="input input-bordered w-full max-w-xs"
+  class="input input-bordered w-full"
   [placeholder]="placeholder" />
 <ng-container *ngIf="control?.touched && control?.errors">
   <p *ngIf="control?.errors?.['required']" class="mt-2 text-sm text-red-600 dark:text-red-500">

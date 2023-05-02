@@ -1,28 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { AboutComponent } from './about/about.component';
+import { IntroComponent } from './intro/intro.component';
 import { ContactComponent } from './contact/contact.component';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from '../shared/components/header/header.component';
 import { NgTypedComponent } from '../shared/components/ng-typed/ng-typed.component';
 import { SkillsComponent } from './skills/skills.component';
 import { ExperienceComponent } from './experience/experience.component';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-about-me',
   standalone: true,
   imports: [
     CommonModule,
-    HeaderComponent,
-    AboutComponent,
+    IntroComponent,
     SkillsComponent,
     ExperienceComponent,
     ContactComponent,
     NgTypedComponent,
   ],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  templateUrl: './about-me.component.html',
+  styleUrls: ['./about-me.component.scss'],
 })
-export class HomeComponent {
+export class AboutMeComponent {
   options = {
     strings: ['Web Full-stack Develope'],
     typeSpeed: 100,
