@@ -29,7 +29,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 export class BlogComponent {
   constructor(private http: HttpClient) {
     this.http
-      .get('https://ron-web-api.herokuapp.com/api/a0rticleLabel')
+      .get('https://ron-web-api.herokuapp.com/api/articleLabel')
       .subscribe(res => console.warn(res));
   }
 }
