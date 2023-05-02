@@ -7,8 +7,6 @@ import { ScrollAnimateDirective } from 'src/app/shared/directive/scroll-animate.
   standalone: true,
   imports: [CommonModule, ScrollAnimateDirective],
   templateUrl: './experience.component.html',
-  styleUrls: ['./experience.component.scss']
+  styleUrls: ['./experience.component.scss'],
 })
-export class ExperienceComponent {
-
-}
+export class ExperienceComponent {}

@@ -9,6 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 export type Option = {
   name: string;
   value: string;
@@ -17,7 +18,7 @@ export type Options = Option[];
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
@@ -27,19 +28,11 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   links: Options = [
     {
       name: '首頁',
-      value: 'about',
+      value: '/',
     },
     {
-      name: '技能',
-      value: 'skills',
-    },
-    {
-      name: '專案經歷',
-      value: 'experience',
-    },
-    {
-      name: '聯絡我們',
-      value: 'contact',
+      name: '關於我',
+      value: '/about-me',
     },
   ];
   mobileToggle: boolean = false;
@@ -53,17 +46,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     }
     this._destroy$.next(null);
     this._destroy$.complete();
-  }
-
-  /**
-   * 滾到特定元素
-   */
-  scrollToElement(id: string, toggle?: boolean) {
-    const dom = document.getElementById(id) as HTMLElement | undefined;
-    dom?.scrollIntoView({ behavior: 'smooth' });
-    if (toggle !== undefined) {
-      this.mobileToggle = toggle;
-    }
   }
 
   ngAfterViewInit() {
