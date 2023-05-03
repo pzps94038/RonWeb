@@ -1,0 +1,19 @@
+{
+  "returnCode": "00",
+  "returnMessage": "string",
+  "data": {
+    "articleId": "string",
+    "articleTitle": "string",
+    "content": "string",
+    "categoryId": "string",
+    "categoryName": "string",
+    "viewCount": 0,
+    "labels": [
+      {
+        "labelId": "string",
+        "labelName": "string"
+      }
+    ],
+    "createDate": "2023-05-03T12:02:18.878Z"
+  }
+}

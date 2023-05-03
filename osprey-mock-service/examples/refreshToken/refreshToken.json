@@ -1,0 +1,8 @@
+{
+  "returnCode": "string",
+  "returnMessage": "string",
+  "data": {
+    "accessToken": "string",
+    "refreshToken": "string"
+  }
+}
