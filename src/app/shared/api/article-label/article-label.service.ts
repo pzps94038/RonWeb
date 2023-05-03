@@ -31,6 +31,6 @@ export class ArticleLabelService {
   }
 
   createArticleLabel(req: CreateArticleLabelRequest) {
-    return this.http.post<BaseMessageResponse>(`${environment.baseUrl}/articleLabel/`, req);
+    return this.http.post<BaseMessageResponse>(`${environment.baseUrl}/articleLabel`, req);
   }
 }
