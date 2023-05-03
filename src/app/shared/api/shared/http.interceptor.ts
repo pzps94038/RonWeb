@@ -16,15 +16,13 @@ export class HttpInterceptor implements HttpInterceptor {
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const accessToken = '';
-    const headers = new HttpHeaders({
-      ...req.headers,
-      Authorization: `Bearer ${accessToken}`,
+    const authReq = req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${accessToken}`),
     });
-    const request = req.clone({ headers });
-    return next.handle(request).pipe(
+    return next.handle(authReq).pipe(
       catchError((err: HttpErrorResponse) => {
         if (err.status === 401) {
-          return this.refreshToken(next, request, err);
+          return this.refreshToken(next, authReq, err);
         } else {
           throw err;
         }
