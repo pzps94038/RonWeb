@@ -1,12 +1,132 @@
 #%RAML 1.0
-baseUri: http://localhost:3001/
-title: SinoPac.Cawho.Api
+baseUri: http://localhost:3000/
+title: RonWeb
 version: 0.1
-
-/api/misc/getMyHostInfo:
+/api/article/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the article to update
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/article/updated.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the article to retrieve
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/article/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the article to retrieve
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/article/delete.json
+/api/article:
   get:
     responses:
       200:
         body:
           application/json:
-            example: !include examples/MyHostInfo.json
+            example: !include examples/article/get.json
+/api/articleCategory/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the article to update
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/articleCategory/updated.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the article to retrieve
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/articleCategory/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the article to retrieve
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/articleCategory/delete.json
+/api/articleCategory:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/articleCategory/get.json
+/api/articleLabel/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the article to update
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/articleLabel/updated.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the article to retrieve
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/articleLabel/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the article to retrieve
+        type: string
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/articleLabel/delete.json
+/api/articleLabel:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/articleLabel/get.json
+/api/login:
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/login/login.json
+/api/refreshToken:
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/refreshToken/refreshToken.json

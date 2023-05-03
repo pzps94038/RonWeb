@@ -11,6 +11,8 @@ import { TypedOptions } from 'typed.js';
 import { InputComponent } from '../shared/components/form/input/input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from 'src/environments/environment.prod';
+import { ArticleLabelService } from '../shared/api/article-label/article-label.service';
 
 @Component({
   selector: 'app-blog',
@@ -27,9 +29,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   styleUrls: ['./blog.component.scss'],
 })
 export class BlogComponent {
-  constructor(private http: HttpClient) {
-    this.http
-      .get('https://ron-web-api.herokuapp.com/api/articleLabel')
-      .subscribe(res => console.warn(res));
+  constructor(private http: ArticleLabelService) {
+    this.http.getArticleLabel().subscribe(res => console.warn(res));
   }
 }
