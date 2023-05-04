@@ -1,16 +1,16 @@
 import { BaseResponse } from '../shared/shared.model';
 
-export type GetCategoryResponse = BaseResponse<Categorys>;
+export type GetArticleCategoryResponse = BaseResponse<ArticleCategorys>;
 
-export type Category = {
+export type ArticleCategory = {
   categoryId: string;
   categoryName: string;
 };
 
-export type Categorys = Category[];
+export type ArticleCategorys = ArticleCategory[];
 
-export type CreateCategoryRequest = {
+export type CreateArticleCategoryRequest = {
   categoryName: string;
 };
 
-export type ModifyCategoryNameRequest = Category;
+export type ModifyArticleCategoryRequest = ArticleCategory;
