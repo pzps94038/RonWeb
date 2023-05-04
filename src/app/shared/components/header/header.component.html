@@ -1,6 +1,4 @@
-<header
-  #header
-  class="hidden lg:flex py-3 justify-between items-center top-0 w-full absolute z-50 bg-transparent">
+<header #header class="hidden lg:flex py-3 justify-between items-center top-0 w-full absolute z-50 bg-transparent">
   <div class="ml-14 flex items-center">
     <a routerLink="/">
       <img src="assets/images/logo.png" class="w-12 object-cover" alt="logo" loading="lazy" />
@@ -8,8 +6,7 @@
   </div>
   <div class="mr-14">
     <ul class="flex justify-around">
-      <li
-        *ngFor="let link of links"
+      <li *ngFor="let link of links"
         class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-[#0872BF] cursor-pointer mx-8">
         <a [routerLink]="link.value">{{ link.name }}</a>
       </li>
@@ -33,9 +30,7 @@
       <input type="checkbox" [hidden]="true" [(ngModel)]="mobileToggle" />
       <div class="collapse-content">
         <ul class="w-full overflow-hidden bg-primary text-secondary-content">
-          <li
-            *ngFor="let link of links"
-            class="flex justify-center border-2 border-white p-2 text-xl cursor-pointer">
+          <li *ngFor="let link of links" class="flex justify-center border-2 border-white p-2 text-xl cursor-pointer">
             <a [routerLink]="link.value">{{ link.name }}</a>
           </li>
         </ul>

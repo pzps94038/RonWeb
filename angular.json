@@ -7,7 +7,14 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "standalone": true
+        },
+        "@schematics/angular:directive": {
+          "standalone": true
+        },
+        "@schematics/angular:pipe": {
+          "standalone": true
         }
       },
       "root": "",
@@ -54,13 +61,7 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ]
+              "outputHashing": "all"
             },
             "development": {
               "buildOptimizer": false,
@@ -123,6 +124,7 @@
               "outputHashing": "media"
             },
             "development": {
+              "buildOptimizer": false,
               "optimization": false,
               "sourceMap": true,
               "extractLicenses": false,
@@ -166,8 +168,5 @@
         }
       }
     }
-  },
-  "cli": {
-    "analytics": "dd3cbfa4-fecd-498e-a80e-5cf512f18b15"
   }
 }
