@@ -1,18 +1,18 @@
 import { BaseResponse } from '../shared/shared.model';
 
-export type GetArticleLabelResponse = BaseResponse<Labels>;
+export type GetArticleLabelResponse = BaseResponse<ArticleLabels>;
 
-export type GetArticleLabelByIdResponse = BaseResponse<Label>;
+export type GetArticleLabelByIdResponse = BaseResponse<ArticleLabel>;
 
-export type Label = {
+export type ArticleLabel = {
   labelId: string;
   labelName: string;
 };
 
-export type Labels = Label[];
+export type ArticleLabels = ArticleLabel[];
 
 export type CreateArticleLabelRequest = {
   labelName: string;
 };
 
-export type ModifyArticleLabelRequest = Label;
+export type ModifyArticleLabelRequest = ArticleLabel;
