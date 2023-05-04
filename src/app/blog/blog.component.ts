@@ -1,17 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../shared/components/header/header.component';
-import {
-  AnimationPathConfig,
-  NgLottieComponent,
-} from '../shared/components/ng-lottie/ng-lottie.component';
-import { NgTypedComponent } from '../shared/components/ng-typed/ng-typed.component';
 import { ScrollAnimateDirective } from '../shared/directive/scroll-animate.directive';
-import { TypedOptions } from 'typed.js';
 import { InputComponent } from '../shared/components/form/input/input.component';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { environment } from 'src/environments/environment.prod';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { ArticleLabelService } from '../shared/api/article-label/article-label.service';
 
 @Component({

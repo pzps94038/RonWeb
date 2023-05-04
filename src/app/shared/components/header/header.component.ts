@@ -2,14 +2,17 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Inject,
   OnDestroy,
+  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Subject, filter, fromEvent, takeUntil } from 'rxjs';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { filter, fromEvent } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export type Option = {
   name: string;
   value: string;
@@ -37,21 +40,18 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   ];
   mobileToggle: boolean = false;
   private _observers: IntersectionObserver[] = [];
-  private _destroy$ = new Subject<any>();
-  constructor(private render: Renderer2) {}
+  constructor(private render: Renderer2, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnDestroy() {
     for (const observer of this._observers) {
       observer.disconnect();
     }
-    this._destroy$.next(null);
-    this._destroy$.complete();
   }
 
   ngAfterViewInit() {
     const header = this.header?.nativeElement;
     const mobile = this.mobile?.nativeElement;
-    if (header && mobile) {
+    if (header && mobile && isPlatformBrowser(this.platformId)) {
       const observer = new IntersectionObserver(([{ isIntersecting, target }]) => {
         // 離開焦點
         if (!isIntersecting) {
@@ -66,7 +66,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
       fromEvent(window, 'scroll')
         .pipe(
           filter(() => !!!window.scrollY),
-          takeUntil(this._destroy$),
+          takeUntilDestroyed(),
         )
         .subscribe(() => {
           this.render.addClass(header, 'absolute');
