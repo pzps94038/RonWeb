@@ -1,5 +1,5 @@
-import { Component, DestroyRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { CommonModule, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputComponent } from 'src/app/shared/components/form/input/input.component';
 import { TextAreaComponent } from 'src/app/shared/components/form/text-area/text-area.component';
@@ -10,7 +10,7 @@ import {
 import { ScrollAnimateDirective } from 'src/app/shared/directive/scroll-animate.directive';
 import { environment } from 'src/environments/environment';
 import { ContactUsService } from 'src/app/shared/api/contact-us/contact-us.service';
-import { from, switchMap } from 'rxjs';
+import { delay, finalize, from, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SwalIcon, SwalService } from 'src/app/shared/service/swal.service';
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
@@ -23,7 +23,7 @@ declare const grecaptcha: Grecaptcha;
   selector: 'app-contact',
   standalone: true,
   imports: [
-    CommonModule,
+    NgIf,
     ReactiveFormsModule,
     InputComponent,
     TextAreaComponent,
@@ -36,6 +36,7 @@ declare const grecaptcha: Grecaptcha;
 export class ContactComponent {
   contactUs = inject(ContactUsService);
   swal = inject(SwalService);
+  loading = signal(false);
   form = new FormGroup({
     subject: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -54,6 +55,7 @@ export class ContactComponent {
       const subject = this.form.get('subject')!.value as string;
       const email = this.form.get('email')!.value as string;
       const message = this.form.get('message')!.value as string;
+      this.loading.set(true);
       from(grecaptcha.execute(environment.grecaptchaToken, { action: 'contactUs' }))
         .pipe(
           switchMap(clientToken =>
@@ -65,6 +67,7 @@ export class ContactComponent {
             }),
           ),
           takeUntilDestroyed(this._destroyRef),
+          finalize(() => this.loading.set(false)),
         )
         .subscribe(({ returnCode, returnMessage }) => {
           if (returnCode === ReturnCode.Success) {
