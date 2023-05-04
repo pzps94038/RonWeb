@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ArticleLabelService } from '../shared/api/article-label/article-label.service';
 import { DeviceService } from '../shared/service/device.service';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { GetArticleLabelResponse } from '../shared/api/article-label/article-label.model';
 import { Observable } from 'rxjs';
 
@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
     InputComponent,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule,
+    RouterOutlet,
   ],
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.scss'],

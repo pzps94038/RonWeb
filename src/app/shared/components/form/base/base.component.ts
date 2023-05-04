@@ -15,6 +15,7 @@ export const CONTROL_VALUE_ACCESSOR = (component: Type<any>) => {
 })
 export abstract class BasicComponent implements ControlValueAccessor, OnInit {
   @Input() labelName?: string;
+  @Input() labelClass: string = '';
   @Input() class: string = '';
   protected val = '';
   // 用來接收 setDisabledState 的狀態

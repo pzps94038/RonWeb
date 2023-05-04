@@ -14,4 +14,5 @@ import { FormsModule } from '@angular/forms';
 export class TextAreaComponent extends BasicComponent {
   @Input() placeholder: string = '';
   @Input() size: 'xs' | 'sm' | 'md' | 'lg' = 'md';
+  @Input() rows?: number | string;
 }

@@ -36,7 +36,12 @@
           <li
             *ngFor="let link of links"
             class="flex justify-center border-2 border-white p-2 text-xl cursor-pointer">
-            <a [routerLink]="link.value" class="w-full text-center">{{ link.name }}</a>
+            <a
+              [routerLink]="link.value"
+              class="w-full text-center"
+              (click)="mobileToggle = !mobileToggle"
+              >{{ link.name }}</a
+            >
           </li>
         </ul>
       </div>

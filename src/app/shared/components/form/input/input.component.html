@@ -1,11 +1,12 @@
 <label
   *ngIf="labelName"
   [for]="control?.name"
+  [class]="labelClass"
   [ngClass]="{
       'text-green-700 dark:text-green-500': control?.touched && !control?.errors,
       'text-red-700 dark:text-red-500': control?.touched && control?.errors
     }"
-  class="block mb-2 text-sm font-medium"
+  class="block"
   >{{ labelName }}</label
 >
 <input
@@ -13,8 +14,8 @@
   [id]="control?.name"
   [(ngModel)]="val"
   (ngModelChange)="change()"
+  [class]="class"
   [ngClass]="{
-    class,
     'input-error': control?.touched && control?.errors,
     'input-accent': control?.touched && !control?.errors
   }"
@@ -23,7 +24,7 @@
   [class.input-md]="size === 'md'"
   [class.input-lg]="size === 'lg'"
   [disabled]="disabled"
-  class="input input-bordered w-full"
+  class="input input-bordered"
   [placeholder]="placeholder" />
 <ng-container *ngIf="control?.touched && control?.errors">
   <p *ngIf="control?.errors?.['required']" class="mt-2 text-sm text-red-600 dark:text-red-500">

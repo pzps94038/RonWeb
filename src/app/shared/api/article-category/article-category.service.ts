@@ -12,7 +12,7 @@ import { BaseMessageResponse } from '../shared/shared.model';
   providedIn: 'root',
 })
 export class ArticleCategoryService {
-  http = inject(HttpClient);
+  private http = inject(HttpClient);
 
   getArticleCategory() {
     return this.http.get<GetArticleCategoryResponse>(`${environment.baseUrl}/articleCategory`);
