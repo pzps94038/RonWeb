@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { GetArticleByIdResponse, GetArticleResponse } from './article.model';
 import { environment } from 'src/environments/environment';
 
@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class ArticleService {
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   getArticle() {
     return this.http.get<GetArticleResponse>(`${environment.baseUrl}/article`);
