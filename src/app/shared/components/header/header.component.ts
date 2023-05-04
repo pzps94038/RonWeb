@@ -1,12 +1,15 @@
+import { DeviceService } from './../../service/device.service';
 import {
   AfterViewInit,
   Component,
+  DestroyRef,
   ElementRef,
   Inject,
   OnDestroy,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { filter, fromEvent } from 'rxjs';
@@ -31,7 +34,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   links: Options = [
     {
       name: '首頁',
-      value: '/',
+      value: '/blog',
     },
     {
       name: '關於我',
@@ -40,7 +43,8 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   ];
   mobileToggle: boolean = false;
   private _observers: IntersectionObserver[] = [];
-  constructor(private render: Renderer2, @Inject(PLATFORM_ID) private platformId: Object) {}
+  private _destroyRef = inject(DestroyRef);
+  constructor(private render: Renderer2, private device: DeviceService) {}
 
   ngOnDestroy() {
     for (const observer of this._observers) {
@@ -51,7 +55,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     const header = this.header?.nativeElement;
     const mobile = this.mobile?.nativeElement;
-    if (header && mobile && isPlatformBrowser(this.platformId)) {
+    if (header && mobile && this.device.isClient) {
       const observer = new IntersectionObserver(([{ isIntersecting, target }]) => {
         // 離開焦點
         if (!isIntersecting) {
@@ -66,7 +70,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
       fromEvent(window, 'scroll')
         .pipe(
           filter(() => !!!window.scrollY),
-          takeUntilDestroyed(),
+          takeUntilDestroyed(this._destroyRef),
         )
         .subscribe(() => {
           this.render.addClass(header, 'absolute');

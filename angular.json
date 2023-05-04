@@ -158,6 +158,7 @@
           "options": {
             "routes": [
               "/",
+              "/blog",
               "/about-me"
             ]
           },

@@ -1,8 +1,8 @@
-import { Routes } from "@angular/router";
+import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'blog',
     loadComponent: () => import('./blog/blog.component').then(m => m.BlogComponent),
   },
   {
@@ -12,6 +12,6 @@ export const routes: Routes = [
   {
     path: '**',
     pathMatch: 'full',
-    redirectTo: '',
+    redirectTo: '/blog',
   },
 ];
