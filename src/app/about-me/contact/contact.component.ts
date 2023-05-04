@@ -38,6 +38,7 @@ export class ContactComponent {
   swal = inject(SwalService);
   form = new FormGroup({
     subject: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     message: new FormControl('', [Validators.required]),
   });
 
@@ -51,6 +52,7 @@ export class ContactComponent {
     this.form.markAllAsTouched();
     if (this.form.valid) {
       const subject = this.form.get('subject')!.value as string;
+      const email = this.form.get('email')!.value as string;
       const message = this.form.get('message')!.value as string;
       from(grecaptcha.execute(environment.grecaptchaToken, { action: 'contactUs' }))
         .pipe(
@@ -58,6 +60,7 @@ export class ContactComponent {
             this.contactUs.sendContactUsMail({
               subject,
               body: message,
+              email,
               clientToken,
             }),
           ),
