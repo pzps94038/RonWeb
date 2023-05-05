@@ -1,5 +1,21 @@
 {
   "returnCode": "00",
   "returnMessage": "取得資料成功",
-  "data": []
+  "data": [
+    {
+      "articleId": "string",
+      "articleTitle": "string",
+      "description": "string",
+      "categoryId": "string",
+      "categoryName": "string",
+      "viewCount": 0,
+      "labels": [
+        {
+          "labelId": "string",
+          "labelName": "string"
+        }
+      ],
+      "createDate": "2023-05-04T05:39:08.080Z"
+    }
+  ]
 }
