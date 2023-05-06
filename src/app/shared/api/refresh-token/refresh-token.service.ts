@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class RefreshTokenService {
-  http = inject(HttpClient);
+  private http = inject(HttpClient);
 
   refreshToken(req: RefreshTokenRequest) {
     return this.http.post<RefreshTokenResponse>(`${environment.baseUrl}/refreshToken`, req);

@@ -12,7 +12,7 @@ import { BaseMessageResponse } from '../shared/shared.model';
   providedIn: 'root',
 })
 export class ArticleLabelService {
-  http = inject(HttpClient);
+  private http = inject(HttpClient);
 
   getArticleLabel() {
     return this.http.get<GetArticleLabelResponse>(`${environment.baseUrl}/articleLabel`);

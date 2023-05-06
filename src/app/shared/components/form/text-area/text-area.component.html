@@ -1,29 +1,31 @@
 <label
   *ngIf="labelName"
   [for]="control?.name"
+  [class]="labelClass"
   [ngClass]="{
       'text-green-700 dark:text-green-500': control?.touched && !control?.errors,
       'text-red-700 dark:text-red-500': control?.touched && control?.errors
     }"
-  class="block mb-2 text-sm font-medium"
+  class="block"
   >{{ labelName }}</label
 >
 <textarea
+  [rows]="rows"
   [id]="control?.name"
   [placeholder]="placeholder"
+  [class]="class"
   [class.textarea-xs]="size === 'xs'"
   [class.textarea-sm]="size === 'sm'"
   [class.textarea-md]="size === 'md'"
   [class.textarea-lg]="size === 'lg'"
   [ngClass]="{
-    class,
     'textarea-error': control?.touched && control?.errors,
     'textarea-accent': control?.touched && !control?.errors
   }"
   [disabled]="disabled"
   [(ngModel)]="val"
   (ngModelChange)="change()"
-  class="textarea textarea-bordered w-full max-w-xs"></textarea>
+  class="textarea textarea-bordered"></textarea>
 <ng-container *ngIf="control?.touched && control?.errors">
   <p *ngIf="control?.errors?.['required']" class="mt-2 text-sm text-red-600 dark:text-red-500">
     <span class="font-medium">此欄位必填</span>
