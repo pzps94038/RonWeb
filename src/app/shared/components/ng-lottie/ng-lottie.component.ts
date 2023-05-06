@@ -1,6 +1,15 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import Lottie, { AnimationConfigWithPath, AnimationItem, RendererType } from 'lottie-web';
+import { DeviceService } from '../../service/device.service';
 export type AnimationPathConfig<T extends RendererType = 'svg'> = Omit<
   AnimationConfigWithPath<T>,
   'container'
@@ -24,9 +33,9 @@ export class NgLottieComponent implements AfterViewInit, OnDestroy {
   @ViewChild('element') el?: ElementRef<HTMLDivElement>;
   private _isLoading = false;
   private _item?: AnimationItem;
-
+  device = inject(DeviceService);
   ngAfterViewInit() {
-    if (this.el) {
+    if (this.el && this.device.isClient) {
       if (this.lazyLoading) {
         const observer = new IntersectionObserver(([entry]) => {
           if (!this._isLoading && entry.isIntersecting) {

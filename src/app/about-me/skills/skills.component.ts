@@ -1,5 +1,4 @@
 import {
-  AfterContentInit,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -7,11 +6,13 @@ import {
   OnDestroy,
   Renderer2,
   ViewChild,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import Swiper from 'swiper';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroArrowLeftCircle, heroArrowRightCircle, heroBars3 } from '@ng-icons/heroicons/outline';
+import { heroArrowLeftCircle, heroArrowRightCircle } from '@ng-icons/heroicons/outline';
+import { DeviceService } from 'src/app/shared/service/device.service';
 
 @Component({
   selector: 'app-skills',
@@ -22,12 +23,16 @@ import { heroArrowLeftCircle, heroArrowRightCircle, heroBars3 } from '@ng-icons/
   styleUrls: ['./skills.component.scss'],
 })
 export class SkillsComponent implements AfterViewInit, OnDestroy {
-  swiper?: Swiper;
+  swiper = signal<Swiper | undefined>(undefined);
   @ViewChild('el') private _el?: ElementRef<HTMLDivElement>;
-  constructor(private render: Renderer2, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private render: Renderer2,
+    private device: DeviceService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngAfterViewInit() {
-    if (this._el?.nativeElement) {
+    if (this._el?.nativeElement && this.device.isClient) {
       const animate = 'animate__fadeIn';
       // 進畫面
       const observer = new IntersectionObserver(entries => {
@@ -47,7 +52,7 @@ export class SkillsComponent implements AfterViewInit, OnDestroy {
           }
         }
       });
-      this.swiper = new Swiper(this._el?.nativeElement, {
+      const swiper = new Swiper(this._el?.nativeElement, {
         on: {
           slideChange: e => {
             const slidesPerView = e.params.slidesPerView as number;
@@ -74,17 +79,18 @@ export class SkillsComponent implements AfterViewInit, OnDestroy {
           },
         },
       });
-      const slidesPerView = this.swiper.params.slidesPerView as number;
-      const start = this.swiper.activeIndex;
-      const end = this.swiper.activeIndex + slidesPerView - 1;
+      this.swiper.set(swiper);
+      const slidesPerView = swiper.params.slidesPerView as number;
+      const start = swiper.activeIndex;
+      const end = swiper.activeIndex + slidesPerView - 1;
       for (let i = start; i <= end; i++) {
-        observer.observe(this.swiper.slides[i]);
+        observer.observe(swiper.slides[i]);
       }
       this.cdr.detectChanges();
     }
   }
 
   ngOnDestroy() {
-    this.swiper?.destroy();
+    this.swiper()?.destroy();
   }
 }

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   CreateArticleCategoryRequest,
   GetArticleCategoryResponse,
@@ -12,7 +12,7 @@ import { BaseMessageResponse } from '../shared/shared.model';
   providedIn: 'root',
 })
 export class ArticleCategoryService {
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   getArticleCategory() {
     return this.http.get<GetArticleCategoryResponse>(`${environment.baseUrl}/articleCategory`);

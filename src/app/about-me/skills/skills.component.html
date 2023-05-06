@@ -172,18 +172,18 @@
       </div>
     </div>
     <ng-icon
-      *ngIf="swiper?.activeIndex !== 0"
+      *ngIf="swiper()?.activeIndex !== 0"
       class="left-0 top-1/2 absolute z-10 hover:cursor-pointer -translate-y-[25px]"
       name="heroArrowLeftCircle"
       size="50"
-      (click)="swiper?.slidePrev()">
+      (click)="swiper()?.slidePrev()">
     </ng-icon>
     <ng-icon
-      *ngIf="!swiper?.isEnd"
+      *ngIf="!swiper()?.isEnd"
       class="right-0 top-1/2 absolute z-10 hover:cursor-pointer -translate-y-[25px]"
       name="heroArrowRightCircle"
       size="50"
-      (click)="swiper?.slideNext()">
+      (click)="swiper()?.slideNext()">
     </ng-icon>
   </div>
 </div>

@@ -8,8 +8,6 @@ import { HeaderComponent } from './shared/components/header/header.component';
   standalone: true,
   imports: [CommonModule, RouterModule, HeaderComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  title = 'RonWeb';
-}
+export class AppComponent {}

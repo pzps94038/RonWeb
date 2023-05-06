@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import {
   CreateArticleLabelRequest,
@@ -12,7 +12,7 @@ import { BaseMessageResponse } from '../shared/shared.model';
   providedIn: 'root',
 })
 export class ArticleLabelService {
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   getArticleLabel() {
     return this.http.get<GetArticleLabelResponse>(`${environment.baseUrl}/articleLabel`);
