@@ -31,7 +31,12 @@
           placeholder="請輸入訊息" />
       </div>
       <div class="flex justify-end">
-        <button class="btn btn-primary w-28 mb-5">送出</button>
+        <button
+          [disabled]="loading()"
+          [class.loading]="loading()"
+          class="btn btn-primary w-28 mb-5">
+          送出
+        </button>
       </div>
     </form>
   </div>
