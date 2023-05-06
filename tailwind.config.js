@@ -54,6 +54,11 @@ module.exports = {
           '83%': { color: 'rgb(255,0,255)' },
           '91%': { color: 'rgb(255,0,127)' },
         },
+        shimmer: {
+          '100%': {
+            transform: 'translateX(100%)',
+          },
+        },
       },
     },
   },

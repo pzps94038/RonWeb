@@ -17,6 +17,7 @@ export abstract class BasicComponent implements ControlValueAccessor, OnInit {
   @Input() labelName?: string;
   @Input() labelClass: string = '';
   @Input() class: string = '';
+  @Input() showErrorMsg: boolean = true;
   protected val = '';
   // 用來接收 setDisabledState 的狀態
   protected disabled = false;

@@ -1,5 +1,26 @@
 {
   "returnCode": "00",
   "returnMessage": "取得資料成功",
-  "data": []
+  "data": [
+    {
+      "categoryId": "1",
+      "categoryName": "分類1"
+    },
+    {
+      "categoryId": "2",
+      "categoryName": "分類2"
+    },
+    {
+      "categoryId": "3",
+      "categoryName": "分類3"
+    },
+    {
+      "categoryId": "4",
+      "categoryName": "分類4"
+    },
+    {
+      "categoryId": "5",
+      "categoryName": "分類5"
+    }
+  ]
 }

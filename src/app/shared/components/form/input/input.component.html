@@ -26,7 +26,7 @@
   [disabled]="disabled"
   class="input input-bordered"
   [placeholder]="placeholder" />
-<ng-container *ngIf="control?.touched && control?.errors">
+<ng-container *ngIf="control?.touched && control?.errors && showErrorMsg">
   <p *ngIf="control?.errors?.['required']" class="mt-2 text-sm text-red-600 dark:text-red-500">
     <span class="font-medium">此欄位必填</span>
   </p>
