@@ -1,0 +1,25 @@
+<div class="p-5 bg-slate-800 rounded-md mb-5">
+  <h3 class="text-xl">文章標籤</h3>
+  <ng-container *ngIf="!isError(); else error">
+    <ng-container *ngIf="!isLoading(); else loading">
+      <div class="my-1" *ngFor="let label of labels()">
+        <a class="link link-accent">{{ label.labelName }}</a>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-template #loading>
+    <div
+      class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+    <div
+      class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+    <div
+      class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+    <div
+      class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+    <div
+      class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+  </ng-template>
+  <ng-template #error>
+    <app-error (refresh)="getArticleLabel()" />
+  </ng-template>
+</div>
