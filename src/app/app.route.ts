@@ -2,6 +2,11 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: '/blog',
+  },
+  {
     path: 'blog',
     loadComponent: () => import('./blog/blog.component').then(m => m.BlogComponent),
     loadChildren: () => import('./blog/blog.route').then(m => m.routes),

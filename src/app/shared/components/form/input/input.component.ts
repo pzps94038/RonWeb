@@ -15,4 +15,5 @@ export class InputComponent extends BasicComponent {
   @Input() type: string = 'text';
   @Input() placeholder: string = '';
   @Input() size: 'xs' | 'sm' | 'md' | 'lg' = 'md';
+  @Input() inputmode: string = 'text';
 }

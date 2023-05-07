@@ -24,6 +24,7 @@
   [class.input-md]="size === 'md'"
   [class.input-lg]="size === 'lg'"
   [disabled]="disabled"
+  [inputMode]="inputmode"
   class="input input-bordered"
   [placeholder]="placeholder" />
 <ng-container *ngIf="control?.touched && control?.errors && showErrorMsg">

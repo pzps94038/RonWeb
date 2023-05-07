@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.route';
@@ -12,5 +12,6 @@ export const appConfig: ApplicationConfig = {
     // 路由
     provideRouter(routes),
     provideClientHydration(),
+    importProvidersFrom([]),
   ],
 };

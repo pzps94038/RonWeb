@@ -11,7 +11,7 @@
       <li
         *ngFor="let link of links"
         class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-[#0872BF] cursor-pointer mx-8">
-        <a [routerLink]="link.value">{{ link.name }}</a>
+        <a class="w-full" [routerLink]="link.value">{{ link.name }}</a>
       </li>
     </ul>
   </div>
