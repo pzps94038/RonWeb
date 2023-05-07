@@ -6,11 +6,15 @@ import { ErrorComponent } from 'src/app/shared/components/error/error.component'
 import { SharedService } from 'src/app/shared/service/shared.service';
 import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
 import { ArticleLabels } from 'src/app/shared/api/article-label/article-label.model';
+import { RouterLink } from '@angular/router';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { heroTag } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-article-label',
   standalone: true,
-  imports: [CommonModule, ErrorComponent],
+  imports: [CommonModule, ErrorComponent, RouterLink, NgIconComponent],
+  providers: [provideIcons({ heroTag })],
   templateUrl: './article-label.component.html',
   styleUrls: ['./article-label.component.scss'],
 })
