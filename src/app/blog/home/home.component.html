@@ -5,26 +5,22 @@
       [title]="article.articleTitle"
       [date]="article.createDate"
       [category]="{
-    categoryId: article.categoryId,
-    categoryName: article.categoryName
-  }"
+        categoryId: article.categoryId,
+        categoryName: article.categoryName
+      }"
       [previewContent]="article.previewContent"
       (category)="navigateCategory($event)"
       (showMore)="showMore(article.articleId)" />
   </ng-container>
 </ng-container>
 <ng-template #loading>
-  <div
-    class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
-  <div
-    class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
-  <div
-    class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
-  <div
-    class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
-  <div
-    class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+  <app-loading-card></app-loading-card>
+  <app-loading-card></app-loading-card>
+  <app-loading-card></app-loading-card>
 </ng-template>
 <ng-template #error>
-  <app-error (refresh)="getArticle()" />
+  <div class="bg-slate-800 rounded-md mx-0 md:mx-5 p-5 mb-5">
+    <app-error (refresh)="getArticle()" />
+  </div>
 </ng-template>
+<app-pagination [total]="total()" (change)="getArticle($event)"></app-pagination>
