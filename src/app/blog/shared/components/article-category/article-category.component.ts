@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -24,6 +24,7 @@ export class ArticleCategoryComponent {
   categorys = signal<ArticleCategorys>([]);
   isLoading = signal(false);
   isError = signal(false);
+  private _destroyRef = inject(DestroyRef);
   constructor() {
     this.getArticleCategory();
   }
@@ -39,7 +40,7 @@ export class ArticleCategoryComponent {
           throw err;
         }),
         finalize(() => this.isLoading.set(false)),
-        takeUntilDestroyed(),
+        takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
         if (this.sharedSrv.ifSuccess(res)) {

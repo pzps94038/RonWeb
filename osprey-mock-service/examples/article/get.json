@@ -2,7 +2,7 @@
   "returnCode": "00",
   "returnMessage": "string",
   "data": {
-    "total": 100,
+    "total": 23,
     "articles": [
       {
         "articleId": "string",
@@ -11,24 +11,6 @@
         "categoryId": "string",
         "categoryName": "string",
         "viewCount": 0,
-        "labels": [
-          {
-            "labelId": "string",
-            "labelName": "string"
-          },
-          {
-            "labelId": "string",
-            "labelName": "string"
-          },
-          {
-            "labelId": "string",
-            "labelName": "string"
-          },
-          {
-            "labelId": "string",
-            "labelName": "string"
-          }
-        ],
         "createDate": "2023-05-08T13:22:00.124Z"
       }
     ]

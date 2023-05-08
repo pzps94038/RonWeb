@@ -10,11 +10,18 @@ import { catchError, finalize, delay } from 'rxjs';
 import { Router } from '@angular/router';
 import { ArticleCategory } from 'src/app/shared/api/article-category/article-category.model';
 import { ErrorComponent } from 'src/app/shared/components/error/error.component';
+import { LoadingCardComponent } from '../shared/components/loading-card/loading-card.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ArticleCardComponent, PaginationComponent, ErrorComponent],
+  imports: [
+    CommonModule,
+    ArticleCardComponent,
+    PaginationComponent,
+    ErrorComponent,
+    LoadingCardComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -33,11 +40,11 @@ export class HomeComponent implements OnInit {
   }
 
   getArticle(page?: number) {
+    this.isError.set(false);
     this.isLoading.set(true);
     this.articleSrv
-      .getArticle()
+      .getArticle(page)
       .pipe(
-        delay(10000),
         catchError(err => {
           this.isError.set(true);
           throw err;
