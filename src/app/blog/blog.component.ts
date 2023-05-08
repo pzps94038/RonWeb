@@ -8,7 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { DeviceService } from '../shared/service/device.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { ArticleCategoryComponent } from './shared/components/article-category/article-category.component';
-import { ArticleLabelComponent } from './shared/components/article-label/article-label.component';
 
 @Component({
   selector: 'app-blog',
@@ -23,7 +22,6 @@ import { ArticleLabelComponent } from './shared/components/article-label/article
     RouterOutlet,
     ReactiveFormsModule,
     ArticleCategoryComponent,
-    ArticleLabelComponent,
   ],
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.scss'],

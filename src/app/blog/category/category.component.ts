@@ -1,7 +1,9 @@
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-category',
@@ -15,7 +17,13 @@ export class CategoryComponent implements OnInit {
   router = inject(Router);
   category = signal<string | undefined>(undefined);
   private _destroyRef = inject(DestroyRef);
+
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    this.route.paramMap
+      .pipe(
+        map(params => params.get('id')),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
   }
 }
