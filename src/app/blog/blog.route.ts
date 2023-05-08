@@ -10,10 +10,6 @@ export const routes: Routes = [
     loadComponent: () => import('./search/search.component').then(m => m.SearchComponent),
   },
   {
-    path: 'label/:id',
-    loadComponent: () => import('./label/label.component').then(m => m.LabelComponent),
-  },
-  {
     path: 'category/:id',
     loadComponent: () => import('./category/category.component').then(m => m.CategoryComponent),
   },

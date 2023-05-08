@@ -1,17 +1,21 @@
-import { ArticleLabels } from '../article-label/article-label.model';
 import { BaseResponse } from '../shared/shared.model';
 
-export type GetArticleResponse = BaseResponse<Articles>;
+export type GetArticleResponse = BaseResponse<ArticleResponse>;
+
+export type ArticleResponse = {
+  total: number;
+  articles: Articles;
+};
+
 export type GetArticleByIdResponse = BaseResponse<Article>;
 
 export type Article = {
   articleId: string;
   articleTitle: string;
-  description: string;
   categoryId: string;
   categoryName: string;
+  previewContent: string;
   viewCount: number;
-  labels: ArticleLabels;
   createDate: string;
 };
 
