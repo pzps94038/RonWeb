@@ -11,6 +11,7 @@ import { ErrorComponent } from 'src/app/shared/components/error/error.component'
 import { ArticleCardComponent } from '../shared/components/article-card/article-card.component';
 import { LoadingCardComponent } from '../shared/components/loading-card/loading-card.component';
 import { ArticleCategory } from 'src/app/shared/api/article-category/article-category.model';
+import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 
 @Component({
   selector: 'app-category',
@@ -83,6 +84,8 @@ export class CategoryComponent implements OnInit {
           this.total.set(total);
           this.articles.set(articles);
           this.category.set(keyword);
+        } else if (res.returnCode === ReturnCode.NotFound) {
+          this.router.navigate(['blog', 'notFound']);
         } else {
           this.isError.set(true);
         }
