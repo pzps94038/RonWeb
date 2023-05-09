@@ -23,4 +23,5 @@
     <app-error (refresh)="getArticle()" />
   </div>
 </ng-template>
-<app-pagination [total]="total()" (change)="getArticle($event)"></app-pagination>
+<app-pagination [total]="total()" [currentPage]="page()" (change)=" paginationChange($event)">
+</app-pagination>

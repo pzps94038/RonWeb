@@ -1,3 +1,30 @@
-<div class="p-5 bg-slate-800 rounded-md mx-0 md:mx-5">
+<div class="p-5 bg-slate-800 rounded-md mx-0 md:mx-5 mb-5">
   <h3>{{ keyword() }}的搜尋結果如下:</h3>
 </div>
+<ng-container *ngIf="!isError(); else error">
+  <ng-container *ngIf="!isLoading(); else loading">
+    <app-article-card
+      *ngFor="let article of articles()"
+      [title]="article.articleTitle"
+      [date]="article.createDate"
+      [category]="{
+        categoryId: article.categoryId,
+        categoryName: article.categoryName
+      }"
+      [previewContent]="article.previewContent"
+      (category)="navigateCategory($event)"
+      (showMore)="showMore(article.articleId)" />
+  </ng-container>
+</ng-container>
+<ng-template #loading>
+  <app-loading-card></app-loading-card>
+  <app-loading-card></app-loading-card>
+  <app-loading-card></app-loading-card>
+</ng-template>
+<ng-template #error>
+  <div class="bg-slate-800 rounded-md mx-0 md:mx-5 p-5 mb-5">
+    <app-error (change)="searchKeyword(keyword(), page())" />
+  </div>
+</ng-template>
+<app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)">
+</app-pagination>

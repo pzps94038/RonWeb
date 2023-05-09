@@ -117,3 +117,17 @@ version: 0.1
         body:
           application/json:
             example: !include examples/contact-us/contactUs.json
+/api/search/keyword/{keyword}:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/search/keyword.json
+/api/search/category/{id}:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/search/category.json

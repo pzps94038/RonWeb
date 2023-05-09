@@ -6,8 +6,8 @@ import { PaginationComponent } from 'src/app/shared/components/pagination/pagina
 import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { SharedService } from 'src/app/shared/service/shared.service';
 import { Articles } from 'src/app/shared/api/article/article.model';
-import { catchError, finalize, delay } from 'rxjs';
-import { Router } from '@angular/router';
+import { catchError, finalize, delay, filter } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ArticleCategory } from 'src/app/shared/api/article-category/article-category.model';
 import { ErrorComponent } from 'src/app/shared/components/error/error.component';
 import { LoadingCardComponent } from '../shared/components/loading-card/loading-card.component';
@@ -28,15 +28,22 @@ import { LoadingCardComponent } from '../shared/components/loading-card/loading-
 export class HomeComponent implements OnInit {
   articleSrv = inject(ArticleService);
   sharedSrv = inject(SharedService);
+  route = inject(ActivatedRoute);
   router = inject(Router);
   total = signal(0);
   articles = signal<Articles>([]);
   isLoading = signal(false);
   isError = signal(false);
+  page = signal(1);
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit() {
-    this.getArticle();
+    this.route.paramMap.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(params => {
+      const page = params.get('page');
+      const num = page ? parseInt(page) : 1;
+      this.page.set(isNaN(num) ? 1 : num);
+      this.getArticle(this.page());
+    });
   }
 
   getArticle(page?: number) {
@@ -71,5 +78,14 @@ export class HomeComponent implements OnInit {
 
   navigateCategory({ categoryId }: ArticleCategory) {
     this.router.navigateByUrl(`/blog/category/${categoryId}`);
+  }
+
+  paginationChange(page: number) {
+    this.page.set(page);
+    this.router.navigate(['/blog/home'], {
+      queryParams: {
+        page,
+      },
+    });
   }
 }

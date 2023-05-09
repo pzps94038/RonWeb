@@ -1,0 +1,41 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { SearchKeywordResponse } from './search.model';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SearchService {
+  private http = inject(HttpClient);
+
+  keyword(keyword: string, page?: number) {
+    if (page) {
+      const params = new HttpParams().append('page', page);
+      return this.http.get<SearchKeywordResponse>(
+        `${environment.baseUrl}/search/keyword/${keyword}`,
+        {
+          params,
+        },
+      );
+    } else {
+      return this.http.get<SearchKeywordResponse>(
+        `${environment.baseUrl}/search/keyword/${keyword}`,
+      );
+    }
+  }
+
+  category(id: string, page?: number) {
+    if (page) {
+      const params = new HttpParams().append('page', page);
+      return this.http.get<SearchKeywordResponse>(`${environment.baseUrl}/search/category/${id}`, {
+        params,
+      });
+    } else {
+      const params = new HttpParams().append('id', id);
+      return this.http.get<SearchKeywordResponse>(`${environment.baseUrl}/search/category/${id}`, {
+        params,
+      });
+    }
+  }
+}
