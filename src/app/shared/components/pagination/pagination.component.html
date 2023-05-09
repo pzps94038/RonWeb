@@ -1,4 +1,4 @@
-<div class="btn-group w-full flex justify-center" *ngIf="!!totalItems()">
+<div class="btn-group w-full flex justify-center my-5" *ngIf="!!totalItems()">
   <button class="btn" (click)="firstPage()" [disabled]="currentPage() === 1">««</button>
   <button class="btn" (click)="prevPage()" [disabled]="currentPage() - 1 < 1">«</button>
   <button class="btn" *ngIf="startPage() > 1" (click)="goToPage(1)">1</button>

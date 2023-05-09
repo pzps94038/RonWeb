@@ -23,7 +23,7 @@
 </ng-template>
 <ng-template #error>
   <div class="bg-slate-800 rounded-md mx-0 md:mx-5 p-5 mb-5">
-    <app-error (change)="searchCategory(categoryId(), page())" />
+    <app-error (refresh)="searchCategory(categoryId(), page())" />
   </div>
 </ng-template>
 <app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)">
