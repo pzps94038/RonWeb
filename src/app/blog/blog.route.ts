@@ -6,7 +6,7 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.component').then(m => m.HomeComponent),
   },
   {
-    path: 'search',
+    path: 'search/:keyword',
     loadComponent: () => import('./search/search.component').then(m => m.SearchComponent),
   },
   {

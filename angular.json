@@ -44,7 +44,9 @@
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
-              "lottie-web"
+              "lottie-web",
+              "sweetalert2",
+              "dayjs"
             ]
           },
           "configurations": {

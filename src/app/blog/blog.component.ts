@@ -37,7 +37,7 @@ export class BlogComponent {
     this.form.markAllAsTouched();
     if (this.form.valid) {
       const keyword = this.form.get('keyword')!.value;
-      this.router.navigate(['blog/search'], { queryParams: { keyword } });
+      this.router.navigate(['blog', 'search', keyword]);
     }
   }
 }
