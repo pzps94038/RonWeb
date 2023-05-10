@@ -1,6 +1,6 @@
 {
   "returnCode": "string",
-  "returnMessage": "string",
+  "returnMessage": "系統發生錯誤",
   "data": {
     "accessToken": "string",
     "refreshToken": "string"

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '../shared/components/form/input/input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,6 +9,11 @@ import {
   AnimationPathConfig,
   NgLottieComponent,
 } from '../shared/components/ng-lottie/ng-lottie.component';
+import { LoginService } from '../shared/api/login/login.service';
+import { SharedService } from '../shared/service/shared.service';
+import { catchError } from 'rxjs';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { heroXCircle, heroXMark } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-login',
@@ -21,9 +27,24 @@ import {
     FooterComponent,
     HeaderComponent,
     NgLottieComponent,
+    NgIconComponent,
   ],
+  providers: [provideIcons({ heroXMark })],
 })
 export class LoginComponent {
+  loginSrv = inject(LoginService);
+  sharedSrv = inject(SharedService);
+  errMsg = signal<string | undefined>(undefined);
+  private _destroyRef = inject(DestroyRef);
+
+  get account() {
+    return this.form.get('account') as FormControl;
+  }
+
+  get password() {
+    return this.form.get('password') as FormControl;
+  }
+
   form = new FormGroup({
     account: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
@@ -35,5 +56,27 @@ export class LoginComponent {
 
   submit() {
     this.form.markAllAsTouched();
+    if (this.form.valid) {
+      this.loginSrv
+        .login({
+          account: this.account.value,
+          password: this.password.value,
+        })
+        .pipe(
+          catchError(err => {
+            this.errMsg.set('系統發生錯誤');
+            throw err;
+          }),
+          takeUntilDestroyed(this._destroyRef),
+        )
+        .subscribe(res => {
+          if (this.sharedSrv.ifSuccess(res)) {
+            //TODO 登入成功
+          } else {
+            const { returnMessage } = res;
+            this.errMsg.set(returnMessage);
+          }
+        });
+    }
   }
 }
