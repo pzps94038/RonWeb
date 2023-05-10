@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit() {
-    this.route.paramMap.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(params => {
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(params => {
       const page = params.get('page');
       const num = page ? parseInt(page) : 1;
       this.page.set(isNaN(num) ? 1 : num);
@@ -81,7 +81,6 @@ export class HomeComponent implements OnInit {
   }
 
   paginationChange(page: number) {
-    this.page.set(page);
     this.router.navigate(['/blog/home'], {
       queryParams: {
         page,

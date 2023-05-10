@@ -7,6 +7,10 @@ export const routes: Routes = [
     redirectTo: '/blog',
   },
   {
+    path: 'login',
+    loadComponent: () => import('./login/login.component').then(m => m.LoginComponent),
+  },
+  {
     path: 'blog',
     loadComponent: () => import('./blog/blog.component').then(m => m.BlogComponent),
     loadChildren: () => import('./blog/blog.route').then(m => m.routes),

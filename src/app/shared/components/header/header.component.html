@@ -13,6 +13,10 @@
         class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-[#0872BF] cursor-pointer mx-8">
         <a class="w-full" [routerLink]="link.value">{{ link.name }}</a>
       </li>
+      <li
+        class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-[#0872BF] cursor-pointer mx-8">
+        <a class="w-full" routerLink="/login">登入</a>
+      </li>
     </ul>
   </div>
 </header>
@@ -41,6 +45,11 @@
               class="w-full text-center"
               (click)="mobileToggle = !mobileToggle"
               >{{ link.name }}</a
+            >
+          </li>
+          <li class="flex justify-center border-2 border-white p-2 text-xl cursor-pointer">
+            <a routerLink="/login" class="w-full text-center" (click)="mobileToggle = !mobileToggle"
+              >登入</a
             >
           </li>
         </ul>
