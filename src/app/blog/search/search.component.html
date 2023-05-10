@@ -1,8 +1,8 @@
-<div class="p-5 bg-slate-800 rounded-md mx-0 md:mx-5 mb-5">
-  <h3>{{ keyword() }}的搜尋結果如下:</h3>
-</div>
 <ng-container *ngIf="!isError(); else error">
   <ng-container *ngIf="!isLoading(); else loading">
+    <div class="p-5 bg-slate-800 rounded-md mx-0 md:mx-5 mb-5">
+      <h3>以下是{{ keyword() }}的搜尋結果：</h3>
+    </div>
     <app-article-card
       *ngFor="let article of articles()"
       [title]="article.articleTitle"
@@ -17,6 +17,7 @@
   </ng-container>
 </ng-container>
 <ng-template #loading>
+  <app-loading-keyword></app-loading-keyword>
   <app-loading-card></app-loading-card>
   <app-loading-card></app-loading-card>
   <app-loading-card></app-loading-card>

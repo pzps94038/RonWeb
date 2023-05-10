@@ -1,0 +1,24 @@
+<app-header />
+<div class="bg-banner bg-cover bg-fixed h-screen flex justify-center items-center">
+  <div class="bg-slate-800 rounded-md m-5">
+    <h3 class="text-center text-3xl font-semibold my-3">登入</h3>
+    <div class="w-60 mx-auto">
+      <ng-lottie [options]="loginOptions" />
+    </div>
+    <form class="flex flex-wrap items-center" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="w-full mx-5 my-2">
+        <app-input class="w-full" placeholder="請輸入帳號" formControlName="account" />
+      </div>
+      <div class="w-full mx-5 my-2">
+        <app-input
+          class="w-full"
+          type="password"
+          placeholder="請輸入密碼"
+          formControlName="password" />
+      </div>
+      <div class="w-full flex justify-center items-center">
+        <button type="submit" class="btn btn-primary my-3 px-8">登入</button>
+      </div>
+    </form>
+  </div>
+</div>

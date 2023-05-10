@@ -3,7 +3,7 @@ import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
-import { catchError, combineLatest, filter, finalize, map } from 'rxjs';
+import { catchError, combineLatest, delay, filter, finalize, map } from 'rxjs';
 import { SearchService } from 'src/app/shared/api/search/search.service';
 import { Articles } from 'src/app/shared/api/article/article.model';
 import { SharedService } from 'src/app/shared/service/shared.service';
@@ -12,6 +12,7 @@ import { ArticleCardComponent } from '../shared/components/article-card/article-
 import { LoadingCardComponent } from '../shared/components/loading-card/loading-card.component';
 import { ArticleCategory } from 'src/app/shared/api/article-category/article-category.model';
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
+import { LoadingKeywordComponent } from '../shared/components/loading-keyword/loading-keyword.component';
 
 @Component({
   selector: 'app-category',
@@ -21,6 +22,7 @@ import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
     PaginationComponent,
     ArticleCardComponent,
     ErrorComponent,
+    LoadingKeywordComponent,
     LoadingCardComponent,
   ],
   templateUrl: './category.component.html',

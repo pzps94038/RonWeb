@@ -8,13 +8,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { DeviceService } from '../shared/service/device.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { ArticleCategoryComponent } from './shared/components/article-category/article-category.component';
+import { FooterComponent } from '../shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-blog',
   standalone: true,
   imports: [
-    CommonModule,
     HeaderComponent,
+    CommonModule,
     ScrollAnimateDirective,
     InputComponent,
     ReactiveFormsModule,
@@ -22,6 +23,7 @@ import { ArticleCategoryComponent } from './shared/components/article-category/a
     RouterOutlet,
     ReactiveFormsModule,
     ArticleCategoryComponent,
+    FooterComponent,
   ],
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.scss'],
