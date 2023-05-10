@@ -168,7 +168,9 @@
             "routes": [
               "/",
               "/blog",
-              "/about-me"
+              "/blog/home",
+              "/about-me",
+              "/login"
             ]
           },
           "configurations": {
