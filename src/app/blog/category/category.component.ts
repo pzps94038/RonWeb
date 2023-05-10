@@ -77,6 +77,8 @@ export class CategoryComponent implements OnInit {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
+        console.warn(res);
+        console.warn(res.returnCode, res.returnCode === ReturnCode.NotFound);
         if (this.sharedSrv.ifSuccess(res)) {
           const {
             data: { total, articles, keyword },
