@@ -1,6 +1,6 @@
 <app-header />
 <div class="bg-banner bg-cover bg-fixed h-screen flex justify-center items-center">
-  <div class="bg-slate-800 rounded-md m-5">
+  <div class="bg-slate-800 rounded-md mt-20 md:mt-0 mx-5">
     <h3 class="text-center text-3xl font-semibold my-3">登入</h3>
     <div class="w-60 mx-auto">
       <ng-lottie [options]="loginOptions" />
@@ -13,12 +13,12 @@
         <div
           *ngIf="errMsg()"
           class="alert alert-error shadow-lg border-2 bg-rose-800/[0.1] border-rose-900 relative py-5">
-          <div class="absolute left-5">
+          <div class="absolute left-5 top-2">
             <span class="text-base font-semibold text-rose-900">{{ errMsg() }}</span>
           </div>
           <ng-icon
             name="heroXMark"
-            class="cursor-pointer absolute right-5 text-rose-900"
+            class="cursor-pointer absolute right-5 top-1 text-rose-900"
             (click)="errMsg.set('')" />
         </div>
       </div>
