@@ -1,5 +1,5 @@
 {
-  "returnCode": "string",
+  "returnCode": "00",
   "returnMessage": "系統發生錯誤",
   "data": {
     "accessToken": "string",

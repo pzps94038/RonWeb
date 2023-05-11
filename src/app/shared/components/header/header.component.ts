@@ -6,16 +6,19 @@ import {
   ElementRef,
   Inject,
   OnDestroy,
+  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
   inject,
+  signal,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { filter, fromEvent } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SharedService } from '../../service/shared.service';
 export type Option = {
   name: string;
   value: string;
@@ -28,9 +31,11 @@ export type Options = Option[];
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements AfterViewInit, OnDestroy {
+export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('header') header?: ElementRef<HTMLElement>;
   @ViewChild('mobile') mobile?: ElementRef<HTMLElement>;
+  sharedSrv = inject(SharedService);
+  isLogin = signal(false);
   links: Options = [
     {
       name: '首頁',
@@ -45,6 +50,12 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   private _observers: IntersectionObserver[] = [];
   private _destroyRef = inject(DestroyRef);
   constructor(private render: Renderer2, private device: DeviceService) {}
+
+  ngOnInit(): void {
+    this.sharedSrv.isLogin$
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(isLogin => this.isLogin.set(isLogin));
+  }
 
   ngOnDestroy() {
     for (const observer of this._observers) {
