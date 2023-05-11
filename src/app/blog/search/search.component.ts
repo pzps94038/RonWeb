@@ -55,7 +55,7 @@ export class SearchComponent implements OnInit {
       )
       .subscribe(([params, queryParam]) => {
         const keyword = params.get('keyword') as string;
-        this.keyword.set(keyword);
+        this.keyword.set(keyword.trim());
         const page = queryParam.get('page');
         const num = page ? parseInt(page) : 1;
         this.page.set(isNaN(num) ? 1 : num);
@@ -67,7 +67,7 @@ export class SearchComponent implements OnInit {
     this.isError.set(false);
     this.isLoading.set(true);
     this.searchSrv
-      .keyword(keyword.trim(), page)
+      .keyword(keyword, page)
       .pipe(
         catchError(err => {
           this.isError.set(true);
