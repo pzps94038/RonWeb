@@ -67,7 +67,7 @@ export class SearchComponent implements OnInit {
     this.isError.set(false);
     this.isLoading.set(true);
     this.searchSrv
-      .keyword(keyword, page)
+      .keyword(keyword.trim(), page)
       .pipe(
         catchError(err => {
           this.isError.set(true);
