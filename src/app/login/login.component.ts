@@ -1,5 +1,5 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '../shared/components/form/input/input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,6 +14,7 @@ import { SharedService } from '../shared/service/shared.service';
 import { catchError, finalize } from 'rxjs';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroXMark } from '@ng-icons/heroicons/outline';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -33,8 +34,10 @@ import { heroXMark } from '@ng-icons/heroicons/outline';
 })
 export class LoginComponent {
   loginSrv = inject(LoginService);
-  loading = signal(false);
   sharedSrv = inject(SharedService);
+  router = inject(Router);
+  loading = signal(false);
+
   errMsg = signal<string | undefined>(undefined);
   private _destroyRef = inject(DestroyRef);
 
@@ -73,10 +76,12 @@ export class LoginComponent {
           takeUntilDestroyed(this._destroyRef),
         )
         .subscribe(res => {
+          const { returnMessage, data } = res;
           if (this.sharedSrv.ifSuccess(res)) {
-            //TODO 登入成功
+            this.sharedSrv.setToken(data);
+            this.sharedSrv.setLoginStatus(true);
+            this.router.navigate(['setting']);
           } else {
-            const { returnMessage } = res;
             this.errMsg.set(returnMessage);
           }
         });
