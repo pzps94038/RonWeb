@@ -18,7 +18,7 @@
           </div>
           <ng-icon
             name="heroXMark"
-            class="cursor-pointer absolute right-5 top-1 text-rose-900"
+            class="cursor-pointer absolute right-5 top-1 md:top-3 text-rose-900"
             (click)="errMsg.set('')" />
         </div>
       </div>
@@ -34,7 +34,13 @@
         </app-input>
       </div>
       <div class="w-full flex justify-center items-center">
-        <button type="submit" class="btn btn-primary my-3 px-8">登入</button>
+        <button
+          type="submit"
+          class="btn btn-primary my-3 px-8"
+          [disabled]="loading()"
+          [class.loading]="loading()">
+          登入
+        </button>
       </div>
     </form>
   </div>
