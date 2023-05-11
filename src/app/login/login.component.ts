@@ -11,9 +11,9 @@ import {
 } from '../shared/components/ng-lottie/ng-lottie.component';
 import { LoginService } from '../shared/api/login/login.service';
 import { SharedService } from '../shared/service/shared.service';
-import { catchError } from 'rxjs';
+import { catchError, finalize } from 'rxjs';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroXCircle, heroXMark } from '@ng-icons/heroicons/outline';
+import { heroXMark } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-login',
@@ -33,6 +33,7 @@ import { heroXCircle, heroXMark } from '@ng-icons/heroicons/outline';
 })
 export class LoginComponent {
   loginSrv = inject(LoginService);
+  loading = signal(false);
   sharedSrv = inject(SharedService);
   errMsg = signal<string | undefined>(undefined);
   private _destroyRef = inject(DestroyRef);
@@ -57,6 +58,7 @@ export class LoginComponent {
   submit() {
     this.form.markAllAsTouched();
     if (this.form.valid) {
+      this.loading.set(true);
       this.loginSrv
         .login({
           account: this.account.value,
@@ -67,6 +69,7 @@ export class LoginComponent {
             this.errMsg.set('系統發生錯誤');
             throw err;
           }),
+          finalize(() => this.loading.set(false)),
           takeUntilDestroyed(this._destroyRef),
         )
         .subscribe(res => {
