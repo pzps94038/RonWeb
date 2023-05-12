@@ -79,7 +79,7 @@ export class LoginComponent {
           const { returnMessage, data } = res;
           if (this.sharedSrv.ifSuccess(res)) {
             this.sharedSrv.setToken(data);
-            this.sharedSrv.setLoginStatus(true);
+            this.sharedSrv.isLogin.set(true);
             this.router.navigate(['setting']);
           } else {
             this.errMsg.set(returnMessage);

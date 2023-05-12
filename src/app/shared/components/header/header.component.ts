@@ -31,11 +31,13 @@ export type Options = Option[];
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HeaderComponent implements AfterViewInit, OnDestroy {
   @ViewChild('header') header?: ElementRef<HTMLElement>;
   @ViewChild('mobile') mobile?: ElementRef<HTMLElement>;
+  render = inject(Renderer2);
   sharedSrv = inject(SharedService);
-  isLogin = signal(false);
+  device = inject(DeviceService);
+  isLogin = this.sharedSrv.isLogin;
   links: Options = [
     {
       name: '首頁',
@@ -49,13 +51,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   mobileToggle: boolean = false;
   private _observers: IntersectionObserver[] = [];
   private _destroyRef = inject(DestroyRef);
-  constructor(private render: Renderer2, private device: DeviceService) {}
-
-  ngOnInit(): void {
-    this.sharedSrv.isLogin$
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(isLogin => this.isLogin.set(isLogin));
-  }
 
   ngOnDestroy() {
     for (const observer of this._observers) {
