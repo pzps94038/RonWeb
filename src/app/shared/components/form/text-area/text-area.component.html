@@ -3,8 +3,8 @@
   [for]="control?.name"
   [class]="labelClass"
   [ngClass]="{
-      'text-green-700 dark:text-green-500': control?.touched && !control?.errors,
-      'text-red-700 dark:text-red-500': control?.touched && control?.errors
+      'text-success': control?.touched && !control?.errors,
+      'text-error': control?.touched && control?.errors
     }"
   class="block"
   >{{ labelName }}</label
@@ -20,12 +20,12 @@
   [class.textarea-lg]="size === 'lg'"
   [ngClass]="{
     'textarea-error': control?.touched && control?.errors,
-    'textarea-accent': control?.touched && !control?.errors
+    'textarea-success': control?.touched && !control?.errors
   }"
   [disabled]="disabled"
   [(ngModel)]="val"
   (ngModelChange)="change()"
-  class="textarea textarea-bordered border-2 dark:text-white text-black"></textarea>
+  class="textarea textarea-bordered border-2"></textarea>
 <ng-container *ngIf="control?.touched && control?.errors && showErrorMsg">
   <p *ngIf="control?.errors?.['required']" class="mt-2 text-sm text-red-600 dark:text-red-500">
     <span class="font-medium">此欄位必填</span>

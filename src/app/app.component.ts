@@ -16,6 +16,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     const token = this.sharedSrv.getToken();
     const isLogin = !!token;
-    this.sharedSrv.setLoginStatus(isLogin);
+    this.sharedSrv.isLogin.set(isLogin);
   }
 }

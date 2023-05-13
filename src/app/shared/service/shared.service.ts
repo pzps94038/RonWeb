@@ -1,5 +1,5 @@
 import { DeviceService } from 'src/app/shared/service/device.service';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { BaseMessageResponse, ReturnCode, Token } from '../api/shared/shared.model';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
@@ -12,26 +12,14 @@ export class SharedService {
   device = inject(DeviceService);
   router = inject(Router);
 
-  private _isLogin$ = new BehaviorSubject(false);
-
-  get isLogin$() {
-    return this._isLogin$.asObservable();
-  }
-
-  /**
-   * 設定登入狀態
-   * @param state
-   */
-  setLoginStatus(state: boolean) {
-    this._isLogin$.next(state);
-  }
+  isLogin = signal(false);
 
   /**
    * 登出
    */
   logout() {
     this.removeToken();
-    this.setLoginStatus(false);
+    this.isLogin.set(false);
     this.router.navigate(['blog']);
   }
 

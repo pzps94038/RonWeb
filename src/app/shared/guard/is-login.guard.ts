@@ -6,11 +6,10 @@ import { tap } from 'rxjs';
 export const isLoginGuard: CanActivateFn = (route, state) => {
   const sharedSrv = inject(SharedService);
   const router = inject(Router);
-  return sharedSrv.isLogin$.pipe(
-    tap(val => {
-      if (!val) {
-        router.navigate(['login']);
-      }
-    }),
-  );
+  if (sharedSrv.isLogin()) {
+    return true;
+  } else {
+    router.navigate(['login']);
+    return false;
+  }
 };

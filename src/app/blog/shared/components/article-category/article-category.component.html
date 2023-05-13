@@ -1,9 +1,9 @@
-<div class="p-5 bg-slate-800 rounded-md mb-5">
+<div class="p-5 bg-neutral text-neutral-content rounded-md mb-5">
   <h3 class="text-xl">分類</h3>
   <ng-container *ngIf="!isError(); else error">
     <ng-container *ngIf="!isLoading(); else loading">
       <div class="my-1" *ngFor="let category of categorys()">
-        <a class="link link-accent w-full flex" [routerLink]="['category', category.categoryId]">
+        <a class="link link-secondary w-full flex" [routerLink]="['category', category.categoryId]">
           <div class="mr-1">
             <ng-icon name="heroHashtag" />
           </div>

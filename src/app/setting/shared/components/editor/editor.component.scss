@@ -1,0 +1,41 @@
+:host ::ng-deep ckeditor {
+  .ck {
+    .ck-button.ck-on,
+    a.ck.ck-button.ck-on {
+      @apply bg-neutral-focus;
+    }
+    .ck-button:not(.ck-disabled):hover,
+    a.ck.ck-button:not(.ck-disabled):hover {
+      @apply bg-neutral-focus;
+    }
+    .ck-list__item .ck-button:hover:not(.ck-disabled) {
+      @apply bg-neutral-focus;
+    }
+    // @apply bg-neutral #{!important};
+    .ck-toolbar__items,
+    .ck-color-grids-page-view {
+      @apply bg-neutral;
+    }
+    .ck-button,
+    .ck-button__label {
+      @apply text-neutral-content;
+    }
+    .ck-list,
+    .ck-content {
+      @apply bg-neutral text-neutral-content;
+    }
+    .ck-insert-table-dropdown__grid,
+    .ck-insert-table-dropdown__label,
+    .ck-splitbutton,
+    .ck-dropdown__button,
+    .ck-splitbutton__arrow,
+    .ck-media-form,
+    .ck-labeled-field-view__status,
+    .ck-splitbutton__action {
+      @apply bg-neutral text-base-content #{!important};
+    }
+    .ck-editor__editable pre {
+      @apply bg-neutral-focus text-base-content;
+    }
+  }
+}
