@@ -3583,7 +3583,7 @@
                 }),
               );
           }
-          n.d(o, { default: () => cI });
+          n.d(o, { default: () => pI });
           const s = (function () {
               try {
                 return navigator.userAgent.toLowerCase();
@@ -21098,16 +21098,37 @@
           function qg(t) {
             return Gg.test(t);
           }
-          function Wg(t) {
+          function Wg(t = '') {
+            if ('' === t) return { top: void 0, right: void 0, bottom: void 0, left: void 0 };
+            const e = Kg(t),
+              n = e[0],
+              o = e[2] || n,
+              i = e[1] || n;
+            return { top: n, bottom: o, right: i, left: e[3] || i };
+          }
+          function $g({ top: t, right: e, bottom: n, left: o }) {
+            const i = [];
+            return (
+              o !== e
+                ? i.push(t, e, n, o)
+                : n !== t
+                ? i.push(t, e, n)
+                : e !== t
+                ? i.push(t, e)
+                : i.push(t),
+              i.join(' ')
+            );
+          }
+          function Kg(t) {
             return t
               .replace(/, /g, ',')
               .split(' ')
               .map(t => t.replace(/,/g, ', '));
           }
-          function $g(t) {
+          function Yg(t) {
             t.setNormalizer('background', t => {
               const e = {},
-                n = Wg(t);
+                n = Kg(t);
               for (const t of n)
                 jg(t)
                   ? ((e.repeat = e.repeat || []), e.repeat.push(t))
@@ -21127,7 +21148,38 @@
               }),
               t.setStyleRelation('background', ['background-color']);
           }
-          class Kg {
+          function Zg(t) {
+            var e, n;
+            t.setNormalizer('margin', ((e = 'margin'), t => ({ path: e, value: Wg(t) }))),
+              t.setNormalizer('margin-top', t => ({ path: 'margin.top', value: t })),
+              t.setNormalizer('margin-right', t => ({ path: 'margin.right', value: t })),
+              t.setNormalizer('margin-bottom', t => ({ path: 'margin.bottom', value: t })),
+              t.setNormalizer('margin-left', t => ({ path: 'margin.left', value: t })),
+              t.setReducer(
+                'margin',
+                ((n = 'margin'),
+                t => {
+                  const { top: e, right: o, bottom: i, left: r } = t,
+                    s = [];
+                  return (
+                    [e, o, r, i].every(t => !!t)
+                      ? s.push([n, $g(t)])
+                      : (e && s.push([n + '-top', e]),
+                        o && s.push([n + '-right', o]),
+                        i && s.push([n + '-bottom', i]),
+                        r && s.push([n + '-left', r])),
+                    s
+                  );
+                }),
+              ),
+              t.setStyleRelation('margin', [
+                'margin-top',
+                'margin-right',
+                'margin-bottom',
+                'margin-left',
+              ]);
+          }
+          class Qg {
             constructor() {
               this._commands = new Map();
             }
@@ -21155,7 +21207,7 @@
               for (const t of this.commands()) t.destroy();
             }
           }
-          class Yg extends Y() {
+          class Jg extends Y() {
             constructor(t = {}) {
               super();
               const e = this.constructor,
@@ -21170,7 +21222,7 @@
                 (this.locale = this._context.locale),
                 (this.t = this.locale.t),
                 (this._readOnlyLocks = new Set()),
-                (this.commands = new Kg()),
+                (this.commands = new Qg()),
                 this.set('state', 'initializing'),
                 this.once('ready', () => (this.state = 'ready'), { priority: 'high' }),
                 this.once('destroy', () => (this.state = 'destroyed'), { priority: 'high' }),
@@ -21253,7 +21305,7 @@
               throw new Error('This is an abstract method.');
             }
           }
-          function Zg(t) {
+          function Xg(t) {
             return class extends t {
               setData(t) {
                 this.data.set(t);
@@ -21264,10 +21316,10 @@
             };
           }
           {
-            const t = Zg(Object);
-            (Zg.setData = t.prototype.setData), (Zg.getData = t.prototype.getData);
+            const t = Xg(Object);
+            (Xg.setData = t.prototype.setData), (Xg.getData = t.prototype.getData);
           }
-          function Qg(t) {
+          function tm(t) {
             return class extends t {
               updateSourceElement(t = this.data.get()) {
                 if (!this.sourceElement) throw new _('editor-missing-sourceelement', this);
@@ -21277,8 +21329,8 @@
               }
             };
           }
-          Qg.updateSourceElement = Qg(Object).prototype.updateSourceElement;
-          class Jg extends vs {
+          tm.updateSourceElement = tm(Object).prototype.updateSourceElement;
+          class em extends vs {
             static get pluginName() {
               return 'PendingActions';
             }
@@ -21302,7 +21354,7 @@
               return this._actions[Symbol.iterator]();
             }
           }
-          const Xg = {
+          const nm = {
             bold: '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.187 17H5.773c-.637 0-1.092-.138-1.364-.415-.273-.277-.409-.718-.409-1.323V4.738c0-.617.14-1.062.419-1.332.279-.27.73-.406 1.354-.406h4.68c.69 0 1.288.041 1.793.124.506.083.96.242 1.36.478.341.197.644.447.906.75a3.262 3.262 0 0 1 .808 2.162c0 1.401-.722 2.426-2.167 3.075C15.05 10.175 16 11.315 16 13.01a3.756 3.756 0 0 1-2.296 3.504 6.1 6.1 0 0 1-1.517.377c-.571.073-1.238.11-2 .11zm-.217-6.217H7v4.087h3.069c1.977 0 2.965-.69 2.965-2.072 0-.707-.256-1.22-.768-1.537-.512-.319-1.277-.478-2.296-.478zM7 5.13v3.619h2.606c.729 0 1.292-.067 1.69-.2a1.6 1.6 0 0 0 .91-.765c.165-.267.247-.566.247-.897 0-.707-.26-1.176-.778-1.409-.519-.232-1.31-.348-2.375-.348H7z"/></svg>',
             cancel:
               '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m11.591 10.177 4.243 4.242a1 1 0 0 1-1.415 1.415l-4.242-4.243-4.243 4.243a1 1 0 0 1-1.414-1.415l4.243-4.242L4.52 5.934A1 1 0 0 1 5.934 4.52l4.243 4.243 4.242-4.243a1 1 0 1 1 1.415 1.414l-4.243 4.243z"/></svg>',
@@ -21368,26 +21420,26 @@
             threeVerticalDots:
               '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="9.5" cy="4.5" r="1.5"/><circle cx="9.5" cy="10.5" r="1.5"/><circle cx="9.5" cy="16.5" r="1.5"/></svg>',
           };
-          var tm = n(5542),
-            em = {
+          var om = n(5542),
+            im = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(tm.Z, em);
-          tm.Z.locals;
-          const { threeVerticalDots: nm } = Xg,
-            om = {
-              alignLeft: Xg.alignLeft,
-              bold: Xg.bold,
-              importExport: Xg.importExport,
-              paragraph: Xg.paragraph,
-              plus: Xg.plus,
-              text: Xg.text,
-              threeVerticalDots: Xg.threeVerticalDots,
+          Vi()(om.Z, im);
+          om.Z.locals;
+          const { threeVerticalDots: rm } = nm,
+            sm = {
+              alignLeft: nm.alignLeft,
+              bold: nm.bold,
+              importExport: nm.importExport,
+              paragraph: nm.paragraph,
+              plus: nm.plus,
+              text: nm.text,
+              threeVerticalDots: nm.threeVerticalDots,
             };
-          class im extends Gi {
+          class am extends Gi {
             constructor(t, e) {
               super(t);
               const n = this.bindTemplate,
@@ -21400,7 +21452,7 @@
                 (this.keystrokes = new Bi()),
                 this.set('class', void 0),
                 this.set('isCompact', !1),
-                (this.itemsView = new rm(t)),
+                (this.itemsView = new cm(t)),
                 (this.children = this.createCollection()),
                 this.children.add(this.itemsView),
                 (this.focusables = this.createCollection());
@@ -21442,7 +21494,7 @@
                       })),
                   },
                 }),
-                (this._behavior = this.options.shouldGroupWhenFull ? new am(this) : new sm(this));
+                (this._behavior = this.options.shouldGroupWhenFull ? new dm(this) : new lm(this));
             }
             render() {
               super.render(), this.focusTracker.add(this.element);
@@ -21515,18 +21567,18 @@
             _createNestedToolbarDropdown(t, e, n) {
               let { label: o, icon: i, items: r, tooltip: s = !0, withText: a = !1 } = t;
               if (((r = this._cleanItemsConfiguration(r, e, n)), !r.length)) return null;
-              const c = Am(this.locale);
+              const c = vm(this.locale);
               return (
                 o || v('toolbarview-nested-toolbar-dropdown-missing-label', t),
                 (c.class = 'ck-toolbar__nested-toolbar-dropdown'),
                 c.buttonView.set({ label: o, tooltip: s, withText: !!a }),
-                !1 !== i ? (c.buttonView.icon = om[i] || i || nm) : (c.buttonView.withText = !0),
-                Cm(c, () => c.toolbarView._buildItemsFromConfig(r, e, n)),
+                !1 !== i ? (c.buttonView.icon = sm[i] || i || rm) : (c.buttonView.withText = !0),
+                ym(c, () => c.toolbarView._buildItemsFromConfig(r, e, n)),
                 c
               );
             }
           }
-          class rm extends Gi {
+          class cm extends Gi {
             constructor(t) {
               super(t),
                 (this.children = this.createCollection()),
@@ -21537,7 +21589,7 @@
                 });
             }
           }
-          class sm {
+          class lm {
             constructor(t) {
               const e = t.bindTemplate;
               t.set('isVertical', !1),
@@ -21550,7 +21602,7 @@
             render() {}
             destroy() {}
           }
-          class am {
+          class dm {
             constructor(t) {
               (this.resizeObserver = null),
                 (this.cachedPadding = null),
@@ -21652,16 +21704,16 @@
             _createGroupedItemsDropdown() {
               const t = this.viewLocale,
                 e = t.t,
-                n = Am(t);
+                n = vm(t);
               return (
                 (n.class = 'ck-toolbar__grouped-dropdown'),
                 (n.panelPosition = 'ltr' === t.uiLanguageDirection ? 'sw' : 'se'),
-                Cm(n, this.groupedItems),
+                ym(n, this.groupedItems),
                 n.buttonView.set({
                   label: e('Show more items'),
                   tooltip: !0,
                   tooltipPosition: 'rtl' === t.uiLanguageDirection ? 'se' : 'sw',
-                  icon: nm,
+                  icon: rm,
                 }),
                 n
               );
@@ -21674,16 +21726,16 @@
                 this.groupedItems.length && this.viewFocusables.add(this.groupedItemsDropdown);
             }
           }
-          var cm = n(1046),
-            lm = {
+          var hm = n(1046),
+            um = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(cm.Z, lm);
-          cm.Z.locals;
-          class dm extends Gi {
+          Vi()(hm.Z, um);
+          hm.Z.locals;
+          class gm extends Gi {
             constructor(t) {
               super(t);
               const e = this.bindTemplate;
@@ -21729,7 +21781,7 @@
               this._focusCycler.focusLast();
             }
           }
-          class hm extends Gi {
+          class mm extends Gi {
             constructor(t) {
               super(t);
               const e = this.bindTemplate;
@@ -21748,7 +21800,7 @@
               this.children.first.focus();
             }
           }
-          class um extends Gi {
+          class pm extends Gi {
             constructor(t) {
               super(t),
                 this.setTemplate({
@@ -21757,16 +21809,16 @@
                 });
             }
           }
-          var gm = n(7686),
-            mm = {
+          var fm = n(7686),
+            km = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(gm.Z, mm);
-          gm.Z.locals;
-          class pm extends Gi {
+          Vi()(fm.Z, km);
+          fm.Z.locals;
+          class bm extends Gi {
             constructor(t) {
               super(t);
               const e = this.bindTemplate;
@@ -21870,31 +21922,31 @@
               );
             }
           }
-          var fm = n(7339),
-            km = {
+          var wm = n(7339),
+            Am = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(fm.Z, km);
-          fm.Z.locals;
-          var bm = n(3949),
-            wm = {
+          Vi()(wm.Z, Am);
+          wm.Z.locals;
+          var Cm = n(3949),
+            _m = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(bm.Z, wm);
-          bm.Z.locals;
-          function Am(e, n = ds) {
+          Vi()(Cm.Z, _m);
+          Cm.Z.locals;
+          function vm(e, n = ds) {
             const o = new n(e),
               i = new is(e),
               r = new cs(e, o, i);
             return (
               o.bind('isEnabled').to(r),
-              o instanceof pm
+              o instanceof bm
                 ? o.arrowView.bind('isOn').to(r, 'isOpen')
                 : o.bind('isOn').to(r, 'isOpen'),
               (function (e) {
@@ -21948,18 +22000,18 @@
               r
             );
           }
-          function Cm(t, e, n = {}) {
+          function ym(t, e, n = {}) {
             t.extendTemplate({ attributes: { class: ['ck-toolbar-dropdown'] } }),
               t.isOpen
-                ? _m(t, e, n)
-                : t.once('change:isOpen', () => _m(t, e, n), { priority: 'highest' }),
+                ? xm(t, e, n)
+                : t.once('change:isOpen', () => xm(t, e, n), { priority: 'highest' }),
               n.enableActiveItemFocusOnDropdownOpen &&
-                xm(t, () => t.toolbarView.items.find(t => t.isOn));
+                Sm(t, () => t.toolbarView.items.find(t => t.isOn));
           }
-          function _m(t, e, n) {
+          function xm(t, e, n) {
             const o = t.locale,
               i = o.t,
-              r = (t.toolbarView = new im(o)),
+              r = (t.toolbarView = new am(o)),
               s = 'function' == typeof e ? e() : e;
             (r.ariaLabel = n.ariaLabel || i('Dropdown toolbar')),
               n.maxWidth && (r.maxWidth = n.maxWidth),
@@ -21970,22 +22022,22 @@
               t.panelView.children.add(r),
               r.items.delegate('execute').to(t);
           }
-          function vm(t, e, n = {}) {
+          function Em(t, e, n = {}) {
             t.isOpen
-              ? ym(t, e, n)
-              : t.once('change:isOpen', () => ym(t, e, n), { priority: 'highest' }),
-              xm(t, () => t.listView.items.find(t => t instanceof hm && t.children.first.isOn));
+              ? Dm(t, e, n)
+              : t.once('change:isOpen', () => Dm(t, e, n), { priority: 'highest' }),
+              Sm(t, () => t.listView.items.find(t => t instanceof mm && t.children.first.isOn));
           }
-          function ym(t, e, n) {
+          function Dm(t, e, n) {
             const o = t.locale,
-              i = (t.listView = new dm(o)),
+              i = (t.listView = new gm(o)),
               r = 'function' == typeof e ? e() : e;
             (i.ariaLabel = n.ariaLabel),
               (i.role = n.role),
               i.items.bindTo(r).using(t => {
-                if ('separator' === t.type) return new um(o);
+                if ('separator' === t.type) return new pm(o);
                 if ('button' === t.type || 'switchbutton' === t.type) {
-                  const e = new hm(o);
+                  const e = new mm(o);
                   let n;
                   return (
                     (n = 'button' === t.type ? new wr(o) : new _r(o)),
@@ -22000,7 +22052,7 @@
               t.panelView.children.add(i),
               i.items.delegate('execute').to(t);
           }
-          function xm(t, e) {
+          function Sm(t, e) {
             t.on(
               'change:isOpen',
               () => {
@@ -22014,7 +22066,7 @@
               { priority: w.low - 10 },
             );
           }
-          function Em(t, e, n) {
+          function Im(t, e, n) {
             const o = new os(t.locale);
             return (
               o.set({ id: e, ariaDescribedById: n }),
@@ -22027,9 +22079,9 @@
               o
             );
           }
-          const Dm = (t, e = 0, n = 1) => (t > n ? n : t < e ? e : t),
-            Sm = (t, e = 0, n = Math.pow(10, e)) => Math.round(n * t) / n,
-            Im =
+          const Tm = (t, e = 0, n = 1) => (t > n ? n : t < e ? e : t),
+            Mm = (t, e = 0, n = Math.pow(10, e)) => Math.round(n * t) / n,
+            Bm =
               (Math.PI,
               t => (
                 '#' === t[0] && (t = t.substring(1)),
@@ -22038,29 +22090,29 @@
                       r: parseInt(t[0] + t[0], 16),
                       g: parseInt(t[1] + t[1], 16),
                       b: parseInt(t[2] + t[2], 16),
-                      a: 4 === t.length ? Sm(parseInt(t[3] + t[3], 16) / 255, 2) : 1,
+                      a: 4 === t.length ? Mm(parseInt(t[3] + t[3], 16) / 255, 2) : 1,
                     }
                   : {
                       r: parseInt(t.substring(0, 2), 16),
                       g: parseInt(t.substring(2, 4), 16),
                       b: parseInt(t.substring(4, 6), 16),
-                      a: 8 === t.length ? Sm(parseInt(t.substring(6, 8), 16) / 255, 2) : 1,
+                      a: 8 === t.length ? Mm(parseInt(t.substring(6, 8), 16) / 255, 2) : 1,
                     }
               )),
-            Tm = ({ h: t, s: e, v: n, a: o }) => {
+            Nm = ({ h: t, s: e, v: n, a: o }) => {
               const i = ((200 - e) * n) / 100;
               return {
-                h: Sm(t),
-                s: Sm(i > 0 && i < 200 ? ((e * n) / 100 / (i <= 100 ? i : 200 - i)) * 100 : 0),
-                l: Sm(i / 2),
-                a: Sm(o, 2),
+                h: Mm(t),
+                s: Mm(i > 0 && i < 200 ? ((e * n) / 100 / (i <= 100 ? i : 200 - i)) * 100 : 0),
+                l: Mm(i / 2),
+                a: Mm(o, 2),
               };
             },
-            Mm = t => {
-              const { h: e, s: n, l: o } = Tm(t);
+            Pm = t => {
+              const { h: e, s: n, l: o } = Nm(t);
               return `hsl(${e}, ${n}%, ${o}%)`;
             },
-            Bm = ({ h: t, s: e, v: n, a: o }) => {
+            zm = ({ h: t, s: e, v: n, a: o }) => {
               (t = (t / 360) * 6), (e /= 100), (n /= 100);
               const i = Math.floor(t),
                 r = n * (1 - e),
@@ -22068,63 +22120,63 @@
                 a = n * (1 - (1 - t + i) * e),
                 c = i % 6;
               return {
-                r: Sm(255 * [n, s, r, r, a, n][c]),
-                g: Sm(255 * [a, n, n, s, r, r][c]),
-                b: Sm(255 * [r, r, a, n, n, s][c]),
-                a: Sm(o, 2),
+                r: Mm(255 * [n, s, r, r, a, n][c]),
+                g: Mm(255 * [a, n, n, s, r, r][c]),
+                b: Mm(255 * [r, r, a, n, n, s][c]),
+                a: Mm(o, 2),
               };
             },
-            Nm = t => {
+            Lm = t => {
               const e = t.toString(16);
               return e.length < 2 ? '0' + e : e;
             },
-            Pm = ({ r: t, g: e, b: n, a: o }) => {
-              const i = o < 1 ? Nm(Sm(255 * o)) : '';
-              return '#' + Nm(t) + Nm(e) + Nm(n) + i;
+            Om = ({ r: t, g: e, b: n, a: o }) => {
+              const i = o < 1 ? Lm(Mm(255 * o)) : '';
+              return '#' + Lm(t) + Lm(e) + Lm(n) + i;
             },
-            zm = ({ r: t, g: e, b: n, a: o }) => {
+            Rm = ({ r: t, g: e, b: n, a: o }) => {
               const i = Math.max(t, e, n),
                 r = i - Math.min(t, e, n),
                 s = r ? (i === t ? (e - n) / r : i === e ? 2 + (n - t) / r : 4 + (t - e) / r) : 0;
               return {
-                h: Sm(60 * (s < 0 ? s + 6 : s)),
-                s: Sm(i ? (r / i) * 100 : 0),
-                v: Sm((i / 255) * 100),
+                h: Mm(60 * (s < 0 ? s + 6 : s)),
+                s: Mm(i ? (r / i) * 100 : 0),
+                v: Mm((i / 255) * 100),
                 a: o,
               };
             },
-            Lm = (t, e) => {
+            jm = (t, e) => {
               if (t === e) return !0;
               for (const n in t) if (t[n] !== e[n]) return !1;
               return !0;
             },
-            Om = {},
-            Rm = t => {
-              let e = Om[t];
+            Fm = {},
+            Vm = t => {
+              let e = Fm[t];
               return (
-                e || ((e = document.createElement('template')), (e.innerHTML = t), (Om[t] = e)), e
+                e || ((e = document.createElement('template')), (e.innerHTML = t), (Fm[t] = e)), e
               );
             },
-            jm = (t, e, n) => {
+            Hm = (t, e, n) => {
               t.dispatchEvent(new CustomEvent(e, { bubbles: !0, detail: n }));
             };
-          let Fm = !1;
-          const Vm = t => 'touches' in t,
-            Hm = (t, e) => {
-              const n = Vm(e) ? e.touches[0] : e,
+          let Um = !1;
+          const Gm = t => 'touches' in t,
+            qm = (t, e) => {
+              const n = Gm(e) ? e.touches[0] : e,
                 o = t.el.getBoundingClientRect();
-              jm(
+              Hm(
                 t.el,
                 'move',
                 t.getMove({
-                  x: Dm((n.pageX - (o.left + window.pageXOffset)) / o.width),
-                  y: Dm((n.pageY - (o.top + window.pageYOffset)) / o.height),
+                  x: Tm((n.pageX - (o.left + window.pageXOffset)) / o.width),
+                  y: Tm((n.pageY - (o.top + window.pageYOffset)) / o.height),
                 }),
               );
             };
-          class Um {
+          class Wm {
             constructor(t, e, n, o) {
-              const i = Rm(
+              const i = Vm(
                 `<div role="slider" tabindex="0" part="${e}" ${n}><div part="${e}-pointer"></div></div>`,
               );
               t.appendChild(i.content.cloneNode(!0));
@@ -22138,7 +22190,7 @@
             }
             set dragging(t) {
               const e = t ? document.addEventListener : document.removeEventListener;
-              e(Fm ? 'touchmove' : 'mousemove', this), e(Fm ? 'touchend' : 'mouseup', this);
+              e(Um ? 'touchmove' : 'mousemove', this), e(Um ? 'touchend' : 'mouseup', this);
             }
             handleEvent(t) {
               switch (t.type) {
@@ -22146,15 +22198,15 @@
                 case 'touchstart':
                   if (
                     (t.preventDefault(),
-                    !(t => !((Fm && !Vm(t)) || (Fm || (Fm = Vm(t)), 0)))(t) ||
-                      (!Fm && 0 != t.button))
+                    !(t => !((Um && !Gm(t)) || (Um || (Um = Gm(t)), 0)))(t) ||
+                      (!Um && 0 != t.button))
                   )
                     return;
-                  this.el.focus(), Hm(this, t), (this.dragging = !0);
+                  this.el.focus(), qm(this, t), (this.dragging = !0);
                   break;
                 case 'mousemove':
                 case 'touchmove':
-                  t.preventDefault(), Hm(this, t);
+                  t.preventDefault(), qm(this, t);
                   break;
                 case 'mouseup':
                 case 'touchend':
@@ -22167,7 +22219,7 @@
                       (t.xy && n < 37) ||
                       n < 33 ||
                       (e.preventDefault(),
-                      jm(
+                      Hm(
                         t.el,
                         'move',
                         t.getMove(
@@ -22200,80 +22252,80 @@
               });
             }
           }
-          class Gm extends Um {
+          class $m extends Wm {
             constructor(t) {
               super(t, 'hue', 'aria-label="Hue" aria-valuemin="0" aria-valuemax="360"', !1);
             }
             update({ h: t }) {
               (this.h = t),
                 this.style([
-                  { left: (t / 360) * 100 + '%', color: Mm({ h: t, s: 100, v: 100, a: 1 }) },
+                  { left: (t / 360) * 100 + '%', color: Pm({ h: t, s: 100, v: 100, a: 1 }) },
                 ]),
-                this.el.setAttribute('aria-valuenow', `${Sm(t)}`);
+                this.el.setAttribute('aria-valuenow', `${Mm(t)}`);
             }
             getMove(t, e) {
-              return { h: e ? Dm(this.h + 360 * t.x, 0, 360) : 360 * t.x };
+              return { h: e ? Tm(this.h + 360 * t.x, 0, 360) : 360 * t.x };
             }
           }
-          class qm extends Um {
+          class Km extends Wm {
             constructor(t) {
               super(t, 'saturation', 'aria-label="Color"', !0);
             }
             update(t) {
               (this.hsva = t),
                 this.style([
-                  { top: 100 - t.v + '%', left: `${t.s}%`, color: Mm(t) },
-                  { 'background-color': Mm({ h: t.h, s: 100, v: 100, a: 1 }) },
+                  { top: 100 - t.v + '%', left: `${t.s}%`, color: Pm(t) },
+                  { 'background-color': Pm({ h: t.h, s: 100, v: 100, a: 1 }) },
                 ]),
                 this.el.setAttribute(
                   'aria-valuetext',
-                  `Saturation ${Sm(t.s)}%, Brightness ${Sm(t.v)}%`,
+                  `Saturation ${Mm(t.s)}%, Brightness ${Mm(t.v)}%`,
                 );
             }
             getMove(t, e) {
               return {
-                s: e ? Dm(this.hsva.s + 100 * t.x, 0, 100) : 100 * t.x,
-                v: e ? Dm(this.hsva.v - 100 * t.y, 0, 100) : Math.round(100 - 100 * t.y),
+                s: e ? Tm(this.hsva.s + 100 * t.x, 0, 100) : 100 * t.x,
+                v: e ? Tm(this.hsva.v - 100 * t.y, 0, 100) : Math.round(100 - 100 * t.y),
               };
             }
           }
-          const Wm = Symbol('same'),
-            $m = Symbol('color'),
-            Km = Symbol('hsva'),
-            Ym = Symbol('update'),
-            Zm = Symbol('parts'),
-            Qm = Symbol('css'),
-            Jm = Symbol('sliders');
-          class Xm extends HTMLElement {
+          const Ym = Symbol('same'),
+            Zm = Symbol('color'),
+            Qm = Symbol('hsva'),
+            Jm = Symbol('update'),
+            Xm = Symbol('parts'),
+            tp = Symbol('css'),
+            ep = Symbol('sliders');
+          class np extends HTMLElement {
             static get observedAttributes() {
               return ['color'];
             }
-            get [Qm]() {
+            get [tp]() {
               return [
                 ':host{display:flex;flex-direction:column;position:relative;width:200px;height:200px;user-select:none;-webkit-user-select:none;cursor:default}:host([hidden]){display:none!important}[role=slider]{position:relative;touch-action:none;user-select:none;-webkit-user-select:none;outline:0}[role=slider]:last-child{border-radius:0 0 8px 8px}[part$=pointer]{position:absolute;z-index:1;box-sizing:border-box;width:28px;height:28px;display:flex;place-content:center center;transform:translate(-50%,-50%);background-color:#fff;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,.2)}[part$=pointer]::after{content:"";width:100%;height:100%;border-radius:inherit;background-color:currentColor}[role=slider]:focus [part$=pointer]{transform:translate(-50%,-50%) scale(1.1)}',
                 '[part=hue]{flex:0 0 24px;background:linear-gradient(to right,red 0,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,red 100%)}[part=hue-pointer]{top:50%;z-index:2}',
                 '[part=saturation]{flex-grow:1;border-color:transparent;border-bottom:12px solid #000;border-radius:8px 8px 0 0;background-image:linear-gradient(to top,#000,transparent),linear-gradient(to right,#fff,rgba(255,255,255,0));box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)}[part=saturation-pointer]{z-index:3}',
               ];
             }
-            get [Jm]() {
-              return [qm, Gm];
+            get [ep]() {
+              return [Km, $m];
             }
             get color() {
-              return this[$m];
+              return this[Zm];
             }
             set color(t) {
-              if (!this[Wm](t)) {
+              if (!this[Ym](t)) {
                 const e = this.colorModel.toHsva(t);
-                this[Ym](e), (this[$m] = t);
+                this[Jm](e), (this[Zm] = t);
               }
             }
             constructor() {
               super();
-              const t = Rm(`<style>${this[Qm].join('')}</style>`),
+              const t = Vm(`<style>${this[tp].join('')}</style>`),
                 e = this.attachShadow({ mode: 'open' });
               e.appendChild(t.content.cloneNode(!0)),
                 e.addEventListener('move', this),
-                (this[Zm] = this[Jm].map(t => new t(e)));
+                (this[Xm] = this[ep].map(t => new t(e)));
             }
             connectedCallback() {
               if (this.hasOwnProperty('color')) {
@@ -22283,47 +22335,47 @@
             }
             attributeChangedCallback(t, e, n) {
               const o = this.colorModel.fromAttr(n);
-              this[Wm](o) || (this.color = o);
+              this[Ym](o) || (this.color = o);
             }
             handleEvent(t) {
-              const e = this[Km],
+              const e = this[Qm],
                 n = { ...e, ...t.detail };
               let o;
-              this[Ym](n),
-                Lm(n, e) ||
-                  this[Wm]((o = this.colorModel.fromHsva(n))) ||
-                  ((this[$m] = o), jm(this, 'color-changed', { value: o }));
-            }
-            [Wm](t) {
-              return this.color && this.colorModel.equal(t, this.color);
+              this[Jm](n),
+                jm(n, e) ||
+                  this[Ym]((o = this.colorModel.fromHsva(n))) ||
+                  ((this[Zm] = o), Hm(this, 'color-changed', { value: o }));
             }
             [Ym](t) {
-              (this[Km] = t), this[Zm].forEach(e => e.update(t));
+              return this.color && this.colorModel.equal(t, this.color);
+            }
+            [Jm](t) {
+              (this[Qm] = t), this[Xm].forEach(e => e.update(t));
             }
           }
-          const tp = {
+          const op = {
             defaultColor: '#000',
-            toHsva: t => zm(Im(t)),
-            fromHsva: ({ h: t, s: e, v: n }) => Pm(Bm({ h: t, s: e, v: n, a: 1 })),
-            equal: (t, e) => t.toLowerCase() === e.toLowerCase() || Lm(Im(t), Im(e)),
+            toHsva: t => Rm(Bm(t)),
+            fromHsva: ({ h: t, s: e, v: n }) => Om(zm({ h: t, s: e, v: n, a: 1 })),
+            equal: (t, e) => t.toLowerCase() === e.toLowerCase() || jm(Bm(t), Bm(e)),
             fromAttr: t => t,
           };
-          class ep extends Xm {
+          class ip extends np {
             get colorModel() {
-              return tp;
+              return op;
             }
           }
-          customElements.define('hex-color-picker', class extends ep {});
-          var np = n(3398),
-            op = {
+          customElements.define('hex-color-picker', class extends ip {});
+          var rp = n(3398),
+            sp = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(np.Z, op);
-          np.Z.locals;
-          class ip extends Gi {
+          Vi()(rp.Z, sp);
+          rp.Z.locals;
+          class ap extends Gi {
             constructor(t, e) {
               super(t),
                 this.set('color', ''),
@@ -22348,11 +22400,11 @@
                   t.return = Br(n, this._format);
                 }),
                 this.on('change:color', () => {
-                  this._hexColor = rp(this.color);
+                  this._hexColor = cp(this.color);
                 }),
                 this.on('change:_hexColor', () => {
                   this.picker.setAttribute('color', this._hexColor),
-                    rp(this.color) != rp(this._hexColor) && (this.color = this._hexColor);
+                    cp(this.color) != cp(this._hexColor) && (this.color = this._hexColor);
                 });
             }
             render() {
@@ -22384,19 +22436,19 @@
             _createSlidersView() {
               const t = [...this.picker.shadowRoot.children]
                 .filter(t => 'slider' === t.getAttribute('role'))
-                .map(t => new sp(t));
+                .map(t => new lp(t));
               (this.slidersView = this.createCollection()),
                 t.forEach(t => {
                   this.slidersView.add(t);
                 });
             }
             _createInputRow() {
-              const t = new ap(),
+              const t = new dp(),
                 e = this._createColorInput();
-              return new cp(this.locale, [t, e]);
+              return new hp(this.locale, [t, e]);
             }
             _createColorInput() {
-              const t = new Xr(this.locale, Em),
+              const t = new Xr(this.locale, Im),
                 { t: e } = this.locale;
               return (
                 t.set({ label: e('HEX'), class: 'color-picker-hex-input' }),
@@ -22419,7 +22471,7 @@
               );
             }
           }
-          function rp(t) {
+          function cp(t) {
             let e = (function (t) {
               if (!t) return '';
               const e = Nr(t);
@@ -22431,7 +22483,7 @@
               e.toLowerCase()
             );
           }
-          class sp extends Gi {
+          class lp extends Gi {
             constructor(t) {
               super(), (this.element = t);
             }
@@ -22439,7 +22491,7 @@
               this.element.focus();
             }
           }
-          class ap extends Gi {
+          class dp extends Gi {
             constructor(t) {
               super(t),
                 this.setTemplate({
@@ -22449,7 +22501,7 @@
                 });
             }
           }
-          class cp extends Gi {
+          class hp extends Gi {
             constructor(t, e) {
               super(t),
                 (this.children = this.createCollection(e)),
@@ -22460,7 +22512,7 @@
                 });
             }
           }
-          class lp {
+          class up {
             constructor(t) {
               (this._components = new Map()), (this.editor = t);
             }
@@ -22468,44 +22520,44 @@
               for (const t of this._components.values()) yield t.originalName;
             }
             add(t, e) {
-              this._components.set(dp(t), { callback: e, originalName: t });
+              this._components.set(gp(t), { callback: e, originalName: t });
             }
             create(t) {
               if (!this.has(t)) throw new _('componentfactory-item-missing', this, { name: t });
-              return this._components.get(dp(t)).callback(this.editor.locale);
+              return this._components.get(gp(t)).callback(this.editor.locale);
             }
             has(t) {
-              return this._components.has(dp(t));
+              return this._components.has(gp(t));
             }
           }
-          function dp(t) {
+          function gp(t) {
             return String(t).toLowerCase();
           }
-          var hp = n(8793),
-            up = {
+          var mp = n(8793),
+            pp = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(hp.Z, up);
-          hp.Z.locals;
-          var gp = Object.defineProperty,
-            mp = Object.getOwnPropertySymbols,
-            pp = Object.prototype.hasOwnProperty,
-            fp = Object.prototype.propertyIsEnumerable,
-            kp = (t, e, n) =>
+          Vi()(mp.Z, pp);
+          mp.Z.locals;
+          var fp = Object.defineProperty,
+            kp = Object.getOwnPropertySymbols,
+            bp = Object.prototype.hasOwnProperty,
+            wp = Object.prototype.propertyIsEnumerable,
+            Ap = (t, e, n) =>
               e in t
-                ? gp(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? fp(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n),
-            bp = (t, e) => {
-              for (var n in e || (e = {})) pp.call(e, n) && kp(t, n, e[n]);
-              if (mp) for (var n of mp(e)) fp.call(e, n) && kp(t, n, e[n]);
+            Cp = (t, e) => {
+              for (var n in e || (e = {})) bp.call(e, n) && Ap(t, n, e[n]);
+              if (kp) for (var n of kp(e)) wp.call(e, n) && Ap(t, n, e[n]);
               return t;
             };
-          const wp = Qo('px'),
-            Ap = Ro.document.body,
-            Cp = class extends Gi {
+          const _p = Qo('px'),
+            vp = Ro.document.body,
+            yp = class extends Gi {
               constructor(t) {
                 super(t);
                 const e = this.bindTemplate;
@@ -22528,7 +22580,7 @@
                         e.if('withArrow', 'ck-balloon-panel_with-arrow'),
                         e.to('class'),
                       ],
-                      style: { top: e.to('top', wp), left: e.to('left', wp) },
+                      style: { top: e.to('top', _p), left: e.to('left', _p) },
                     },
                     children: this.content,
                   });
@@ -22541,7 +22593,7 @@
               }
               attachTo(t) {
                 this.show();
-                const e = Cp.defaultPositions,
+                const e = yp.defaultPositions,
                   n = Object.assign(
                     {},
                     {
@@ -22559,12 +22611,12 @@
                         e.northArrowSouthEast,
                         e.viewportStickyNorth,
                       ],
-                      limiter: Ap,
+                      limiter: vp,
                       fitInViewport: !0,
                     },
                     t,
                   ),
-                  o = Cp._getOptimalPosition(n),
+                  o = yp._getOptimalPosition(n),
                   i = parseInt(o.left),
                   r = parseInt(o.top),
                   s = o.name,
@@ -22589,8 +22641,8 @@
               }
               _startPinning(t) {
                 this.attachTo(t);
-                const e = vp(t.target),
-                  n = t.limiter ? vp(t.limiter) : Ap;
+                const e = Ep(t.target),
+                  n = t.limiter ? Ep(t.limiter) : vp;
                 this.listenTo(
                   Ro.document,
                   'scroll',
@@ -22610,53 +22662,53 @@
                 this.stopListening(Ro.document, 'scroll'), this.stopListening(Ro.window, 'resize');
               }
             };
-          let _p = Cp;
-          function vp(t) {
+          let xp = yp;
+          function Ep(t) {
             return Do(t)
               ? t
               : Vo(t)
               ? t.commonAncestorContainer
               : 'function' == typeof t
-              ? vp(t())
+              ? Ep(t())
               : null;
           }
-          function yp(t = {}) {
+          function Dp(t = {}) {
             const {
-              sideOffset: e = _p.arrowSideOffset,
-              heightOffset: n = _p.arrowHeightOffset,
-              stickyVerticalOffset: o = _p.stickyVerticalOffset,
+              sideOffset: e = xp.arrowSideOffset,
+              heightOffset: n = xp.arrowHeightOffset,
+              stickyVerticalOffset: o = xp.stickyVerticalOffset,
               config: i,
             } = t;
             return {
               northWestArrowSouthWest: (t, n) =>
-                bp({ top: r(t, n), left: t.left - e, name: 'arrow_sw' }, i && { config: i }),
+                Cp({ top: r(t, n), left: t.left - e, name: 'arrow_sw' }, i && { config: i }),
               northWestArrowSouthMiddleWest: (t, n) =>
-                bp(
+                Cp(
                   { top: r(t, n), left: t.left - 0.25 * n.width - e, name: 'arrow_smw' },
                   i && { config: i },
                 ),
               northWestArrowSouth: (t, e) =>
-                bp(
+                Cp(
                   { top: r(t, e), left: t.left - e.width / 2, name: 'arrow_s' },
                   i && { config: i },
                 ),
               northWestArrowSouthMiddleEast: (t, n) =>
-                bp(
+                Cp(
                   { top: r(t, n), left: t.left - 0.75 * n.width + e, name: 'arrow_sme' },
                   i && { config: i },
                 ),
               northWestArrowSouthEast: (t, n) =>
-                bp(
+                Cp(
                   { top: r(t, n), left: t.left - n.width + e, name: 'arrow_se' },
                   i && { config: i },
                 ),
               northArrowSouthWest: (t, n) =>
-                bp(
+                Cp(
                   { top: r(t, n), left: t.left + t.width / 2 - e, name: 'arrow_sw' },
                   i && { config: i },
                 ),
               northArrowSouthMiddleWest: (t, n) =>
-                bp(
+                Cp(
                   {
                     top: r(t, n),
                     left: t.left + t.width / 2 - 0.25 * n.width - e,
@@ -22665,12 +22717,12 @@
                   i && { config: i },
                 ),
               northArrowSouth: (t, e) =>
-                bp(
+                Cp(
                   { top: r(t, e), left: t.left + t.width / 2 - e.width / 2, name: 'arrow_s' },
                   i && { config: i },
                 ),
               northArrowSouthMiddleEast: (t, n) =>
-                bp(
+                Cp(
                   {
                     top: r(t, n),
                     left: t.left + t.width / 2 - 0.75 * n.width + e,
@@ -22679,94 +22731,94 @@
                   i && { config: i },
                 ),
               northArrowSouthEast: (t, n) =>
-                bp(
+                Cp(
                   { top: r(t, n), left: t.left + t.width / 2 - n.width + e, name: 'arrow_se' },
                   i && { config: i },
                 ),
               northEastArrowSouthWest: (t, n) =>
-                bp({ top: r(t, n), left: t.right - e, name: 'arrow_sw' }, i && { config: i }),
+                Cp({ top: r(t, n), left: t.right - e, name: 'arrow_sw' }, i && { config: i }),
               northEastArrowSouthMiddleWest: (t, n) =>
-                bp(
+                Cp(
                   { top: r(t, n), left: t.right - 0.25 * n.width - e, name: 'arrow_smw' },
                   i && { config: i },
                 ),
               northEastArrowSouth: (t, e) =>
-                bp(
+                Cp(
                   { top: r(t, e), left: t.right - e.width / 2, name: 'arrow_s' },
                   i && { config: i },
                 ),
               northEastArrowSouthMiddleEast: (t, n) =>
-                bp(
+                Cp(
                   { top: r(t, n), left: t.right - 0.75 * n.width + e, name: 'arrow_sme' },
                   i && { config: i },
                 ),
               northEastArrowSouthEast: (t, n) =>
-                bp(
+                Cp(
                   { top: r(t, n), left: t.right - n.width + e, name: 'arrow_se' },
                   i && { config: i },
                 ),
               southWestArrowNorthWest: t =>
-                bp({ top: s(t), left: t.left - e, name: 'arrow_nw' }, i && { config: i }),
+                Cp({ top: s(t), left: t.left - e, name: 'arrow_nw' }, i && { config: i }),
               southWestArrowNorthMiddleWest: (t, n) =>
-                bp(
+                Cp(
                   { top: s(t), left: t.left - 0.25 * n.width - e, name: 'arrow_nmw' },
                   i && { config: i },
                 ),
               southWestArrowNorth: (t, e) =>
-                bp({ top: s(t), left: t.left - e.width / 2, name: 'arrow_n' }, i && { config: i }),
+                Cp({ top: s(t), left: t.left - e.width / 2, name: 'arrow_n' }, i && { config: i }),
               southWestArrowNorthMiddleEast: (t, n) =>
-                bp(
+                Cp(
                   { top: s(t), left: t.left - 0.75 * n.width + e, name: 'arrow_nme' },
                   i && { config: i },
                 ),
               southWestArrowNorthEast: (t, n) =>
-                bp({ top: s(t), left: t.left - n.width + e, name: 'arrow_ne' }, i && { config: i }),
+                Cp({ top: s(t), left: t.left - n.width + e, name: 'arrow_ne' }, i && { config: i }),
               southArrowNorthWest: t =>
-                bp(
+                Cp(
                   { top: s(t), left: t.left + t.width / 2 - e, name: 'arrow_nw' },
                   i && { config: i },
                 ),
               southArrowNorthMiddleWest: (t, n) =>
-                bp(
+                Cp(
                   { top: s(t), left: t.left + t.width / 2 - 0.25 * n.width - e, name: 'arrow_nmw' },
                   i && { config: i },
                 ),
               southArrowNorth: (t, e) =>
-                bp(
+                Cp(
                   { top: s(t), left: t.left + t.width / 2 - e.width / 2, name: 'arrow_n' },
                   i && { config: i },
                 ),
               southArrowNorthMiddleEast: (t, n) =>
-                bp(
+                Cp(
                   { top: s(t), left: t.left + t.width / 2 - 0.75 * n.width + e, name: 'arrow_nme' },
                   i && { config: i },
                 ),
               southArrowNorthEast: (t, n) =>
-                bp(
+                Cp(
                   { top: s(t), left: t.left + t.width / 2 - n.width + e, name: 'arrow_ne' },
                   i && { config: i },
                 ),
               southEastArrowNorthWest: t =>
-                bp({ top: s(t), left: t.right - e, name: 'arrow_nw' }, i && { config: i }),
+                Cp({ top: s(t), left: t.right - e, name: 'arrow_nw' }, i && { config: i }),
               southEastArrowNorthMiddleWest: (t, n) =>
-                bp(
+                Cp(
                   { top: s(t), left: t.right - 0.25 * n.width - e, name: 'arrow_nmw' },
                   i && { config: i },
                 ),
               southEastArrowNorth: (t, e) =>
-                bp({ top: s(t), left: t.right - e.width / 2, name: 'arrow_n' }, i && { config: i }),
+                Cp({ top: s(t), left: t.right - e.width / 2, name: 'arrow_n' }, i && { config: i }),
               southEastArrowNorthMiddleEast: (t, n) =>
-                bp(
+                Cp(
                   { top: s(t), left: t.right - 0.75 * n.width + e, name: 'arrow_nme' },
                   i && { config: i },
                 ),
               southEastArrowNorthEast: (t, n) =>
-                bp(
+                Cp(
                   { top: s(t), left: t.right - n.width + e, name: 'arrow_ne' },
                   i && { config: i },
                 ),
               westArrowEast: (t, e) =>
-                bp(
+                Cp(
                   {
                     top: t.top + t.height / 2 - e.height / 2,
                     left: t.left - e.width - n,
@@ -22775,7 +22827,7 @@
                   i && { config: i },
                 ),
               eastArrowWest: (t, e) =>
-                bp(
+                Cp(
                   { top: t.top + t.height / 2 - e.height / 2, left: t.right + n, name: 'arrow_w' },
                   i && { config: i },
                 ),
@@ -22785,7 +22837,7 @@
                       top: n.top + o,
                       left: t.left + t.width / 2 - e.width / 2,
                       name: 'arrowless',
-                      config: bp({ withArrow: !1 }, i),
+                      config: Cp({ withArrow: !1 }, i),
                     }
                   : null,
             };
@@ -22796,33 +22848,33 @@
               return t.bottom + n;
             }
           }
-          (_p.arrowSideOffset = 25),
-            (_p.arrowHeightOffset = 10),
-            (_p.stickyVerticalOffset = 20),
-            (_p._getOptimalPosition = oi),
-            (_p.defaultPositions = yp());
-          var xp = n(3332),
-            Ep = {
+          (xp.arrowSideOffset = 25),
+            (xp.arrowHeightOffset = 10),
+            (xp.stickyVerticalOffset = 20),
+            (xp._getOptimalPosition = oi),
+            (xp.defaultPositions = Dp());
+          var Sp = n(3332),
+            Ip = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(xp.Z, Ep);
-          xp.Z.locals;
-          const Dp = 'ck-tooltip',
-            Sp = class extends Po() {
+          Vi()(Sp.Z, Ip);
+          Sp.Z.locals;
+          const Tp = 'ck-tooltip',
+            Mp = class extends Po() {
               constructor(t) {
                 if (
                   (super(),
                   (this._currentElementWithTooltip = null),
                   (this._currentTooltipPosition = null),
                   (this._resizeObserver = null),
-                  Sp._editors.add(t),
-                  Sp._instance)
+                  Mp._editors.add(t),
+                  Mp._instance)
                 )
-                  return Sp._instance;
-                (Sp._instance = this),
+                  return Mp._instance;
+                (Mp._instance = this),
                   (this.tooltipTextView = new Gi(t.locale)),
                   this.tooltipTextView.set('text', ''),
                   this.tooltipTextView.setTemplate({
@@ -22830,8 +22882,8 @@
                     attributes: { class: ['ck', 'ck-tooltip__text'] },
                     children: [{ text: this.tooltipTextView.bindTemplate.to('text') }],
                   }),
-                  (this.balloonPanelView = new _p(t.locale)),
-                  (this.balloonPanelView.class = Dp),
+                  (this.balloonPanelView = new xp(t.locale)),
+                  (this.balloonPanelView.class = Tp),
                   this.balloonPanelView.content.add(this.tooltipTextView),
                   (this._pinTooltipDebounced = $r(this._pinTooltip, 600)),
                   this.listenTo(Ro.document, 'mouseenter', this._onEnterOrFocus.bind(this), {
@@ -22853,17 +22905,17 @@
               }
               destroy(t) {
                 const e = t.ui.view && t.ui.view.body;
-                Sp._editors.delete(t),
+                Mp._editors.delete(t),
                   this.stopListening(t.ui),
                   e && e.has(this.balloonPanelView) && e.remove(this.balloonPanelView),
-                  Sp._editors.size ||
+                  Mp._editors.size ||
                     (this._unpinTooltip(),
                     this.balloonPanelView.destroy(),
                     this.stopListening(),
-                    (Sp._instance = null));
+                    (Mp._instance = null));
               }
               static getPositioningFunctions(t) {
-                const e = Sp.defaultBalloonPositions;
+                const e = Mp.defaultBalloonPositions;
                 return {
                   s: [e.southArrowNorth, e.southArrowNorthEast, e.southArrowNorthWest],
                   n: [e.northArrowSouth],
@@ -22874,7 +22926,7 @@
                 }[t];
               }
               _onEnterOrFocus(t, { target: e }) {
-                const n = Tp(e);
+                const n = Np(e);
                 var o;
                 n &&
                   n !== this._currentElementWithTooltip &&
@@ -22890,8 +22942,8 @@
                   if (!Do(e)) return;
                   if (this._currentElementWithTooltip && e !== this._currentElementWithTooltip)
                     return;
-                  const t = Tp(e),
-                    o = Tp(n);
+                  const t = Np(e),
+                    o = Np(n);
                   t && t !== o && this._unpinTooltip();
                 } else {
                   if (this._currentElementWithTooltip && e !== this._currentElementWithTooltip)
@@ -22906,18 +22958,18 @@
                     this._unpinTooltip());
               }
               _pinTooltip(t, { text: e, position: n, cssClass: o }) {
-                const i = Ti(Sp._editors.values()).ui.view.body;
+                const i = Ti(Mp._editors.values()).ui.view.body;
                 i.has(this.balloonPanelView) || i.add(this.balloonPanelView),
                   (this.tooltipTextView.text = e),
                   this.balloonPanelView.pin({
                     target: t,
-                    positions: Sp.getPositioningFunctions(n),
+                    positions: Mp.getPositioningFunctions(n),
                   }),
                   (this._resizeObserver = new Yo(t, () => {
                     ei(t) || this._unpinTooltip();
                   })),
-                  (this.balloonPanelView.class = [Dp, o].filter(t => t).join(' '));
-                for (const t of Sp._editors)
+                  (this.balloonPanelView.class = [Tp, o].filter(t => t).join(' '));
+                for (const t of Mp._editors)
                   this.listenTo(t.ui, 'update', this._updateTooltipPosition.bind(this), {
                     priority: 'low',
                   });
@@ -22925,7 +22977,7 @@
               }
               _unpinTooltip() {
                 this._pinTooltipDebounced.cancel(), this.balloonPanelView.unpin();
-                for (const t of Sp._editors) this.stopListening(t.ui, 'update');
+                for (const t of Mp._editors) this.stopListening(t.ui, 'update');
                 (this._currentElementWithTooltip = null),
                   (this._currentTooltipPosition = null),
                   this._resizeObserver && this._resizeObserver.destroy();
@@ -22934,21 +22986,21 @@
                 ei(this._currentElementWithTooltip)
                   ? this.balloonPanelView.pin({
                       target: this._currentElementWithTooltip,
-                      positions: Sp.getPositioningFunctions(this._currentTooltipPosition),
+                      positions: Mp.getPositioningFunctions(this._currentTooltipPosition),
                     })
                   : this._unpinTooltip();
               }
             };
-          let Ip = Sp;
-          function Tp(t) {
+          let Bp = Mp;
+          function Np(t) {
             return Do(t)
               ? t.closest('[data-cke-tooltip-text]:not([data-cke-tooltip-disabled])')
               : null;
           }
-          (Ip.defaultBalloonPositions = yp({ heightOffset: 5, sideOffset: 13 })),
-            (Ip._editors = new Set()),
-            (Ip._instance = null);
-          const Mp = function (t, e, n) {
+          (Bp.defaultBalloonPositions = Dp({ heightOffset: 5, sideOffset: 13 })),
+            (Bp._editors = new Set()),
+            (Bp._instance = null);
+          const Pp = function (t, e, n) {
             var o = !0,
               i = !0;
             if ('function' != typeof t) throw new TypeError('Expected a function');
@@ -22958,28 +23010,28 @@
               $r(t, e, { leading: o, maxWait: e, trailing: i })
             );
           };
-          var Bp = Object.defineProperty,
-            Np = Object.getOwnPropertySymbols,
-            Pp = Object.prototype.hasOwnProperty,
-            zp = Object.prototype.propertyIsEnumerable,
-            Lp = (t, e, n) =>
+          var zp = Object.defineProperty,
+            Lp = Object.getOwnPropertySymbols,
+            Op = Object.prototype.hasOwnProperty,
+            Rp = Object.prototype.propertyIsEnumerable,
+            jp = (t, e, n) =>
               e in t
-                ? Bp(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? zp(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n),
-            Op = (t, e) => {
-              for (var n in e || (e = {})) Pp.call(e, n) && Lp(t, n, e[n]);
-              if (Np) for (var n of Np(e)) zp.call(e, n) && Lp(t, n, e[n]);
+            Fp = (t, e) => {
+              for (var n in e || (e = {})) Op.call(e, n) && jp(t, n, e[n]);
+              if (Lp) for (var n of Lp(e)) Rp.call(e, n) && jp(t, n, e[n]);
               return t;
             };
-          const Rp = 250,
-            jp = { top: -9999999, left: -9999999, name: 'invalid', config: { withArrow: !1 } };
-          class Fp extends Po() {
+          const Vp = 250,
+            Hp = { top: -9999999, left: -9999999, name: 'invalid', config: { withArrow: !1 } };
+          class Up extends Po() {
             constructor(t) {
               super(),
                 (this.editor = t),
                 (this._balloonView = null),
                 (this._lastFocusedDOMRoot = null),
-                (this._showBalloonThrottled = Mp(this._showBalloon.bind(this), 50, {
+                (this._showBalloonThrottled = Pp(this._showBalloon.bind(this), 50, {
                   leading: !0,
                 })),
                 t.on('ready', this._handleEditorReady.bind(this));
@@ -23055,8 +23107,8 @@
             }
             _createBalloonView() {
               const t = this.editor,
-                e = (this._balloonView = new _p()),
-                n = new Vp(t.locale);
+                e = (this._balloonView = new xp()),
+                n = new Gp(t.locale);
               e.content.add(n),
                 e.set({ class: 'ck-powered-by-balloon' }),
                 t.ui.view.body.add(e),
@@ -23069,7 +23121,7 @@
                 const n = (function (t) {
                     const e = t.config.get('ui.poweredBy'),
                       n = (e && e.position) || 'inside';
-                    return Op(
+                    return Fp(
                       {
                         position: n,
                         verticalOffset: 'inside' === n ? 5 : 0,
@@ -23082,14 +23134,14 @@
                   o =
                     'right' === n.side
                       ? (function (t, e) {
-                          return Hp(
+                          return qp(
                             t,
                             e,
                             (t, n) => t.left + t.width - n.width - e.horizontalOffset,
                           );
                         })(e, n)
                       : (function (t, e) {
-                          return Hp(t, e, t => t.left + e.horizontalOffset);
+                          return qp(t, e, t => t.left + e.horizontalOffset);
                         })(e, n);
                 return { target: e, positions: [o] };
               })(this.editor, this._lastFocusedDOMRoot);
@@ -23099,7 +23151,7 @@
               this._balloonView && this._balloonView.unpin();
             }
           }
-          class Vp extends Gi {
+          class Gp extends Gi {
             constructor(t) {
               super(t);
               const e = new fr(),
@@ -23135,18 +23187,18 @@
                 });
             }
           }
-          function Hp(t, e, o) {
+          function qp(t, e, o) {
             return (i, r) => {
               const s = i.getVisible();
-              if (!s) return jp;
-              const a = i.width < Rp;
+              if (!s) return Hp;
+              const a = i.width < Vp;
               let c;
               (c = 'inside' === e.position ? i.bottom - r.height : i.bottom - r.height / 2),
                 (c -= e.verticalOffset);
               const l = o(i, r);
               if ('inside' === e.position) {
                 const t = r.clone().moveTo(l, c);
-                if (t.getIntersectionArea(s) < t.getArea()) return jp;
+                if (t.getIntersectionArea(s) < t.getArea()) return Hp;
               } else {
                 const e = (function (t) {
                   let e = t.parentElement;
@@ -23160,7 +23212,7 @@
                 })(t);
                 if (e) {
                   const t = new Go(e);
-                  if (s.bottom + r.height / 2 > t.bottom) return jp;
+                  if (s.bottom + r.height / 2 > t.bottom) return Hp;
                 }
               }
               return {
@@ -23173,17 +23225,17 @@
               };
             };
           }
-          class Up extends Y() {
+          class Wp extends Y() {
             constructor(t) {
               super(),
                 (this.isReady = !1),
                 (this._editableElementsMap = new Map()),
                 (this._focusableToolbarDefinitions = []),
                 (this.editor = t),
-                (this.componentFactory = new lp(t)),
+                (this.componentFactory = new up(t)),
                 (this.focusTracker = new Mi()),
-                (this.tooltipManager = new Ip(t)),
-                (this.poweredBy = new Fp(t)),
+                (this.tooltipManager = new Bp(t)),
+                (this.poweredBy = new Up(t)),
                 this.set('viewportOffset', this._readViewportOffsetFromConfig()),
                 this.once('ready', () => {
                   this.isReady = !0;
@@ -23292,7 +23344,7 @@
                 const { toolbarView: n, options: o } = e;
                 (ei(n.element) || o.beforeFocus) && t.push(e);
               }
-              return t.sort((t, e) => Gp(t) - Gp(e)), t;
+              return t.sort((t, e) => $p(t) - $p(e)), t;
             }
             _getCurrentFocusedToolbarDefinition() {
               for (const t of this._focusableToolbarDefinitions)
@@ -23311,21 +23363,21 @@
               return n && n(), !!ei(e.element) && (e.focus(), !0);
             }
           }
-          function Gp(t) {
+          function $p(t) {
             const { toolbarView: e, options: n } = t;
             let o = 10;
             return ei(e.element) && o--, n.isContextual && o--, o;
           }
-          var qp = n(9688),
-            Wp = {
+          var Kp = n(9688),
+            Yp = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(qp.Z, Wp);
-          qp.Z.locals;
-          class $p extends Gi {
+          Vi()(Kp.Z, Yp);
+          Kp.Z.locals;
+          class Zp extends Gi {
             constructor(t) {
               super(t), (this.body = new ur(t));
             }
@@ -23336,7 +23388,7 @@
               return this.body.detachFromDom(), super.destroy();
             }
           }
-          class Kp extends $p {
+          class Qp extends Zp {
             constructor(t) {
               super(t),
                 (this.top = this.createCollection()),
@@ -23379,7 +23431,7 @@
               );
             }
           }
-          class Yp extends Gi {
+          class Jp extends Gi {
             constructor(t, e, n) {
               super(t),
                 (this.name = null),
@@ -23429,7 +23481,7 @@
                 : e(this);
             }
           }
-          class Zp extends Yp {
+          class Xp extends Jp {
             constructor(t, e, n, o = {}) {
               super(t, e, n);
               const i = t.t;
@@ -23447,16 +23499,16 @@
               });
             }
           }
-          var Qp = n(8847),
-            Jp = {
+          var tf = n(8847),
+            ef = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(Qp.Z, Jp);
-          Qp.Z.locals;
-          class Xp extends vs {
+          Vi()(tf.Z, ef);
+          tf.Z.locals;
+          class nf extends vs {
             static get pluginName() {
               return 'Notification';
             }
@@ -23498,31 +23550,31 @@
               this.fire(e, { message: t.message, type: t.type, title: t.title || '' });
             }
           }
-          class tf extends Y() {
+          class of extends Y() {
             constructor(t, e) {
               super(), e && Xc(this, e), t && this.set(t);
             }
           }
-          var ef = n(4650),
-            nf = {
+          var rf = n(4650),
+            sf = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(ef.Z, nf);
-          ef.Z.locals;
-          var of = n(7676),
-            rf = {
+          Vi()(rf.Z, sf);
+          rf.Z.locals;
+          var af = n(7676),
+            cf = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(of.Z, rf);
-          of.Z.locals;
-          const sf = Qo('px');
-          class af extends fs {
+          Vi()(af.Z, cf);
+          af.Z.locals;
+          const lf = Qo('px');
+          class df extends fs {
             constructor(t) {
               super(t),
                 (this._viewToStack = new Map()),
@@ -23600,7 +23652,7 @@
               this._visibleStack !== e && this._showView(Array.from(e.values()).pop());
             }
             _createPanelView() {
-              (this._view = new _p(this.editor.locale)),
+              (this._view = new xp(this.editor.locale)),
                 this.editor.ui.view.body.add(this._view),
                 this.editor.ui.focusTracker.add(this._view.element),
                 (this._rotatorView = this._createRotatorView()),
@@ -23623,7 +23675,7 @@
               t[e] || (e = t.length - 1), this.showStack(this._getStackId(t[e]));
             }
             _createRotatorView() {
-              const t = new cf(this.editor.locale),
+              const t = new hf(this.editor.locale),
                 e = this.editor.locale.t;
               return (
                 this.view.content.add(t),
@@ -23650,7 +23702,7 @@
               );
             }
             _createFakePanelsView() {
-              const t = new lf(this.editor.locale, this.view);
+              const t = new uf(this.editor.locale, this.view);
               return (
                 t
                   .bind('numberOfPanels')
@@ -23689,7 +23741,7 @@
               );
             }
           }
-          class cf extends Gi {
+          class hf extends Gi {
             constructor(t) {
               super(t);
               const e = t.t,
@@ -23752,7 +23804,7 @@
               return n.set({ label: t, icon: e, tooltip: !0 }), n;
             }
           }
-          class lf extends Gi {
+          class uf extends Gi {
             constructor(t, e) {
               super(t);
               const n = this.bindTemplate;
@@ -23768,10 +23820,10 @@
                   attributes: {
                     class: ['ck-fake-panel', n.to('numberOfPanels', t => (t ? '' : 'ck-hidden'))],
                     style: {
-                      top: n.to('top', sf),
-                      left: n.to('left', sf),
-                      width: n.to('width', sf),
-                      height: n.to('height', sf),
+                      top: n.to('top', lf),
+                      left: n.to('left', lf),
+                      width: n.to('width', lf),
+                      height: n.to('height', lf),
                     },
                   },
                   children: this.content,
@@ -23800,17 +23852,17 @@
               }
             }
           }
-          var df = n(5868),
-            hf = {
+          var gf = n(5868),
+            mf = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(df.Z, hf);
-          df.Z.locals;
-          const uf = Qo('px');
-          class gf extends Gi {
+          Vi()(gf.Z, mf);
+          gf.Z.locals;
+          const pf = Qo('px');
+          class ff extends Gi {
             constructor(t) {
               super(t);
               const e = this.bindTemplate;
@@ -23829,7 +23881,7 @@
                     class: ['ck', 'ck-sticky-panel__placeholder'],
                     style: {
                       display: e.to('isSticky', t => (t ? 'block' : 'none')),
-                      height: e.to('isSticky', t => (t ? uf(this._panelRect.height) : null)),
+                      height: e.to('isSticky', t => (t ? pf(this._panelRect.height) : null)),
                     },
                   },
                 }).render()),
@@ -23844,13 +23896,13 @@
                     ],
                     style: {
                       width: e.to('isSticky', t =>
-                        t ? uf(this._contentPanelPlaceholder.getBoundingClientRect().width) : null,
+                        t ? pf(this._contentPanelPlaceholder.getBoundingClientRect().width) : null,
                       ),
                       top: e.to('_hasViewportTopOffset', t =>
-                        t ? uf(this.viewportTopOffset) : null,
+                        t ? pf(this.viewportTopOffset) : null,
                       ),
                       bottom: e.to('_isStickyToTheLimiter', t =>
-                        t ? uf(this.limiterBottomOffset) : null,
+                        t ? pf(this.limiterBottomOffset) : null,
                       ),
                       marginLeft: e.to('_marginLeft'),
                     },
@@ -23888,25 +23940,25 @@
                       e.bottom < t.height + this.limiterBottomOffset + this.viewportTopOffset),
                     (this._hasViewportTopOffset =
                       !this._isStickyToTheLimiter && !!this.viewportTopOffset),
-                    (this._marginLeft = this._isStickyToTheLimiter ? null : uf(-Ro.window.scrollX)))
+                    (this._marginLeft = this._isStickyToTheLimiter ? null : pf(-Ro.window.scrollX)))
                   : ((this._isStickyToTheLimiter = !1),
                     (this._hasViewportTopOffset = !1),
                     (this._marginLeft = null));
             }
           }
           Qo('px');
-          var mf = n(9695),
-            pf = {
+          var kf = n(9695),
+            bf = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(mf.Z, pf);
-          mf.Z.locals, Qo('px');
+          Vi()(kf.Z, bf);
+          kf.Z.locals, Qo('px');
           Qo('px');
-          const { pilcrow: ff } = Xg;
-          class kf extends Up {
+          const { pilcrow: wf } = nm;
+          class Af extends Wp {
             constructor(t, e) {
               super(t),
                 (this.view = e),
@@ -23963,21 +24015,21 @@
                 i && Ss({ view: e, element: n, text: i, isDirectHost: !1, keepOnFocus: !0 });
             }
           }
-          var bf = n(3143),
-            wf = {
+          var Cf = n(3143),
+            _f = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(bf.Z, wf);
-          bf.Z.locals;
-          class Af extends Kp {
+          Vi()(Cf.Z, _f);
+          Cf.Z.locals;
+          class vf extends Qp {
             constructor(t, e, n = {}) {
               super(t),
-                (this.stickyPanel = new gf(t)),
-                (this.toolbar = new im(t, { shouldGroupWhenFull: n.shouldToolbarGroupWhenFull })),
-                (this.editable = new Zp(t, e));
+                (this.stickyPanel = new ff(t)),
+                (this.toolbar = new am(t, { shouldGroupWhenFull: n.shouldToolbarGroupWhenFull })),
+                (this.editable = new Xp(t, e));
             }
             render() {
               super.render(),
@@ -23986,7 +24038,7 @@
                 this.main.add(this.editable);
             }
           }
-          class Cf {
+          class yf {
             constructor(t) {
               if (
                 ((this.crashes = []),
@@ -24070,13 +24122,13 @@
               );
             }
           }
-          function _f(t, e = new Set()) {
+          function xf(t, e = new Set()) {
             const n = [t],
               o = new Set();
             let i = 0;
             for (; n.length > i; ) {
               const t = n[i++];
-              if (!o.has(t) && vf(t) && !e.has(t))
+              if (!o.has(t) && Ef(t) && !e.has(t))
                 if ((o.add(t), Symbol.iterator in t))
                   try {
                     for (const e of t) n.push(e);
@@ -24085,7 +24137,7 @@
             }
             return o;
           }
-          function vf(t) {
+          function Ef(t) {
             const e = Object.prototype.toString.call(t),
               n = typeof t;
             return !(
@@ -24103,19 +24155,19 @@
               t instanceof Event
             );
           }
-          function yf(t, e, n = new Set()) {
+          function Df(t, e, n = new Set()) {
             if (t === e && 'object' == typeof (o = t) && null !== o) return !0;
             var o;
-            const i = _f(t, n),
-              r = _f(e, n);
+            const i = xf(t, n),
+              r = xf(e, n);
             for (const t of i) if (r.has(t)) return !0;
             return !1;
           }
-          class xf extends Cf {
+          class Sf extends yf {
             constructor(t, e = {}) {
               super(e),
                 (this._editor = null),
-                (this._throttledSave = Mp(
+                (this._throttledSave = Pp(
                   this._save.bind(this),
                   'number' == typeof e.saveInterval ? e.saveInterval : 5e3,
                 )),
@@ -24216,14 +24268,14 @@
               return t;
             }
             _isErrorComingFromThisItem(t) {
-              return yf(this._editor, t.context, this._excludedProps);
+              return Df(this._editor, t.context, this._excludedProps);
             }
             _cloneEditorConfiguration(t) {
               return Eo(t, (t, e) => (Do(t) || 'context' === e ? t : void 0));
             }
           }
-          const Ef = Symbol('MainQueueId');
-          class Df {
+          const If = Symbol('MainQueueId');
+          class Tf {
             constructor() {
               (this._onEmptyCallbacks = []), (this._queues = new Map()), (this._activeActions = 0);
             }
@@ -24231,12 +24283,12 @@
               this._onEmptyCallbacks.push(t);
             }
             enqueue(t, e) {
-              const n = t === Ef;
+              const n = t === If;
               this._activeActions++, this._queues.get(t) || this._queues.set(t, Promise.resolve());
               const o = (
                   n
                     ? Promise.all(this._queues.values())
-                    : Promise.all([this._queues.get(Ef), this._queues.get(t)])
+                    : Promise.all([this._queues.get(If), this._queues.get(t)])
                 ).then(e),
                 i = o.catch(() => {});
               return (
@@ -24250,29 +24302,29 @@
               );
             }
           }
-          function Sf(t) {
+          function Mf(t) {
             return Array.isArray(t) ? t : [t];
           }
-          class If extends Zg(Qg(Yg)) {
+          class Bf extends Xg(tm(Jg)) {
             constructor(t, e = {}) {
-              if (!Tf(t) && void 0 !== e.initialData)
+              if (!Nf(t) && void 0 !== e.initialData)
                 throw new _('editor-create-initial-data', null);
               super(e),
                 void 0 === this.config.get('initialData') &&
                   this.config.set(
                     'initialData',
                     (function (t) {
-                      return Tf(t)
+                      return Nf(t)
                         ? ((e = t), e instanceof HTMLTextAreaElement ? e.value : e.innerHTML)
                         : t;
                       var e;
                     })(t),
                   ),
-                Tf(t) && (this.sourceElement = t),
+                Nf(t) && (this.sourceElement = t),
                 this.model.document.createRoot();
               const n = !this.config.get('toolbar.shouldNotGroupWhenFull'),
-                o = new Af(this.locale, this.editing.view, { shouldToolbarGroupWhenFull: n });
-              (this.ui = new kf(this, o)),
+                o = new vf(this.locale, this.editing.view, { shouldToolbarGroupWhenFull: n });
+              (this.ui = new Af(this, o)),
                 (function (t) {
                   if (!Gt(t.updateSourceElement))
                     throw new _('attachtoform-missing-elementapi-interface', t);
@@ -24309,7 +24361,7 @@
                 n(
                   o
                     .initPlugins()
-                    .then(() => o.ui.init(Tf(t) ? t : null))
+                    .then(() => o.ui.init(Nf(t) ? t : null))
                     .then(() => o.data.init(o.config.get('initialData')))
                     .then(() => o.fire('ready'))
                     .then(() => o),
@@ -24317,18 +24369,18 @@
               });
             }
           }
-          function Tf(t) {
+          function Nf(t) {
             return Do(t);
           }
-          (If.Context = _s),
-            (If.EditorWatchdog = xf),
-            (If.ContextWatchdog = class extends Cf {
+          (Bf.Context = _s),
+            (Bf.EditorWatchdog = Sf),
+            (Bf.ContextWatchdog = class extends yf {
               constructor(t, e = {}) {
                 super(e),
                   (this._watchdogs = new Map()),
                   (this._context = null),
                   (this._contextProps = new Set()),
-                  (this._actionQueues = new Df()),
+                  (this._actionQueues = new Tf()),
                   (this._watchdogConfig = e),
                   (this._creator = e => t.create(e)),
                   (this._destructor = t => t.destroy()),
@@ -24348,7 +24400,7 @@
               }
               create(t = {}) {
                 return this._actionQueues.enqueue(
-                  Ef,
+                  If,
                   () => ((this._contextConfig = t), this._create()),
                 );
               }
@@ -24359,7 +24411,7 @@
                 return this._getWatchdog(t).state;
               }
               add(t) {
-                const e = Sf(t);
+                const e = Mf(t);
                 return Promise.all(
                   e.map(t =>
                     this._actionQueues.enqueue(t.id, () => {
@@ -24374,7 +24426,7 @@
                         throw new Error(`Item with the given id is already added: '${t.id}'.`);
                       if ('editor' === t.type)
                         return (
-                          (e = new xf(null, this._watchdogConfig)),
+                          (e = new Sf(null, this._watchdogConfig)),
                           e.setCreator(t.creator),
                           e._setExcludedProperties(this._contextProps),
                           t.destructor && e.setDestructor(t.destructor),
@@ -24403,7 +24455,7 @@
                 );
               }
               remove(t) {
-                const e = Sf(t);
+                const e = Mf(t);
                 return Promise.all(
                   e.map(t =>
                     this._actionQueues.enqueue(t, () => {
@@ -24415,7 +24467,7 @@
               }
               destroy() {
                 return this._actionQueues.enqueue(
-                  Ef,
+                  If,
                   () => (
                     (this.state = 'destroyed'),
                     this._fire('stateChange'),
@@ -24426,7 +24478,7 @@
               }
               _restart() {
                 return this._actionQueues.enqueue(
-                  Ef,
+                  If,
                   () => (
                     (this.state = 'initializing'),
                     this._fire('stateChange'),
@@ -24448,7 +24500,7 @@
                   .then(
                     t => (
                       (this._context = t),
-                      (this._contextProps = _f(this._context)),
+                      (this._contextProps = xf(this._context)),
                       Promise.all(
                         Array.from(this._watchdogs.values()).map(
                           t => (
@@ -24481,10 +24533,10 @@
               _isErrorComingFromThisItem(t) {
                 for (const e of this._watchdogs.values())
                   if (e._isErrorComingFromThisItem(t)) return !1;
-                return yf(this._context, t.context);
+                return Df(this._context, t.context);
               }
             });
-          class Mf extends el {
+          class Pf extends el {
             constructor(t) {
               super(t),
                 (this.domEventType = [
@@ -24540,8 +24592,8 @@
                 this.fire(t.type, t, o);
             }
           }
-          const Bf = ['figcaption', 'li'];
-          function Nf(t) {
+          const zf = ['figcaption', 'li'];
+          function Lf(t) {
             let e = '';
             if (t.is('$text') || t.is('$textProxy')) e = t.data;
             else if (t.is('element', 'img') && t.hasAttribute('alt')) e = t.getAttribute('alt');
@@ -24549,22 +24601,22 @@
             else {
               let n = null;
               for (const o of t.getChildren()) {
-                const t = Nf(o);
+                const t = Lf(o);
                 n &&
                   (n.is('containerElement') || o.is('containerElement')) &&
-                  (Bf.includes(n.name) || Bf.includes(o.name) ? (e += '\n') : (e += '\n\n')),
+                  (zf.includes(n.name) || zf.includes(o.name) ? (e += '\n') : (e += '\n\n')),
                   (e += t),
                   (n = o);
               }
             }
             return e;
           }
-          class Pf extends fs {
+          class Of extends fs {
             static get pluginName() {
               return 'ClipboardPipeline';
             }
             init() {
-              this.editor.editing.view.addObserver(Mf),
+              this.editor.editing.view.addObserver(Pf),
                 this._setupPasteDrop(),
                 this._setupCopyCut();
             }
@@ -24683,14 +24735,14 @@
                         'text/html',
                         this.editor.data.htmlProcessor.toData(o.content),
                       ),
-                      o.dataTransfer.setData('text/plain', Nf(o.content))),
+                      o.dataTransfer.setData('text/plain', Lf(o.content))),
                       'cut' == o.method && t.model.deleteContent(e.selection);
                   },
                   { priority: 'low' },
                 );
             }
           }
-          class zf {
+          class Rf {
             constructor(t, e = 20) {
               (this._batch = null),
                 (this.model = t),
@@ -24739,9 +24791,9 @@
               (this.isLocked && !t) || ((this._batch = null), (this._size = 0));
             }
           }
-          class Lf extends bs {
+          class jf extends bs {
             constructor(t, e) {
-              super(t), (this._buffer = new zf(t.model, e)), (this._isEnabledBasedOnSelection = !1);
+              super(t), (this._buffer = new Rf(t.model, e)), (this._isEnabledBasedOnSelection = !1);
             }
             get buffer() {
               return this._buffer;
@@ -24771,15 +24823,15 @@
               });
             }
           }
-          const Of = ['insertText', 'insertReplacementText'];
-          class Rf extends Jc {
+          const Ff = ['insertText', 'insertReplacementText'];
+          class Vf extends Jc {
             constructor(t) {
-              super(t), l.isAndroid && Of.push('insertCompositionText');
+              super(t), l.isAndroid && Ff.push('insertCompositionText');
               const e = t.document;
               e.on('beforeinput', (n, o) => {
                 if (!this.isEnabled) return;
                 const { data: i, targetRanges: r, inputType: s, domEvent: a } = o;
-                if (!Of.includes(s)) return;
+                if (!Ff.includes(s)) return;
                 const c = new f(e, 'insertText');
                 e.fire(c, new tl(t, a, { text: i, selection: t.createSelection(r) })),
                   c.stop.called && n.stop();
@@ -24798,7 +24850,7 @@
             observe() {}
             stopObserving() {}
           }
-          class jf extends fs {
+          class Hf extends fs {
             static get pluginName() {
               return 'Input';
             }
@@ -24807,8 +24859,8 @@
                 e = t.model,
                 n = t.editing.view,
                 o = e.document.selection;
-              n.addObserver(Rf);
-              const i = new Lf(t, t.config.get('typing.undoStep') || 20);
+              n.addObserver(Vf);
+              const i = new jf(t, t.config.get('typing.undoStep') || 20);
               t.commands.add('insertText', i),
                 t.commands.add('input', i),
                 this.listenTo(n.document, 'insertText', (o, i) => {
@@ -24835,14 +24887,14 @@
                 }),
                 l.isAndroid
                   ? this.listenTo(n.document, 'keydown', (t, r) => {
-                      !o.isCollapsed && 229 == r.keyCode && n.document.isComposing && Ff(e, i);
+                      !o.isCollapsed && 229 == r.keyCode && n.document.isComposing && Uf(e, i);
                     })
                   : this.listenTo(n.document, 'compositionstart', () => {
-                      o.isCollapsed || Ff(e, i);
+                      o.isCollapsed || Uf(e, i);
                     });
             }
           }
-          function Ff(t, e) {
+          function Uf(t, e) {
             if (!e.isEnabled) return;
             const n = e.buffer;
             n.lock(),
@@ -24851,11 +24903,11 @@
               }),
               n.unlock();
           }
-          class Vf extends bs {
+          class Gf extends bs {
             constructor(t, e) {
               super(t),
                 (this.direction = e),
-                (this._buffer = new zf(t.model, t.config.get('typing.undoStep'))),
+                (this._buffer = new Rf(t.model, t.config.get('typing.undoStep'))),
                 (this._isEnabledBasedOnSelection = !1);
             }
             get buffer() {
@@ -24930,22 +24982,22 @@
               );
             }
           }
-          const Hf = 'word',
-            Uf = 'selection',
-            Gf = 'backward',
-            qf = 'forward',
-            Wf = {
-              deleteContent: { unit: Uf, direction: Gf },
-              deleteContentBackward: { unit: 'codePoint', direction: Gf },
-              deleteWordBackward: { unit: Hf, direction: Gf },
-              deleteHardLineBackward: { unit: Uf, direction: Gf },
-              deleteSoftLineBackward: { unit: Uf, direction: Gf },
-              deleteContentForward: { unit: 'character', direction: qf },
-              deleteWordForward: { unit: Hf, direction: qf },
-              deleteHardLineForward: { unit: Uf, direction: qf },
-              deleteSoftLineForward: { unit: Uf, direction: qf },
+          const qf = 'word',
+            Wf = 'selection',
+            $f = 'backward',
+            Kf = 'forward',
+            Yf = {
+              deleteContent: { unit: Wf, direction: $f },
+              deleteContentBackward: { unit: 'codePoint', direction: $f },
+              deleteWordBackward: { unit: qf, direction: $f },
+              deleteHardLineBackward: { unit: Wf, direction: $f },
+              deleteSoftLineBackward: { unit: Wf, direction: $f },
+              deleteContentForward: { unit: 'character', direction: Kf },
+              deleteWordForward: { unit: qf, direction: Kf },
+              deleteHardLineForward: { unit: Wf, direction: Kf },
+              deleteSoftLineForward: { unit: Wf, direction: Kf },
             };
-          class $f extends Jc {
+          class Zf extends Jc {
             constructor(t) {
               super(t);
               const e = t.document;
@@ -24959,10 +25011,10 @@
                 e.on('beforeinput', (o, i) => {
                   if (!this.isEnabled) return;
                   const { targetRanges: r, domEvent: s, inputType: a } = i,
-                    c = Wf[a];
+                    c = Yf[a];
                   if (!c) return;
                   const d = { direction: c.direction, unit: c.unit, sequence: n };
-                  d.unit == Uf && (d.selectionToRemove = t.createSelection(r[0])),
+                  d.unit == Wf && (d.selectionToRemove = t.createSelection(r[0])),
                     'deleteContentBackward' === a &&
                       (l.isAndroid && (d.sequence = 1),
                       (function (t) {
@@ -24983,7 +25035,7 @@
                           if (n > 1) return !0;
                         }
                         return !1;
-                      })(r) && ((d.unit = Uf), (d.selectionToRemove = t.createSelection(r))));
+                      })(r) && ((d.unit = Wf), (d.selectionToRemove = t.createSelection(r))));
                   const h = new Za(e, 'delete', r[0]);
                   e.fire(h, new tl(t, s, d)), h.stop.called && o.stop();
                 }),
@@ -24997,7 +25049,7 @@
                       return t == bi.backspace || t == bi.delete;
                     }
                     function s(t) {
-                      return t == bi.backspace ? Gf : qf;
+                      return t == bi.backspace ? $f : Kf;
                     }
                     n.on('keydown', (t, { keyCode: e }) => {
                       (o = e), (i = !1);
@@ -25008,14 +25060,14 @@
                         if (((o = null), h)) {
                           const t = d.getFirstRange(),
                             o = new Za(n, 'delete', t),
-                            i = { unit: Uf, direction: s(c), selectionToRemove: d };
+                            i = { unit: Wf, direction: s(c), selectionToRemove: d };
                           n.fire(o, new tl(e, l, i));
                         }
                       }),
                       n.on(
                         'beforeinput',
                         (t, { inputType: e }) => {
-                          const n = Wf[e];
+                          const n = Yf[e];
                           r(o) && n && n.direction == s(o) && (i = !0);
                         },
                         { priority: 'high' },
@@ -25032,7 +25084,7 @@
             observe() {}
             stopObserving() {}
           }
-          class Kf extends fs {
+          class Qf extends fs {
             static get pluginName() {
               return 'Delete';
             }
@@ -25041,11 +25093,11 @@
                 e = t.editing.view,
                 n = e.document,
                 o = t.model.document;
-              e.addObserver($f), (this._undoOnBackspace = !1);
-              const i = new Vf(t, 'forward');
+              e.addObserver(Zf), (this._undoOnBackspace = !1);
+              const i = new Gf(t, 'forward');
               t.commands.add('deleteForward', i),
                 t.commands.add('forwardDelete', i),
-                t.commands.add('delete', new Vf(t, 'backward')),
+                t.commands.add('delete', new Gf(t, 'backward')),
                 this.listenTo(
                   n,
                   'delete',
@@ -25088,15 +25140,15 @@
               this.editor.plugins.has('UndoEditing') && (this._undoOnBackspace = !0);
             }
           }
-          class Yf extends fs {
+          class Jf extends fs {
             static get requires() {
-              return [jf, Kf];
+              return [Hf, Qf];
             }
             static get pluginName() {
               return 'Typing';
             }
           }
-          function Zf(t, e) {
+          function Xf(t, e) {
             let n = t.start;
             return {
               text: Array.from(t.getItems()).reduce(
@@ -25109,7 +25161,7 @@
               range: e.createRange(n, t.end),
             };
           }
-          class Qf extends Y() {
+          class tk extends Y() {
             constructor(t, e) {
               super(),
                 (this.model = t),
@@ -25142,7 +25194,7 @@
               const n = this.model,
                 o = n.document.selection,
                 i = n.createRange(n.createPositionAt(o.focus.parent, 0), o.focus),
-                { text: r, range: s } = Zf(i, n),
+                { text: r, range: s } = Xf(i, n),
                 a = this.testCallback(r);
               if ((!a && this.hasMatch && this.fire('unmatched'), (this._hasMatch = !!a), a)) {
                 const n = Object.assign(e, { text: r, range: s });
@@ -25150,7 +25202,7 @@
               }
             }
           }
-          class Jf extends fs {
+          class ek extends fs {
             constructor(t) {
               super(t), (this.attributes = new Set()), (this._overrideUid = null);
             }
@@ -25187,7 +25239,7 @@
                   this._isNextGravityRestorationSkipped
                     ? (this._isNextGravityRestorationSkipped = !1)
                     : this._isGravityOverridden &&
-                      ((!e.directChange && nk(i.getFirstPosition(), this.attributes)) ||
+                      ((!e.directChange && rk(i.getFirstPosition(), this.attributes)) ||
                         this._restoreGravity());
                 });
             }
@@ -25200,9 +25252,9 @@
                 o = n.getFirstPosition();
               return (
                 !this._isGravityOverridden &&
-                (!o.isAtStart || !Xf(n, e)) &&
-                !!nk(o, e) &&
-                (ek(t), this._overrideGravity(), !0)
+                (!o.isAtStart || !nk(n, e)) &&
+                !!rk(o, e) &&
+                (ik(t), this._overrideGravity(), !0)
               );
             }
             _handleBackwardMovement(t) {
@@ -25211,15 +25263,15 @@
                 o = n.document.selection,
                 i = o.getFirstPosition();
               return this._isGravityOverridden
-                ? (ek(t), this._restoreGravity(), tk(n, e, i), !0)
+                ? (ik(t), this._restoreGravity(), ok(n, e, i), !0)
                 : i.isAtStart
-                ? !!Xf(o, e) && (ek(t), tk(n, e, i), !0)
+                ? !!nk(o, e) && (ik(t), ok(n, e, i), !0)
                 : !!(function (t, e) {
                     const n = t.getShiftedBy(-1);
-                    return nk(n, e);
+                    return rk(n, e);
                   })(i, e) &&
-                  (i.isAtEnd && !Xf(o, e) && nk(i, e)
-                    ? (ek(t), tk(n, e, i), !0)
+                  (i.isAtEnd && !nk(o, e) && rk(i, e)
+                    ? (ik(t), ok(n, e, i), !0)
                     : ((this._isNextGravityRestorationSkipped = !0), this._overrideGravity(), !1));
             }
             get _isGravityOverridden() {
@@ -25234,20 +25286,20 @@
               });
             }
           }
-          function Xf(t, e) {
+          function nk(t, e) {
             for (const n of e) if (t.hasAttribute(n)) return !0;
             return !1;
           }
-          function tk(t, e, n) {
+          function ok(t, e, n) {
             const o = n.nodeBefore;
             t.change(t => {
               o ? t.setSelectionAttribute(o.getAttributes()) : t.removeSelectionAttribute(e);
             });
           }
-          function ek(t) {
+          function ik(t) {
             t.preventDefault();
           }
-          function nk(t, e) {
+          function rk(t, e) {
             const { nodeBefore: n, nodeAfter: o } = t;
             for (const t of e) {
               const e = n ? n.getAttribute(t) : void 0;
@@ -25255,12 +25307,12 @@
             }
             return !1;
           }
-          var ok = /[\\^$.*+?()[\]{}|]/g,
-            ik = RegExp(ok.source);
-          const rk = function (t) {
-              return (t = ea(t)) && ik.test(t) ? t.replace(ok, '\\$&') : t;
+          var sk = /[\\^$.*+?()[\]{}|]/g,
+            ak = RegExp(sk.source);
+          const ck = function (t) {
+              return (t = ea(t)) && ak.test(t) ? t.replace(sk, '\\$&') : t;
             },
-            sk = {
+            lk = {
               copyright: { from: '(c)', to: '©' },
               registeredTrademark: { from: '(r)', to: '®' },
               trademark: { from: '(tm)', to: '™' },
@@ -25277,14 +25329,14 @@
               horizontalEllipsis: { from: '...', to: '…' },
               enDash: { from: /(^| )(--)( )$/, to: [null, '–', null] },
               emDash: { from: /(^| )(---)( )$/, to: [null, '—', null] },
-              quotesPrimary: { from: uk('"'), to: [null, '“', null, '”'] },
-              quotesSecondary: { from: uk("'"), to: [null, '‘', null, '’'] },
-              quotesPrimaryEnGb: { from: uk("'"), to: [null, '‘', null, '’'] },
-              quotesSecondaryEnGb: { from: uk('"'), to: [null, '“', null, '”'] },
-              quotesPrimaryPl: { from: uk('"'), to: [null, '„', null, '”'] },
-              quotesSecondaryPl: { from: uk("'"), to: [null, '‚', null, '’'] },
+              quotesPrimary: { from: pk('"'), to: [null, '“', null, '”'] },
+              quotesSecondary: { from: pk("'"), to: [null, '‘', null, '’'] },
+              quotesPrimaryEnGb: { from: pk("'"), to: [null, '‘', null, '’'] },
+              quotesSecondaryEnGb: { from: pk('"'), to: [null, '“', null, '”'] },
+              quotesPrimaryPl: { from: pk('"'), to: [null, '„', null, '”'] },
+              quotesSecondaryPl: { from: pk("'"), to: [null, '‚', null, '’'] },
             },
-            ak = {
+            dk = {
               symbols: ['copyright', 'registeredTrademark', 'trademark'],
               mathematical: [
                 'oneHalf',
@@ -25301,37 +25353,37 @@
               typography: ['horizontalEllipsis', 'enDash', 'emDash'],
               quotes: ['quotesPrimary', 'quotesSecondary'],
             },
-            ck = ['symbols', 'mathematical', 'typography', 'quotes'];
-          function lk(t) {
-            return 'string' == typeof t ? new RegExp(`(${rk(t)})$`) : t;
+            hk = ['symbols', 'mathematical', 'typography', 'quotes'];
+          function uk(t) {
+            return 'string' == typeof t ? new RegExp(`(${ck(t)})$`) : t;
           }
-          function dk(t) {
+          function gk(t) {
             return 'string' == typeof t ? () => [t] : t instanceof Array ? () => t : t;
           }
-          function hk(t) {
+          function mk(t) {
             return (t.textNode ? t.textNode : t.nodeAfter).getAttributes();
           }
-          function uk(t) {
+          function pk(t) {
             return new RegExp(`(^|\\s)(${t})([^${t}]*)(${t})$`);
           }
-          function gk(t, e, n, o) {
-            return o.createRange(mk(t, e, n, !0, o), mk(t, e, n, !1, o));
+          function fk(t, e, n, o) {
+            return o.createRange(kk(t, e, n, !0, o), kk(t, e, n, !1, o));
           }
-          function mk(t, e, n, o, i) {
+          function kk(t, e, n, o, i) {
             let r = t.textNode || (o ? t.nodeBefore : t.nodeAfter),
               s = null;
             for (; r && r.getAttribute(e) == n; )
               (s = r), (r = o ? r.previousSibling : r.nextSibling);
             return s ? i.createPositionAt(s, o ? 'before' : 'after') : t;
           }
-          function pk(t, e, n, o) {
+          function bk(t, e, n, o) {
             const i = t.editing.view,
               r = new Set();
             i.document.registerPostFixer(i => {
               const s = t.model.document.selection;
               let a = !1;
               if (s.hasAttribute(e)) {
-                const c = gk(s.getFirstPosition(), e, s.getAttribute(e), t.model),
+                const c = fk(s.getFirstPosition(), e, s.getAttribute(e), t.model),
                   l = t.editing.mapper.toViewRange(c);
                 for (const t of l.getItems())
                   t.is('element', n) && !t.hasClass(o) && (i.addClass(o, t), r.add(t), (a = !0));
@@ -25350,10 +25402,10 @@
                   t.on('selection', e, { priority: 'highest' });
               });
           }
-          function* fk(t, e) {
+          function* wk(t, e) {
             for (const n of e) n && t.getAttributeProperties(n[0]).copyOnEnter && (yield n);
           }
-          class kk extends bs {
+          class Ak extends bs {
             execute() {
               this.editor.model.change(t => {
                 this.enterBlock(t), this.fire('afterExecute', { writer: t });
@@ -25369,25 +25421,25 @@
                 a = r.end.parent;
               if (o.isLimit(s) || o.isLimit(a)) return i || s != a || e.deleteContent(n), !1;
               if (i) {
-                const e = fk(t.model.schema, n.getAttributes());
-                return bk(t, r.start), t.setSelectionAttribute(e), !0;
+                const e = wk(t.model.schema, n.getAttributes());
+                return Ck(t, r.start), t.setSelectionAttribute(e), !0;
               }
               {
                 const o = !(r.start.isAtStart && r.end.isAtEnd),
                   i = s == a;
                 if ((e.deleteContent(n, { leaveUnmerged: o }), o)) {
-                  if (i) return bk(t, n.focus), !0;
+                  if (i) return Ck(t, n.focus), !0;
                   t.setSelection(a, 0);
                 }
               }
               return !1;
             }
           }
-          function bk(t, e) {
+          function Ck(t, e) {
             t.split(e), t.setSelection(e.parent.nextSibling, 0);
           }
-          const wk = { insertParagraph: { isSoft: !1 }, insertLineBreak: { isSoft: !0 } };
-          class Ak extends Jc {
+          const _k = { insertParagraph: { isSoft: !1 }, insertLineBreak: { isSoft: !0 } };
+          class vk extends Jc {
             constructor(t) {
               super(t);
               const e = this.document;
@@ -25400,7 +25452,7 @@
                   let r = i.inputType;
                   l.isSafari && n && 'insertParagraph' == r && (r = 'insertLineBreak');
                   const s = i.domEvent,
-                    a = wk[r];
+                    a = _k[r];
                   if (!a) return;
                   const c = new Za(e, 'enter', i.targetRanges[0]);
                   e.fire(c, new tl(t, s, { isSoft: a.isSoft })), c.stop.called && o.stop();
@@ -25409,7 +25461,7 @@
             observe() {}
             stopObserving() {}
           }
-          class Ck extends fs {
+          class yk extends fs {
             static get pluginName() {
               return 'Enter';
             }
@@ -25417,8 +25469,8 @@
               const t = this.editor,
                 e = t.editing.view,
                 n = e.document;
-              e.addObserver(Ak),
-                t.commands.add('enter', new kk(t)),
+              e.addObserver(vk),
+                t.commands.add('enter', new Ak(t)),
                 this.listenTo(
                   n,
                   'enter',
@@ -25430,7 +25482,7 @@
                 );
             }
           }
-          class _k extends bs {
+          class xk extends bs {
             execute() {
               const t = this.editor.model,
                 e = t.document;
@@ -25442,14 +25494,14 @@
                     s = i.end.parent,
                     a = r == s;
                   if (o) {
-                    const o = fk(t.schema, n.getAttributes());
-                    vk(t, e, i.end),
+                    const o = wk(t.schema, n.getAttributes());
+                    Ek(t, e, i.end),
                       e.removeSelectionAttribute(n.getAttributeKeys()),
                       e.setSelectionAttribute(o);
                   } else {
                     const o = !(i.start.isAtStart && i.end.isAtEnd);
                     t.deleteContent(n, { leaveUnmerged: o }),
-                      a ? vk(t, e, n.focus) : o && e.setSelection(s, 0);
+                      a ? Ek(t, e, n.focus) : o && e.setSelection(s, 0);
                   }
                 })(t, n, e.selection),
                   this.fire('afterExecute', { writer: n });
@@ -25465,19 +25517,19 @@
                 const o = e.getFirstRange(),
                   i = o.start.parent,
                   r = o.end.parent;
-                if ((yk(i, t) || yk(r, t)) && i !== r) return !1;
+                if ((Dk(i, t) || Dk(r, t)) && i !== r) return !1;
                 return !0;
               })(t.schema, e.selection);
             }
           }
-          function vk(t, e, n) {
+          function Ek(t, e, n) {
             const o = e.createElement('softBreak');
             t.insertContent(o, n), e.setSelection(o, 'after');
           }
-          function yk(t, e) {
-            return !t.is('rootElement') && (e.isLimit(t) || yk(t.parent, e));
+          function Dk(t, e) {
+            return !t.is('rootElement') && (e.isLimit(t) || Dk(t.parent, e));
           }
-          class xk extends fs {
+          class Sk extends fs {
             static get pluginName() {
               return 'ShiftEnter';
             }
@@ -25495,8 +25547,8 @@
                     model: 'softBreak',
                     view: (t, { writer: e }) => e.createEmptyElement('br'),
                   }),
-                o.addObserver(Ak),
-                t.commands.add('shiftEnter', new _k(t)),
+                o.addObserver(vk),
+                t.commands.add('shiftEnter', new xk(t)),
                 this.listenTo(
                   i,
                   'enter',
@@ -25508,7 +25560,7 @@
                 );
             }
           }
-          class Ek extends P() {
+          class Ik extends P() {
             constructor() {
               super(...arguments), (this._stack = []);
             }
@@ -25518,7 +25570,7 @@
               this._insertDescriptor(t);
               const i = n[0];
               o === i ||
-                Dk(o, i) ||
+                Tk(o, i) ||
                 this.fire('change:top', { oldDescriptor: o, newDescriptor: i, writer: e });
             }
             remove(t, e) {
@@ -25527,16 +25579,16 @@
               this._removeDescriptor(t);
               const i = n[0];
               o === i ||
-                Dk(o, i) ||
+                Tk(o, i) ||
                 this.fire('change:top', { oldDescriptor: o, newDescriptor: i, writer: e });
             }
             _insertDescriptor(t) {
               const e = this._stack,
                 n = e.findIndex(e => e.id === t.id);
-              if (Dk(t, e[n])) return;
+              if (Tk(t, e[n])) return;
               n > -1 && e.splice(n, 1);
               let o = 0;
-              for (; e[o] && Sk(e[o], t); ) o++;
+              for (; e[o] && Mk(e[o], t); ) o++;
               e.splice(o, 0, t);
             }
             _removeDescriptor(t) {
@@ -25545,33 +25597,33 @@
               n > -1 && e.splice(n, 1);
             }
           }
-          function Dk(t, e) {
-            return t && e && t.priority == e.priority && Ik(t.classes) == Ik(e.classes);
+          function Tk(t, e) {
+            return t && e && t.priority == e.priority && Bk(t.classes) == Bk(e.classes);
           }
-          function Sk(t, e) {
+          function Mk(t, e) {
             return (
               t.priority > e.priority ||
-              (!(t.priority < e.priority) && Ik(t.classes) > Ik(e.classes))
+              (!(t.priority < e.priority) && Bk(t.classes) > Bk(e.classes))
             );
           }
-          function Ik(t) {
+          function Bk(t) {
             return Array.isArray(t) ? t.sort().join(',') : t;
           }
-          const Tk =
+          const Nk =
               '<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M4 0v1H1v3H0V.5A.5.5 0 0 1 .5 0H4zm8 0h3.5a.5.5 0 0 1 .5.5V4h-1V1h-3V0zM4 16H.5a.5.5 0 0 1-.5-.5V12h1v3h3v1zm8 0v-1h3v-3h1v3.5a.5.5 0 0 1-.5.5H12z"/><path fill-opacity=".256" d="M1 1h14v14H1z"/><g class="ck-icon__selected-indicator"><path d="M7 0h2v1H7V0zM0 7h1v2H0V7zm15 0h1v2h-1V7zm-8 8h2v1H7v-1z"/><path fill-opacity=".254" d="M1 1h14v14H1z"/></g></svg>',
-            Mk = 'ck-widget',
-            Bk = 'ck-widget_selected';
-          function Nk(t) {
+            Pk = 'ck-widget',
+            zk = 'ck-widget_selected';
+          function Lk(t) {
             return !!t.is('element') && !!t.getCustomProperty('widget');
           }
-          function Pk(t, e, n = {}) {
+          function Ok(t, e, n = {}) {
             if (!t.is('containerElement'))
               throw new _('widget-to-widget-wrong-element-type', null, { element: t });
             return (
               e.setAttribute('contenteditable', 'false', t),
-              e.addClass(Mk, t),
+              e.addClass(Pk, t),
               e.setCustomProperty('widget', !0, t),
-              (t.getFillerOffset = Fk),
+              (t.getFillerOffset = Uk),
               e.setCustomProperty('widgetLabel', [], t),
               n.label &&
                 (function (t, e) {
@@ -25586,26 +25638,26 @@
                     function (t) {
                       const e = this.toDomElement(t),
                         n = new fr();
-                      return n.set('content', Tk), n.render(), e.appendChild(n.element), e;
+                      return n.set('content', Nk), n.render(), e.appendChild(n.element), e;
                     },
                   );
                   e.insert(e.createPositionAt(t, 0), n),
                     e.addClass(['ck-widget_with-selection-handle'], t);
                 })(t, e),
-              Ok(t, e),
+              Fk(t, e),
               t
             );
           }
-          function zk(t, e, n) {
+          function Rk(t, e, n) {
             if ((e.classes && n.addClass(yi(e.classes), t), e.attributes))
               for (const o in e.attributes) n.setAttribute(o, e.attributes[o], t);
           }
-          function Lk(t, e, n) {
+          function jk(t, e, n) {
             if ((e.classes && n.removeClass(yi(e.classes), t), e.attributes))
               for (const o in e.attributes) n.removeAttribute(o, t);
           }
-          function Ok(t, e, n = zk, o = Lk) {
-            const i = new Ek();
+          function Fk(t, e, n = Rk, o = jk) {
+            const i = new Ik();
             i.on('change:top', (e, i) => {
               i.oldDescriptor && o(t, i.oldDescriptor, i.writer),
                 i.newDescriptor && n(t, i.newDescriptor, i.writer);
@@ -25613,7 +25665,7 @@
             e.setCustomProperty('addHighlight', (t, e, n) => i.add(e, n), t),
               e.setCustomProperty('removeHighlight', (t, e, n) => i.remove(e, n), t);
           }
-          function Rk(t, e, n = {}) {
+          function Vk(t, e, n = {}) {
             return (
               e.addClass(['ck-editor__editable', 'ck-editor__nested-editable'], t),
               e.setAttribute('role', 'textbox', t),
@@ -25627,44 +25679,44 @@
                   ? e.addClass('ck-editor__nested-editable_focused', t)
                   : e.removeClass('ck-editor__nested-editable_focused', t);
               }),
-              Ok(t, e),
+              Fk(t, e),
               t
             );
           }
-          function jk(t, e) {
+          function Hk(t, e) {
             const n = t.getSelectedElement();
             if (n) {
-              const o = Uk(t);
+              const o = Wk(t);
               if (o) return e.createRange(e.createPositionAt(n, o));
             }
             return kg(t, e);
           }
-          function Fk() {
+          function Uk() {
             return null;
           }
-          const Vk = 'widget-type-around';
-          function Hk(t, e, n) {
-            return !!t && Nk(t) && !n.isInline(e);
+          const Gk = 'widget-type-around';
+          function qk(t, e, n) {
+            return !!t && Lk(t) && !n.isInline(e);
           }
-          function Uk(t) {
-            return t.getAttribute(Vk);
+          function Wk(t) {
+            return t.getAttribute(Gk);
           }
-          var Gk = n(4921),
-            qk = {
+          var $k = n(4921),
+            Kk = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(Gk.Z, qk);
-          Gk.Z.locals;
-          const Wk = ['before', 'after'],
-            $k = new DOMParser().parseFromString(
+          Vi()($k.Z, Kk);
+          $k.Z.locals;
+          const Yk = ['before', 'after'],
+            Zk = new DOMParser().parseFromString(
               '<svg viewBox="0 0 10 8" xmlns="http://www.w3.org/2000/svg"><path d="M9.055.263v3.972h-6.77M1 4.216l2-2.038m-2 2 2 2.038"/></svg>',
               'image/svg+xml',
             ).firstChild,
-            Kk = 'ck-widget__type-around_disabled';
-          class Yk extends fs {
+            Qk = 'ck-widget__type-around_disabled';
+          class Jk extends fs {
             constructor() {
               super(...arguments), (this._currentFakeCaretModelElement = null);
             }
@@ -25672,18 +25724,18 @@
               return 'WidgetTypeAround';
             }
             static get requires() {
-              return [Ck, Kf];
+              return [yk, Qf];
             }
             init() {
               const t = this.editor,
                 e = t.editing.view;
               this.on('change:isEnabled', (n, o, i) => {
                 e.change(t => {
-                  for (const n of e.document.roots) i ? t.removeClass(Kk, n) : t.addClass(Kk, n);
+                  for (const n of e.document.roots) i ? t.removeClass(Qk, n) : t.addClass(Qk, n);
                 }),
                   i ||
                     t.model.change(t => {
-                      t.removeSelectionAttribute(Vk);
+                      t.removeSelectionAttribute(Gk);
                     });
               }),
                 this._enableTypeAroundUIInjection(),
@@ -25722,7 +25774,7 @@
             }
             _insertParagraphAccordingToFakeCaretPosition() {
               const t = this.editor.model.document.selection,
-                e = Uk(t);
+                e = Wk(t);
               if (!e) return !1;
               const n = t.getSelectedElement();
               return this._insertParagraph(n, e), !0;
@@ -25739,7 +25791,7 @@
                 'insert',
                 (t, i, r) => {
                   const s = r.mapper.toViewElement(i.item);
-                  if (s && Hk(s, i.item, e)) {
+                  if (s && qk(s, i.item, e)) {
                     !(function (t, e, n) {
                       const o = t.createUIElement(
                         'div',
@@ -25748,7 +25800,7 @@
                           const n = this.toDomElement(t);
                           return (
                             (function (t, e) {
-                              for (const n of Wk) {
+                              for (const n of Yk) {
                                 const o = new qi({
                                   tag: 'div',
                                   attributes: {
@@ -25760,7 +25812,7 @@
                                     title: e[n],
                                     'aria-hidden': 'true',
                                   },
-                                  children: [t.ownerDocument.importNode($k, !0)],
+                                  children: [t.ownerDocument.importNode(Zk, !0)],
                                 });
                                 t.appendChild(o.render());
                               }
@@ -25805,40 +25857,40 @@
                 (t, e) => {
                   this._handleArrowKeyPress(t, e);
                 },
-                { context: [Nk, '$text'], priority: 'high' },
+                { context: [Lk, '$text'], priority: 'high' },
               ),
                 this._listenToIfEnabled(n, 'change:range', (e, n) => {
                   n.directChange &&
                     t.model.change(t => {
-                      t.removeSelectionAttribute(Vk);
+                      t.removeSelectionAttribute(Gk);
                     });
                 }),
                 this._listenToIfEnabled(e.document, 'change:data', () => {
                   const e = n.getSelectedElement();
                   if (e) {
-                    if (Hk(t.editing.mapper.toViewElement(e), e, o)) return;
+                    if (qk(t.editing.mapper.toViewElement(e), e, o)) return;
                   }
                   t.model.change(t => {
-                    t.removeSelectionAttribute(Vk);
+                    t.removeSelectionAttribute(Gk);
                   });
                 }),
                 this._listenToIfEnabled(t.editing.downcastDispatcher, 'selection', (t, e, n) => {
                   const i = n.writer;
                   if (this._currentFakeCaretModelElement) {
                     const t = n.mapper.toViewElement(this._currentFakeCaretModelElement);
-                    t && (i.removeClass(Wk.map(r), t), (this._currentFakeCaretModelElement = null));
+                    t && (i.removeClass(Yk.map(r), t), (this._currentFakeCaretModelElement = null));
                   }
                   const s = e.selection.getSelectedElement();
                   if (!s) return;
                   const a = n.mapper.toViewElement(s);
-                  if (!Hk(a, s, o)) return;
-                  const c = Uk(e.selection);
+                  if (!qk(a, s, o)) return;
+                  const c = Wk(e.selection);
                   c && (i.addClass(r(c), a), (this._currentFakeCaretModelElement = s));
                 }),
                 this._listenToIfEnabled(t.ui.focusTracker, 'change:isFocused', (e, n, o) => {
                   o ||
                     t.model.change(t => {
-                      t.removeSelectionAttribute(Vk);
+                      t.removeSelectionAttribute(Gk);
                     });
                 });
             }
@@ -25854,7 +25906,7 @@
                 })(e.keyCode, n.locale.contentLanguageDirection),
                 c = s.document.selection.getSelectedElement();
               let l;
-              Hk(c, n.editing.mapper.toModelElement(c), r)
+              qk(c, n.editing.mapper.toModelElement(c), r)
                 ? (l = this._handleArrowKeyPressOnSelectedWidget(a))
                 : i.isCollapsed
                 ? (l = this._handleArrowKeyPressWhenSelectionNextToAWidget(a))
@@ -25863,10 +25915,10 @@
             }
             _handleArrowKeyPressOnSelectedWidget(t) {
               const e = this.editor.model,
-                n = Uk(e.document.selection);
+                n = Wk(e.document.selection);
               return e.change(e => {
-                if (!n) return e.setSelectionAttribute(Vk, t ? 'after' : 'before'), !0;
-                if (!(n === (t ? 'after' : 'before'))) return e.removeSelectionAttribute(Vk), !0;
+                if (!n) return e.setSelectionAttribute(Gk, t ? 'after' : 'before'), !0;
+                if (!(n === (t ? 'after' : 'before'))) return e.removeSelectionAttribute(Gk), !0;
                 return !1;
               });
             }
@@ -25877,10 +25929,10 @@
                 i = e.plugins.get('Widget'),
                 r = i._getObjectElementNextToSelection(t);
               return (
-                !!Hk(e.editing.mapper.toViewElement(r), r, o) &&
+                !!qk(e.editing.mapper.toViewElement(r), r, o) &&
                 (n.change(e => {
                   i._setSelectionOverElement(r),
-                    e.setSelectionAttribute(Vk, t ? 'before' : 'after');
+                    e.setSelectionAttribute(Gk, t ? 'before' : 'after');
                 }),
                 !0)
               );
@@ -25893,9 +25945,9 @@
                 r = n.document.selection,
                 s = t ? r.getLastPosition().nodeBefore : r.getFirstPosition().nodeAfter;
               return (
-                !!Hk(i.toViewElement(s), s, o) &&
+                !!qk(i.toViewElement(s), s, o) &&
                 (n.change(e => {
-                  e.setSelection(s, 'on'), e.setSelectionAttribute(Vk, t ? 'after' : 'before');
+                  e.setSelection(s, 'on'), e.setSelectionAttribute(Gk, t ? 'after' : 'before');
                 }),
                 !0)
               );
@@ -25934,11 +25986,11 @@
                   let a;
                   this._insertParagraphAccordingToFakeCaretPosition()
                     ? (a = !0)
-                    : Hk(r, i, s) &&
+                    : qk(r, i, s) &&
                       (this._insertParagraph(i, o.isSoft ? 'before' : 'after'), (a = !0)),
                     a && (o.preventDefault(), n.stop());
                 },
-                { context: Nk },
+                { context: Lk },
               );
             }
             _enableInsertingParagraphsOnTypingKeystroke() {
@@ -25975,7 +26027,7 @@
                 'delete',
                 (e, i) => {
                   if ('atTarget' != e.eventPhase) return;
-                  const r = Uk(n.document.selection);
+                  const r = Wk(n.document.selection);
                   if (!r) return;
                   const s = i.direction,
                     a = n.document.selection.getSelectedElement(),
@@ -26008,7 +26060,7 @@
                   }
                   i.preventDefault(), e.stop();
                 },
-                { context: Nk },
+                { context: Lk },
               );
             }
             _enableInsertContentIntegration() {
@@ -26020,7 +26072,7 @@
                 'insertContent',
                 (t, [o, i]) => {
                   if (i && !i.is('documentSelection')) return;
-                  const r = Uk(n);
+                  const r = Wk(n);
                   return r
                     ? (t.stop(),
                       e.change(t => {
@@ -26044,7 +26096,7 @@
                 (t, n) => {
                   const [, o, i = {}] = n;
                   if (o && !o.is('documentSelection')) return;
-                  const r = Uk(e);
+                  const r = Wk(e);
                   r && ((i.findOptimalPosition = r), (n[3] = i));
                 },
                 { priority: 'high' },
@@ -26058,13 +26110,13 @@
                 'deleteContent',
                 (t, [n]) => {
                   if (n && !n.is('documentSelection')) return;
-                  Uk(e) && t.stop();
+                  Wk(e) && t.stop();
                 },
                 { priority: 'high' },
               );
             }
           }
-          function Zk(t) {
+          function Xk(t) {
             const e = t.model;
             return (n, o) => {
               const i = o.keyCode == bi.arrowup,
@@ -26084,18 +26136,18 @@
                 const o = t.model;
                 if (n) {
                   const t = e.isCollapsed ? e.focus : e.getLastPosition(),
-                    n = Qk(o, t, 'forward');
+                    n = tb(o, t, 'forward');
                   if (!n) return null;
                   const i = o.createRange(t, n),
-                    r = Jk(o.schema, i, 'backward');
+                    r = eb(o.schema, i, 'backward');
                   return r ? o.createRange(t, r) : null;
                 }
                 {
                   const t = e.isCollapsed ? e.focus : e.getFirstPosition(),
-                    n = Qk(o, t, 'backward');
+                    n = tb(o, t, 'backward');
                   if (!n) return null;
                   const i = o.createRange(n, t),
-                    r = Jk(o.schema, i, 'forward');
+                    r = eb(o.schema, i, 'forward');
                   return r ? o.createRange(r, t) : null;
                 }
               })(t, a, c);
@@ -26139,7 +26191,7 @@
               }
             };
           }
-          function Qk(t, e, n) {
+          function tb(t, e, n) {
             const o = t.schema,
               i = t.createRangeIn(e.root),
               r = 'forward' == n ? 'elementStart' : 'elementEnd';
@@ -26152,23 +26204,23 @@
             }
             return null;
           }
-          function Jk(t, e, n) {
+          function eb(t, e, n) {
             const o = 'backward' == n ? e.end : e.start;
             if (t.checkChild(o, '$text')) return o;
             for (const { nextPosition: o } of e.getWalker({ direction: n }))
               if (t.checkChild(o, '$text')) return o;
             return null;
           }
-          var Xk = n(3488),
-            tb = {
+          var nb = n(3488),
+            ob = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(Xk.Z, tb);
-          Xk.Z.locals;
-          class eb extends fs {
+          Vi()(nb.Z, ob);
+          nb.Z.locals;
+          class ib extends fs {
             constructor() {
               super(...arguments), (this._previouslySelected = new Set());
             }
@@ -26176,7 +26228,7 @@
               return 'Widget';
             }
             static get requires() {
-              return [Yk, Kf];
+              return [Jk, Qf];
             }
             init() {
               const t = this.editor,
@@ -26190,7 +26242,7 @@
                 if (!s) return;
                 const a = t.editing.mapper.toViewElement(s);
                 var c;
-                Nk(a) &&
+                Lk(a) &&
                   o.consumable.consume(r, 'selection') &&
                   i.setSelection(i.createRangeOn(a), {
                     fake: !0,
@@ -26221,9 +26273,9 @@
                     for (const t of i.getRanges())
                       for (const e of t) {
                         const t = e.item;
-                        Nk(t) &&
-                          !nb(t, r) &&
-                          (o.addClass(Bk, t), this._previouslySelected.add(t), (r = t));
+                        Lk(t) &&
+                          !rb(t, r) &&
+                          (o.addClass(zk, t), this._previouslySelected.add(t), (r = t));
                       }
                   },
                   { priority: 'low' },
@@ -26236,7 +26288,7 @@
                   (...t) => {
                     this._handleSelectionChangeOnArrowKeyPress(...t);
                   },
-                  { context: [Nk, '$text'] },
+                  { context: [Lk, '$text'] },
                 ),
                 this.listenTo(
                   n,
@@ -26246,7 +26298,7 @@
                   },
                   { context: '$root' },
                 ),
-                this.listenTo(n, 'arrowKey', Zk(this.editor.editing), { context: '$text' }),
+                this.listenTo(n, 'arrowKey', Xk(this.editor.editing), { context: '$text' }),
                 this.listenTo(
                   n,
                   'delete',
@@ -26266,7 +26318,7 @@
                   let e = t;
                   for (; e; ) {
                     if (e.is('editableElement') && !e.is('rootElement')) return !0;
-                    if (Nk(e)) return !1;
+                    if (Lk(e)) return !1;
                     e = e.parent;
                   }
                   return !1;
@@ -26285,7 +26337,7 @@
                 }
                 return;
               }
-              if (!Nk(r) && ((r = r.findAncestor(Nk)), !r)) return;
+              if (!Lk(r) && ((r = r.findAncestor(Lk)), !r)) return;
               l.isAndroid && e.preventDefault(), i.isFocused || o.focus();
               const s = n.editing.mapper.toModelElement(r);
               this._setSelectionOverElement(s);
@@ -26371,19 +26423,19 @@
               return r && n.isObject(r) ? r : null;
             }
             _clearPreviouslySelectedWidgets(t) {
-              for (const e of this._previouslySelected) t.removeClass(Bk, e);
+              for (const e of this._previouslySelected) t.removeClass(zk, e);
               this._previouslySelected.clear();
             }
           }
-          function nb(t, e) {
+          function rb(t, e) {
             return !!e && Array.from(t.getAncestors()).includes(e);
           }
-          class ob extends fs {
+          class sb extends fs {
             constructor() {
               super(...arguments), (this._toolbarDefinitions = new Map());
             }
             static get requires() {
-              return [af];
+              return [df];
             }
             static get pluginName() {
               return 'WidgetToolbarRepository';
@@ -26398,7 +26450,7 @@
                   e => {
                     (function (t) {
                       const e = t.getSelectedElement();
-                      return !(!e || !Nk(e));
+                      return !(!e || !Lk(e));
                     })(t.editing.view.document.selection) && e.stop();
                   },
                   { priority: 'high' },
@@ -26436,7 +26488,7 @@
               if (!n.length) return void v('widget-toolbar-no-items', { toolbarId: t });
               const r = this.editor,
                 s = r.t,
-                a = new im(r.locale);
+                a = new am(r.locale);
               if (((a.ariaLabel = e || s('Widget toolbar')), this._toolbarDefinitions.has(t)))
                 throw new _('widget-toolbar-duplicated', this, { toolbarId: t });
               const c = {
@@ -26478,21 +26530,21 @@
             }
             _showToolbar(t, e) {
               this._isToolbarVisible(t)
-                ? ib(this.editor, e)
+                ? ab(this.editor, e)
                 : this._isToolbarInBalloon(t) ||
                   (t.initialized ||
                     ((t.initialized = !0),
                     t.view.fillFromConfig(t.itemsConfig, this.editor.ui.componentFactory)),
                   this._balloon.add({
                     view: t.view,
-                    position: rb(this.editor, e),
+                    position: cb(this.editor, e),
                     balloonClassName: t.balloonClassName,
                   }),
                   this.listenTo(this._balloon, 'change:visibleView', () => {
                     for (const t of this._toolbarDefinitions.values())
                       if (this._isToolbarVisible(t)) {
                         const e = t.getRelatedElement(this.editor.editing.view.document.selection);
-                        ib(this.editor, e);
+                        ab(this.editor, e);
                       }
                   }));
             }
@@ -26503,14 +26555,14 @@
               return this._balloon.hasView(t.view);
             }
           }
-          function ib(t, e) {
+          function ab(t, e) {
             const n = t.plugins.get('ContextualBalloon'),
-              o = rb(t, e);
+              o = cb(t, e);
             n.updatePosition(o);
           }
-          function rb(t, e) {
+          function cb(t, e) {
             const n = t.editing.view,
-              o = _p.defaultPositions;
+              o = xp.defaultPositions;
             return {
               target: n.domConverter.mapViewToDom(e),
               positions: [
@@ -26524,7 +26576,7 @@
               ],
             };
           }
-          class sb extends Y() {
+          class lb extends Y() {
             constructor(t) {
               super(),
                 this.set('activeHandlePosition', null),
@@ -26552,7 +26604,7 @@
               const o = new Go(e);
               (this.activeHandlePosition = (function (t) {
                 const e = ['top-left', 'top-right', 'bottom-right', 'bottom-left'];
-                for (const n of e) if (t.classList.contains(ab(n))) return n;
+                for (const n of e) if (t.classList.contains(db(n))) return n;
               })(t)),
                 (this._referenceCoordinates = (function (t, e) {
                   const n = new Go(t),
@@ -26601,10 +26653,10 @@
                 (this.proposedHandleHostHeight = t.handleHostHeight);
             }
           }
-          function ab(t) {
+          function db(t) {
             return `ck-widget__resizer__handle-${t}`;
           }
-          class cb extends Gi {
+          class hb extends Gi {
             constructor() {
               super();
               const t = this.bindTemplate;
@@ -26652,17 +26704,17 @@
               this.unbind(), (this._isVisible = !1);
             }
           }
-          var lb = Object.defineProperty,
-            db = Object.defineProperties,
-            hb = Object.getOwnPropertyDescriptors,
-            ub = Object.getOwnPropertySymbols,
-            gb = Object.prototype.hasOwnProperty,
-            mb = Object.prototype.propertyIsEnumerable,
-            pb = (t, e, n) =>
+          var ub = Object.defineProperty,
+            gb = Object.defineProperties,
+            mb = Object.getOwnPropertyDescriptors,
+            pb = Object.getOwnPropertySymbols,
+            fb = Object.prototype.hasOwnProperty,
+            kb = Object.prototype.propertyIsEnumerable,
+            bb = (t, e, n) =>
               e in t
-                ? lb(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? ub(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n);
-          class fb extends Y() {
+          class wb extends Y() {
             constructor(t) {
               super(),
                 (this._viewResizerWrapper = null),
@@ -26719,7 +26771,7 @@
                 });
             }
             begin(t) {
-              (this._state = new sb(this._options)),
+              (this._state = new lb(this._options)),
                 this._sizeView._bindToState(this._options, this.state),
                 (this._initialViewWidth = this._options.viewElement.getStyle('width')),
                 this.state.begin(t, this._getHandleHost(), this._getResizeHost());
@@ -26742,11 +26794,11 @@
                 this.redraw(o),
                 this.state.update(
                   ((a = ((t, e) => {
-                    for (var n in e || (e = {})) gb.call(e, n) && pb(t, n, e[n]);
-                    if (ub) for (var n of ub(e)) mb.call(e, n) && pb(t, n, e[n]);
+                    for (var n in e || (e = {})) fb.call(e, n) && bb(t, n, e[n]);
+                    if (pb) for (var n of pb(e)) kb.call(e, n) && bb(t, n, e[n]);
                     return t;
                   })({}, e)),
-                  db(a, hb({ handleHostWidth: i, handleHostHeight: r }))),
+                  gb(a, mb({ handleHostWidth: i, handleHostHeight: r }))),
                 );
             }
             commit() {
@@ -26861,21 +26913,21 @@
               var n;
             }
             _appendSizeUI(t) {
-              (this._sizeView = new cb()),
+              (this._sizeView = new hb()),
                 this._sizeView.render(),
                 t.appendChild(this._sizeView.element);
             }
           }
-          var kb = n(8506),
-            bb = {
+          var Ab = n(8506),
+            Cb = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(kb.Z, bb);
-          kb.Z.locals;
-          class wb extends fs {
+          Vi()(Ab.Z, Cb);
+          Ab.Z.locals;
+          class _b extends fs {
             constructor() {
               super(...arguments), (this._resizers = new Map());
             }
@@ -26894,7 +26946,7 @@
                 }),
                 this._observer.listenTo(e, 'mousemove', this._mouseMoveListener.bind(this)),
                 this._observer.listenTo(e, 'mouseup', this._mouseUpListener.bind(this)),
-                (this._redrawSelectedResizerThrottled = Mp(
+                (this._redrawSelectedResizerThrottled = Pp(
                   () => this.redrawSelectedResizer(),
                   200,
                 )),
@@ -26933,7 +26985,7 @@
                 (this.selectedResizer = null);
             }
             attachTo(t) {
-              const e = new fb(t),
+              const e = new wb(t),
                 n = this.editor.plugins;
               if ((e.attach(), n.has('WidgetToolbarRepository'))) {
                 const t = n.get('WidgetToolbarRepository');
@@ -26971,7 +27023,7 @@
             }
             _mouseDownListener(t, e) {
               const n = e.domTarget;
-              fb.isResizeHandle(n) &&
+              wb.isResizeHandle(n) &&
                 ((this._activeResizer = this._getResizerByHandle(n) || null),
                 this._activeResizer &&
                   (this._activeResizer.begin(n), t.stop(), e.preventDefault()));
@@ -26983,21 +27035,21 @@
               this._activeResizer && (this._activeResizer.commit(), (this._activeResizer = null));
             }
           }
-          var Ab = n(903),
-            Cb = {
+          var vb = n(903),
+            yb = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(Ab.Z, Cb);
-          Ab.Z.locals;
-          class _b extends fs {
+          Vi()(vb.Z, yb);
+          vb.Z.locals;
+          class xb extends fs {
             static get pluginName() {
               return 'DragDrop';
             }
             static get requires() {
-              return [Pf, eb];
+              return [Of, ib];
             }
             init() {
               const t = this.editor,
@@ -27005,7 +27057,7 @@
               (this._draggedRange = null),
                 (this._draggingUid = ''),
                 (this._draggableElement = null),
-                (this._updateDropMarkerThrottled = Mp(t => this._updateDropMarker(t), 40)),
+                (this._updateDropMarkerThrottled = Pp(t => this._updateDropMarker(t), 40)),
                 (this._removeDropMarkerDelayed = Pi(() => this._removeDropMarker(), 40)),
                 (this._clearDraggableAttributesDelayed = Pi(
                   () => this._clearDraggableAttributes(),
@@ -27013,7 +27065,7 @@
                 )),
                 t.plugins.has('DragDropExperimental')
                   ? this.forceDisabled('DragDropExperimental')
-                  : (e.addObserver(Mf),
+                  : (e.addObserver(Pf),
                     e.addObserver(Dg),
                     this._setupDragging(),
                     this._setupContentInsertionIntegration(),
@@ -27051,7 +27103,7 @@
                 (o, r) => {
                   const s = n.selection;
                   if (r.target && r.target.is('editableElement')) return void r.preventDefault();
-                  const a = r.target ? xb(r.target) : null;
+                  const a = r.target ? Sb(r.target) : null;
                   if (a) {
                     const n = t.editing.mapper.toModelElement(a);
                     if (
@@ -27062,7 +27114,7 @@
                     }
                   } else if (!i.selection.isCollapsed) {
                     const t = i.selection.getSelectedElement();
-                    (t && Nk(t)) || (this._draggedRange = wd.fromRange(s.getFirstRange()));
+                    (t && Lk(t)) || (this._draggedRange = wd.fromRange(s.getFirstRange()));
                   }
                   if (!this._draggedRange) return void r.preventDefault();
                   this._draggingUid = b();
@@ -27105,7 +27157,7 @@
                   (e, n) => {
                     if (!this.isEnabled) return void (n.dataTransfer.dropEffect = 'none');
                     this._removeDropMarkerDelayed.cancel();
-                    const o = vb(t, n.targetRanges, n.target);
+                    const o = Eb(t, n.targetRanges, n.target);
                     t.model.canEditAt(o)
                       ? (this._draggedRange || (n.dataTransfer.dropEffect = 'copy'),
                         l.isGecko ||
@@ -27127,7 +27179,7 @@
                 'clipboardInput',
                 (e, n) => {
                   if ('drop' != n.method) return;
-                  const o = vb(t, n.targetRanges, n.target);
+                  const o = Eb(t, n.targetRanges, n.target);
                   if ((this._removeDropMarker(), !o || !t.model.canEditAt(o)))
                     return this._finalizeDragging(!1), void e.stop();
                   this._draggedRange &&
@@ -27137,7 +27189,7 @@
                     (this._draggedRange = null),
                     (this._draggingUid = ''));
                   if (
-                    'move' == yb(n.dataTransfer) &&
+                    'move' == Db(n.dataTransfer) &&
                     this._draggedRange &&
                     this._draggedRange.containsRange(o, !0)
                   )
@@ -27148,7 +27200,7 @@
               );
             }
             _setupContentInsertionIntegration() {
-              const t = this.editor.plugins.get(Pf);
+              const t = this.editor.plugins.get(Of);
               t.on(
                 'contentInsertion',
                 (t, e) => {
@@ -27162,7 +27214,7 @@
                   'contentInsertion',
                   (t, e) => {
                     if (!this.isEnabled || 'drop' !== e.method) return;
-                    const n = 'move' == yb(e.dataTransfer),
+                    const n = 'move' == Db(e.dataTransfer),
                       o = !e.resultRange || !e.resultRange.isCollapsed;
                     this._finalizeDragging(o && n);
                   },
@@ -27176,10 +27228,10 @@
               this.listenTo(n, 'mousedown', (o, i) => {
                 if (l.isAndroid || !i) return;
                 this._clearDraggableAttributesDelayed.cancel();
-                let r = xb(i.target);
+                let r = Sb(i.target);
                 if (l.isBlink && !r && !n.selection.isCollapsed) {
                   const t = n.selection.getSelectedElement();
-                  if (!t || !Nk(t)) {
+                  if (!t || !Lk(t)) {
                     const t = n.selection.editableElement;
                     t && !t.isReadOnly && (r = t);
                   }
@@ -27266,7 +27318,7 @@
                   (this._draggedRange = null));
             }
           }
-          function vb(t, e, n) {
+          function Eb(t, e, n) {
             const o = t.model,
               i = t.editing.mapper;
             let r = null;
@@ -27276,10 +27328,10 @@
               (r = (function (t, e) {
                 const n = t.model,
                   o = t.editing.mapper;
-                if (Nk(e)) return n.createRangeOn(o.toModelElement(e));
+                if (Lk(e)) return n.createRangeOn(o.toModelElement(e));
                 if (!e.is('editableElement')) {
-                  const t = e.findAncestor(t => Nk(t) || t.is('editableElement'));
-                  if (Nk(t)) return n.createRangeOn(o.toModelElement(t));
+                  const t = e.findAncestor(t => Lk(t) || t.is('editableElement'));
+                  if (Lk(t)) return n.createRangeOn(o.toModelElement(t));
                 }
                 return null;
               })(t, n)),
@@ -27326,26 +27378,26 @@
                   return o.getNearestSelectionRange(i, 'forward');
                 })(t, a);
           }
-          function yb(t) {
+          function Db(t) {
             return l.isGecko
               ? t.dropEffect
               : ['all', 'copyMove'].includes(t.effectAllowed)
               ? 'move'
               : 'copy';
           }
-          function xb(t) {
+          function Sb(t) {
             if (t.is('editableElement')) return null;
-            if (t.hasClass('ck-widget__selection-handle')) return t.findAncestor(Nk);
-            if (Nk(t)) return t;
-            const e = t.findAncestor(t => Nk(t) || t.is('editableElement'));
-            return Nk(e) ? e : null;
+            if (t.hasClass('ck-widget__selection-handle')) return t.findAncestor(Lk);
+            if (Lk(t)) return t;
+            const e = t.findAncestor(t => Lk(t) || t.is('editableElement'));
+            return Lk(e) ? e : null;
           }
-          class Eb extends fs {
+          class Ib extends fs {
             static get pluginName() {
               return 'PastePlainText';
             }
             static get requires() {
-              return [Pf];
+              return [Of];
             }
             init() {
               const t = this.editor,
@@ -27354,11 +27406,11 @@
                 o = n.document,
                 i = e.document.selection;
               let r = !1;
-              n.addObserver(Mf),
+              n.addObserver(Pf),
                 this.listenTo(o, 'keydown', (t, e) => {
                   r = e.shiftKey;
                 }),
-                t.plugins.get(Pf).on('contentInsertion', (t, n) => {
+                t.plugins.get(Of).on('contentInsertion', (t, n) => {
                   (r ||
                     (function (t, e) {
                       if (t.childCount > 1) return !1;
@@ -27378,12 +27430,12 @@
                 });
             }
           }
-          class Db extends fs {
+          class Tb extends fs {
             static get pluginName() {
               return 'Clipboard';
             }
             static get requires() {
-              return [Pf, _b, Eb];
+              return [Of, xb, Ib];
             }
           }
           Qo('px');
@@ -27393,7 +27445,7 @@
             Object.getOwnPropertySymbols,
             Object.prototype.hasOwnProperty,
             Object.prototype.propertyIsEnumerable;
-          class Sb extends bs {
+          class Mb extends bs {
             constructor(t) {
               super(t), (this.affectsData = !1);
             }
@@ -27401,33 +27453,33 @@
               const t = this.editor.model,
                 e = t.document.selection;
               let n = t.schema.getLimitElement(e);
-              if (e.containsEntireContent(n) || !Ib(t.schema, n))
+              if (e.containsEntireContent(n) || !Bb(t.schema, n))
                 do {
                   if (((n = n.parent), !n)) return;
-                } while (!Ib(t.schema, n));
+                } while (!Bb(t.schema, n));
               t.change(t => {
                 t.setSelection(n, 'in');
               });
             }
           }
-          function Ib(t, e) {
+          function Bb(t, e) {
             return t.isLimit(e) && (t.checkChild(e, '$text') || t.checkChild(e, 'paragraph'));
           }
-          const Tb = Ci('Ctrl+A');
-          class Mb extends fs {
+          const Nb = Ci('Ctrl+A');
+          class Pb extends fs {
             static get pluginName() {
               return 'SelectAllEditing';
             }
             init() {
               const t = this.editor,
                 e = t.editing.view.document;
-              t.commands.add('selectAll', new Sb(t)),
+              t.commands.add('selectAll', new Mb(t)),
                 this.listenTo(e, 'keydown', (e, n) => {
-                  Ai(n) === Tb && (t.execute('selectAll'), n.preventDefault());
+                  Ai(n) === Nb && (t.execute('selectAll'), n.preventDefault());
                 });
             }
           }
-          class Bb extends fs {
+          class zb extends fs {
             static get pluginName() {
               return 'SelectAllUI';
             }
@@ -27453,23 +27505,23 @@
               });
             }
           }
-          class Nb extends fs {
+          class Lb extends fs {
             static get requires() {
-              return [Mb, Bb];
+              return [Pb, zb];
             }
             static get pluginName() {
               return 'SelectAll';
             }
           }
-          var Pb = Object.defineProperty,
-            zb = Object.getOwnPropertySymbols,
-            Lb = Object.prototype.hasOwnProperty,
-            Ob = Object.prototype.propertyIsEnumerable,
-            Rb = (t, e, n) =>
+          var Ob = Object.defineProperty,
+            Rb = Object.getOwnPropertySymbols,
+            jb = Object.prototype.hasOwnProperty,
+            Fb = Object.prototype.propertyIsEnumerable,
+            Vb = (t, e, n) =>
               e in t
-                ? Pb(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? Ob(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n);
-          class jb extends bs {
+          class Hb extends bs {
             constructor(t) {
               super(t),
                 (this._stack = []),
@@ -27481,8 +27533,8 @@
                   'set',
                   (t, e) => {
                     e[1] = ((t, e) => {
-                      for (var n in e || (e = {})) Lb.call(e, n) && Rb(t, n, e[n]);
-                      if (zb) for (var n of zb(e)) Ob.call(e, n) && Rb(t, n, e[n]);
+                      for (var n in e || (e = {})) jb.call(e, n) && Vb(t, n, e[n]);
+                      if (Rb) for (var n of Rb(e)) Fb.call(e, n) && Vb(t, n, e[n]);
                       return t;
                     })({}, e[1]);
                     const n = e[1];
@@ -27518,8 +27570,8 @@
                 s = t.map(t => t.getTransformedByOperations(n)),
                 a = s.flat();
               for (const t of s) {
-                const e = t.filter(t => t.root != i.graveyard).filter(t => !Vb(t, a));
-                e.length && (Fb(e), r.push(e[0]));
+                const e = t.filter(t => t.root != i.graveyard).filter(t => !Gb(t, a));
+                e.length && (Ub(e), r.push(e[0]));
               }
               r.length &&
                 o.change(t => {
@@ -27551,17 +27603,17 @@
               }
             }
           }
-          function Fb(t) {
+          function Ub(t) {
             t.sort((t, e) => (t.start.isBefore(e.start) ? -1 : 1));
             for (let e = 1; e < t.length; e++) {
               const n = t[e - 1].getJoined(t[e], !0);
               n && (e--, t.splice(e, 2, n));
             }
           }
-          function Vb(t, e) {
+          function Gb(t, e) {
             return e.some(e => e !== t && e.containsRange(t, !0));
           }
-          class Hb extends jb {
+          class qb extends Hb {
             execute(t = null) {
               const e = t ? this._stack.findIndex(e => e.batch == t) : this._stack.length - 1,
                 n = this._stack.splice(e, 1)[0],
@@ -27575,7 +27627,7 @@
                 this.refresh();
             }
           }
-          class Ub extends jb {
+          class Wb extends Hb {
             execute() {
               const t = this._stack.pop(),
                 e = this.editor.model.createBatch({ isUndo: !0 });
@@ -27588,7 +27640,7 @@
                 this.refresh();
             }
           }
-          class Gb extends fs {
+          class $b extends fs {
             constructor() {
               super(...arguments), (this._batchRegistry = new WeakSet());
             }
@@ -27597,8 +27649,8 @@
             }
             init() {
               const t = this.editor;
-              (this._undoCommand = new Hb(t)),
-                (this._redoCommand = new Ub(t)),
+              (this._undoCommand = new qb(t)),
+                (this._redoCommand = new Wb(t)),
                 t.commands.add('undo', this._undoCommand),
                 t.commands.add('redo', this._redoCommand),
                 this.listenTo(
@@ -27627,11 +27679,11 @@
                 t.keystrokes.set('CTRL+SHIFT+Z', 'redo');
             }
           }
-          const qb =
+          const Kb =
               '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m5.042 9.367 2.189 1.837a.75.75 0 0 1-.965 1.149l-3.788-3.18a.747.747 0 0 1-.21-.284.75.75 0 0 1 .17-.945L6.23 4.762a.75.75 0 1 1 .964 1.15L4.863 7.866h8.917A.75.75 0 0 1 14 7.9a4 4 0 1 1-1.477 7.718l.344-1.489a2.5 2.5 0 1 0 1.094-4.73l.008-.032H5.042z"/></svg>',
-            Wb =
+            Yb =
               '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m14.958 9.367-2.189 1.837a.75.75 0 0 0 .965 1.149l3.788-3.18a.747.747 0 0 0 .21-.284.75.75 0 0 0-.17-.945L13.77 4.762a.75.75 0 1 0-.964 1.15l2.331 1.955H6.22A.75.75 0 0 0 6 7.9a4 4 0 1 0 1.477 7.718l-.344-1.489A2.5 2.5 0 1 1 6.039 9.4l-.008-.032h8.927z"/></svg>';
-          class $b extends fs {
+          class Zb extends fs {
             static get pluginName() {
               return 'UndoUI';
             }
@@ -27639,8 +27691,8 @@
               const t = this.editor,
                 e = t.locale,
                 n = t.t,
-                o = 'ltr' == e.uiLanguageDirection ? qb : Wb,
-                i = 'ltr' == e.uiLanguageDirection ? Wb : qb;
+                o = 'ltr' == e.uiLanguageDirection ? Kb : Yb,
+                i = 'ltr' == e.uiLanguageDirection ? Yb : Kb;
               this._addButton('undo', n('Undo'), 'CTRL+Z', o),
                 this._addButton('redo', n('Redo'), 'CTRL+Y', i);
             }
@@ -27660,15 +27712,15 @@
               });
             }
           }
-          class Kb extends fs {
+          class Qb extends fs {
             static get requires() {
-              return [Gb, $b];
+              return [$b, Zb];
             }
             static get pluginName() {
               return 'Undo';
             }
           }
-          class Yb extends Y() {
+          class Jb extends Y() {
             constructor() {
               super();
               const t = new window.FileReader();
@@ -27708,7 +27760,7 @@
               this._reader.abort();
             }
           }
-          class Zb extends fs {
+          class Xb extends fs {
             constructor() {
               super(...arguments),
                 (this.loaders = new Ii()),
@@ -27719,7 +27771,7 @@
               return 'FileRepository';
             }
             static get requires() {
-              return [Jg];
+              return [em];
             }
             init() {
               this.loaders.on('change', () => this._updatePendingAction()),
@@ -27734,7 +27786,7 @@
             }
             createLoader(t) {
               if (!this.createUploadAdapter) return v('filerepository-no-upload-adapter'), null;
-              const e = new Qb(Promise.resolve(t), this.createUploadAdapter);
+              const e = new tw(Promise.resolve(t), this.createUploadAdapter);
               return (
                 this.loaders.add(e),
                 this._loadersMap.set(t, e),
@@ -27758,7 +27810,7 @@
               );
             }
             destroyLoader(t) {
-              const e = t instanceof Qb ? t : this.getLoader(t);
+              const e = t instanceof tw ? t : this.getLoader(t);
               e._destroy(),
                 this.loaders.remove(e),
                 this._loadersMap.forEach((t, n) => {
@@ -27766,7 +27818,7 @@
                 });
             }
             _updatePendingAction() {
-              const t = this.editor.plugins.get(Jg);
+              const t = this.editor.plugins.get(em);
               if (this.loaders.length) {
                 if (!this._pendingAction) {
                   const e = this.editor.t,
@@ -27777,13 +27829,13 @@
               } else t.remove(this._pendingAction), (this._pendingAction = null);
             }
           }
-          class Qb extends Y() {
+          class tw extends Y() {
             constructor(t, e) {
               super(),
                 (this.id = b()),
                 (this._filePromiseWrapper = this._createFilePromiseWrapper(t)),
                 (this._adapter = e(this)),
-                (this._reader = new Yb()),
+                (this._reader = new Jb()),
                 this.set('status', 'idle'),
                 this.set('uploaded', 0),
                 this.set('uploadTotal', null),
@@ -27864,11 +27916,11 @@
               );
             }
           }
-          class Jb extends Gi {
+          class ew extends Gi {
             constructor(t) {
               super(t),
                 (this.buttonView = new wr(t)),
-                (this._fileInputView = new Xb(t)),
+                (this._fileInputView = new nw(t)),
                 this._fileInputView.bind('acceptedType').to(this),
                 this._fileInputView.bind('allowMultipleFiles').to(this),
                 this._fileInputView.delegate('done').to(this),
@@ -27885,7 +27937,7 @@
               this.buttonView.focus();
             }
           }
-          class Xb extends Gi {
+          class nw extends Gi {
             constructor(t) {
               super(t), this.set('acceptedType', void 0), this.set('allowMultipleFiles', !1);
               const e = this.bindTemplate;
@@ -27913,17 +27965,17 @@
               this.element.click();
             }
           }
-          var tw = Object.defineProperty,
-            ew = Object.defineProperties,
-            nw = Object.getOwnPropertyDescriptors,
-            ow = Object.getOwnPropertySymbols,
-            iw = Object.prototype.hasOwnProperty,
-            rw = Object.prototype.propertyIsEnumerable,
-            sw = (t, e, n) =>
+          var ow = Object.defineProperty,
+            iw = Object.defineProperties,
+            rw = Object.getOwnPropertyDescriptors,
+            sw = Object.getOwnPropertySymbols,
+            aw = Object.prototype.hasOwnProperty,
+            cw = Object.prototype.propertyIsEnumerable,
+            lw = (t, e, n) =>
               e in t
-                ? tw(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? ow(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n);
-          class aw {
+          class dw {
             constructor(t, e) {
               (this.loader = t), (this.options = e);
             }
@@ -27956,11 +28008,11 @@
                   var s;
                   t(
                     ((s = ((t, e) => {
-                      for (var n in e || (e = {})) iw.call(e, n) && sw(t, n, e[n]);
-                      if (ow) for (var n of ow(e)) rw.call(e, n) && sw(t, n, e[n]);
+                      for (var n in e || (e = {})) aw.call(e, n) && lw(t, n, e[n]);
+                      if (sw) for (var n of sw(e)) cw.call(e, n) && lw(t, n, e[n]);
                       return t;
                     })({}, n)),
-                    ew(s, nw({ urls: i }))),
+                    iw(s, rw({ urls: i }))),
                   );
                 }),
                 o.upload &&
@@ -27977,9 +28029,9 @@
               o.append('upload', t), this.xhr.send(o);
             }
           }
-          const cw = 'ckCsrfToken',
-            lw = 'abcdefghijklmnopqrstuvwxyz0123456789';
-          function dw() {
+          const hw = 'ckCsrfToken',
+            uw = 'abcdefghijklmnopqrstuvwxyz0123456789';
+          function gw() {
             let t = (function (t) {
               t = t.toLowerCase();
               const e = document.cookie.split(';');
@@ -27989,7 +28041,7 @@
                   return decodeURIComponent(e[1]);
               }
               return null;
-            })(cw);
+            })(hw);
             var e, n;
             return (
               (t && 40 == t.length) ||
@@ -27998,19 +28050,19 @@
                   const n = new Uint8Array(t);
                   window.crypto.getRandomValues(n);
                   for (let t = 0; t < n.length; t++) {
-                    const o = lw.charAt(n[t] % lw.length);
+                    const o = uw.charAt(n[t] % uw.length);
                     e += Math.random() > 0.5 ? o.toUpperCase() : o;
                   }
                   return e;
                 })(40)),
-                (e = cw),
+                (e = hw),
                 (n = t),
                 (document.cookie =
                   encodeURIComponent(e) + '=' + encodeURIComponent(n) + ';path=/')),
               t
             );
           }
-          class hw {
+          class mw {
             constructor(t, e, n) {
               (this.loader = t), (this.url = e), (this.t = n);
             }
@@ -28048,10 +28100,10 @@
             }
             _sendRequest(t) {
               const e = new FormData();
-              e.append('upload', t), e.append('ckCsrfToken', dw()), this.xhr.send(e);
+              e.append('upload', t), e.append('ckCsrfToken', gw()), this.xhr.send(e);
             }
           }
-          function uw(t, e, n, o) {
+          function pw(t, e, n, o) {
             let i,
               r = null;
             'function' == typeof o
@@ -28100,7 +28152,7 @@
                   });
               });
           }
-          function gw(t, e, n, o) {
+          function fw(t, e, n, o) {
             let i, r;
             n instanceof RegExp ? (i = n) : (r = n),
               (r =
@@ -28142,8 +28194,8 @@
                     return { text: o, range: e.createRange(n, t.end) };
                   })(s.createRange(s.createPositionAt(h, 0), d), s),
                   m = r(u),
-                  p = mw(g.start, m.format, s),
-                  f = mw(g.start, m.remove, s);
+                  p = kw(g.start, m.format, s),
+                  f = kw(g.start, m.remove, s);
                 p.length &&
                   f.length &&
                   s.enqueueChange(e => {
@@ -28156,12 +28208,12 @@
                   });
               });
           }
-          function mw(t, e, n) {
+          function kw(t, e, n) {
             return e
               .filter(t => void 0 !== t[0] && void 0 !== t[1])
               .map(e => n.createRange(t.getShiftedBy(e[0]), t.getShiftedBy(e[1])));
           }
-          function pw(t, e) {
+          function bw(t, e) {
             return (n, o) => {
               if (!t.commands.get(e).isEnabled) return !1;
               const i = t.model.schema.getValidRanges(o, e);
@@ -28169,7 +28221,7 @@
               n.removeSelectionAttribute(e);
             };
           }
-          class fw extends bs {
+          class ww extends bs {
             constructor(t, e) {
               super(t), (this.attributeKey = e);
             }
@@ -28212,17 +28264,17 @@
               return !1;
             }
           }
-          const kw = 'bold';
-          class bw extends fs {
+          const Aw = 'bold';
+          class Cw extends fs {
             static get pluginName() {
               return 'BoldEditing';
             }
             init() {
               const t = this.editor;
-              t.model.schema.extend('$text', { allowAttributes: kw }),
-                t.model.schema.setAttributeProperties(kw, { isFormatting: !0, copyOnEnter: !0 }),
+              t.model.schema.extend('$text', { allowAttributes: Aw }),
+                t.model.schema.setAttributeProperties(Aw, { isFormatting: !0, copyOnEnter: !0 }),
                 t.conversion.attributeToElement({
-                  model: kw,
+                  model: Aw,
                   view: 'strong',
                   upcastAlso: [
                     'b',
@@ -28234,79 +28286,79 @@
                     },
                   ],
                 }),
-                t.commands.add(kw, new fw(t, kw)),
-                t.keystrokes.set('CTRL+B', kw);
+                t.commands.add(Aw, new ww(t, Aw)),
+                t.keystrokes.set('CTRL+B', Aw);
             }
           }
-          const ww = 'bold';
-          class Aw extends fs {
+          const _w = 'bold';
+          class vw extends fs {
             static get pluginName() {
               return 'BoldUI';
             }
             init() {
               const t = this.editor,
                 e = t.t;
-              t.ui.componentFactory.add(ww, n => {
-                const o = t.commands.get(ww),
+              t.ui.componentFactory.add(_w, n => {
+                const o = t.commands.get(_w),
                   i = new wr(n);
                 return (
                   i.set({
                     label: e('Bold'),
-                    icon: Xg.bold,
+                    icon: nm.bold,
                     keystroke: 'CTRL+B',
                     tooltip: !0,
                     isToggleable: !0,
                   }),
                   i.bind('isOn', 'isEnabled').to(o, 'value', 'isEnabled'),
                   this.listenTo(i, 'execute', () => {
-                    t.execute(ww), t.editing.view.focus();
+                    t.execute(_w), t.editing.view.focus();
                   }),
                   i
                 );
               });
             }
           }
-          const Cw = 'code';
-          class _w extends fs {
+          const yw = 'code';
+          class xw extends fs {
             static get pluginName() {
               return 'CodeEditing';
             }
             static get requires() {
-              return [Jf];
+              return [ek];
             }
             init() {
               const t = this.editor;
-              t.model.schema.extend('$text', { allowAttributes: Cw }),
-                t.model.schema.setAttributeProperties(Cw, { isFormatting: !0, copyOnEnter: !1 }),
+              t.model.schema.extend('$text', { allowAttributes: yw }),
+                t.model.schema.setAttributeProperties(yw, { isFormatting: !0, copyOnEnter: !1 }),
                 t.conversion.attributeToElement({
-                  model: Cw,
+                  model: yw,
                   view: 'code',
                   upcastAlso: { styles: { 'word-wrap': 'break-word' } },
                 }),
-                t.commands.add(Cw, new fw(t, Cw)),
-                t.plugins.get(Jf).registerAttribute(Cw),
-                pk(t, Cw, 'code', 'ck-code_selected');
+                t.commands.add(yw, new ww(t, yw)),
+                t.plugins.get(ek).registerAttribute(yw),
+                bk(t, yw, 'code', 'ck-code_selected');
             }
           }
-          var vw = n(8603),
-            yw = {
+          var Ew = n(8603),
+            Dw = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(vw.Z, yw);
-          vw.Z.locals;
-          const xw = 'code';
-          class Ew extends fs {
+          Vi()(Ew.Z, Dw);
+          Ew.Z.locals;
+          const Sw = 'code';
+          class Iw extends fs {
             static get pluginName() {
               return 'CodeUI';
             }
             init() {
               const t = this.editor,
                 e = t.t;
-              t.ui.componentFactory.add(xw, n => {
-                const o = t.commands.get(xw),
+              t.ui.componentFactory.add(Sw, n => {
+                const o = t.commands.get(Sw),
                   i = new wr(n);
                 return (
                   i.set({
@@ -28317,41 +28369,41 @@
                   }),
                   i.bind('isOn', 'isEnabled').to(o, 'value', 'isEnabled'),
                   this.listenTo(i, 'execute', () => {
-                    t.execute(xw), t.editing.view.focus();
+                    t.execute(Sw), t.editing.view.focus();
                   }),
                   i
                 );
               });
             }
           }
-          const Dw = 'italic';
-          class Sw extends fs {
+          const Tw = 'italic';
+          class Mw extends fs {
             static get pluginName() {
               return 'ItalicEditing';
             }
             init() {
               const t = this.editor;
-              t.model.schema.extend('$text', { allowAttributes: Dw }),
-                t.model.schema.setAttributeProperties(Dw, { isFormatting: !0, copyOnEnter: !0 }),
+              t.model.schema.extend('$text', { allowAttributes: Tw }),
+                t.model.schema.setAttributeProperties(Tw, { isFormatting: !0, copyOnEnter: !0 }),
                 t.conversion.attributeToElement({
-                  model: Dw,
+                  model: Tw,
                   view: 'i',
                   upcastAlso: ['em', { styles: { 'font-style': 'italic' } }],
                 }),
-                t.commands.add(Dw, new fw(t, Dw)),
-                t.keystrokes.set('CTRL+I', Dw);
+                t.commands.add(Tw, new ww(t, Tw)),
+                t.keystrokes.set('CTRL+I', Tw);
             }
           }
-          const Iw = 'italic';
-          class Tw extends fs {
+          const Bw = 'italic';
+          class Nw extends fs {
             static get pluginName() {
               return 'ItalicUI';
             }
             init() {
               const t = this.editor,
                 e = t.t;
-              t.ui.componentFactory.add(Iw, n => {
-                const o = t.commands.get(Iw),
+              t.ui.componentFactory.add(Bw, n => {
+                const o = t.commands.get(Bw),
                   i = new wr(n);
                 return (
                   i.set({
@@ -28363,41 +28415,41 @@
                   }),
                   i.bind('isOn', 'isEnabled').to(o, 'value', 'isEnabled'),
                   this.listenTo(i, 'execute', () => {
-                    t.execute(Iw), t.editing.view.focus();
+                    t.execute(Bw), t.editing.view.focus();
                   }),
                   i
                 );
               });
             }
           }
-          const Mw = 'strikethrough';
-          class Bw extends fs {
+          const Pw = 'strikethrough';
+          class zw extends fs {
             static get pluginName() {
               return 'StrikethroughEditing';
             }
             init() {
               const t = this.editor;
-              t.model.schema.extend('$text', { allowAttributes: Mw }),
-                t.model.schema.setAttributeProperties(Mw, { isFormatting: !0, copyOnEnter: !0 }),
+              t.model.schema.extend('$text', { allowAttributes: Pw }),
+                t.model.schema.setAttributeProperties(Pw, { isFormatting: !0, copyOnEnter: !0 }),
                 t.conversion.attributeToElement({
-                  model: Mw,
+                  model: Pw,
                   view: 's',
                   upcastAlso: ['del', 'strike', { styles: { 'text-decoration': 'line-through' } }],
                 }),
-                t.commands.add(Mw, new fw(t, Mw)),
+                t.commands.add(Pw, new ww(t, Pw)),
                 t.keystrokes.set('CTRL+SHIFT+X', 'strikethrough');
             }
           }
-          const Nw = 'strikethrough';
-          class Pw extends fs {
+          const Lw = 'strikethrough';
+          class Ow extends fs {
             static get pluginName() {
               return 'StrikethroughUI';
             }
             init() {
               const t = this.editor,
                 e = t.t;
-              t.ui.componentFactory.add(Nw, n => {
-                const o = t.commands.get(Nw),
+              t.ui.componentFactory.add(Lw, n => {
+                const o = t.commands.get(Lw),
                   i = new wr(n);
                 return (
                   i.set({
@@ -28409,40 +28461,40 @@
                   }),
                   i.bind('isOn', 'isEnabled').to(o, 'value', 'isEnabled'),
                   this.listenTo(i, 'execute', () => {
-                    t.execute(Nw), t.editing.view.focus();
+                    t.execute(Lw), t.editing.view.focus();
                   }),
                   i
                 );
               });
             }
           }
-          const zw = 'subscript';
-          class Lw extends fs {
+          const Rw = 'subscript';
+          class jw extends fs {
             static get pluginName() {
               return 'SubscriptEditing';
             }
             init() {
               const t = this.editor;
-              t.model.schema.extend('$text', { allowAttributes: zw }),
-                t.model.schema.setAttributeProperties(zw, { isFormatting: !0, copyOnEnter: !0 }),
+              t.model.schema.extend('$text', { allowAttributes: Rw }),
+                t.model.schema.setAttributeProperties(Rw, { isFormatting: !0, copyOnEnter: !0 }),
                 t.conversion.attributeToElement({
-                  model: zw,
+                  model: Rw,
                   view: 'sub',
                   upcastAlso: [{ styles: { 'vertical-align': 'sub' } }],
                 }),
-                t.commands.add(zw, new fw(t, zw));
+                t.commands.add(Rw, new ww(t, Rw));
             }
           }
-          const Ow = 'subscript';
-          class Rw extends fs {
+          const Fw = 'subscript';
+          class Vw extends fs {
             static get pluginName() {
               return 'SubscriptUI';
             }
             init() {
               const t = this.editor,
                 e = t.t;
-              t.ui.componentFactory.add(Ow, n => {
-                const o = t.commands.get(Ow),
+              t.ui.componentFactory.add(Fw, n => {
+                const o = t.commands.get(Fw),
                   i = new wr(n);
                 return (
                   i.set({
@@ -28453,40 +28505,40 @@
                   }),
                   i.bind('isOn', 'isEnabled').to(o, 'value', 'isEnabled'),
                   this.listenTo(i, 'execute', () => {
-                    t.execute(Ow), t.editing.view.focus();
+                    t.execute(Fw), t.editing.view.focus();
                   }),
                   i
                 );
               });
             }
           }
-          const jw = 'superscript';
-          class Fw extends fs {
+          const Hw = 'superscript';
+          class Uw extends fs {
             static get pluginName() {
               return 'SuperscriptEditing';
             }
             init() {
               const t = this.editor;
-              t.model.schema.extend('$text', { allowAttributes: jw }),
-                t.model.schema.setAttributeProperties(jw, { isFormatting: !0, copyOnEnter: !0 }),
+              t.model.schema.extend('$text', { allowAttributes: Hw }),
+                t.model.schema.setAttributeProperties(Hw, { isFormatting: !0, copyOnEnter: !0 }),
                 t.conversion.attributeToElement({
-                  model: jw,
+                  model: Hw,
                   view: 'sup',
                   upcastAlso: [{ styles: { 'vertical-align': 'super' } }],
                 }),
-                t.commands.add(jw, new fw(t, jw));
+                t.commands.add(Hw, new ww(t, Hw));
             }
           }
-          const Vw = 'superscript';
-          class Hw extends fs {
+          const Gw = 'superscript';
+          class qw extends fs {
             static get pluginName() {
               return 'SuperscriptUI';
             }
             init() {
               const t = this.editor,
                 e = t.t;
-              t.ui.componentFactory.add(Vw, n => {
-                const o = t.commands.get(Vw),
+              t.ui.componentFactory.add(Gw, n => {
+                const o = t.commands.get(Gw),
                   i = new wr(n);
                 return (
                   i.set({
@@ -28497,41 +28549,41 @@
                   }),
                   i.bind('isOn', 'isEnabled').to(o, 'value', 'isEnabled'),
                   this.listenTo(i, 'execute', () => {
-                    t.execute(Vw), t.editing.view.focus();
+                    t.execute(Gw), t.editing.view.focus();
                   }),
                   i
                 );
               });
             }
           }
-          const Uw = 'underline';
-          class Gw extends fs {
+          const Ww = 'underline';
+          class $w extends fs {
             static get pluginName() {
               return 'UnderlineEditing';
             }
             init() {
               const t = this.editor;
-              t.model.schema.extend('$text', { allowAttributes: Uw }),
-                t.model.schema.setAttributeProperties(Uw, { isFormatting: !0, copyOnEnter: !0 }),
+              t.model.schema.extend('$text', { allowAttributes: Ww }),
+                t.model.schema.setAttributeProperties(Ww, { isFormatting: !0, copyOnEnter: !0 }),
                 t.conversion.attributeToElement({
-                  model: Uw,
+                  model: Ww,
                   view: 'u',
                   upcastAlso: { styles: { 'text-decoration': 'underline' } },
                 }),
-                t.commands.add(Uw, new fw(t, Uw)),
+                t.commands.add(Ww, new ww(t, Ww)),
                 t.keystrokes.set('CTRL+U', 'underline');
             }
           }
-          const qw = 'underline';
-          class Ww extends fs {
+          const Kw = 'underline';
+          class Yw extends fs {
             static get pluginName() {
               return 'UnderlineUI';
             }
             init() {
               const t = this.editor,
                 e = t.t;
-              t.ui.componentFactory.add(qw, n => {
-                const o = t.commands.get(qw),
+              t.ui.componentFactory.add(Kw, n => {
+                const o = t.commands.get(Kw),
                   i = new wr(n);
                 return (
                   i.set({
@@ -28543,14 +28595,14 @@
                   }),
                   i.bind('isOn', 'isEnabled').to(o, 'value', 'isEnabled'),
                   this.listenTo(i, 'execute', () => {
-                    t.execute(qw), t.editing.view.focus();
+                    t.execute(Kw), t.editing.view.focus();
                   }),
                   i
                 );
               });
             }
           }
-          class $w extends bs {
+          class Zw extends bs {
             refresh() {
               (this.value = this._getValue()), (this.isEnabled = this._checkEnabled());
             }
@@ -28562,24 +28614,24 @@
                 r = void 0 === t.forceValue ? !this.value : t.forceValue;
               e.change(t => {
                 if (r) {
-                  const e = i.filter(t => Kw(t) || Zw(n, t));
+                  const e = i.filter(t => Qw(t) || Xw(n, t));
                   this._applyQuote(t, e);
-                } else this._removeQuote(t, i.filter(Kw));
+                } else this._removeQuote(t, i.filter(Qw));
               });
             }
             _getValue() {
               const t = Ti(this.editor.model.document.selection.getSelectedBlocks());
-              return !(!t || !Kw(t));
+              return !(!t || !Qw(t));
             }
             _checkEnabled() {
               if (this.value) return !0;
               const t = this.editor.model.document.selection,
                 e = this.editor.model.schema,
                 n = Ti(t.getSelectedBlocks());
-              return !!n && Zw(e, n);
+              return !!n && Xw(e, n);
             }
             _removeQuote(t, e) {
-              Yw(t, e)
+              Jw(t, e)
                 .reverse()
                 .forEach(e => {
                   if (e.start.isAtStart && e.end.isAtEnd) return void t.unwrap(e.start.parent);
@@ -28594,10 +28646,10 @@
             }
             _applyQuote(t, e) {
               const n = [];
-              Yw(t, e)
+              Jw(t, e)
                 .reverse()
                 .forEach(e => {
-                  let o = Kw(e.start);
+                  let o = Qw(e.start);
                   o || ((o = t.createElement('blockQuote')), t.wrap(e, o)), n.push(o);
                 }),
                 n
@@ -28607,10 +28659,10 @@
                   );
             }
           }
-          function Kw(t) {
+          function Qw(t) {
             return 'blockQuote' == t.parent.name ? t.parent : null;
           }
-          function Yw(t, e) {
+          function Jw(t, e) {
             let n,
               o = 0;
             const i = [];
@@ -28624,22 +28676,22 @@
             }
             return i;
           }
-          function Zw(t, e) {
+          function Xw(t, e) {
             const n = t.checkChild(e.parent, 'blockQuote'),
               o = t.checkChild(['$root', 'blockQuote'], e);
             return n && o;
           }
-          class Qw extends fs {
+          class tA extends fs {
             static get pluginName() {
               return 'BlockQuoteEditing';
             }
             static get requires() {
-              return [Ck, Kf];
+              return [yk, Qf];
             }
             init() {
               const t = this.editor,
                 e = t.model.schema;
-              t.commands.add('blockQuote', new $w(t)),
+              t.commands.add('blockQuote', new Zw(t)),
                 e.register('blockQuote', { inheritAllFrom: '$container' }),
                 t.conversion.elementToElement({ model: 'blockQuote', view: 'blockquote' }),
                 t.model.document.registerPostFixer(n => {
@@ -28699,16 +28751,16 @@
                 );
             }
           }
-          var Jw = n(3062),
-            Xw = {
+          var eA = n(3062),
+            nA = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(Jw.Z, Xw);
-          Jw.Z.locals;
-          class tA extends fs {
+          Vi()(eA.Z, nA);
+          eA.Z.locals;
+          class oA extends fs {
             static get pluginName() {
               return 'BlockQuoteUI';
             }
@@ -28719,7 +28771,7 @@
                 const o = t.commands.get('blockQuote'),
                   i = new wr(n);
                 return (
-                  i.set({ label: e('Block quote'), icon: Xg.quote, tooltip: !0, isToggleable: !0 }),
+                  i.set({ label: e('Block quote'), icon: nm.quote, tooltip: !0, isToggleable: !0 }),
                   i.bind('isOn', 'isEnabled').to(o, 'value', 'isEnabled'),
                   this.listenTo(i, 'execute', () => {
                     t.execute('blockQuote'), t.editing.view.focus();
@@ -28729,7 +28781,7 @@
               });
             }
           }
-          class eA extends fs {
+          class iA extends fs {
             static get pluginName() {
               return 'CKBoxUI';
             }
@@ -28755,15 +28807,15 @@
               });
             }
           }
-          const nA = 4e3,
-            oA = 80,
-            iA = 10;
-          function rA({ token: t, id: e, origin: n, width: o, extension: i }) {
-            const r = sA(t),
+          const rA = 4e3,
+            sA = 80,
+            aA = 10;
+          function cA({ token: t, id: e, origin: n, width: o, extension: i }) {
+            const r = lA(t),
               s = (function (t) {
-                const e = [(t * iA) / 100, oA],
+                const e = [(t * aA) / 100, sA],
                   n = Math.floor(Math.max(...e)),
-                  o = [Math.min(t, nA)];
+                  o = [Math.min(t, rA)];
                 let i = o[0];
                 for (; i - n >= n; ) (i -= n), o.unshift(i);
                 return o;
@@ -28773,13 +28825,13 @@
                 return t;
               })(i);
             return {
-              imageFallbackUrl: aA({ environmentId: r, id: e, origin: n, width: o, extension: a }),
+              imageFallbackUrl: dA({ environmentId: r, id: e, origin: n, width: o, extension: a }),
               imageSources: [
                 {
                   srcset: s
                     .map(
                       t =>
-                        `${aA({
+                        `${dA({
                           environmentId: r,
                           id: e,
                           origin: n,
@@ -28794,14 +28846,14 @@
               ],
             };
           }
-          function sA(t) {
+          function lA(t) {
             const [, e] = t.value.split('.');
             return JSON.parse(atob(e)).aud;
           }
-          function aA({ environmentId: t, id: e, origin: n, width: o, extension: i }) {
+          function dA({ environmentId: t, id: e, origin: n, width: o, extension: i }) {
             return new URL(`${t}/assets/${e}/images/${o}.${i}`, n).toString();
           }
-          class cA extends bs {
+          class hA extends bs {
             constructor(t) {
               super(t),
                 (this._chosenAssets = new Set()),
@@ -28874,8 +28926,8 @@
                             if (!e) return !1;
                             return e.width && e.height;
                           })(t)
-                            ? { id: t.data.id, type: 'image', attributes: lA(t, n, e) }
-                            : { id: t.data.id, type: 'link', attributes: dA(t, n, e) },
+                            ? { id: t.data.id, type: 'image', attributes: uA(t, n, e) }
+                            : { id: t.data.id, type: 'link', attributes: gA(t, n, e) },
                         )
                         .filter(t => ('image' === t.type ? o : i));
                     })({
@@ -28925,8 +28977,8 @@
               n.execute('link', s);
             }
           }
-          function lA(t, e, n) {
-            const { imageFallbackUrl: o, imageSources: i } = rA({
+          function uA(t, e, n) {
+            const { imageFallbackUrl: o, imageSources: i } = cA({
               token: e,
               origin: n,
               id: t.data.id,
@@ -28939,15 +28991,15 @@
               imageTextAlternative: t.data.metadata.description || '',
             };
           }
-          function dA(t, e, n) {
-            return { linkName: t.data.name, linkHref: hA(t, e, n) };
+          function gA(t, e, n) {
+            return { linkName: t.data.name, linkHref: mA(t, e, n) };
           }
-          function hA(t, e, n) {
-            const o = sA(e),
+          function mA(t, e, n) {
+            const o = lA(e),
               i = new URL(`${o}/assets/${t.data.id}/file`, n);
             return i.searchParams.set('download', 'true'), i.toString();
           }
-          var uA = (t, e, n) =>
+          var pA = (t, e, n) =>
             new Promise((o, i) => {
               var r = t => {
                   try {
@@ -28966,22 +29018,22 @@
                 a = t => (t.done ? o(t.value) : Promise.resolve(t.value).then(r, s));
               a((n = n.apply(t, e)).next());
             });
-          class gA extends fs {
+          class fA extends fs {
             static get requires() {
-              return ['ImageUploadEditing', 'ImageUploadProgress', Zb, fA];
+              return ['ImageUploadEditing', 'ImageUploadProgress', Xb, wA];
             }
             static get pluginName() {
               return 'CKBoxUploadAdapter';
             }
             afterInit() {
-              return uA(this, null, function* () {
+              return pA(this, null, function* () {
                 const t = this.editor,
                   e = !!t.config.get('ckbox'),
                   n = !!window.CKBox;
                 if (!e && !n) return;
-                const o = t.plugins.get(Zb),
-                  i = t.plugins.get(fA);
-                o.createUploadAdapter = e => new mA(e, i.getToken(), t);
+                const o = t.plugins.get(Xb),
+                  i = t.plugins.get(wA);
+                o.createUploadAdapter = e => new kA(e, i.getToken(), t);
                 const r = !t.config.get('ckbox.ignoreDataId'),
                   s = t.plugins.get('ImageUploadEditing');
                 r &&
@@ -28993,7 +29045,7 @@
               });
             }
           }
-          class mA {
+          class kA {
             constructor(t, e, n) {
               (this.loader = t),
                 (this.token = e),
@@ -29003,14 +29055,14 @@
                 (this.assetsOrigin = n.config.get('ckbox.assetsOrigin'));
             }
             getAvailableCategories(t = 0) {
-              return uA(this, null, function* () {
+              return pA(this, null, function* () {
                 const e = new URL('categories', this.serviceOrigin);
                 return (
                   e.searchParams.set('limit', (50).toString()),
                   e.searchParams.set('offset', t.toString()),
                   this._sendHttpRequest({ url: e })
                     .then(e =>
-                      uA(this, null, function* () {
+                      pA(this, null, function* () {
                         if (e.totalCount - (t + 50) > 0) {
                           const n = yield this.getAvailableCategories(t + 50);
                           return [...e.items, ...n];
@@ -29025,8 +29077,8 @@
               });
             }
             getCategoryIdForFile(t) {
-              return uA(this, null, function* () {
-                const e = pA(t.name),
+              return pA(this, null, function* () {
+                const e = bA(t.name),
                   n = yield this.getAvailableCategories();
                 if (!n) return null;
                 const o = this.editor.config.get('ckbox.defaultUploadCategories');
@@ -29042,7 +29094,7 @@
               });
             }
             upload() {
-              return uA(this, null, function* () {
+              return pA(this, null, function* () {
                 const t = this.editor.t,
                   e = t('Cannot determine a category for the uploaded file.'),
                   n = yield this.loader.file,
@@ -29062,10 +29114,10 @@
                 };
                 return this._sendHttpRequest(s)
                   .then(t =>
-                    uA(this, null, function* () {
+                    pA(this, null, function* () {
                       const e = yield this._getImageWidth(),
-                        o = pA(n.name),
-                        i = rA({
+                        o = bA(n.name),
+                        i = cA({
                           token: this.token,
                           id: t.id,
                           origin: this.assetsOrigin,
@@ -29113,7 +29165,7 @@
                     e();
                   }),
                   r.addEventListener('load', () =>
-                    uA(this, null, function* () {
+                    pA(this, null, function* () {
                       const n = r.response;
                       return !n || n.statusCode >= 400 ? e(n && n.message) : t(n);
                     }),
@@ -29135,16 +29187,16 @@
               });
             }
           }
-          function pA(t) {
+          function bA(t) {
             const e = new RegExp('\\.(?<ext>[^.]+)$');
             return t.match(e).groups.ext;
           }
-          class fA extends fs {
+          class wA extends fs {
             static get pluginName() {
               return 'CKBoxEditing';
             }
             static get requires() {
-              return ['CloudServices', 'LinkEditing', 'PictureEditing', gA];
+              return ['CloudServices', 'LinkEditing', 'PictureEditing', fA];
             }
             init() {
               return (
@@ -29164,7 +29216,7 @@
                   } else this._token = yield o.createToken(i).init();
                   t.config.get('ckbox.ignoreDataId') ||
                     (this._initSchema(), this._initConversion(), this._initFixers()),
-                    n && t.commands.add('ckbox', new cA(t));
+                    n && t.commands.add('ckbox', new hA(t));
                 }),
                 new Promise((o, i) => {
                   var r = t => {
@@ -29244,11 +29296,11 @@
                       const { writer: o, mapper: i, consumable: r } = n;
                       if (r.consume(e.item, t.name)) {
                         if (e.attributeOldValue) {
-                          const t = bA(o, e.attributeOldValue);
+                          const t = CA(o, e.attributeOldValue);
                           o.unwrap(i.toViewRange(e.range), t);
                         }
                         if (e.attributeNewValue) {
-                          const t = bA(o, e.attributeNewValue);
+                          const t = CA(o, e.attributeNewValue);
                           if (e.item.is('selection')) {
                             const e = o.document.selection;
                             o.wrap(e.getFirstRange(), t);
@@ -29272,7 +29324,7 @@
                         if (e.modelRange)
                           for (let t of e.modelRange.getItems())
                             t.is('$textProxy') && (t = t.textNode),
-                              wA(t) && o.setAttribute('ckboxLinkId', r, t);
+                              _A(t) && o.setAttribute('ckboxLinkId', r, t);
                         else {
                           const t = e.modelCursor.nodeBefore || e.modelCursor.parent;
                           o.setAttribute('ckboxLinkId', r, t);
@@ -29320,7 +29372,7 @@
                           e.removeAttribute('ckboxLinkId', t), (n = !0);
                           continue;
                         }
-                        const o = kA(t, i._chosenAssets);
+                        const o = AA(t, i._chosenAssets);
                         for (const i of o) {
                           const o = 'image' === i.type ? 'ckboxImageId' : 'ckboxLinkId';
                           i.id !== t.getAttribute(o) && (e.setAttribute(o, i.id, t), (n = !0));
@@ -29340,7 +29392,7 @@
                 );
             }
           }
-          function kA(t, e) {
+          function AA(t, e) {
             const n = t.is('element', 'imageInline') || t.is('element', 'imageBlock'),
               o = t.hasAttribute('linkHref');
             return [...e].filter(e =>
@@ -29351,7 +29403,7 @@
                 : void 0,
             );
           }
-          function bA(t, e) {
+          function CA(t, e) {
             const n = t.createAttributeElement(
               'a',
               { 'data-ckbox-resource-id': e },
@@ -29359,13 +29411,13 @@
             );
             return t.setCustomProperty('link', !0, n), n;
           }
-          function wA(t) {
+          function _A(t) {
             return (
               !!t.is('$text') ||
               !(!t.is('element', 'imageInline') && !t.is('element', 'imageBlock'))
             );
           }
-          class AA extends fs {
+          class vA extends fs {
             static get pluginName() {
               return 'CKFinderUI';
             }
@@ -29391,7 +29443,7 @@
               });
             }
           }
-          class CA extends bs {
+          class yA extends bs {
             constructor(t) {
               super(t),
                 (this.affectsData = !1),
@@ -29425,11 +29477,11 @@
                         const n = t.getUrl();
                         s.push(n || e.request('file:getProxyUrl', { file: t }));
                       }
-                      s.length && _A(t, s);
+                      s.length && xA(t, s);
                     }),
                     e.on('file:choose:resizedImage', e => {
                       const n = e.data.resizedUrl;
-                      if (n) _A(t, [n]);
+                      if (n) xA(t, [n]);
                       else {
                         const e = t.plugins.get('Notification'),
                           n = t.locale.t;
@@ -29443,7 +29495,7 @@
                 window.CKFinder[e](n);
             }
           }
-          function _A(t, e) {
+          function xA(t, e) {
             if (t.commands.get('insertImage').isEnabled) t.execute('insertImage', { source: e });
             else {
               const e = t.plugins.get('Notification'),
@@ -29454,26 +29506,26 @@
               });
             }
           }
-          class vA extends fs {
+          class EA extends fs {
             static get pluginName() {
               return 'CKFinderEditing';
             }
             static get requires() {
-              return [Xp, 'LinkEditing'];
+              return [nf, 'LinkEditing'];
             }
             init() {
               const t = this.editor;
               if (!t.plugins.has('ImageBlockEditing') && !t.plugins.has('ImageInlineEditing'))
                 throw new _('ckfinder-missing-image-plugin', t);
-              t.commands.add('ckfinder', new CA(t));
+              t.commands.add('ckfinder', new yA(t));
             }
           }
-          class yA extends fs {
+          class DA extends fs {
             static get pluginName() {
               return 'CloudServicesUploadAdapter';
             }
             static get requires() {
-              return ['CloudServices', Zb];
+              return ['CloudServices', Xb];
             }
             init() {
               const t = this.editor,
@@ -29483,10 +29535,10 @@
               if (!n) return;
               const i = t.plugins.get('CloudServicesCore');
               (this._uploadGateway = i.createUploadGateway(n, o)),
-                (t.plugins.get(Zb).createUploadAdapter = t => new xA(this._uploadGateway, t));
+                (t.plugins.get(Xb).createUploadAdapter = t => new SA(this._uploadGateway, t));
             }
           }
-          class xA {
+          class SA {
             constructor(t, e) {
               (this.uploadGateway = t), (this.loader = e);
             }
@@ -29505,7 +29557,7 @@
               this.fileUploader.abort();
             }
           }
-          class EA extends bs {
+          class IA extends bs {
             constructor(t) {
               super(t), (this._isEnabledBasedOnSelection = !1);
             }
@@ -29513,7 +29565,7 @@
               const t = this.editor.model,
                 e = Ti(t.document.selection.getSelectedBlocks());
               (this.value = !!e && e.is('element', 'paragraph')),
-                (this.isEnabled = !!e && DA(e, t.schema));
+                (this.isEnabled = !!e && TA(e, t.schema));
             }
             execute(t = {}) {
               const e = this.editor.model,
@@ -29523,14 +29575,14 @@
                 e.change(t => {
                   const n = o.getSelectedBlocks();
                   for (const o of n)
-                    !o.is('element', 'paragraph') && DA(o, e.schema) && t.rename(o, 'paragraph');
+                    !o.is('element', 'paragraph') && TA(o, e.schema) && t.rename(o, 'paragraph');
                 });
             }
           }
-          function DA(t, e) {
+          function TA(t, e) {
             return e.checkChild(t.parent, 'paragraph') && !e.isObject(t);
           }
-          class SA extends bs {
+          class MA extends bs {
             constructor(t) {
               super(t), (this._isEnabledBasedOnSelection = !1);
             }
@@ -29552,22 +29604,22 @@
                 });
             }
           }
-          const IA = class extends fs {
+          const BA = class extends fs {
             static get pluginName() {
               return 'Paragraph';
             }
             init() {
               const t = this.editor,
                 e = t.model;
-              t.commands.add('paragraph', new EA(t)),
-                t.commands.add('insertParagraph', new SA(t)),
+              t.commands.add('paragraph', new IA(t)),
+                t.commands.add('insertParagraph', new MA(t)),
                 e.schema.register('paragraph', { inheritAllFrom: '$block' }),
                 t.conversion.elementToElement({ model: 'paragraph', view: 'p' }),
                 t.conversion
                   .for('upcast')
                   .elementToElement({
                     model: (t, { writer: e }) =>
-                      IA.paragraphLikeElements.has(t.name)
+                      BA.paragraphLikeElements.has(t.name)
                         ? t.isEmpty
                           ? null
                           : e.createElement('paragraph')
@@ -29577,8 +29629,8 @@
                   });
             }
           };
-          let TA = IA;
-          TA.paragraphLikeElements = new Set([
+          let NA = BA;
+          NA.paragraphLikeElements = new Set([
             'blockquote',
             'dd',
             'div',
@@ -29594,7 +29646,7 @@
             'td',
             'th',
           ]);
-          class MA extends bs {
+          class PA extends bs {
             constructor(t, e) {
               super(t), (this.modelElements = e);
             }
@@ -29602,7 +29654,7 @@
               const t = Ti(this.editor.model.document.selection.getSelectedBlocks());
               (this.value = !!t && this.modelElements.includes(t.name) && t.name),
                 (this.isEnabled =
-                  !!t && this.modelElements.some(e => BA(t, e, this.editor.model.schema)));
+                  !!t && this.modelElements.some(e => zA(t, e, this.editor.model.schema)));
             }
             execute(t) {
               const e = this.editor.model,
@@ -29610,17 +29662,17 @@
                 o = t.value;
               e.change(t => {
                 const i = Array.from(n.selection.getSelectedBlocks()).filter(t =>
-                  BA(t, o, e.schema),
+                  zA(t, o, e.schema),
                 );
                 for (const e of i) e.is('element', o) || t.rename(e, o);
               });
             }
           }
-          function BA(t, e, n) {
+          function zA(t, e, n) {
             return n.checkChild(t.parent, e) && !n.isObject(t);
           }
-          const NA = 'paragraph';
-          class PA extends fs {
+          const LA = 'paragraph';
+          class OA extends fs {
             static get pluginName() {
               return 'HeadingEditing';
             }
@@ -29651,7 +29703,7 @@
                 });
             }
             static get requires() {
-              return [TA];
+              return [NA];
             }
             init() {
               const t = this.editor,
@@ -29662,7 +29714,7 @@
                   (t.model.schema.register(o.model, { inheritAllFrom: '$block' }),
                   t.conversion.elementToElement(o),
                   n.push(o.model));
-              this._addDefaultH1Conversion(t), t.commands.add('heading', new MA(t, n));
+              this._addDefaultH1Conversion(t), t.commands.add('heading', new PA(t, n));
             }
             afterInit() {
               const t = this.editor,
@@ -29672,9 +29724,9 @@
                 this.listenTo(e, 'afterExecute', (e, o) => {
                   const i = t.model.document.selection.getFirstPosition().parent;
                   n.some(t => i.is('element', t.model)) &&
-                    !i.is('element', NA) &&
+                    !i.is('element', LA) &&
                     0 === i.childCount &&
-                    o.writer.rename(i, NA);
+                    o.writer.rename(i, LA);
                 });
             }
             _addDefaultH1Conversion(t) {
@@ -29687,16 +29739,16 @@
                 });
             }
           }
-          var zA = n(8733),
-            LA = {
+          var RA = n(8733),
+            jA = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(zA.Z, LA);
-          zA.Z.locals;
-          class OA extends fs {
+          Vi()(RA.Z, jA);
+          RA.Z.locals;
+          class FA extends fs {
             static get pluginName() {
               return 'HeadingUI';
             }
@@ -29730,7 +29782,7 @@
                 for (const t of n) {
                   const e = {
                     type: 'button',
-                    model: new tf({
+                    model: new of({
                       label: t.title,
                       class: t.class,
                       role: 'menuitemradio',
@@ -29746,9 +29798,9 @@
                     s.add(e),
                     (r[t.model] = t.title);
                 }
-                const d = Am(e);
+                const d = vm(e);
                 return (
-                  vm(d, s, { ariaLabel: i, role: 'menu' }),
+                  Em(d, s, { ariaLabel: i, role: 'menu' }),
                   d.buttonView.set({
                     ariaLabel: i,
                     ariaLabelledBy: void 0,
@@ -29771,13 +29823,13 @@
               });
             }
           }
-          function RA(t) {
+          function VA(t) {
             return t.createContainerElement('figure', { class: 'image' }, [
               t.createEmptyElement('img'),
               t.createSlot('children'),
             ]);
           }
-          function jA(t, e) {
+          function HA(t, e) {
             const n = t.plugins.get('ImageUtils'),
               o = t.plugins.has('ImageInlineEditing') && t.plugins.has('ImageBlockEditing');
             return t => {
@@ -29794,26 +29846,26 @@
               return t.hasAttribute('src') && (e.attributes = ['src']), e;
             }
           }
-          function FA(t, e) {
+          function UA(t, e) {
             const n = Ti(e.getSelectedBlocks());
             return !n || t.isObject(n) || (n.isEmpty && 'listItem' != n.name)
               ? 'imageBlock'
               : 'imageInline';
           }
-          var VA = Object.defineProperty,
-            HA = Object.getOwnPropertySymbols,
-            UA = Object.prototype.hasOwnProperty,
-            GA = Object.prototype.propertyIsEnumerable,
-            qA = (t, e, n) =>
+          var GA = Object.defineProperty,
+            qA = Object.getOwnPropertySymbols,
+            WA = Object.prototype.hasOwnProperty,
+            $A = Object.prototype.propertyIsEnumerable,
+            KA = (t, e, n) =>
               e in t
-                ? VA(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? GA(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n),
-            WA = (t, e) => {
-              for (var n in e || (e = {})) UA.call(e, n) && qA(t, n, e[n]);
-              if (HA) for (var n of HA(e)) GA.call(e, n) && qA(t, n, e[n]);
+            YA = (t, e) => {
+              for (var n in e || (e = {})) WA.call(e, n) && KA(t, n, e[n]);
+              if (qA) for (var n of qA(e)) $A.call(e, n) && KA(t, n, e[n]);
               return t;
             };
-          class $A extends fs {
+          class ZA extends fs {
             static get pluginName() {
               return 'ImageUtils';
             }
@@ -29830,7 +29882,7 @@
               const o = this.editor,
                 i = o.model,
                 r = i.document.selection;
-              (n = KA(o, e || r, n)), (t = WA(WA({}, Object.fromEntries(r.getAttributes())), t));
+              (n = QA(o, e || r, n)), (t = YA(YA({}, Object.fromEntries(r.getAttributes())), t));
               for (const e in t) i.schema.checkAttribute(n, e) || delete t[e];
               return i.change(o => {
                 const r = o.createElement(n, t);
@@ -29863,10 +29915,10 @@
               const t = this.editor.model.document.selection;
               return (
                 (function (t, e) {
-                  const n = KA(t, e, null);
+                  const n = QA(t, e, null);
                   if ('imageBlock' == n) {
                     const n = (function (t, e) {
-                      const n = jk(t, e),
+                      const n = Hk(t, e),
                         o = n.start.parent;
                       if (o.isEmpty && !o.is('element', '$root')) return o.parent;
                       return o;
@@ -29882,7 +29934,7 @@
             }
             toImageWidget(t, e, n) {
               e.setCustomProperty('image', !0, t);
-              return Pk(t, e, {
+              return Ok(t, e, {
                 label: () => {
                   const e = this.findViewImgElement(t).getAttribute('alt');
                   return e ? `${e} ${n}` : n;
@@ -29890,7 +29942,7 @@
               });
             }
             isImageWidget(t) {
-              return !!t.getCustomProperty('image') && Nk(t);
+              return !!t.getCustomProperty('image') && Lk(t);
             }
             isBlockImage(t) {
               return !!t && t.is('element', 'imageBlock');
@@ -29904,7 +29956,7 @@
               for (const { item: n } of e.createRangeIn(t)) if (this.isInlineImageView(n)) return n;
             }
           }
-          function KA(t, e, n) {
+          function QA(t, e, n) {
             const o = t.model.schema,
               i = t.config.get('image.insert.type');
             return t.plugins.has('ImageBlockEditing')
@@ -29915,7 +29967,7 @@
                     : 'block' === i
                     ? 'imageBlock'
                     : e.is('selection')
-                    ? FA(o, e)
+                    ? UA(o, e)
                     : o.checkChild(e, 'imageInline')
                     ? 'imageInline'
                     : 'imageBlock')
@@ -29936,7 +29988,7 @@
                 /(#[\w.~:/[\]@!$&'()*+,;=%-]*)?$/.source,
             ),
           );
-          class YA extends bs {
+          class JA extends bs {
             refresh() {
               const t = this.editor.plugins
                 .get('ImageUtils')
@@ -29956,47 +30008,47 @@
               });
             }
           }
-          class ZA extends fs {
+          class XA extends fs {
             static get requires() {
-              return [$A];
+              return [ZA];
             }
             static get pluginName() {
               return 'ImageTextAlternativeEditing';
             }
             init() {
-              this.editor.commands.add('imageTextAlternative', new YA(this.editor));
+              this.editor.commands.add('imageTextAlternative', new JA(this.editor));
             }
           }
-          var QA = n(1905),
-            JA = {
+          var tC = n(1905),
+            eC = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(QA.Z, JA);
-          QA.Z.locals;
-          var XA = n(6764),
-            tC = {
+          Vi()(tC.Z, eC);
+          tC.Z.locals;
+          var nC = n(6764),
+            oC = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(XA.Z, tC);
-          XA.Z.locals;
-          class eC extends Gi {
+          Vi()(nC.Z, oC);
+          nC.Z.locals;
+          class iC extends Gi {
             constructor(t) {
               super(t);
               const e = this.locale.t;
               (this.focusTracker = new Mi()),
                 (this.keystrokes = new Bi()),
                 (this.labeledInput = this._createLabeledInputView()),
-                (this.saveButtonView = this._createButton(e('Save'), Xg.check, 'ck-button-save')),
+                (this.saveButtonView = this._createButton(e('Save'), nm.check, 'ck-button-save')),
                 (this.saveButtonView.type = 'submit'),
                 (this.cancelButtonView = this._createButton(
                   e('Cancel'),
-                  Xg.cancel,
+                  nm.cancel,
                   'ck-button-cancel',
                   'cancel',
                 )),
@@ -30038,13 +30090,13 @@
             }
             _createLabeledInputView() {
               const t = this.locale.t,
-                e = new Xr(this.locale, Em);
+                e = new Xr(this.locale, Im);
               return (e.label = t('Text alternative')), e;
             }
           }
-          function nC(t) {
+          function rC(t) {
             const e = t.editing.view,
-              n = _p.defaultPositions,
+              n = xp.defaultPositions,
               o = t.plugins.get('ImageUtils');
             return {
               target: e.domConverter.mapViewToDom(
@@ -30061,9 +30113,9 @@
               ],
             };
           }
-          class oC extends fs {
+          class sC extends fs {
             static get requires() {
-              return [af];
+              return [df];
             }
             static get pluginName() {
               return 'ImageTextAlternativeUI';
@@ -30083,7 +30135,7 @@
                 return (
                   i.set({
                     label: e('Change image text alternative'),
-                    icon: Xg.lowVision,
+                    icon: nm.lowVision,
                     tooltip: !0,
                   }),
                   i.bind('isEnabled').to(o, 'isEnabled'),
@@ -30100,7 +30152,7 @@
                 o = n.editing.view.document,
                 i = n.plugins.get('ImageUtils');
               (this._balloon = this.editor.plugins.get('ContextualBalloon')),
-                (this._form = new (e(eC))(n.locale)),
+                (this._form = new (e(iC))(n.locale)),
                 this._form.render(),
                 this.listenTo(this._form, 'submit', () => {
                   n.execute('imageTextAlternative', {
@@ -30124,7 +30176,7 @@
                             .get('ImageUtils')
                             .getClosestSelectedImageWidget(t.editing.view.document.selection)
                         ) {
-                          const n = nC(t);
+                          const n = rC(t);
                           e.updatePosition(n);
                         }
                       })(n)
@@ -30144,7 +30196,7 @@
                 e = t.commands.get('imageTextAlternative'),
                 n = this._form.labeledInput;
               this._form.disableCssTransitions(),
-                this._isInBalloon || this._balloon.add({ view: this._form, position: nC(t) }),
+                this._isInBalloon || this._balloon.add({ view: this._form, position: rC(t) }),
                 (n.fieldView.value = n.fieldView.element.value = e.value || ''),
                 this._form.labeledInput.fieldView.select(),
                 this._form.enableCssTransitions();
@@ -30162,15 +30214,15 @@
               return !!this._balloon && this._balloon.hasView(this._form);
             }
           }
-          class iC extends fs {
+          class aC extends fs {
             static get requires() {
-              return [ZA, oC];
+              return [XA, sC];
             }
             static get pluginName() {
               return 'ImageTextAlternative';
             }
           }
-          function rC(t, e) {
+          function cC(t, e) {
             const n = (e, n, o) => {
               if (!o.consumable.consume(n.item, e.name)) return;
               const i = o.writer,
@@ -30196,7 +30248,7 @@
               t.on(`attribute:srcset:${e}`, n);
             };
           }
-          function sC(t, e, n) {
+          function lC(t, e, n) {
             const o = (e, n, o) => {
               if (!o.consumable.consume(n.item, e.name)) return;
               const i = o.writer,
@@ -30208,7 +30260,7 @@
               t.on(`attribute:${n}:${e}`, o);
             };
           }
-          class aC extends Jc {
+          class dC extends Jc {
             observe(t) {
               this.listenTo(
                 t,
@@ -30229,20 +30281,20 @@
                 (this.document.fire('layoutChanged'), this.document.fire('imageLoaded', t));
             }
           }
-          var cC = Object.defineProperty,
-            lC = Object.getOwnPropertySymbols,
-            dC = Object.prototype.hasOwnProperty,
-            hC = Object.prototype.propertyIsEnumerable,
-            uC = (t, e, n) =>
+          var hC = Object.defineProperty,
+            uC = Object.getOwnPropertySymbols,
+            gC = Object.prototype.hasOwnProperty,
+            mC = Object.prototype.propertyIsEnumerable,
+            pC = (t, e, n) =>
               e in t
-                ? cC(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? hC(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n),
-            gC = (t, e) => {
-              for (var n in e || (e = {})) dC.call(e, n) && uC(t, n, e[n]);
-              if (lC) for (var n of lC(e)) hC.call(e, n) && uC(t, n, e[n]);
+            fC = (t, e) => {
+              for (var n in e || (e = {})) gC.call(e, n) && pC(t, n, e[n]);
+              if (uC) for (var n of uC(e)) mC.call(e, n) && pC(t, n, e[n]);
               return t;
             };
-          class mC extends bs {
+          class kC extends bs {
             constructor(t) {
               super(t);
               const e = t.config.get('image.insert.type');
@@ -30264,12 +30316,12 @@
                 const r = n.getSelectedElement();
                 if (('string' == typeof t && (t = { src: t }), e && r && o.isImage(r))) {
                   const e = this.editor.model.createPositionAfter(r);
-                  o.insertImage(gC(gC({}, t), i), e);
-                } else o.insertImage(gC(gC({}, t), i));
+                  o.insertImage(fC(fC({}, t), i), e);
+                } else o.insertImage(fC(fC({}, t), i));
               });
             }
           }
-          class pC extends bs {
+          class bC extends bs {
             refresh() {
               const t = this.editor.plugins.get('ImageUtils'),
                 e = this.editor.model.document.selection.getSelectedElement();
@@ -30285,9 +30337,9 @@
               });
             }
           }
-          class fC extends fs {
+          class wC extends fs {
             static get requires() {
-              return [$A];
+              return [ZA];
             }
             static get pluginName() {
               return 'ImageEditing';
@@ -30295,7 +30347,7 @@
             init() {
               const t = this.editor,
                 e = t.conversion;
-              t.editing.view.addObserver(aC),
+              t.editing.view.addObserver(dC),
                 e
                   .for('upcast')
                   .attributeToAttribute({ view: { name: 'img', key: 'alt' }, model: 'alt' })
@@ -30309,14 +30361,14 @@
                       },
                     },
                   });
-              const n = new mC(t),
-                o = new pC(t);
+              const n = new kC(t),
+                o = new bC(t);
               t.commands.add('insertImage', n),
                 t.commands.add('replaceImageSource', o),
                 t.commands.add('imageInsert', n);
             }
           }
-          class kC extends bs {
+          class AC extends bs {
             constructor(t, e) {
               super(t), (this._modelElementName = e);
             }
@@ -30349,9 +30401,9 @@
                 : null;
             }
           }
-          class bC extends fs {
+          class CC extends fs {
             static get requires() {
-              return [fC, $A, Pf];
+              return [wC, ZA, Of];
             }
             static get pluginName() {
               return 'ImageBlockEditing';
@@ -30364,7 +30416,7 @@
               }),
                 this._setupConversion(),
                 t.plugins.has('ImageInlineEditing') &&
-                  (t.commands.add('imageTypeBlock', new kC(this.editor, 'imageBlock')),
+                  (t.commands.add('imageTypeBlock', new AC(this.editor, 'imageBlock')),
                   this._setupClipboardIntegration());
             }
             _setupConversion() {
@@ -30374,22 +30426,22 @@
                 o = t.plugins.get('ImageUtils');
               n
                 .for('dataDowncast')
-                .elementToStructure({ model: 'imageBlock', view: (t, { writer: e }) => RA(e) }),
+                .elementToStructure({ model: 'imageBlock', view: (t, { writer: e }) => VA(e) }),
                 n
                   .for('editingDowncast')
                   .elementToStructure({
                     model: 'imageBlock',
-                    view: (t, { writer: n }) => o.toImageWidget(RA(n), n, e('image widget')),
+                    view: (t, { writer: n }) => o.toImageWidget(VA(n), n, e('image widget')),
                   }),
                 n
                   .for('downcast')
-                  .add(sC(o, 'imageBlock', 'src'))
-                  .add(sC(o, 'imageBlock', 'alt'))
-                  .add(rC(o, 'imageBlock')),
+                  .add(lC(o, 'imageBlock', 'src'))
+                  .add(lC(o, 'imageBlock', 'alt'))
+                  .add(cC(o, 'imageBlock')),
                 n
                   .for('upcast')
                   .elementToElement({
-                    view: jA(t, 'imageBlock'),
+                    view: HA(t, 'imageBlock'),
                     model: (t, { writer: e }) =>
                       e.createElement(
                         'imageBlock',
@@ -30428,7 +30480,7 @@
                   ? t.editing.mapper.toModelRange(r.targetRanges[0])
                   : e.document.selection.getFirstRange();
                 const c = e.createSelection(a);
-                if ('imageBlock' === FA(e.schema, c)) {
+                if ('imageBlock' === UA(e.schema, c)) {
                   const t = new Sg(n.document),
                     e = s.map(e => t.createElement('figure', { class: 'image' }, e));
                   r.content = t.createDocumentFragment(e);
@@ -30436,26 +30488,26 @@
               });
             }
           }
-          var wC = n(3508),
-            AC = {
+          var _C = n(3508),
+            vC = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(wC.Z, AC);
-          wC.Z.locals;
-          class CC extends fs {
+          Vi()(_C.Z, vC);
+          _C.Z.locals;
+          class yC extends fs {
             static get requires() {
-              return [bC, eb, iC];
+              return [CC, ib, aC];
             }
             static get pluginName() {
               return 'ImageBlock';
             }
           }
-          class _C extends fs {
+          class xC extends fs {
             static get requires() {
-              return [fC, $A, Pf];
+              return [wC, ZA, Of];
             }
             static get pluginName() {
               return 'ImageInlineEditing';
@@ -30472,7 +30524,7 @@
                 }),
                 this._setupConversion(),
                 t.plugins.has('ImageBlockEditing') &&
-                  (t.commands.add('imageTypeInline', new kC(this.editor, 'imageInline')),
+                  (t.commands.add('imageTypeInline', new AC(this.editor, 'imageInline')),
                   this._setupClipboardIntegration());
             }
             _setupConversion() {
@@ -30503,13 +30555,13 @@
                 }),
                 n
                   .for('downcast')
-                  .add(sC(o, 'imageInline', 'src'))
-                  .add(sC(o, 'imageInline', 'alt'))
-                  .add(rC(o, 'imageInline')),
+                  .add(lC(o, 'imageInline', 'src'))
+                  .add(lC(o, 'imageInline', 'alt'))
+                  .add(cC(o, 'imageInline')),
                 n
                   .for('upcast')
                   .elementToElement({
-                    view: jA(t, 'imageInline'),
+                    view: HA(t, 'imageInline'),
                     model: (t, { writer: e }) =>
                       e.createElement(
                         'imageInline',
@@ -30531,7 +30583,7 @@
                   ? t.editing.mapper.toModelRange(r.targetRanges[0])
                   : e.document.selection.getFirstRange();
                 const c = e.createSelection(a);
-                if ('imageInline' === FA(e.schema, c)) {
+                if ('imageInline' === UA(e.schema, c)) {
                   const t = new Sg(n.document),
                     e = s.map(e =>
                       1 === e.childCount
@@ -30546,20 +30598,20 @@
               });
             }
           }
-          class vC extends fs {
+          class EC extends fs {
             static get requires() {
-              return [_C, eb, iC];
+              return [xC, ib, aC];
             }
             static get pluginName() {
               return 'ImageInline';
             }
           }
-          class yC extends fs {
+          class DC extends fs {
             static get pluginName() {
               return 'ImageCaptionUtils';
             }
             static get requires() {
-              return [$A];
+              return [ZA];
             }
             getCaptionFromImageModelElement(t) {
               for (const e of t.getChildren()) if (e && e.is('element', 'caption')) return e;
@@ -30575,12 +30627,12 @@
               return 'figcaption' == t.name && e.isBlockImageView(t.parent) ? { name: !0 } : null;
             }
           }
-          class xC extends bs {
+          class SC extends bs {
             refresh() {
               const t = this.editor,
                 e = t.plugins.get('ImageCaptionUtils'),
                 n = t.plugins.get('ImageUtils');
-              if (!t.plugins.has(bC)) return (this.isEnabled = !1), void (this.value = !1);
+              if (!t.plugins.has(CC)) return (this.isEnabled = !1), void (this.value = !1);
               const o = t.model.document.selection,
                 i = o.getSelectedElement();
               if (!i) {
@@ -30624,12 +30676,12 @@
                 t.remove(r);
             }
           }
-          class EC extends fs {
+          class IC extends fs {
             constructor(t) {
               super(t), (this._savedCaptionsMap = new WeakMap());
             }
             static get requires() {
-              return [$A, yC];
+              return [ZA, DC];
             }
             static get pluginName() {
               return 'ImageCaptionEditing';
@@ -30644,7 +30696,7 @@
                     allowContentOf: '$block',
                     isLimit: !0,
                   }),
-                t.commands.add('toggleImageCaption', new xC(this.editor)),
+                t.commands.add('toggleImageCaption', new SC(this.editor)),
                 this._setupConversion(),
                 this._setupImageTypeCommandsIntegration(),
                 this._registerCaptionReconversion();
@@ -30676,7 +30728,7 @@
                     o.setCustomProperty('imageCaption', !0, r),
                       Ss({ view: e, element: r, text: i('Enter image caption'), keepOnFocus: !0 });
                     const s = t.parent.getAttribute('alt');
-                    return Rk(r, o, {
+                    return Vk(r, o, {
                       label: s ? i('Caption for image: %0', [s]) : i('Caption for the image'),
                     });
                   },
@@ -30728,9 +30780,9 @@
               });
             }
           }
-          class DC extends fs {
+          class TC extends fs {
             static get requires() {
-              return [yC];
+              return [DC];
             }
             static get pluginName() {
               return 'ImageCaptionUI';
@@ -30744,7 +30796,7 @@
                 const r = t.commands.get('toggleImageCaption'),
                   s = new wr(i);
                 return (
-                  s.set({ icon: Xg.caption, tooltip: !0, isToggleable: !0 }),
+                  s.set({ icon: nm.caption, tooltip: !0, isToggleable: !0 }),
                   s.bind('isOn', 'isEnabled').to(r, 'value', 'isEnabled'),
                   s
                     .bind('label')
@@ -30766,26 +30818,26 @@
               });
             }
           }
-          var SC = n(2640),
-            IC = {
+          var MC = n(2640),
+            BC = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(SC.Z, IC);
-          SC.Z.locals;
-          function TC(t) {
+          Vi()(MC.Z, BC);
+          MC.Z.locals;
+          function NC(t) {
             const e = t.map(t => t.replace('+', '\\+'));
             return new RegExp(`^image\\/(${e.join('|')})$`);
           }
-          function MC(t) {
+          function PC(t) {
             return new Promise((e, n) => {
               const o = t.getAttribute('src');
               fetch(o)
                 .then(t => t.blob())
                 .then(t => {
-                  const n = BC(t, o),
+                  const n = zC(t, o),
                     i = n.replace('image/', ''),
                     r = new File([t], `image.${i}`, { type: n });
                   e(r);
@@ -30806,7 +30858,7 @@
                               (o.src = t);
                           });
                         })(t).then(e => {
-                          const n = BC(e, t),
+                          const n = zC(e, t),
                             o = n.replace('image/', '');
                           return new File([e], `image.${o}`, { type: n });
                         });
@@ -30817,14 +30869,14 @@
                 );
             });
           }
-          function BC(t, e) {
+          function zC(t, e) {
             return t.type
               ? t.type
               : e.match(/data:(image\/\w+);base64/)
               ? e.match(/data:(image\/\w+);base64/)[1].toLowerCase()
               : 'image/jpeg';
           }
-          class NC extends fs {
+          class LC extends fs {
             static get pluginName() {
               return 'ImageUploadUI';
             }
@@ -30832,16 +30884,16 @@
               const t = this.editor,
                 e = t.t,
                 n = n => {
-                  const o = new Jb(n),
+                  const o = new ew(n),
                     i = t.commands.get('uploadImage'),
                     r = t.config.get('image.upload.types'),
-                    s = TC(r);
+                    s = NC(r);
                   return (
                     o.set({
                       acceptedType: r.map(t => `image/${t}`).join(','),
                       allowMultipleFiles: !0,
                     }),
-                    o.buttonView.set({ label: e('Insert image'), icon: Xg.image, tooltip: !0 }),
+                    o.buttonView.set({ label: e('Insert image'), icon: nm.image, tooltip: !0 }),
                     o.buttonView.bind('isEnabled').to(i),
                     o.on('done', (e, n) => {
                       const o = Array.from(n).filter(t => s.test(t.type));
@@ -30854,34 +30906,34 @@
                 t.ui.componentFactory.add('imageUpload', n);
             }
           }
-          var PC = n(3689),
-            zC = {
+          var OC = n(3689),
+            RC = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(PC.Z, zC);
-          PC.Z.locals;
-          var LC = n(4036),
-            OC = {
+          Vi()(OC.Z, RC);
+          OC.Z.locals;
+          var jC = n(4036),
+            FC = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(LC.Z, OC);
-          LC.Z.locals;
-          var RC = n(3773),
-            jC = {
+          Vi()(jC.Z, FC);
+          jC.Z.locals;
+          var VC = n(3773),
+            HC = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(RC.Z, jC);
-          RC.Z.locals;
-          class FC extends fs {
+          Vi()(VC.Z, HC);
+          VC.Z.locals;
+          class UC extends fs {
             constructor(t) {
               super(t),
                 (this.uploadStatusChange = (t, e, n) => {
@@ -30890,18 +30942,18 @@
                     r = i.getAttribute('uploadId');
                   if (!n.consumable.consume(e.item, t.name)) return;
                   const s = o.plugins.get('ImageUtils'),
-                    a = o.plugins.get(Zb),
+                    a = o.plugins.get(Xb),
                     c = r ? e.attributeNewValue : null,
                     l = this.placeholder,
                     d = o.editing.mapper.toViewElement(i),
                     h = n.writer;
-                  if ('reading' == c) return VC(d, h), void HC(s, l, d, h);
+                  if ('reading' == c) return GC(d, h), void qC(s, l, d, h);
                   if ('uploading' == c) {
                     const t = a.loaders.get(r);
                     return (
-                      VC(d, h),
+                      GC(d, h),
                       void (t
-                        ? (UC(d, h),
+                        ? (WC(d, h),
                           (function (t, e, n, o) {
                             const i = (function (t) {
                               const e = t.createUIElement('div', { class: 'ck-progress-bar' });
@@ -30920,7 +30972,7 @@
                               n.setAttribute('src', o.data, i);
                             }
                           })(s, d, h, t))
-                        : HC(s, l, d, h))
+                        : qC(s, l, d, h))
                     );
                   }
                   'complete' == c &&
@@ -30935,9 +30987,9 @@
                         }, 3e3);
                     })(d, h, o.editing.view),
                     (function (t, e) {
-                      qC(t, e, 'progressBar');
+                      KC(t, e, 'progressBar');
                     })(d, h),
-                    UC(d, h),
+                    WC(d, h),
                     (function (t, e) {
                       e.removeClass('ck-appear', t);
                     })(d, h);
@@ -30962,15 +31014,15 @@
                   );
             }
           }
-          function VC(t, e) {
+          function GC(t, e) {
             t.hasClass('ck-appear') || e.addClass('ck-appear', t);
           }
-          function HC(t, e, n, o) {
+          function qC(t, e, n, o) {
             n.hasClass('ck-image-upload-placeholder') ||
               o.addClass('ck-image-upload-placeholder', n);
             const i = t.findViewImgElement(n);
             i.getAttribute('src') !== e && o.setAttribute('src', e, i),
-              GC(n, 'placeholder') ||
+              $C(n, 'placeholder') ||
                 o.insert(
                   o.createPositionAfter(i),
                   (function (t) {
@@ -30979,29 +31031,29 @@
                   })(o),
                 );
           }
-          function UC(t, e) {
+          function WC(t, e) {
             t.hasClass('ck-image-upload-placeholder') &&
               e.removeClass('ck-image-upload-placeholder', t),
-              qC(t, e, 'placeholder');
+              KC(t, e, 'placeholder');
           }
-          function GC(t, e) {
+          function $C(t, e) {
             for (const n of t.getChildren()) if (n.getCustomProperty(e)) return n;
           }
-          function qC(t, e, n) {
-            const o = GC(t, n);
+          function KC(t, e, n) {
+            const o = $C(t, n);
             o && e.remove(e.createRangeOn(o));
           }
-          var WC = Object.defineProperty,
-            $C = Object.defineProperties,
-            KC = Object.getOwnPropertyDescriptors,
-            YC = Object.getOwnPropertySymbols,
-            ZC = Object.prototype.hasOwnProperty,
-            QC = Object.prototype.propertyIsEnumerable,
-            JC = (t, e, n) =>
+          var YC = Object.defineProperty,
+            ZC = Object.defineProperties,
+            QC = Object.getOwnPropertyDescriptors,
+            JC = Object.getOwnPropertySymbols,
+            XC = Object.prototype.hasOwnProperty,
+            t_ = Object.prototype.propertyIsEnumerable,
+            e_ = (t, e, n) =>
               e in t
-                ? WC(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? YC(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n);
-          class XC extends bs {
+          class n_ extends bs {
             refresh() {
               const t = this.editor,
                 e = t.plugins.get('ImageUtils'),
@@ -31023,23 +31075,23 @@
             }
             _uploadImage(t, e, n) {
               const o = this.editor,
-                i = o.plugins.get(Zb).createLoader(t),
+                i = o.plugins.get(Xb).createLoader(t),
                 r = o.plugins.get('ImageUtils');
               var s, a;
               i &&
                 r.insertImage(
                   ((s = ((t, e) => {
-                    for (var n in e || (e = {})) ZC.call(e, n) && JC(t, n, e[n]);
-                    if (YC) for (var n of YC(e)) QC.call(e, n) && JC(t, n, e[n]);
+                    for (var n in e || (e = {})) XC.call(e, n) && e_(t, n, e[n]);
+                    if (JC) for (var n of JC(e)) t_.call(e, n) && e_(t, n, e[n]);
                     return t;
                   })({}, e)),
                   (a = { uploadId: i.id }),
-                  $C(s, KC(a))),
+                  ZC(s, QC(a))),
                   n,
                 );
             }
           }
-          class t_ extends fs {
+          class o_ extends fs {
             constructor(t) {
               super(t),
                 t.config.define('image', {
@@ -31048,7 +31100,7 @@
                 (this._uploadImageElements = new Map());
             }
             static get requires() {
-              return [Zb, Xp, Pf, $A];
+              return [Xb, nf, Of, ZA];
             }
             static get pluginName() {
               return 'ImageUploadEditing';
@@ -31057,11 +31109,11 @@
               const t = this.editor,
                 e = t.model.document,
                 n = t.conversion,
-                o = t.plugins.get(Zb),
+                o = t.plugins.get(Xb),
                 i = t.plugins.get('ImageUtils'),
                 r = t.plugins.get('ClipboardPipeline'),
-                s = TC(t.config.get('image.upload.types')),
-                a = new XC(t);
+                s = NC(t.config.get('image.upload.types')),
+                a = new n_(t);
               t.commands.add('uploadImage', a),
                 t.commands.add('imageUpload', a),
                 n
@@ -31102,7 +31154,7 @@
                           );
                         })(i, t) && !t.getAttribute('uploadProcessed'),
                     )
-                    .map(t => ({ promise: MC(t), imageElement: t }));
+                    .map(t => ({ promise: PC(t), imageElement: t }));
                   if (!r.length) return;
                   const s = new Sg(t.editing.view.document);
                   for (const t of r) {
@@ -31123,7 +31175,7 @@
                     if ('insert' == e.type && '$text' != e.name) {
                       const n = e.position.nodeAfter,
                         r = '$graveyard' == e.position.root.rootName;
-                      for (const e of e_(t, n)) {
+                      for (const e of i_(t, n)) {
                         const t = e.getAttribute('uploadId');
                         if (!t) continue;
                         const n = o.loaders.get(t);
@@ -31159,8 +31211,8 @@
               const e = this.editor,
                 n = e.model,
                 o = e.locale.t,
-                i = e.plugins.get(Zb),
-                r = e.plugins.get(Xp),
+                i = e.plugins.get(Xb),
+                r = e.plugins.get(nf),
                 s = e.plugins.get('ImageUtils'),
                 a = this._uploadImageElements;
               return (
@@ -31233,31 +31285,31 @@
               '' != i && n.setAttribute('srcset', { data: i, width: o }, e);
             }
           }
-          function e_(t, e) {
+          function i_(t, e) {
             const n = t.plugins.get('ImageUtils');
             return Array.from(t.model.createRangeOn(e))
               .filter(t => n.isImage(t.item))
               .map(t => t.item);
           }
-          var n_ = n(1568),
-            o_ = {
+          var r_ = n(1568),
+            s_ = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(n_.Z, o_);
-          n_.Z.locals;
-          var i_ = n(3535),
-            r_ = {
+          Vi()(r_.Z, s_);
+          r_.Z.locals;
+          var a_ = n(3535),
+            c_ = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(i_.Z, r_);
-          i_.Z.locals;
-          class s_ extends bs {
+          Vi()(a_.Z, c_);
+          a_.Z.locals;
+          class l_ extends bs {
             refresh() {
               const t = this.editor,
                 e = t.plugins
@@ -31281,18 +31333,18 @@
                   });
             }
           }
-          const a_ = /(image|image-inline)/,
-            c_ = 'image_resized';
-          var l_ = n(6270),
-            d_ = {
+          const d_ = /(image|image-inline)/,
+            h_ = 'image_resized';
+          var u_ = n(6270),
+            g_ = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(l_.Z, d_);
-          l_.Z.locals;
-          class h_ extends bs {
+          Vi()(u_.Z, g_);
+          u_.Z.locals;
+          class m_ extends bs {
             constructor(t, e) {
               super(t),
                 (this._defaultStyles = { imageBlock: !1, imageInline: !1 }),
@@ -31335,34 +31387,34 @@
               return !this._styles.get(t).modelElements.includes(e.name);
             }
           }
-          var u_ = Object.defineProperty,
-            g_ = Object.getOwnPropertySymbols,
-            m_ = Object.prototype.hasOwnProperty,
-            p_ = Object.prototype.propertyIsEnumerable,
-            f_ = (t, e, n) =>
+          var p_ = Object.defineProperty,
+            f_ = Object.getOwnPropertySymbols,
+            k_ = Object.prototype.hasOwnProperty,
+            b_ = Object.prototype.propertyIsEnumerable,
+            w_ = (t, e, n) =>
               e in t
-                ? u_(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? p_(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n),
-            k_ = (t, e) => {
-              for (var n in e || (e = {})) m_.call(e, n) && f_(t, n, e[n]);
-              if (g_) for (var n of g_(e)) p_.call(e, n) && f_(t, n, e[n]);
+            A_ = (t, e) => {
+              for (var n in e || (e = {})) k_.call(e, n) && w_(t, n, e[n]);
+              if (f_) for (var n of f_(e)) b_.call(e, n) && w_(t, n, e[n]);
               return t;
             };
           const {
-              objectFullWidth: b_,
-              objectInline: w_,
-              objectLeft: A_,
-              objectRight: C_,
-              objectCenter: __,
-              objectBlockLeft: v_,
-              objectBlockRight: y_,
-            } = Xg,
-            x_ = {
+              objectFullWidth: C_,
+              objectInline: __,
+              objectLeft: v_,
+              objectRight: y_,
+              objectCenter: x_,
+              objectBlockLeft: E_,
+              objectBlockRight: D_,
+            } = nm,
+            S_ = {
               get inline() {
                 return {
                   name: 'inline',
                   title: 'In line',
-                  icon: w_,
+                  icon: __,
                   modelElements: ['imageInline'],
                   isDefault: !0,
                 };
@@ -31371,7 +31423,7 @@
                 return {
                   name: 'alignLeft',
                   title: 'Left aligned image',
-                  icon: A_,
+                  icon: v_,
                   modelElements: ['imageBlock', 'imageInline'],
                   className: 'image-style-align-left',
                 };
@@ -31380,7 +31432,7 @@
                 return {
                   name: 'alignBlockLeft',
                   title: 'Left aligned image',
-                  icon: v_,
+                  icon: E_,
                   modelElements: ['imageBlock'],
                   className: 'image-style-block-align-left',
                 };
@@ -31389,7 +31441,7 @@
                 return {
                   name: 'alignCenter',
                   title: 'Centered image',
-                  icon: __,
+                  icon: x_,
                   modelElements: ['imageBlock'],
                   className: 'image-style-align-center',
                 };
@@ -31398,7 +31450,7 @@
                 return {
                   name: 'alignRight',
                   title: 'Right aligned image',
-                  icon: C_,
+                  icon: y_,
                   modelElements: ['imageBlock', 'imageInline'],
                   className: 'image-style-align-right',
                 };
@@ -31407,7 +31459,7 @@
                 return {
                   name: 'alignBlockRight',
                   title: 'Right aligned image',
-                  icon: y_,
+                  icon: D_,
                   modelElements: ['imageBlock'],
                   className: 'image-style-block-align-right',
                 };
@@ -31416,7 +31468,7 @@
                 return {
                   name: 'block',
                   title: 'Centered image',
-                  icon: __,
+                  icon: x_,
                   modelElements: ['imageBlock'],
                   isDefault: !0,
                 };
@@ -31425,22 +31477,22 @@
                 return {
                   name: 'side',
                   title: 'Side image',
-                  icon: C_,
+                  icon: y_,
                   modelElements: ['imageBlock'],
                   className: 'image-style-side',
                 };
               },
             },
-            E_ = {
-              full: b_,
-              left: v_,
-              right: y_,
-              center: __,
-              inlineLeft: A_,
-              inlineRight: C_,
-              inline: w_,
+            I_ = {
+              full: C_,
+              left: E_,
+              right: D_,
+              center: x_,
+              inlineLeft: v_,
+              inlineRight: y_,
+              inline: __,
             },
-            D_ = [
+            T_ = [
               {
                 name: 'imageStyle:wrapText',
                 title: 'Wrap text',
@@ -31458,33 +31510,33 @@
                 ],
               },
             ];
-          function S_(t) {
+          function M_(t) {
             v('image-style-configuration-definition-invalid', t);
           }
-          const I_ = {
+          const B_ = {
             normalizeStyles: function (t) {
               return (t.configuredStyles.options || [])
                 .map(t =>
                   (function (t) {
                     t =
                       'string' == typeof t
-                        ? x_[t]
-                          ? k_({}, x_[t])
+                        ? S_[t]
+                          ? A_({}, S_[t])
                           : { name: t }
                         : (function (t, e) {
-                            const n = k_({}, e);
+                            const n = A_({}, e);
                             for (const o in t)
                               Object.prototype.hasOwnProperty.call(e, o) || (n[o] = t[o]);
                             return n;
-                          })(x_[t.name], t);
-                    'string' == typeof t.icon && (t.icon = E_[t.icon] || t.icon);
+                          })(S_[t.name], t);
+                    'string' == typeof t.icon && (t.icon = I_[t.icon] || t.icon);
                     return t;
                   })(t),
                 )
                 .filter(e =>
                   (function (t, { isBlockPluginLoaded: e, isInlinePluginLoaded: n }) {
                     const { modelElements: o, name: i } = t;
-                    if (!(o && o.length && i)) return S_({ style: t }), !1;
+                    if (!(o && o.length && i)) return M_({ style: t }), !1;
                     {
                       const i = [e ? 'imageBlock' : null, n ? 'imageInline' : null];
                       if (!o.some(t => i.includes(t)))
@@ -31523,25 +31575,25 @@
                 : {};
             },
             getDefaultDropdownDefinitions: function (t) {
-              return t.has('ImageBlockEditing') && t.has('ImageInlineEditing') ? [...D_] : [];
+              return t.has('ImageBlockEditing') && t.has('ImageInlineEditing') ? [...T_] : [];
             },
-            warnInvalidStyle: S_,
-            DEFAULT_OPTIONS: x_,
-            DEFAULT_ICONS: E_,
-            DEFAULT_DROPDOWN_DEFINITIONS: D_,
+            warnInvalidStyle: M_,
+            DEFAULT_OPTIONS: S_,
+            DEFAULT_ICONS: I_,
+            DEFAULT_DROPDOWN_DEFINITIONS: T_,
           };
-          function T_(t, e) {
+          function N_(t, e) {
             for (const n of e) if (n.name === t) return n;
           }
-          class M_ extends fs {
+          class P_ extends fs {
             static get pluginName() {
               return 'ImageStyleEditing';
             }
             static get requires() {
-              return [$A];
+              return [ZA];
             }
             init() {
-              const { normalizeStyles: t, getDefaultStylesConfiguration: e } = I_,
+              const { normalizeStyles: t, getDefaultStylesConfiguration: e } = B_,
                 n = this.editor,
                 o = n.plugins.has('ImageBlockEditing'),
                 i = n.plugins.has('ImageInlineEditing');
@@ -31553,7 +31605,7 @@
                 })),
                 this._setupConversion(o, i),
                 this._setupPostFixer(),
-                n.commands.add('imageStyle', new h_(n, this.normalizedStyles));
+                n.commands.add('imageStyle', new m_(n, this.normalizedStyles));
             }
             _setupConversion(t, e) {
               const n = this.editor,
@@ -31562,8 +31614,8 @@
                   ((r = this.normalizedStyles),
                   (t, e, n) => {
                     if (!n.consumable.consume(e.item, t.name)) return;
-                    const o = T_(e.attributeNewValue, r),
-                      i = T_(e.attributeOldValue, r),
+                    const o = N_(e.attributeNewValue, r),
+                      i = N_(e.attributeOldValue, r),
                       s = n.mapper.toViewElement(e.item),
                       a = n.writer;
                     i && a.removeClass(i.className, s), o && a.addClass(o.className, s);
@@ -31598,7 +31650,7 @@
             _setupPostFixer() {
               const t = this.editor,
                 e = t.model.document,
-                n = t.plugins.get($A),
+                n = t.plugins.get(ZA),
                 o = new Map(this.normalizedStyles.map(t => [t.name, t]));
               e.registerPostFixer(t => {
                 let i = !1;
@@ -31623,18 +31675,18 @@
               });
             }
           }
-          var B_ = n(5083),
-            N_ = {
+          var z_ = n(5083),
+            L_ = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(B_.Z, N_);
-          B_.Z.locals;
-          class P_ extends fs {
+          Vi()(z_.Z, L_);
+          z_.Z.locals;
+          class O_ extends fs {
             static get requires() {
-              return [M_];
+              return [P_];
             }
             static get pluginName() {
               return 'ImageStyleUI';
@@ -31655,13 +31707,13 @@
             init() {
               const t = this.editor.plugins,
                 e = this.editor.config.get('image.toolbar') || [],
-                n = z_(
+                n = R_(
                   t.get('ImageStyleEditing').normalizedStyles,
                   this.localizedDefaultStylesTitles,
                 );
               for (const t of n) this._createButton(t);
-              const o = z_(
-                [...e.filter(H), ...I_.getDefaultDropdownDefinitions(t)],
+              const o = R_(
+                [...e.filter(H), ...B_.getDefaultDropdownDefinitions(t)],
                 this.localizedDefaultStylesTitles,
               );
               for (const t of o) this._createDropdown(t, n);
@@ -31672,18 +31724,18 @@
                 let i;
                 const { defaultItem: r, items: s, title: a } = t,
                   c = s
-                    .filter(t => e.find(({ name: e }) => L_(e) === t))
+                    .filter(t => e.find(({ name: e }) => j_(e) === t))
                     .map(t => {
                       const e = n.create(t);
                       return t === r && (i = e), e;
                     });
-                s.length !== c.length && I_.warnInvalidStyle({ dropdown: t });
-                const l = Am(o, pm),
+                s.length !== c.length && B_.warnInvalidStyle({ dropdown: t });
+                const l = vm(o, bm),
                   d = l.buttonView,
                   h = d.arrowView;
                 return (
-                  Cm(l, c, { enableActiveItemFocusOnDropdownOpen: !0 }),
-                  d.set({ label: O_(a, i.label), class: null, tooltip: !0 }),
+                  ym(l, c, { enableActiveItemFocusOnDropdownOpen: !0 }),
+                  d.set({ label: F_(a, i.label), class: null, tooltip: !0 }),
                   h.unbind('label'),
                   h.set({ label: a }),
                   d.bind('icon').toMany(c, 'isOn', (...t) => {
@@ -31692,7 +31744,7 @@
                   }),
                   d.bind('label').toMany(c, 'isOn', (...t) => {
                     const e = t.findIndex(ba);
-                    return O_(a, e < 0 ? i.label : c[e].label);
+                    return F_(a, e < 0 ? i.label : c[e].label);
                   }),
                   d.bind('isOn').toMany(c, 'isOn', (...t) => t.some(ba)),
                   d
@@ -31711,7 +31763,7 @@
             }
             _createButton(t) {
               const e = t.name;
-              this.editor.ui.componentFactory.add(L_(e), n => {
+              this.editor.ui.componentFactory.add(j_(e), n => {
                 const o = this.editor.commands.get('imageStyle'),
                   i = new wr(n);
                 return (
@@ -31727,17 +31779,17 @@
               this.editor.execute('imageStyle', { value: t }), this.editor.editing.view.focus();
             }
           }
-          function z_(t, e) {
+          function R_(t, e) {
             for (const n of t) e[n.title] && (n.title = e[n.title]);
             return t;
           }
-          function L_(t) {
+          function j_(t) {
             return `imageStyle:${t}`;
           }
-          function O_(t, e) {
+          function F_(t, e) {
             return (t ? t + ': ' : '') + e;
           }
-          class R_ extends fs {
+          class V_ extends fs {
             static get pluginName() {
               return 'IndentEditing';
             }
@@ -31746,11 +31798,11 @@
               t.commands.add('indent', new As(t)), t.commands.add('outdent', new As(t));
             }
           }
-          const j_ =
+          const H_ =
               '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 3.75c0 .414.336.75.75.75h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 0 0-.75.75zm5 6c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zM2.75 16.5h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 1 0 0 1.5zM1.632 6.95 5.02 9.358a.4.4 0 0 1-.013.661l-3.39 2.207A.4.4 0 0 1 1 11.892V7.275a.4.4 0 0 1 .632-.326z"/></svg>',
-            F_ =
+            U_ =
               '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 3.75c0 .414.336.75.75.75h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 0 0-.75.75zm5 6c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zM2.75 16.5h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 1 0 0 1.5zm1.618-9.55L.98 9.358a.4.4 0 0 0 .013.661l3.39 2.207A.4.4 0 0 0 5 11.892V7.275a.4.4 0 0 0-.632-.326z"/></svg>';
-          class V_ extends fs {
+          class G_ extends fs {
             static get pluginName() {
               return 'IndentUI';
             }
@@ -31758,8 +31810,8 @@
               const t = this.editor,
                 e = t.locale,
                 n = t.t,
-                o = 'ltr' == e.uiLanguageDirection ? j_ : F_,
-                i = 'ltr' == e.uiLanguageDirection ? F_ : j_;
+                o = 'ltr' == e.uiLanguageDirection ? H_ : U_,
+                i = 'ltr' == e.uiLanguageDirection ? U_ : H_;
               this._defineButton('indent', n('Increase indent'), o),
                 this._defineButton('outdent', n('Decrease indent'), i);
             }
@@ -31779,7 +31831,79 @@
               });
             }
           }
-          class H_ {
+          class q_ extends bs {
+            constructor(t, e) {
+              super(t), (this._indentBehavior = e);
+            }
+            refresh() {
+              const t = this.editor.model,
+                e = Ti(t.document.selection.getSelectedBlocks());
+              e && t.schema.checkAttribute(e, 'blockIndent')
+                ? (this.isEnabled = this._indentBehavior.checkEnabled(
+                    e.getAttribute('blockIndent'),
+                  ))
+                : (this.isEnabled = !1);
+            }
+            execute() {
+              const t = this.editor.model,
+                e = (function (t) {
+                  const e = t.document.selection,
+                    n = t.schema;
+                  return Array.from(e.getSelectedBlocks()).filter(t =>
+                    n.checkAttribute(t, 'blockIndent'),
+                  );
+                })(t);
+              t.change(t => {
+                for (const n of e) {
+                  const e = n.getAttribute('blockIndent'),
+                    o = this._indentBehavior.getNextIndent(e);
+                  o ? t.setAttribute('blockIndent', o, n) : t.removeAttribute('blockIndent', n);
+                }
+              });
+            }
+          }
+          class W_ {
+            constructor(t) {
+              (this.isForward = 'forward' === t.direction),
+                (this.offset = t.offset),
+                (this.unit = t.unit);
+            }
+            checkEnabled(t) {
+              const e = parseFloat(t || '0');
+              return this.isForward || e > 0;
+            }
+            getNextIndent(t) {
+              const e = parseFloat(t || '0');
+              if (!(!t || t.endsWith(this.unit)))
+                return this.isForward ? this.offset + this.unit : void 0;
+              const n = e + (this.isForward ? this.offset : -this.offset);
+              return n > 0 ? n + this.unit : void 0;
+            }
+          }
+          class $_ {
+            constructor(t) {
+              (this.isForward = 'forward' === t.direction), (this.classes = t.classes);
+            }
+            checkEnabled(t) {
+              const e = this.classes.indexOf(t);
+              return this.isForward ? e < this.classes.length - 1 : e >= 0;
+            }
+            getNextIndent(t) {
+              const e = this.classes.indexOf(t),
+                n = this.isForward ? 1 : -1;
+              return this.classes[e + n];
+            }
+          }
+          const K_ = [
+            'paragraph',
+            'heading1',
+            'heading2',
+            'heading3',
+            'heading4',
+            'heading5',
+            'heading6',
+          ];
+          class Y_ {
             constructor() {
               this._definitions = new Set();
             }
@@ -31839,85 +31963,85 @@
               };
             }
           }
-          const U_ = function (t, e, n) {
+          const Z_ = function (t, e, n) {
             var o = t.length;
             return (n = void 0 === n ? o : n), !e && n >= o ? t : sa(t, e, n);
           };
-          var G_ = RegExp(
+          var Q_ = RegExp(
             '[\\u200d\\ud800-\\udfff\\u0300-\\u036f\\ufe20-\\ufe2f\\u20d0-\\u20ff\\ufe0e\\ufe0f]',
           );
-          const q_ = function (t) {
-            return G_.test(t);
+          const J_ = function (t) {
+            return Q_.test(t);
           };
-          const W_ = function (t) {
+          const X_ = function (t) {
             return t.split('');
           };
-          var $_ = '\\ud800-\\udfff',
-            K_ = '[' + $_ + ']',
-            Y_ = '[\\u0300-\\u036f\\ufe20-\\ufe2f\\u20d0-\\u20ff]',
-            Z_ = '\\ud83c[\\udffb-\\udfff]',
-            Q_ = '[^' + $_ + ']',
-            J_ = '(?:\\ud83c[\\udde6-\\uddff]){2}',
-            X_ = '[\\ud800-\\udbff][\\udc00-\\udfff]',
-            tv = '(?:' + Y_ + '|' + Z_ + ')' + '?',
-            ev = '[\\ufe0e\\ufe0f]?',
-            nv = ev + tv + ('(?:\\u200d(?:' + [Q_, J_, X_].join('|') + ')' + ev + tv + ')*'),
-            ov = '(?:' + [Q_ + Y_ + '?', Y_, J_, X_, K_].join('|') + ')',
-            iv = RegExp(Z_ + '(?=' + Z_ + ')|' + ov + nv, 'g');
-          const rv = function (t) {
-            return t.match(iv) || [];
+          var tv = '\\ud800-\\udfff',
+            ev = '[' + tv + ']',
+            nv = '[\\u0300-\\u036f\\ufe20-\\ufe2f\\u20d0-\\u20ff]',
+            ov = '\\ud83c[\\udffb-\\udfff]',
+            iv = '[^' + tv + ']',
+            rv = '(?:\\ud83c[\\udde6-\\uddff]){2}',
+            sv = '[\\ud800-\\udbff][\\udc00-\\udfff]',
+            av = '(?:' + nv + '|' + ov + ')' + '?',
+            cv = '[\\ufe0e\\ufe0f]?',
+            lv = cv + av + ('(?:\\u200d(?:' + [iv, rv, sv].join('|') + ')' + cv + av + ')*'),
+            dv = '(?:' + [iv + nv + '?', nv, rv, sv, ev].join('|') + ')',
+            hv = RegExp(ov + '(?=' + ov + ')|' + dv + lv, 'g');
+          const uv = function (t) {
+            return t.match(hv) || [];
           };
-          const sv = function (t) {
-            return q_(t) ? rv(t) : W_(t);
+          const gv = function (t) {
+            return J_(t) ? uv(t) : X_(t);
           };
-          const av = (function (t) {
+          const mv = (function (t) {
               return function (e) {
                 e = ea(e);
-                var n = q_(e) ? sv(e) : void 0,
+                var n = J_(e) ? gv(e) : void 0,
                   o = n ? n[0] : e.charAt(0),
-                  i = n ? U_(n, 1).join('') : e.slice(1);
+                  i = n ? Z_(n, 1).join('') : e.slice(1);
                 return o[t]() + i;
               };
             })('toUpperCase'),
-            cv = /[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205f\u3000]/g,
-            lv = /^(?:(?:https?|ftps?|mailto):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))/i,
-            dv =
+            pv = /[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205f\u3000]/g,
+            fv = /^(?:(?:https?|ftps?|mailto):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))/i,
+            kv =
               /^[\S]+@((?![-_])(?:[-\w\u00a1-\uffff]{0,63}[^-_]\.))+(?:[a-z\u00a1-\uffff]{2,})$/i,
-            hv = /^((\w+:(\/{2,})?)|(\W))/i,
-            uv = 'Ctrl+K';
-          function gv(t, { writer: e }) {
+            bv = /^((\w+:(\/{2,})?)|(\W))/i,
+            wv = 'Ctrl+K';
+          function Av(t, { writer: e }) {
             const n = e.createAttributeElement('a', { href: t }, { priority: 5 });
             return e.setCustomProperty('link', !0, n), n;
           }
-          function mv(t) {
+          function Cv(t) {
             const e = String(t);
             return (function (t) {
-              const e = t.replace(cv, '');
-              return !!e.match(lv);
+              const e = t.replace(pv, '');
+              return !!e.match(fv);
             })(e)
               ? e
               : '#';
           }
-          function pv(t, e) {
+          function _v(t, e) {
             return !!t && e.checkAttribute(t.name, 'linkHref');
           }
-          function fv(t, e) {
-            const n = ((o = t), dv.test(o) ? 'mailto:' : e);
+          function vv(t, e) {
+            const n = ((o = t), kv.test(o) ? 'mailto:' : e);
             var o;
-            const i = !!n && !kv(t);
+            const i = !!n && !yv(t);
             return t && i ? n + t : t;
           }
-          function kv(t) {
-            return hv.test(t);
+          function yv(t) {
+            return bv.test(t);
           }
-          function bv(t) {
+          function xv(t) {
             window.open(t, '_blank', 'noopener');
           }
-          class wv extends bs {
+          class Ev extends bs {
             constructor() {
               super(...arguments),
                 (this.manualDecorators = new Ii()),
-                (this.automaticDecorators = new H_());
+                (this.automaticDecorators = new Y_());
             }
             restoreManualDecoratorStates() {
               for (const t of this.manualDecorators)
@@ -31927,7 +32051,7 @@
               const t = this.editor.model,
                 e = t.document.selection,
                 n = e.getSelectedElement() || Ti(e.getSelectedBlocks());
-              pv(n, t.schema)
+              _v(n, t.schema)
                 ? ((this.value = n.getAttribute('linkHref')),
                   (this.isEnabled = t.schema.checkAttribute(n, 'linkHref')))
                 : ((this.value = e.getAttribute('linkHref')),
@@ -31945,8 +32069,8 @@
                 if (o.isCollapsed) {
                   const s = o.getFirstPosition();
                   if (o.hasAttribute('linkHref')) {
-                    const a = Av(o);
-                    let c = gk(s, 'linkHref', o.getAttribute('linkHref'), n);
+                    const a = Dv(o);
+                    let c = fk(s, 'linkHref', o.getAttribute('linkHref'), n);
                     o.getAttribute('linkHref') === a && (c = this._updateLinkContent(n, e, c, t)),
                       e.setAttribute('linkHref', t, c),
                       i.forEach(t => {
@@ -31978,7 +32102,7 @@
                   for (const s of c) {
                     let a = s;
                     if (1 === c.length) {
-                      const i = Av(o);
+                      const i = Dv(o);
                       o.getAttribute('linkHref') === i &&
                         ((a = this._updateLinkContent(n, e, s, t)),
                         e.setSelection(e.createSelection(a)));
@@ -31998,7 +32122,7 @@
               const e = this.editor.model,
                 n = e.document.selection,
                 o = n.getSelectedElement();
-              return pv(o, e.schema) ? o.getAttribute(t) : n.getAttribute(t);
+              return _v(o, e.schema) ? o.getAttribute(t) : n.getAttribute(t);
             }
             _isRangeToUpdate(t, e) {
               for (const n of e) if (n.containsRange(t)) return !1;
@@ -32009,7 +32133,7 @@
               return t.insertContent(i, n);
             }
           }
-          function Av(t) {
+          function Dv(t) {
             if (t.isCollapsed) {
               const e = t.getFirstPosition();
               return e.textNode && e.textNode.data;
@@ -32021,12 +32145,12 @@
               return n.is('$text') || n.is('$textProxy') ? n.data : null;
             }
           }
-          class Cv extends bs {
+          class Sv extends bs {
             refresh() {
               const t = this.editor.model,
                 e = t.document.selection,
                 n = e.getSelectedElement();
-              pv(n, t.schema)
+              _v(n, t.schema)
                 ? (this.isEnabled = t.schema.checkAttribute(n, 'linkHref'))
                 : (this.isEnabled = t.schema.checkAttributeInSelection(e, 'linkHref'));
             }
@@ -32037,7 +32161,7 @@
                 o = t.commands.get('link');
               e.change(t => {
                 const i = n.isCollapsed
-                  ? [gk(n.getFirstPosition(), 'linkHref', n.getAttribute('linkHref'), e)]
+                  ? [fk(n.getFirstPosition(), 'linkHref', n.getAttribute('linkHref'), e)]
                   : e.schema.getValidRanges(n.getRanges(), 'linkHref');
                 for (const e of i)
                   if ((t.removeAttribute('linkHref', e), o))
@@ -32045,7 +32169,7 @@
               });
             }
           }
-          class _v extends Y() {
+          class Iv extends Y() {
             constructor({
               id: t,
               label: e,
@@ -32067,36 +32191,36 @@
               return { attributes: this.attributes, classes: this.classes, styles: this.styles };
             }
           }
-          var vv = n(9773),
-            yv = {
+          var Tv = n(9773),
+            Mv = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(vv.Z, yv);
-          vv.Z.locals;
-          var xv = Object.defineProperty,
-            Ev = Object.getOwnPropertySymbols,
-            Dv = Object.prototype.hasOwnProperty,
-            Sv = Object.prototype.propertyIsEnumerable,
-            Iv = (t, e, n) =>
+          Vi()(Tv.Z, Mv);
+          Tv.Z.locals;
+          var Bv = Object.defineProperty,
+            Nv = Object.getOwnPropertySymbols,
+            Pv = Object.prototype.hasOwnProperty,
+            zv = Object.prototype.propertyIsEnumerable,
+            Lv = (t, e, n) =>
               e in t
-                ? xv(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? Bv(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n),
-            Tv = (t, e) => {
-              for (var n in e || (e = {})) Dv.call(e, n) && Iv(t, n, e[n]);
-              if (Ev) for (var n of Ev(e)) Sv.call(e, n) && Iv(t, n, e[n]);
+            Ov = (t, e) => {
+              for (var n in e || (e = {})) Pv.call(e, n) && Lv(t, n, e[n]);
+              if (Nv) for (var n of Nv(e)) zv.call(e, n) && Lv(t, n, e[n]);
               return t;
             };
-          const Mv = 'automatic',
-            Bv = /^(https?:)?\/\//;
-          class Nv extends fs {
+          const Rv = 'automatic',
+            jv = /^(https?:)?\/\//;
+          class Fv extends fs {
             static get pluginName() {
               return 'LinkEditing';
             }
             static get requires() {
-              return [Jf, jf, Pf];
+              return [ek, Hf, Of];
             }
             constructor(t) {
               super(t), t.config.define('link', { addTargetToExternalLinks: !1 });
@@ -32106,18 +32230,18 @@
               t.model.schema.extend('$text', { allowAttributes: 'linkHref' }),
                 t.conversion
                   .for('dataDowncast')
-                  .attributeToElement({ model: 'linkHref', view: gv }),
+                  .attributeToElement({ model: 'linkHref', view: Av }),
                 t.conversion
                   .for('editingDowncast')
-                  .attributeToElement({ model: 'linkHref', view: (t, e) => gv(mv(t), e) }),
+                  .attributeToElement({ model: 'linkHref', view: (t, e) => Av(Cv(t), e) }),
                 t.conversion
                   .for('upcast')
                   .elementToAttribute({
                     view: { name: 'a', attributes: { href: !0 } },
                     model: { key: 'linkHref', value: t => t.getAttribute('href') },
                   }),
-                t.commands.add('link', new wv(t)),
-                t.commands.add('unlink', new Cv(t));
+                t.commands.add('link', new Ev(t)),
+                t.commands.add('unlink', new Sv(t));
               const e = (function (t, e) {
                 const n = {
                   'Open in a new tab': t('Open in a new tab'),
@@ -32130,16 +32254,16 @@
                   const e = [];
                   if (t)
                     for (const [n, o] of Object.entries(t)) {
-                      const t = Object.assign({}, o, { id: `link${av(n)}` });
+                      const t = Object.assign({}, o, { id: `link${mv(n)}` });
                       e.push(t);
                     }
                   return e;
                 })(t.config.get('link.decorators')),
               );
-              this._enableAutomaticDecorators(e.filter(t => t.mode === Mv)),
+              this._enableAutomaticDecorators(e.filter(t => t.mode === Rv)),
                 this._enableManualDecorators(e.filter(t => 'manual' === t.mode));
-              t.plugins.get(Jf).registerAttribute('linkHref'),
-                pk(t, 'linkHref', 'a', 'ck-link_selected'),
+              t.plugins.get(ek).registerAttribute('linkHref'),
+                bk(t, 'linkHref', 'a', 'ck-link_selected'),
                 this._enableLinkOpen(),
                 this._enableInsertContentSelectionAttributesFixer(),
                 this._enableClickingAfterLink(),
@@ -32153,8 +32277,8 @@
               e.config.get('link.addTargetToExternalLinks') &&
                 n.add({
                   id: 'linkIsExternal',
-                  mode: Mv,
-                  callback: t => !!t && Bv.test(t),
+                  mode: Rv,
+                  callback: t => !!t && jv.test(t),
                   attributes: { target: '_blank', rel: 'noopener noreferrer' },
                 }),
                 n.add(t),
@@ -32166,7 +32290,7 @@
                 n = e.commands.get('link').manualDecorators;
               t.forEach(t => {
                 e.model.schema.extend('$text', { allowAttributes: t.id });
-                const o = new _v(t);
+                const o = new Iv(t);
                 n.add(o),
                   e.conversion.for('downcast').attributeToElement({
                     model: o.id,
@@ -32182,7 +32306,7 @@
                   e.conversion
                     .for('upcast')
                     .elementToAttribute({
-                      view: Tv({ name: 'a' }, o._createPattern()),
+                      view: Ov({ name: 'a' }, o._createPattern()),
                       model: { key: o.id },
                     });
               });
@@ -32198,13 +32322,13 @@
                   let n = e.domTarget;
                   if (('a' != n.tagName.toLowerCase() && (n = n.closest('a')), !n)) return;
                   const o = n.getAttribute('href');
-                  o && (t.stop(), e.preventDefault(), bv(o));
+                  o && (t.stop(), e.preventDefault(), xv(o));
                 },
                 { context: '$capture' },
               ),
                 this.listenTo(e, 'keydown', (e, n) => {
                   const o = t.commands.get('link').value;
-                  !!o && n.keyCode === bi.enter && n.altKey && (e.stop(), bv(o));
+                  !!o && n.keyCode === bi.enter && n.altKey && (e.stop(), xv(o));
                 });
             }
             _enableInsertContentSelectionAttributesFixer() {
@@ -32221,7 +32345,7 @@
                     n.hasAttribute('linkHref') &&
                     ((o && o.hasAttribute('linkHref')) ||
                       t.change(e => {
-                        Pv(e, Lv(t.schema));
+                        Vv(e, Uv(t.schema));
                       }));
                 },
                 { priority: 'low' },
@@ -32242,10 +32366,10 @@
                   if (!t.isCollapsed) return;
                   if (!t.hasAttribute('linkHref')) return;
                   const o = t.getFirstPosition(),
-                    i = gk(o, 'linkHref', t.getAttribute('linkHref'), e);
+                    i = fk(o, 'linkHref', t.getAttribute('linkHref'), e);
                   (o.isTouching(i.start) || o.isTouching(i.end)) &&
                     e.change(t => {
-                      Pv(t, Lv(e.schema));
+                      Vv(t, Uv(e.schema));
                     });
                 });
             }
@@ -32270,7 +32394,7 @@
                     e.isCollapsed ||
                       (o
                         ? (o = !1)
-                        : zv(t) &&
+                        : Hv(t) &&
                           (function (t) {
                             const e = t.document.selection,
                               n = e.getFirstPosition(),
@@ -32281,7 +32405,7 @@
                             if (!i.hasAttribute('linkHref')) return !1;
                             const r = o.textNode || o.nodeBefore;
                             if (i === r) return !0;
-                            return gk(n, 'linkHref', i.getAttribute('linkHref'), t).containsRange(
+                            return fk(n, 'linkHref', i.getAttribute('linkHref'), t).containsRange(
                               t.createRange(n, o),
                               !0,
                             );
@@ -32295,7 +32419,7 @@
                   'insertContent',
                   (e, [i]) => {
                     (o = !1),
-                      zv(t) &&
+                      Hv(t) &&
                         n &&
                         (t.model.change(t => {
                           for (const [e, o] of n) t.setAttribute(e, o, i);
@@ -32328,7 +32452,7 @@
                     const t = n.getFirstPosition(),
                       o = n.getAttribute('linkHref');
                     if (!o) return;
-                    const r = gk(t, 'linkHref', o, e);
+                    const r = fk(t, 'linkHref', o, e);
                     i = r.containsPosition(t) || r.end.isEqual(t);
                   },
                   { priority: 'high' },
@@ -32341,7 +32465,7 @@
                       ((r = !1),
                       i ||
                         t.model.enqueueChange(t => {
-                          Pv(t, Lv(e.schema));
+                          Vv(t, Uv(e.schema));
                         }));
                   },
                   { priority: 'low' },
@@ -32357,33 +32481,33 @@
                     const e = t.createRangeIn(o.content);
                     for (const o of e.getItems())
                       if (o.hasAttribute('linkHref')) {
-                        const e = fv(o.getAttribute('linkHref'), n);
+                        const e = vv(o.getAttribute('linkHref'), n);
                         t.setAttribute('linkHref', e, o);
                       }
                   });
                 });
             }
           }
-          function Pv(t, e) {
+          function Vv(t, e) {
             t.removeSelectionAttribute('linkHref');
             for (const n of e) t.removeSelectionAttribute(n);
           }
-          function zv(t) {
+          function Hv(t) {
             return t.model.change(t => t.batch).isTyping;
           }
-          function Lv(t) {
+          function Uv(t) {
             return t.getDefinition('$text').allowAttributes.filter(t => t.startsWith('link'));
           }
-          var Ov = n(7754),
-            Rv = {
+          var Gv = n(7754),
+            qv = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(Ov.Z, Rv);
-          Ov.Z.locals;
-          class jv extends Gi {
+          Vi()(Gv.Z, qv);
+          Gv.Z.locals;
+          class Wv extends Gi {
             constructor(t, e) {
               super(t),
                 (this.focusTracker = new Mi()),
@@ -32391,11 +32515,11 @@
                 (this._focusables = new ji());
               const n = t.t;
               (this.urlInputView = this._createUrlInput()),
-                (this.saveButtonView = this._createButton(n('Save'), Xg.check, 'ck-button-save')),
+                (this.saveButtonView = this._createButton(n('Save'), nm.check, 'ck-button-save')),
                 (this.saveButtonView.type = 'submit'),
                 (this.cancelButtonView = this._createButton(
                   n('Cancel'),
-                  Xg.cancel,
+                  nm.cancel,
                   'ck-button-cancel',
                   'cancel',
                 )),
@@ -32442,7 +32566,7 @@
             }
             _createUrlInput() {
               const t = this.locale.t,
-                e = new Xr(this.locale, Em);
+                e = new Xr(this.locale, Im);
               return (e.label = t('Link URL')), e;
             }
             _createButton(t, e, n, o) {
@@ -32489,16 +32613,16 @@
               return e.add(this.saveButtonView), e.add(this.cancelButtonView), e;
             }
           }
-          var Fv = n(2347),
-            Vv = {
+          var $v = n(2347),
+            Kv = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(Fv.Z, Vv);
-          Fv.Z.locals;
-          class Hv extends Gi {
+          Vi()($v.Z, Kv);
+          $v.Z.locals;
+          class Yv extends Gi {
             constructor(t) {
               super(t),
                 (this.focusTracker = new Mi()),
@@ -32511,7 +32635,7 @@
                   '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m11.077 15 .991-1.416a.75.75 0 1 1 1.229.86l-1.148 1.64a.748.748 0 0 1-.217.206 5.251 5.251 0 0 1-8.503-5.955.741.741 0 0 1 .12-.274l1.147-1.639a.75.75 0 1 1 1.228.86L4.933 10.7l.006.003a3.75 3.75 0 0 0 6.132 4.294l.006.004zm5.494-5.335a.748.748 0 0 1-.12.274l-1.147 1.639a.75.75 0 1 1-1.228-.86l.86-1.23a3.75 3.75 0 0 0-6.144-4.301l-.86 1.229a.75.75 0 0 1-1.229-.86l1.148-1.64a.748.748 0 0 1 .217-.206 5.251 5.251 0 0 1 8.503 5.955zm-4.563-2.532a.75.75 0 0 1 .184 1.045l-3.155 4.505a.75.75 0 1 1-1.229-.86l3.155-4.506a.75.75 0 0 1 1.045-.184zm4.919 10.562-1.414 1.414a.75.75 0 1 1-1.06-1.06l1.414-1.415-1.415-1.414a.75.75 0 0 1 1.061-1.06l1.414 1.414 1.414-1.415a.75.75 0 0 1 1.061 1.061l-1.414 1.414 1.414 1.415a.75.75 0 0 1-1.06 1.06l-1.415-1.414z"/></svg>',
                   'unlink',
                 )),
-                (this.editButtonView = this._createButton(e('Edit link'), Xg.pencil, 'edit')),
+                (this.editButtonView = this._createButton(e('Edit link'), nm.pencil, 'edit')),
                 this.set('href', void 0),
                 (this._focusCycler = new hs({
                   focusables: this._focusables,
@@ -32556,7 +32680,7 @@
                 t.extendTemplate({
                   attributes: {
                     class: ['ck', 'ck-link-actions__preview'],
-                    href: e.to('href', t => t && mv(t)),
+                    href: e.to('href', t => t && Cv(t)),
                     target: '_blank',
                     rel: 'noopener noreferrer',
                   },
@@ -32569,13 +32693,13 @@
               );
             }
           }
-          const Uv = 'link-ui';
-          class Gv extends fs {
+          const Zv = 'link-ui';
+          class Qv extends fs {
             constructor() {
               super(...arguments), (this.actionsView = null), (this.formView = null);
             }
             static get requires() {
-              return [af];
+              return [df];
             }
             static get pluginName() {
               return 'LinkUI';
@@ -32583,16 +32707,16 @@
             init() {
               const t = this.editor;
               t.editing.view.addObserver(Eg),
-                (this._balloon = t.plugins.get(af)),
+                (this._balloon = t.plugins.get(df)),
                 this._createToolbarLinkButton(),
                 this._enableBalloonActivators(),
                 t.conversion
                   .for('editingDowncast')
-                  .markerToHighlight({ model: Uv, view: { classes: ['ck-fake-link-selection'] } }),
+                  .markerToHighlight({ model: Zv, view: { classes: ['ck-fake-link-selection'] } }),
                 t.conversion
                   .for('editingDowncast')
                   .markerToElement({
-                    model: Uv,
+                    model: Zv,
                     view: {
                       name: 'span',
                       classes: ['ck-fake-link-selection', 'ck-fake-link-selection_collapsed'],
@@ -32611,7 +32735,7 @@
             }
             _createActionsView() {
               const t = this.editor,
-                e = new Hv(t.locale),
+                e = new Yv(t.locale),
                 n = t.commands.get('link'),
                 o = t.commands.get('unlink');
               return (
@@ -32627,7 +32751,7 @@
                 e.keystrokes.set('Esc', (t, e) => {
                   this._hideUI(), e();
                 }),
-                e.keystrokes.set(uv, (t, e) => {
+                e.keystrokes.set(wv, (t, e) => {
                   this._addFormView(), e();
                 }),
                 e
@@ -32637,14 +32761,14 @@
               const t = this.editor,
                 n = t.commands.get('link'),
                 o = t.config.get('link.defaultProtocol'),
-                i = new (e(jv))(t.locale, n);
+                i = new (e(Wv))(t.locale, n);
               return (
                 i.urlInputView.fieldView.bind('value').to(n, 'value'),
                 i.urlInputView.bind('isEnabled').to(n, 'isEnabled'),
                 i.saveButtonView.bind('isEnabled').to(n),
                 this.listenTo(i, 'submit', () => {
                   const { value: e } = i.urlInputView.fieldView.element,
-                    n = fv(e, o);
+                    n = vv(e, o);
                   t.execute('link', n, i.getDecoratorSwitchesState()), this._closeFormView();
                 }),
                 this.listenTo(i, 'cancel', () => {
@@ -32667,7 +32791,7 @@
                   (o.label = n('Link')),
                   (o.icon =
                     '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m11.077 15 .991-1.416a.75.75 0 1 1 1.229.86l-1.148 1.64a.748.748 0 0 1-.217.206 5.251 5.251 0 0 1-8.503-5.955.741.741 0 0 1 .12-.274l1.147-1.639a.75.75 0 1 1 1.228.86L4.933 10.7l.006.003a3.75 3.75 0 0 0 6.132 4.294l.006.004zm5.494-5.335a.748.748 0 0 1-.12.274l-1.147 1.639a.75.75 0 1 1-1.228-.86l.86-1.23a3.75 3.75 0 0 0-6.144-4.301l-.86 1.229a.75.75 0 0 1-1.229-.86l1.148-1.64a.748.748 0 0 1 .217-.206 5.251 5.251 0 0 1 8.503 5.955zm-4.563-2.532a.75.75 0 0 1 .184 1.045l-3.155 4.505a.75.75 0 1 1-1.229-.86l3.155-4.506a.75.75 0 0 1 1.045-.184z"/></svg>'),
-                  (o.keystroke = uv),
+                  (o.keystroke = wv),
                   (o.tooltip = !0),
                   (o.isToggleable = !0),
                   o.bind('isEnabled').to(e, 'isEnabled'),
@@ -32683,7 +32807,7 @@
               this.listenTo(e, 'click', () => {
                 this._getSelectedLinkElement() && this._showUI();
               }),
-                t.keystrokes.set(uv, (e, n) => {
+                t.keystrokes.set(wv, (e, n) => {
                   n(), t.commands.get('link').isEnabled && this._showUI(!0);
                 });
             }
@@ -32806,8 +32930,8 @@
                 e = this.editor.model,
                 n = t.document;
               let o;
-              if (e.markers.has(Uv)) {
-                const e = Array.from(this.editor.editing.mapper.markerNameToElements(Uv)),
+              if (e.markers.has(Zv)) {
+                const e = Array.from(this.editor.editing.mapper.markerNameToElements(Zv)),
                   n = t.createRange(
                     t.createPositionBefore(e[0]),
                     t.createPositionAfter(e[e.length - 1]),
@@ -32826,11 +32950,11 @@
               const t = this.editor.editing.view,
                 e = t.document.selection,
                 n = e.getSelectedElement();
-              if (e.isCollapsed || (n && Nk(n))) return qv(e.getFirstPosition());
+              if (e.isCollapsed || (n && Lk(n))) return Jv(e.getFirstPosition());
               {
                 const n = e.getFirstRange().getTrimmed(),
-                  o = qv(n.start),
-                  i = qv(n.end);
+                  o = Jv(n.start),
+                  i = Jv(n.end);
                 return o && o == i && t.createRangeIn(o).getTrimmed().isEqual(n) ? o : null;
               }
             }
@@ -32838,29 +32962,29 @@
               const t = this.editor.model;
               t.change(e => {
                 const n = t.document.selection.getFirstRange();
-                if (t.markers.has(Uv)) e.updateMarker(Uv, { range: n });
+                if (t.markers.has(Zv)) e.updateMarker(Zv, { range: n });
                 else if (n.start.isAtEnd) {
                   const o = n.start.getLastMatchingPosition(
                     ({ item: e }) => !t.schema.isContent(e),
                     { boundaries: n },
                   );
-                  e.addMarker(Uv, {
+                  e.addMarker(Zv, {
                     usingOperation: !1,
                     affectsData: !1,
                     range: e.createRange(o, n.end),
                   });
-                } else e.addMarker(Uv, { usingOperation: !1, affectsData: !1, range: n });
+                } else e.addMarker(Zv, { usingOperation: !1, affectsData: !1, range: n });
               });
             }
             _hideFakeVisualSelection() {
               const t = this.editor.model;
-              t.markers.has(Uv) &&
+              t.markers.has(Zv) &&
                 t.change(t => {
-                  t.removeMarker(Uv);
+                  t.removeMarker(Zv);
                 });
             }
           }
-          function qv(t) {
+          function Jv(t) {
             return (
               t.getAncestors().find(t => {
                 return (e = t).is('attributeElement') && !!e.getCustomProperty('link');
@@ -32868,13 +32992,13 @@
               }) || null
             );
           }
-          const Wv = new RegExp(
+          const Xv = new RegExp(
             '(^|\\s)(((?:(?:(?:https?|ftp):)?\\/\\/)(?:\\S+(?::\\S*)?@)?(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(((?!www\\.)|(www\\.))(?![-_])(?:[-_a-z0-9\\u00a1-\\uffff]{1,63}\\.)+(?:[a-z\\u00a1-\\uffff]{2,63})))(?::\\d{2,5})?(?:[/?#]\\S*)?)|((www.|(\\S+@))((?![-_])(?:[-_a-z0-9\\u00a1-\\uffff]{1,63}\\.))+(?:[a-z\\u00a1-\\uffff]{2,63})))$',
             'i',
           );
-          class $v extends fs {
+          class ty extends fs {
             static get requires() {
-              return [Kf];
+              return [Qf];
             }
             static get pluginName() {
               return 'AutoLink';
@@ -32891,14 +33015,14 @@
             }
             _enableTypingHandling() {
               const t = this.editor,
-                e = new Qf(t.model, t => {
+                e = new tk(t.model, t => {
                   if (
                     !(function (t) {
                       return t.length > 4 && ' ' === t[t.length - 1] && ' ' !== t[t.length - 2];
                     })(t)
                   )
                     return;
-                  const e = Kv(t.substr(0, t.length - 1));
+                  const e = ey(t.substr(0, t.length - 1));
                   return e ? { url: e } : void 0;
                 });
               e.on('matched:data', (e, n) => {
@@ -32936,8 +33060,8 @@
             }
             _checkAndApplyAutoLinkOnRange(t) {
               const e = this.editor.model,
-                { text: n, range: o } = Zf(t, e),
-                i = Kv(n);
+                { text: n, range: o } = Xf(t, e),
+                i = ey(n);
               if (i) {
                 const t = e.createRange(o.end.getShiftedBy(-i.length), o.end);
                 this._applyAutoLink(i, t);
@@ -32945,12 +33069,12 @@
             }
             _applyAutoLink(t, e) {
               const n = this.editor.model,
-                o = fv(t, this.editor.config.get('link.defaultProtocol'));
+                o = vv(t, this.editor.config.get('link.defaultProtocol'));
               this.isEnabled &&
                 (function (t, e) {
                   return e.schema.checkAttributeInSelection(e.createSelection(t), 'linkHref');
                 })(e, n) &&
-                kv(o) &&
+                yv(o) &&
                 !(function (t) {
                   const e = t.start.nodeAfter;
                   return !!e && e.hasAttribute('linkHref');
@@ -32968,20 +33092,20 @@
               });
             }
           }
-          function Kv(t) {
-            const e = Wv.exec(t);
+          function ey(t) {
+            const e = Xv.exec(t);
             return e ? e[2] : null;
           }
-          var Yv = n(111),
-            Zv = {
+          var ny = n(111),
+            oy = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(Yv.Z, Zv);
-          Yv.Z.locals;
-          class Qv {
+          Vi()(ny.Z, oy);
+          ny.Z.locals;
+          class iy {
             constructor(t, e) {
               (this._startElement = t),
                 (this._referenceIndent = t.getAttribute('listIndent')),
@@ -32998,7 +33122,7 @@
             }
             *[Symbol.iterator]() {
               const t = [];
-              for (const { node: e } of Jv(
+              for (const { node: e } of ry(
                 this._getStartNode(),
                 this._isForward ? 'forward' : 'backward',
               )) {
@@ -33038,18 +33162,18 @@
                 : this._startElement.previousSibling;
             }
           }
-          function* Jv(t, e = 'forward') {
+          function* ry(t, e = 'forward') {
             const n = 'forward' == e;
             let o = null;
             for (; isListItemBlock(t); )
               yield { node: t, previous: o }, (o = t), (t = n ? t.nextSibling : t.previousSibling);
           }
-          class Xv {
+          class sy {
             constructor(t) {
               this._listHead = t;
             }
             [Symbol.iterator]() {
-              return Jv(this._listHead, 'forward');
+              return ry(this._listHead, 'forward');
             }
           }
           Object.defineProperty,
@@ -33058,41 +33182,41 @@
             Object.getOwnPropertySymbols,
             Object.prototype.hasOwnProperty,
             Object.prototype.propertyIsEnumerable;
-          var ty = n(5730),
-            ey = {
+          var ay = n(5730),
+            cy = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(ty.Z, ey);
-          ty.Z.locals;
-          var ny = n(4564),
-            oy = {
+          Vi()(ay.Z, cy);
+          ay.Z.locals;
+          var ly = n(4564),
+            dy = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(ny.Z, oy);
-          ny.Z.locals;
-          function iy(t, e) {
+          Vi()(ly.Z, dy);
+          ly.Z.locals;
+          function hy(t, e) {
             const n = e.mapper,
               o = e.writer,
               i = 'numbered' == t.getAttribute('listType') ? 'ol' : 'ul',
               r = (function (t) {
                 const e = t.createContainerElement('li');
-                return (e.getFillerOffset = gy), e;
+                return (e.getFillerOffset = Ay), e;
               })(o),
               s = o.createContainerElement(i, null);
             return o.insert(o.createPositionAt(s, 0), r), n.bindElements(t, r), r;
           }
-          function ry(t, e, n, o) {
+          function uy(t, e, n, o) {
             const i = e.parent,
               r = n.mapper,
               s = n.writer;
             let a = r.toViewPosition(o.createPositionBefore(t));
-            const c = cy(t.previousSibling, {
+            const c = py(t.previousSibling, {
                 sameIndent: !0,
                 smallerIndent: !0,
                 listIndent: t.getAttribute('listIndent'),
@@ -33110,7 +33234,7 @@
                 })(t);
               a = e ? s.createPositionBefore(e) : s.createPositionAt(t, 'end');
             } else a = r.toViewPosition(o.createPositionBefore(t));
-            if (((a = ay(a)), s.insert(a, i), l && 'listItem' == l.name)) {
+            if (((a = my(a)), s.insert(a, i), l && 'listItem' == l.name)) {
               const t = r.toViewElement(l),
                 n = s.createRange(s.createPositionAt(t, 0), a).getWalker({ ignoreElementEnd: !0 });
               for (const t of n)
@@ -33118,7 +33242,7 @@
                   const o = s.breakContainer(s.createPositionBefore(t.item)),
                     i = t.item.parent,
                     r = s.createPositionAt(e, 'end');
-                  sy(s, r.nodeBefore, r.nodeAfter),
+                  gy(s, r.nodeBefore, r.nodeAfter),
                     s.move(s.createRangeOn(i), r),
                     (n._position = o);
                 }
@@ -33136,9 +33260,9 @@
                   s.move(s.createRangeOn(o.parent), s.createPositionAt(e, 'end')));
               }
             }
-            sy(s, i, i.nextSibling), sy(s, i.previousSibling, i);
+            gy(s, i, i.nextSibling), gy(s, i.previousSibling, i);
           }
-          function sy(t, e, n) {
+          function gy(t, e, n) {
             return !e ||
               !n ||
               ('ul' != e.name && 'ol' != e.name) ||
@@ -33147,10 +33271,10 @@
               ? null
               : t.mergeContainers(t.createPositionAfter(e));
           }
-          function ay(t) {
+          function my(t) {
             return t.getLastMatchingPosition(t => t.item.is('uiElement'));
           }
-          function cy(t, e) {
+          function py(t, e) {
             const n = !!e.sameIndent,
               o = !!e.smallerIndent,
               i = e.listIndent;
@@ -33162,7 +33286,7 @@
             }
             return null;
           }
-          function ly(t, e, n, o) {
+          function fy(t, e, n, o) {
             t.ui.componentFactory.add(e, i => {
               const r = t.commands.get(e),
                 s = new wr(i);
@@ -33176,7 +33300,7 @@
               );
             });
           }
-          function dy(t, e) {
+          function ky(t, e) {
             const n = [],
               o = t.parent,
               i = { ignoreElementEnd: !1, startPosition: t, shallow: !0, direction: e },
@@ -33195,8 +33319,8 @@
             }
             return n;
           }
-          const hy = ['disc', 'circle', 'square'],
-            uy = [
+          const by = ['disc', 'circle', 'square'],
+            wy = [
               'decimal',
               'decimal-leading-zero',
               'lower-roman',
@@ -33204,24 +33328,24 @@
               'lower-latin',
               'upper-latin',
             ];
-          function gy() {
+          function Ay() {
             const t =
               !this.isEmpty && ('ul' == this.getChild(0).name || 'ol' == this.getChild(0).name);
             return this.isEmpty || t ? 0 : Fa.call(this);
           }
-          class my extends fs {
+          class Cy extends fs {
             static get pluginName() {
               return 'ListUI';
             }
             init() {
               const t = this.editor.t;
-              ly(
+              fy(
                 this.editor,
                 'numberedList',
                 t('Numbered List'),
                 '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zM3.5 3v5H2V3.7H1v-1h2.5V3zM.343 17.857l2.59-3.257H2.92a.6.6 0 1 0-1.04 0H.302a2 2 0 1 1 3.995 0h-.001c-.048.405-.16.734-.333.988-.175.254-.59.692-1.244 1.312H4.3v1h-4l.043-.043zM7 14.75a.75.75 0 0 1 .75-.75h9.5a.75.75 0 1 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75z"/></svg>',
               ),
-                ly(
+                fy(
                   this.editor,
                   'bulletedList',
                   t('Bulleted List'),
@@ -33229,10 +33353,10 @@
                 );
             }
           }
-          const py = {},
-            fy = {},
-            ky = {},
-            by = [
+          const _y = {},
+            vy = {},
+            yy = {},
+            xy = [
               { listStyle: 'disc', typeAttribute: 'disc', listType: 'bulleted' },
               { listStyle: 'circle', typeAttribute: 'circle', listType: 'bulleted' },
               { listStyle: 'square', typeAttribute: 'square', listType: 'bulleted' },
@@ -33245,36 +33369,36 @@
               { listStyle: 'lower-latin', typeAttribute: 'a', listType: 'numbered' },
               { listStyle: 'upper-latin', typeAttribute: 'A', listType: 'numbered' },
             ];
-          for (const { listStyle: t, typeAttribute: e, listType: n } of by)
-            (py[t] = n), (fy[t] = e), e && (ky[e] = t);
-          var wy = n(4721),
-            Ay = {
+          for (const { listStyle: t, typeAttribute: e, listType: n } of xy)
+            (_y[t] = n), (vy[t] = e), e && (yy[e] = t);
+          var Ey = n(4721),
+            Dy = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(wy.Z, Ay);
-          wy.Z.locals;
-          var Cy = n(6082),
-            _y = {
+          Vi()(Ey.Z, Dy);
+          Ey.Z.locals;
+          var Sy = n(6082),
+            Iy = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(Cy.Z, _y);
-          Cy.Z.locals;
-          var vy = n(2417),
-            yy = {
+          Vi()(Sy.Z, Iy);
+          Sy.Z.locals;
+          var Ty = n(2417),
+            My = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(vy.Z, yy);
-          vy.Z.locals;
-          class xy extends bs {
+          Vi()(Ty.Z, My);
+          Ty.Z.locals;
+          class By extends bs {
             constructor(t, e) {
               super(t), (this._indentBy = 'forward' == e ? 1 : -1);
             }
@@ -33320,7 +33444,7 @@
               return !0;
             }
           }
-          class Ey extends bs {
+          class Ny extends bs {
             constructor(t, e) {
               super(t), (this.type = e);
             }
@@ -33330,7 +33454,7 @@
             execute(t = {}) {
               const e = this.editor.model,
                 n = e.document,
-                o = Array.from(n.selection.getSelectedBlocks()).filter(t => Sy(t, e.schema)),
+                o = Array.from(n.selection.getSelectedBlocks()).filter(t => zy(t, e.schema)),
                 i = void 0 !== t.forceValue ? !t.forceValue : this.value;
               e.change(t => {
                 if (i) {
@@ -33352,7 +33476,7 @@
                     e.is('element', 'listItem') &&
                       e.getAttribute('listIndent') < t &&
                       (t = e.getAttribute('listIndent'));
-                  (t = 0 === t ? 1 : t), Dy(o, !0, t), Dy(o, !1, t);
+                  (t = 0 === t ? 1 : t), Py(o, !0, t), Py(o, !1, t);
                 }
                 for (const e of o.reverse())
                   i && 'listItem' == e.name
@@ -33376,10 +33500,10 @@
               const t = this.editor.model.document.selection,
                 e = this.editor.model.schema,
                 n = Ti(t.getSelectedBlocks());
-              return !!n && Sy(n, e);
+              return !!n && zy(n, e);
             }
           }
-          function Dy(t, e, n) {
+          function Py(t, e, n) {
             const o = e ? t[0] : t[t.length - 1];
             if (o.is('element', 'listItem')) {
               let i = o[e ? 'previousSibling' : 'nextSibling'],
@@ -33390,16 +33514,16 @@
                   (i = i[e ? 'previousSibling' : 'nextSibling']);
             }
           }
-          function Sy(t, e) {
+          function zy(t, e) {
             return e.checkChild(t.parent, 'listItem') && !e.isObject(t);
           }
-          class Iy extends fs {
+          class Ly extends fs {
             static get pluginName() {
               return 'ListUtils';
             }
             getListTypeFromListStyleType(t) {
               return (function (t) {
-                return hy.includes(t) ? 'bulleted' : uy.includes(t) ? 'numbered' : null;
+                return by.includes(t) ? 'bulleted' : wy.includes(t) ? 'numbered' : null;
               })(t);
             }
             getSelectedListItems(t) {
@@ -33408,17 +33532,17 @@
                   .filter(t => t.is('element', 'listItem'))
                   .map(e => {
                     const n = t.change(t => t.createPositionAt(e, 0));
-                    return [...dy(n, 'backward'), ...dy(n, 'forward')];
+                    return [...ky(n, 'backward'), ...ky(n, 'forward')];
                   })
                   .flat();
                 return (e = [...new Set(e)]), e;
               })(t);
             }
             getSiblingNodes(t, e) {
-              return dy(t, e);
+              return ky(t, e);
             }
           }
-          function Ty(t) {
+          function Oy(t) {
             return (e, n, o) => {
               const i = o.consumable;
               if (
@@ -33431,10 +33555,10 @@
                 i.consume(n.item, 'attribute:listType'),
                 i.consume(n.item, 'attribute:listIndent');
               const r = n.item;
-              ry(r, iy(r, o), o, t);
+              uy(r, hy(r, o), o, t);
             };
           }
-          const My = (t, e, n) => {
+          const Ry = (t, e, n) => {
               if (!n.consumable.test(e.item, t.name)) return;
               const o = n.mapper.toViewElement(e.item),
                 i = n.writer;
@@ -33444,13 +33568,13 @@
                 s = 'numbered' == e.attributeNewValue ? 'ol' : 'ul';
               i.rename(s, r);
             },
-            By = (t, e, n) => {
+            jy = (t, e, n) => {
               n.consumable.consume(e.item, t.name);
               const o = n.mapper.toViewElement(e.item).parent,
                 i = n.writer;
-              sy(i, o, o.nextSibling), sy(i, o.previousSibling, o);
+              gy(i, o, o.nextSibling), gy(i, o.previousSibling, o);
             };
-          const Ny = (t, e, n) => {
+          const Fy = (t, e, n) => {
               if (n.consumable.test(e.item, t.name) && 'listItem' != e.item.name) {
                 let t = n.mapper.toViewPosition(e.range.start);
                 const o = n.writer,
@@ -33473,21 +33597,21 @@
                   for (let e = 0; e < i.length; e++) {
                     const n = t.nodeBefore;
                     if (((t = o.insert(t, i[e]).end), e > 0)) {
-                      const e = sy(o, n, n.nextSibling);
+                      const e = gy(o, n, n.nextSibling);
                       e && e.parent == n && t.offset--;
                     }
                   }
-                  sy(o, t.nodeBefore, t.nodeAfter);
+                  gy(o, t.nodeBefore, t.nodeAfter);
                 }
               }
             },
-            Py = (t, e, n) => {
+            Vy = (t, e, n) => {
               const o = n.mapper.toViewPosition(e.position),
                 i = o.nodeBefore,
                 r = o.nodeAfter;
-              sy(n.writer, i, r);
+              gy(n.writer, i, r);
             },
-            zy = (t, e, n) => {
+            Hy = (t, e, n) => {
               if (n.consumable.consume(e.viewItem, { name: !0 })) {
                 const t = n.writer,
                   o = t.createElement('listItem'),
@@ -33521,7 +33645,7 @@
                         !i.checkChild(t, a.name) &&
                         ((t = e.modelCursor.parent.is('element', 'listItem')
                           ? e.modelCursor.parent
-                          : Fy(e.modelCursor)),
+                          : $y(e.modelCursor)),
                         (r = o.createPositionAfter(t)));
                     }
                   return r;
@@ -33529,29 +33653,29 @@
                 (e.modelRange = t.createRange(e.modelCursor, s)), n.updateConversionResult(o, e);
               }
             },
-            Ly = (t, e, n) => {
+            Uy = (t, e, n) => {
               if (n.consumable.test(e.viewItem, { name: !0 })) {
                 const t = Array.from(e.viewItem.getChildren());
                 for (const e of t) {
-                  !(e.is('element', 'li') || Hy(e)) && e._remove();
+                  !(e.is('element', 'li') || Yy(e)) && e._remove();
                 }
               }
             },
-            Oy = (t, e, n) => {
+            Gy = (t, e, n) => {
               if (n.consumable.test(e.viewItem, { name: !0 })) {
                 if (0 === e.viewItem.childCount) return;
                 const t = [...e.viewItem.getChildren()];
                 let n = !1;
-                for (const e of t) n && !Hy(e) && e._remove(), Hy(e) && (n = !0);
+                for (const e of t) n && !Yy(e) && e._remove(), Yy(e) && (n = !0);
               }
             };
-          function Ry(t) {
+          function qy(t) {
             return (e, n) => {
               if (n.isPhantom) return;
               const o = n.modelPosition.nodeBefore;
               if (o && o.is('element', 'listItem')) {
                 const e = n.mapper.toViewElement(o),
-                  i = e.getAncestors().find(Hy),
+                  i = e.getAncestors().find(Yy),
                   r = t.createPositionAt(e, 0).getWalker();
                 for (const t of r) {
                   if ('elementStart' == t.type && t.item.is('element', 'li')) {
@@ -33566,7 +33690,7 @@
               }
             };
           }
-          const jy = function (t, [e, n]) {
+          const Wy = function (t, [e, n]) {
             const o = this;
             let i,
               r = e.is('documentFragment') ? e.getChild(0) : e;
@@ -33590,7 +33714,7 @@
               }
             }
           };
-          function Fy(t) {
+          function $y(t) {
             const e = new Hl({ startPosition: t });
             let n;
             do {
@@ -33598,8 +33722,8 @@
             } while (!n.value.item.is('element', 'listItem'));
             return n.value.item;
           }
-          function Vy(t, e, n, o, i, r) {
-            const s = cy(e.nodeBefore, { sameIndent: !0, smallerIndent: !0, listIndent: t }),
+          function Ky(t, e, n, o, i, r) {
+            const s = py(e.nodeBefore, { sameIndent: !0, smallerIndent: !0, listIndent: t }),
               a = i.mapper,
               c = i.writer,
               l = s ? s.getAttribute('listIndent') : null;
@@ -33613,22 +33737,22 @@
                 d = a.toViewPosition(t);
               }
             else d = n;
-            d = ay(d);
+            d = my(d);
             for (const t of [...o.getChildren()])
-              Hy(t) &&
+              Yy(t) &&
                 ((d = c.move(c.createRangeOn(t), d).end),
-                sy(c, t, t.nextSibling),
-                sy(c, t.previousSibling, t));
+                gy(c, t, t.nextSibling),
+                gy(c, t.previousSibling, t));
           }
-          function Hy(t) {
+          function Yy(t) {
             return t.is('element', 'ol') || t.is('element', 'ul');
           }
-          class Uy extends fs {
+          class Zy extends fs {
             static get pluginName() {
               return 'ListEditing';
             }
             static get requires() {
-              return [Ck, Kf, Iy];
+              return [yk, Qf, Ly];
             }
             init() {
               const t = this.editor;
@@ -33722,9 +33846,9 @@
                   }
                 })(t.model, e),
               ),
-                n.mapper.registerViewToModelLength('li', Gy),
-                e.mapper.registerViewToModelLength('li', Gy),
-                n.mapper.on('modelToViewPosition', Ry(n.view)),
+                n.mapper.registerViewToModelLength('li', Qy),
+                e.mapper.registerViewToModelLength('li', Qy),
+                n.mapper.on('modelToViewPosition', qy(n.view)),
                 n.mapper.on(
                   'viewToModelPosition',
                   ((o = t.model),
@@ -33750,17 +33874,17 @@
                       const s = r.toModelElement(i);
                       let a = 1,
                         c = n.nodeBefore;
-                      for (; c && Hy(c); ) (a += r.getModelLength(c)), (c = c.previousSibling);
+                      for (; c && Yy(c); ) (a += r.getModelLength(c)), (c = c.previousSibling);
                       (e.modelPosition = o.createPositionBefore(s).getShiftedBy(a)), t.stop();
                     }
                   }),
                 ),
-                e.mapper.on('modelToViewPosition', Ry(n.view)),
+                e.mapper.on('modelToViewPosition', qy(n.view)),
                 t.conversion.for('editingDowncast').add(e => {
-                  e.on('insert', Ny, { priority: 'high' }),
-                    e.on('insert:listItem', Ty(t.model)),
-                    e.on('attribute:listType:listItem', My, { priority: 'high' }),
-                    e.on('attribute:listType:listItem', By, { priority: 'low' }),
+                  e.on('insert', Fy, { priority: 'high' }),
+                    e.on('insert:listItem', Oy(t.model)),
+                    e.on('attribute:listType:listItem', Ry, { priority: 'high' }),
+                    e.on('attribute:listType:listItem', jy, { priority: 'low' }),
                     e.on(
                       'attribute:listIndent:listItem',
                       (function (t) {
@@ -33774,9 +33898,9 @@
                             a = s.previousSibling,
                             c = r.createRangeOn(s);
                           r.remove(c),
-                            a && a.nextSibling && sy(r, a, a.nextSibling),
-                            Vy(n.attributeOldValue + 1, n.range.start, c.start, i, o, t),
-                            ry(n.item, i, o, t);
+                            a && a.nextSibling && gy(r, a, a.nextSibling),
+                            Ky(n.attributeOldValue + 1, n.range.start, c.start, i, o, t),
+                            uy(n.item, i, o, t);
                           for (const t of n.item.getChildren()) o.consumable.consume(t, 'insert');
                         };
                       })(t.model),
@@ -33795,8 +33919,8 @@
                             a = s.previousSibling,
                             c = r.createRangeOn(s),
                             l = r.remove(c);
-                          a && a.nextSibling && sy(r, a, a.nextSibling),
-                            Vy(
+                          a && a.nextSibling && gy(r, a, a.nextSibling),
+                            Ky(
                               o.mapper.toModelElement(i).getAttribute('listIndent') + 1,
                               n.position,
                               c.start,
@@ -33810,22 +33934,22 @@
                         };
                       })(t.model),
                     ),
-                    e.on('remove', Py, { priority: 'low' });
+                    e.on('remove', Vy, { priority: 'low' });
                 }),
                 t.conversion.for('dataDowncast').add(e => {
-                  e.on('insert', Ny, { priority: 'high' }), e.on('insert:listItem', Ty(t.model));
+                  e.on('insert', Fy, { priority: 'high' }), e.on('insert:listItem', Oy(t.model));
                 }),
                 t.conversion.for('upcast').add(t => {
-                  t.on('element:ul', Ly, { priority: 'high' }),
-                    t.on('element:ol', Ly, { priority: 'high' }),
-                    t.on('element:li', Oy, { priority: 'high' }),
-                    t.on('element:li', zy);
+                  t.on('element:ul', Uy, { priority: 'high' }),
+                    t.on('element:ol', Uy, { priority: 'high' }),
+                    t.on('element:li', Gy, { priority: 'high' }),
+                    t.on('element:li', Hy);
                 }),
-                t.model.on('insertContent', jy, { priority: 'high' }),
-                t.commands.add('numberedList', new Ey(t, 'numbered')),
-                t.commands.add('bulletedList', new Ey(t, 'bulleted')),
-                t.commands.add('indentList', new xy(t, 'forward')),
-                t.commands.add('outdentList', new xy(t, 'backward'));
+                t.model.on('insertContent', Wy, { priority: 'high' }),
+                t.commands.add('numberedList', new Ny(t, 'numbered')),
+                t.commands.add('bulletedList', new Ny(t, 'bulleted')),
+                t.commands.add('indentList', new By(t, 'forward')),
+                t.commands.add('outdentList', new By(t, 'backward'));
               const i = n.view.document;
               this.listenTo(
                 i,
@@ -33875,23 +33999,23 @@
                 n && n.registerChildCommand(t.get('outdentList'));
             }
           }
-          function Gy(t) {
+          function Qy(t) {
             let e = 1;
             for (const n of t.getChildren())
-              if ('ul' == n.name || 'ol' == n.name) for (const t of n.getChildren()) e += Gy(t);
+              if ('ul' == n.name || 'ol' == n.name) for (const t of n.getChildren()) e += Qy(t);
             return e;
           }
           Ci('Ctrl+Enter');
-          var qy = n(1199),
-            Wy = {
+          var Jy = n(1199),
+            Xy = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(qy.Z, Wy);
-          qy.Z.locals;
-          function $y(t, e) {
+          Vi()(Jy.Z, Xy);
+          Jy.Z.locals;
+          function tx(t, e) {
             const n = (n, o, i) => {
               if (!i.consumable.consume(o.item, n.name)) return;
               const r = o.attributeNewValue,
@@ -33906,17 +34030,17 @@
               t.on('attribute:url:media', n);
             };
           }
-          function Ky(t, e, n, o) {
+          function ex(t, e, n, o) {
             return t.createContainerElement('figure', { class: 'media' }, [
               e.getMediaViewElement(t, n, o),
               t.createSlot(),
             ]);
           }
-          function Yy(t) {
+          function nx(t) {
             const e = t.getSelectedElement();
             return e && e.is('element', 'media') ? e : null;
           }
-          function Zy(t, e, n, o) {
+          function ox(t, e, n, o) {
             t.change(i => {
               const r = i.createElement('media', { url: e });
               t.insertObject(r, n, null, {
@@ -33925,11 +34049,11 @@
               });
             });
           }
-          class Qy extends bs {
+          class ix extends bs {
             refresh() {
               const t = this.editor.model,
                 e = t.document.selection,
-                n = Yy(e);
+                n = nx(e);
               (this.value = n ? n.getAttribute('url') : void 0),
                 (this.isEnabled =
                   (function (t) {
@@ -33937,7 +34061,7 @@
                     return !!e && 'media' === e.name;
                   })(e) ||
                   (function (t, e) {
-                    const n = jk(t, e);
+                    const n = Hk(t, e);
                     let o = n.start.parent;
                     o.isEmpty && !e.schema.isLimit(o) && (o = o.parent);
                     return e.schema.checkChild(o, 'media');
@@ -33946,15 +34070,15 @@
             execute(t) {
               const e = this.editor.model,
                 n = e.document.selection,
-                o = Yy(n);
+                o = nx(n);
               o
                 ? e.change(e => {
                     e.setAttribute('url', t, o);
                   })
-                : Zy(e, t, n, !0);
+                : ox(e, t, n, !0);
             }
           }
-          class Jy {
+          class rx {
             constructor(t, e) {
               const n = e.providers,
                 o = e.extraProviders || [],
@@ -33972,14 +34096,14 @@
               return this._getMedia(e).getViewElement(t, n);
             }
             _getMedia(t) {
-              if (!t) return new Xy(this.locale);
+              if (!t) return new sx(this.locale);
               t = t.trim();
               for (const e of this.providerDefinitions) {
                 const n = e.html,
                   o = yi(e.url);
                 for (const e of o) {
                   const o = this._getUrlMatches(t, e);
-                  if (o) return new Xy(this.locale, t, o, n);
+                  if (o) return new sx(this.locale, t, o, n);
                 }
               }
               return null;
@@ -33993,7 +34117,7 @@
               );
             }
           }
-          class Xy {
+          class sx {
             constructor(t, e, n, o) {
               (this.url = this._getValidUrl(e)),
                 (this._locale = t),
@@ -34062,16 +34186,16 @@
               return t ? (t.match(/^https?/) ? t : 'https://' + t) : null;
             }
           }
-          var tx = n(7442),
-            ex = {
+          var ax = n(7442),
+            cx = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(tx.Z, ex);
-          tx.Z.locals;
-          class nx extends fs {
+          Vi()(ax.Z, cx);
+          ax.Z.locals;
+          class lx extends fs {
             constructor(t) {
               super(t),
                 t.config.define('mediaEmbed', {
@@ -34138,7 +34262,7 @@
                     { name: 'facebook', url: /^facebook\.com/ },
                   ],
                 }),
-                (this.registry = new Jy(t.locale, t.config.get('mediaEmbed')));
+                (this.registry = new rx(t.locale, t.config.get('mediaEmbed')));
             }
             static get pluginName() {
               return 'MediaEmbedEditing';
@@ -34151,30 +34275,30 @@
                 i = t.config.get('mediaEmbed.previewsInData'),
                 r = t.config.get('mediaEmbed.elementName'),
                 s = this.registry;
-              t.commands.add('mediaEmbed', new Qy(t)),
+              t.commands.add('mediaEmbed', new ix(t)),
                 e.register('media', { inheritAllFrom: '$blockObject', allowAttributes: ['url'] }),
                 o.for('dataDowncast').elementToStructure({
                   model: 'media',
                   view: (t, { writer: e }) => {
                     const n = t.getAttribute('url');
-                    return Ky(e, s, n, { elementName: r, renderMediaPreview: !!n && i });
+                    return ex(e, s, n, { elementName: r, renderMediaPreview: !!n && i });
                   },
                 }),
-                o.for('dataDowncast').add($y(s, { elementName: r, renderMediaPreview: i })),
+                o.for('dataDowncast').add(tx(s, { elementName: r, renderMediaPreview: i })),
                 o.for('editingDowncast').elementToStructure({
                   model: 'media',
                   view: (t, { writer: e }) => {
                     const o = t.getAttribute('url');
                     return (function (t, e, n) {
-                      return e.setCustomProperty('media', !0, t), Pk(t, e, { label: n });
+                      return e.setCustomProperty('media', !0, t), Ok(t, e, { label: n });
                     })(
-                      Ky(e, s, o, { elementName: r, renderForEditingView: !0 }),
+                      ex(e, s, o, { elementName: r, renderForEditingView: !0 }),
                       e,
                       n('media widget'),
                     );
                   },
                 }),
-                o.for('editingDowncast').add($y(s, { elementName: r, renderForEditingView: !0 })),
+                o.for('editingDowncast').add(tx(s, { elementName: r, renderForEditingView: !0 })),
                 o
                   .for('upcast')
                   .elementToElement({
@@ -34206,13 +34330,13 @@
                   });
             }
           }
-          const ox = /^(?:http(s)?:\/\/)?[\w-]+\.[\w-.~:/?#[\]@!$&'()*+,;=%]+$/;
-          class ix extends fs {
+          const dx = /^(?:http(s)?:\/\/)?[\w-]+\.[\w-.~:/?#[\]@!$&'()*+,;=%]+$/;
+          class hx extends fs {
             constructor(t) {
               super(t), (this._timeoutId = null), (this._positionToInsert = null);
             }
             static get requires() {
-              return [Db, Kf, Kb];
+              return [Tb, Qf, Qb];
             }
             static get pluginName() {
               return 'AutoMediaEmbed';
@@ -34249,12 +34373,12 @@
             }
             _embedMediaBetweenPositions(t, e) {
               const n = this.editor,
-                o = n.plugins.get(nx).registry,
+                o = n.plugins.get(lx).registry,
                 i = new wd(t, e),
                 r = i.getWalker({ ignoreElementEnd: !0 });
               let s = '';
               for (const t of r) t.item.is('$textProxy') && (s += t.item.data);
-              if (((s = s.trim()), !s.match(ox))) return void i.detach();
+              if (((s = s.trim()), !s.match(dx))) return void i.detach();
               if (!o.hasMedia(s)) return void i.detach();
               n.commands.get('mediaEmbed').isEnabled
                 ? ((this._positionToInsert = wu.fromPosition(t)),
@@ -34264,25 +34388,25 @@
                       let e = null;
                       '$graveyard' !== this._positionToInsert.root.rootName &&
                         (e = this._positionToInsert),
-                        Zy(n.model, s, e, !1),
+                        ox(n.model, s, e, !1),
                         this._positionToInsert.detach(),
                         (this._positionToInsert = null);
                     }),
-                      n.plugins.get(Kf).requestUndoOnBackspace();
+                      n.plugins.get(Qf).requestUndoOnBackspace();
                   }, 100)))
                 : i.detach();
             }
           }
-          var rx = n(9292),
-            sx = {
+          var ux = n(9292),
+            gx = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(rx.Z, sx);
-          rx.Z.locals;
-          class ax extends Gi {
+          Vi()(ux.Z, gx);
+          ux.Z.locals;
+          class mx extends Gi {
             constructor(t, e) {
               super(e);
               const n = e.t;
@@ -34290,12 +34414,12 @@
                 (this.keystrokes = new Bi()),
                 this.set('mediaURLInputValue', ''),
                 (this.urlInputView = this._createUrlInput()),
-                (this.saveButtonView = this._createButton(n('Save'), Xg.check, 'ck-button-save')),
+                (this.saveButtonView = this._createButton(n('Save'), nm.check, 'ck-button-save')),
                 (this.saveButtonView.type = 'submit'),
                 this.saveButtonView.bind('isEnabled').to(this, 'mediaURLInputValue', t => !!t),
                 (this.cancelButtonView = this._createButton(
                   n('Cancel'),
-                  Xg.cancel,
+                  nm.cancel,
                   'ck-button-cancel',
                   'cancel',
                 )),
@@ -34354,7 +34478,7 @@
             }
             _createUrlInput() {
               const t = this.locale.t,
-                e = new Xr(this.locale, Em),
+                e = new Xr(this.locale, Im),
                 n = e.fieldView;
               return (
                 (this._urlInputViewInfoDefault = t('Paste the media URL in the input.')),
@@ -34382,9 +34506,9 @@
               );
             }
           }
-          class cx extends fs {
+          class px extends fs {
             static get requires() {
-              return [nx];
+              return [lx];
             }
             static get pluginName() {
               return 'MediaEmbedUI';
@@ -34393,7 +34517,7 @@
               const t = this.editor,
                 e = t.commands.get('mediaEmbed');
               t.ui.componentFactory.add('mediaEmbed', t => {
-                const n = Am(t);
+                const n = vm(t);
                 return this._setUpDropdown(n, e), n;
               });
             }
@@ -34401,9 +34525,9 @@
               const o = this.editor,
                 i = o.t,
                 r = t.buttonView,
-                s = o.plugins.get(nx).registry;
+                s = o.plugins.get(lx).registry;
               t.once('change:isOpen', () => {
-                const i = new (e(ax))(
+                const i = new (e(mx))(
                   (function (t, e) {
                     return [
                       e => {
@@ -34446,16 +34570,16 @@
                 });
             }
           }
-          var lx = n(4652),
-            dx = {
+          var fx = n(4652),
+            kx = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(lx.Z, dx);
-          lx.Z.locals;
-          function hx(t, e) {
+          Vi()(fx.Z, kx);
+          fx.Z.locals;
+          function bx(t, e) {
             if (!t.childCount) return;
             const n = new Sg(t.document),
               o = (function (t, e) {
@@ -34464,7 +34588,7 @@
                   i = [];
                 for (const t of n)
                   if ('elementStart' === t.type && o.match(t.item)) {
-                    const e = mx(t.item);
+                    const e = Cx(t.item);
                     i.push({ element: t.item, id: e.id, order: e.order, indent: e.indent });
                   }
                 return i;
@@ -34524,13 +34648,13 @@
                       t && t[1] && (c = parseInt(t[1]));
                     }
                   }
-                  return { type: a, startIndex: c, style: ux(s) };
+                  return { type: a, startIndex: c, style: wx(s) };
                 })(t, e);
                 if (i) {
                   if (t.indent > r) {
                     const t = i.getChild(i.childCount - 1),
                       e = t.getChild(t.childCount - 1);
-                    (i = gx(o, e, n)), (r += 1);
+                    (i = Ax(o, e, n)), (r += 1);
                   } else if (t.indent < r) {
                     const e = r - t.indent;
                     (i = (function (t, e) {
@@ -34546,7 +34670,7 @@
                     })(i, e)),
                       (r = t.indent);
                   }
-                } else i = gx(o, t.element, n);
+                } else i = Ax(o, t.element, n);
                 t.indent <= r && (i.is('element', o.type) || (i = n.rename(o.type, i)));
               }
               const u = (function (t, e) {
@@ -34563,7 +34687,7 @@
               n.appendChild(u, i);
             });
           }
-          function ux(t) {
+          function wx(t) {
             if (t.startsWith('arabic-leading-zero')) return 'decimal-leading-zero';
             switch (t) {
               case 'alpha-upper':
@@ -34582,7 +34706,7 @@
                 return null;
             }
           }
-          function gx(t, e, n) {
+          function Ax(t, e, n) {
             const o = e.parent,
               i = n.createElement(t.type),
               r = o.getChildIndex(e) + 1;
@@ -34593,7 +34717,7 @@
               i
             );
           }
-          function mx(t) {
+          function Cx(t) {
             const e = {},
               n = t.getStyle('mso-list');
             if (n) {
@@ -34604,7 +34728,7 @@
             }
             return e;
           }
-          function px(t, e) {
+          function _x(t, e) {
             if (!t.childCount) return;
             const n = new Sg(t.document),
               o = (function (t, e) {
@@ -34687,7 +34811,7 @@
               (function (t, e, n) {
                 if (t.length === e.length)
                   for (let o = 0; o < t.length; o++) {
-                    const i = `data:${e[o].type};base64,${fx(e[o].hex)}`;
+                    const i = `data:${e[o].type};base64,${vx(e[o].hex)}`;
                     n.setAttribute('src', i, t[o]);
                   }
               })(
@@ -34712,7 +34836,7 @@
                 n,
               );
           }
-          function fx(t) {
+          function vx(t) {
             return btoa(
               t
                 .match(/\w{2}/g)
@@ -34720,21 +34844,21 @@
                 .join(''),
             );
           }
-          const kx = /<meta\s*name="?generator"?\s*content="?microsoft\s*word\s*\d+"?\/?>/i,
-            bx = /xmlns:o="urn:schemas-microsoft-com/i;
-          class wx {
+          const yx = /<meta\s*name="?generator"?\s*content="?microsoft\s*word\s*\d+"?\/?>/i,
+            xx = /xmlns:o="urn:schemas-microsoft-com/i;
+          class Ex {
             constructor(t) {
               this.document = t;
             }
             isActive(t) {
-              return kx.test(t) || bx.test(t);
+              return yx.test(t) || xx.test(t);
             }
             execute(t) {
               const { body: e, stylesString: n } = t._parsedData;
-              hx(e, n), px(e, t.dataTransfer.getData('text/rtf')), (t.content = e);
+              bx(e, n), _x(e, t.dataTransfer.getData('text/rtf')), (t.content = e);
             }
           }
-          function Ax(t, e, n, { blockElements: o, inlineObjectElements: i }) {
+          function Dx(t, e, n, { blockElements: o, inlineObjectElements: i }) {
             let r = n.createPositionAt(t, 'forward' == e ? 'after' : 'before');
             return (
               (r = r.getLastMatchingPosition(
@@ -34744,16 +34868,16 @@
               'forward' == e ? r.nodeAfter : r.nodeBefore
             );
           }
-          function Cx(t, e) {
+          function Sx(t, e) {
             return !!t && t.is('element') && e.includes(t.name);
           }
-          const _x = /id=("|')docs-internal-guid-[-0-9a-f]+("|')/i;
-          class vx {
+          const Ix = /id=("|')docs-internal-guid-[-0-9a-f]+("|')/i;
+          class Tx {
             constructor(t) {
               this.document = t;
             }
             isActive(t) {
-              return _x.test(t);
+              return Ix.test(t);
             }
             execute(t) {
               const e = new Sg(this.document),
@@ -34783,10 +34907,10 @@
                   for (const n of e.createRangeIn(t)) {
                     const t = n.item;
                     if (t.is('element', 'br')) {
-                      const n = Ax(t, 'forward', e, { blockElements: i, inlineObjectElements: r }),
-                        o = Ax(t, 'backward', e, { blockElements: i, inlineObjectElements: r }),
-                        a = Cx(n, i);
-                      (Cx(o, i) || a) && s.push(t);
+                      const n = Dx(t, 'forward', e, { blockElements: i, inlineObjectElements: r }),
+                        o = Dx(t, 'backward', e, { blockElements: i, inlineObjectElements: r }),
+                        a = Sx(n, i);
+                      (Sx(o, i) || a) && s.push(t);
                     }
                   }
                   for (const t of s)
@@ -34797,13 +34921,13 @@
                 (t.content = n);
             }
           }
-          const yx = /<google-sheets-html-origin/i;
-          class xx {
+          const Mx = /<google-sheets-html-origin/i;
+          class Bx {
             constructor(t) {
               this.document = t;
             }
             isActive(t) {
-              return yx.test(t);
+              return Mx.test(t);
             }
             execute(t) {
               const e = new Sg(this.document),
@@ -34830,7 +34954,7 @@
                 (t.content = n);
             }
           }
-          function Ex(t) {
+          function Nx(t) {
             return t.replace(/<span(?: class="Apple-converted-space"|)>(\s+)<\/span>/g, (t, e) =>
               1 === e.length
                 ? ' '
@@ -34839,10 +34963,10 @@
                     .substr(0, e.length),
             );
           }
-          function Dx(t, e) {
+          function Px(t, e) {
             const n = new DOMParser(),
               o = (function (t) {
-                return Ex(Ex(t))
+                return Nx(Nx(t))
                   .replace(
                     /(<span\s+style=['"]mso-spacerun:yes['"]>[^\S\r\n]*?)[\r\n]+([^\S\r\n]*<\/span>)/g,
                     '$1$2',
@@ -34898,20 +35022,20 @@
             Object.getOwnPropertySymbols,
             Object.prototype.hasOwnProperty,
             Object.prototype.propertyIsEnumerable;
-          function Sx(t, e, n, o, i = 1) {
+          function zx(t, e, n, o, i = 1) {
             null != e && null != i && e > i ? o.setAttribute(t, e, n) : o.removeAttribute(t, n);
           }
-          function Ix(t, e, n = {}) {
+          function Lx(t, e, n = {}) {
             const o = t.createElement('tableCell', n);
             return t.insertElement('paragraph', o), t.insert(o, e), o;
           }
-          function Tx(t, e) {
+          function Ox(t, e) {
             const n = e.parent.parent,
               o = parseInt(n.getAttribute('headingColumns') || '0'),
               { column: i } = t.getCellLocation(e);
             return !!o && i < o;
           }
-          function Mx() {
+          function Rx() {
             return t => {
               t.on('element:table', (t, e, n) => {
                 const o = e.viewItem;
@@ -34940,7 +35064,7 @@
                           n++, o.push(a);
                         else {
                           i.push(a);
-                          const t = Nx(a);
+                          const t = Fx(a);
                           (!e || t < e) && (e = t);
                         }
                     }
@@ -34958,14 +35082,14 @@
                   ) {
                     const t = n.writer.createElement('tableRow');
                     n.writer.insert(t, n.writer.createPositionAt(c, 'end')),
-                      Ix(n.writer, n.writer.createPositionAt(t, 'end'));
+                      Lx(n.writer, n.writer.createPositionAt(t, 'end'));
                   }
                   n.updateConversionResult(c, e);
                 }
               });
             };
           }
-          function Bx(t) {
+          function jx(t) {
             return e => {
               e.on(
                 `element:${t}`,
@@ -34985,7 +35109,7 @@
               );
             };
           }
-          function Nx(t) {
+          function Fx(t) {
             let e = 0,
               n = 0;
             const o = Array.from(t.getChildren()).filter(t => 'th' === t.name || 'td' === t.name);
@@ -34995,7 +35119,7 @@
             }
             return e;
           }
-          class Px {
+          class Vx {
             constructor(t, e = {}) {
               (this._table = t),
                 (this._startRow = void 0 !== e.row ? e.row : e.startRow || 0),
@@ -35060,7 +35184,7 @@
               return void 0 !== this._endColumn && this._column > this._endColumn;
             }
             _formatOutValue(t, e = this._row, n = this._column) {
-              return { done: !1, value: new zx(this, t, e, n) };
+              return { done: !1, value: new Hx(this, t, e, n) };
             }
             _shouldSkipSlot() {
               const t = this._skipRows.has(this._row),
@@ -35084,7 +35208,7 @@
               this._spannedCells.get(t).set(e, n);
             }
           }
-          class zx {
+          class Hx {
             constructor(t, e, n, o) {
               (this.cell = e),
                 (this.row = t._row),
@@ -35114,7 +35238,7 @@
               );
             }
           }
-          function Lx(t, e) {
+          function Ux(t, e) {
             return (n, { writer: o }) => {
               const i = n.getAttribute('headingRows') || 0,
                 r = o.createContainerElement('table', null, []),
@@ -35151,35 +35275,35 @@
                 e.asWidget
                   ? (function (t, e) {
                       return (
-                        e.setCustomProperty('table', !0, t), Pk(t, e, { hasSelectionHandle: !0 })
+                        e.setCustomProperty('table', !0, t), Ok(t, e, { hasSelectionHandle: !0 })
                       );
                     })(s, o)
                   : s
               );
             };
           }
-          function Ox(t = {}) {
+          function Gx(t = {}) {
             return (e, { writer: n }) => {
               const o = e.parent,
                 i = o.parent,
                 r = i.getChildIndex(o),
-                s = new Px(i, { row: r }),
+                s = new Vx(i, { row: r }),
                 a = i.getAttribute('headingRows') || 0,
                 c = i.getAttribute('headingColumns') || 0;
               let l = null;
               for (const o of s)
                 if (o.cell == e) {
                   const e = o.row < a || o.column < c ? 'th' : 'td';
-                  l = t.asWidget ? Rk(n.createEditableElement(e), n) : n.createContainerElement(e);
+                  l = t.asWidget ? Vk(n.createEditableElement(e), n) : n.createContainerElement(e);
                   break;
                 }
               return l;
             };
           }
-          function Rx(t = {}) {
+          function qx(t = {}) {
             return (e, { writer: n }) => {
               if (!e.parent.is('element', 'tableCell')) return null;
-              if (!jx(e)) return null;
+              if (!Wx(e)) return null;
               if (t.asWidget)
                 return n.createContainerElement('span', { class: 'ck-table-bogus-paragraph' });
               {
@@ -35188,10 +35312,10 @@
               }
             };
           }
-          function jx(t) {
+          function Wx(t) {
             return 1 == t.parent.childCount && !!t.getAttributeKeys().next().done;
           }
-          class Fx extends bs {
+          class $x extends bs {
             refresh() {
               const t = this.editor.model,
                 e = t.document.selection,
@@ -35217,7 +35341,7 @@
                 });
             }
           }
-          class Vx extends bs {
+          class Kx extends bs {
             constructor(t, e = {}) {
               super(t), (this.order = e.order || 'below');
             }
@@ -35239,7 +35363,7 @@
               n.insertRows(a, { at: o ? s : s + 1, copyStructureFromAbove: !o });
             }
           }
-          class Hx extends bs {
+          class Yx extends bs {
             constructor(t, e = {}) {
               super(t), (this.order = e.order || 'right');
             }
@@ -35261,7 +35385,7 @@
               n.insertColumns(a, { columns: 1, at: o ? s : s + 1 });
             }
           }
-          class Ux extends bs {
+          class Zx extends bs {
             constructor(t, e = {}) {
               super(t), (this.direction = e.direction || 'horizontally');
             }
@@ -35279,13 +35403,13 @@
                 : t.splitCellVertically(e, 2);
             }
           }
-          function Gx(t, e, n) {
+          function Qx(t, e, n) {
             const { startRow: o, startColumn: i, endRow: r, endColumn: s } = e,
               a = n.createElement('table'),
               c = r - o + 1;
             for (let t = 0; t < c; t++) n.insertElement('tableRow', a, 'end');
             const l = [
-              ...new Px(t, {
+              ...new Vx(t, {
                 startRow: o,
                 endRow: r,
                 startColumn: i,
@@ -35305,33 +35429,33 @@
                 g = a.getChild(l);
               if (d) {
                 const o = n.cloneElement(c);
-                n.append(o, g), Yx(o, t, e, r, s, n);
-              } else (h < o || u < i) && Ix(n, n.createPositionAt(g, 'end'));
+                n.append(o, g), nE(o, t, e, r, s, n);
+              } else (h < o || u < i) && Lx(n, n.createPositionAt(g, 'end'));
             }
             return (
               (function (t, e, n, o, i) {
                 const r = parseInt(e.getAttribute('headingRows') || '0');
                 if (r > 0) {
-                  Sx('headingRows', r - n, t, i, 0);
+                  zx('headingRows', r - n, t, i, 0);
                 }
                 const s = parseInt(e.getAttribute('headingColumns') || '0');
                 if (s > 0) {
-                  Sx('headingColumns', s - o, t, i, 0);
+                  zx('headingColumns', s - o, t, i, 0);
                 }
               })(a, t, o, i, n),
               a
             );
           }
-          function qx(t, e, n = 0) {
+          function Jx(t, e, n = 0) {
             const o = [],
-              i = new Px(t, { startRow: n, endRow: e - 1 });
+              i = new Vx(t, { startRow: n, endRow: e - 1 });
             for (const t of i) {
               const { row: n, cellHeight: i } = t;
               n < e && e <= n + i - 1 && o.push(t);
             }
             return o;
           }
-          function Wx(t, e, n) {
+          function Xx(t, e, n) {
             const o = t.parent,
               i = o.parent,
               r = o.index,
@@ -35342,49 +35466,49 @@
             const l = parseInt(t.getAttribute('colspan') || '1');
             l > 1 && (a.colspan = l);
             const d = r + s,
-              h = [...new Px(i, { startRow: r, endRow: d, includeAllSlots: !0 })];
+              h = [...new Vx(i, { startRow: r, endRow: d, includeAllSlots: !0 })];
             let u,
               g = null;
             for (const e of h) {
               const { row: o, column: i, cell: r } = e;
               r === t && void 0 === u && (u = i),
-                void 0 !== u && u === i && o === d && (g = Ix(n, e.getPositionBefore(), a));
+                void 0 !== u && u === i && o === d && (g = Lx(n, e.getPositionBefore(), a));
             }
-            return Sx('rowspan', s, t, n), g;
+            return zx('rowspan', s, t, n), g;
           }
-          function $x(t, e) {
+          function tE(t, e) {
             const n = [],
-              o = new Px(t);
+              o = new Vx(t);
             for (const t of o) {
               const { column: o, cellWidth: i } = t;
               o < e && e <= o + i - 1 && n.push(t);
             }
             return n;
           }
-          function Kx(t, e, n, o) {
+          function eE(t, e, n, o) {
             const i = n - e,
               r = {},
               s = parseInt(t.getAttribute('colspan')) - i;
             s > 1 && (r.colspan = s);
             const a = parseInt(t.getAttribute('rowspan') || '1');
             a > 1 && (r.rowspan = a);
-            const c = Ix(o, o.createPositionAfter(t), r);
-            return Sx('colspan', i, t, o), c;
+            const c = Lx(o, o.createPositionAfter(t), r);
+            return zx('colspan', i, t, o), c;
           }
-          function Yx(t, e, n, o, i, r) {
+          function nE(t, e, n, o, i, r) {
             const s = parseInt(t.getAttribute('colspan') || '1'),
               a = parseInt(t.getAttribute('rowspan') || '1');
             if (n + s - 1 > i) {
-              Sx('colspan', i - n + 1, t, r, 1);
+              zx('colspan', i - n + 1, t, r, 1);
             }
             if (e + a - 1 > o) {
-              Sx('rowspan', o - e + 1, t, r, 1);
+              zx('rowspan', o - e + 1, t, r, 1);
             }
           }
-          function Zx(t, e) {
+          function oE(t, e) {
             const n = e.getColumns(t),
               o = new Array(n).fill(0);
-            for (const { column: e } of new Px(t)) o[e]++;
+            for (const { column: e } of new Vx(t)) o[e]++;
             const i = o.reduce((t, e, n) => (e ? t : [...t, n]), []);
             if (i.length > 0) {
               const n = i[i.length - 1];
@@ -35392,7 +35516,7 @@
             }
             return !1;
           }
-          function Qx(t, e) {
+          function iE(t, e) {
             const n = [],
               o = e.getRows(t);
             for (let e = 0; e < o; e++) {
@@ -35404,26 +35528,26 @@
             }
             return !1;
           }
-          function Jx(t, e) {
-            Zx(t, e) || Qx(t, e);
+          function rE(t, e) {
+            oE(t, e) || iE(t, e);
           }
-          function Xx(t, e) {
+          function sE(t, e) {
             const n = Array.from(
-              new Px(t, { startColumn: e.firstColumn, endColumn: e.lastColumn, row: e.lastRow }),
+              new Vx(t, { startColumn: e.firstColumn, endColumn: e.lastColumn, row: e.lastRow }),
             );
             if (n.every(({ cellHeight: t }) => 1 === t)) return e.lastRow;
             const o = n[0].cellHeight - 1;
             return e.lastRow + o;
           }
-          function tE(t, e) {
+          function aE(t, e) {
             const n = Array.from(
-              new Px(t, { startRow: e.firstRow, endRow: e.lastRow, column: e.lastColumn }),
+              new Vx(t, { startRow: e.firstRow, endRow: e.lastRow, column: e.lastColumn }),
             );
             if (n.every(({ cellWidth: t }) => 1 === t)) return e.lastColumn;
             const o = n[0].cellWidth - 1;
             return e.lastColumn + o;
           }
-          class eE extends bs {
+          class cE extends bs {
             constructor(t, e) {
               super(t),
                 (this.direction = e.direction),
@@ -35447,8 +35571,8 @@
                   s = e ? o : n,
                   a = s.parent;
                 !(function (t, e, n) {
-                  nE(t) ||
-                    (nE(e) && n.remove(n.createRangeIn(e)),
+                  lE(t) ||
+                    (lE(e) && n.remove(n.createRangeIn(e)),
                     n.move(n.createRangeIn(t), n.createPositionAt(e, 'end')));
                   n.remove(t);
                 })(s, r, t);
@@ -35457,7 +35581,7 @@
                   d = parseInt(o.getAttribute(c) || '1');
                 t.setAttribute(c, l + d, r), t.setSelection(t.createRangeIn(r));
                 const h = this.editor.plugins.get('TableUtils');
-                Jx(a.findAncestor('table'), h);
+                rE(a.findAncestor('table'), h);
               });
             }
             _getMergeableCell() {
@@ -35477,8 +35601,8 @@
                       { column: l } = n.getCellLocation(a),
                       { column: d } = n.getCellLocation(c),
                       h = parseInt(a.getAttribute('colspan') || '1'),
-                      u = Tx(n, a),
-                      g = Tx(n, c);
+                      u = Ox(n, a),
+                      g = Ox(n, c);
                     if (s && u != g) return;
                     return l + h === d ? r : void 0;
                   })(n, this.direction, e)
@@ -35495,7 +35619,7 @@
                     if (a && (c || l)) return null;
                     const d = parseInt(t.getAttribute('rowspan') || '1'),
                       h = 'down' == e ? r + d : r,
-                      u = [...new Px(i, { endRow: h })],
+                      u = [...new Vx(i, { endRow: h })],
                       g = u.find(e => e.cell === t),
                       m = g.column,
                       p = u.find(
@@ -35510,11 +35634,11 @@
               return parseInt(o.getAttribute(i) || '1') === r ? o : void 0;
             }
           }
-          function nE(t) {
+          function lE(t) {
             const e = t.getChild(0);
             return 1 == t.childCount && e.is('element', 'paragraph') && e.isEmpty;
           }
-          class oE extends bs {
+          class dE extends bs {
             refresh() {
               const t = this.editor.plugins.get('TableUtils'),
                 e = t.getSelectionAffectedTableCells(this.editor.model.document.selection),
@@ -35552,7 +35676,7 @@
               });
             }
           }
-          class iE extends bs {
+          class hE extends bs {
             refresh() {
               const t = this.editor.plugins.get('TableUtils'),
                 e = t.getSelectionAffectedTableCells(this.editor.model.document.selection),
@@ -35574,7 +35698,7 @@
                   return o.isBefore(i) ? r : r.reverse();
                 })(this.editor.model.document.selection, t),
                 o = e.parent.parent,
-                i = [...new Px(o)],
+                i = [...new Vx(o)],
                 r = {
                   first: i.find(t => t.cell === e).column,
                   last: i.find(t => t.cell === n).column,
@@ -35596,7 +35720,7 @@
               });
             }
           }
-          class rE extends bs {
+          class uE extends bs {
             refresh() {
               const t = this.editor.plugins.get('TableUtils'),
                 e = this.editor.model,
@@ -35616,10 +35740,10 @@
                 c = i.getAttribute('headingRows') || 0;
               n.change(t => {
                 if (a) {
-                  const e = qx(i, a, a > c ? c : 0);
-                  for (const { cell: n } of e) Wx(n, a, t);
+                  const e = Jx(i, a, a > c ? c : 0);
+                  for (const { cell: n } of e) Xx(n, a, t);
                 }
-                Sx('headingRows', a, i, t, 0);
+                zx('headingRows', a, i, t, 0);
               });
             }
             _isInHeading(t, e) {
@@ -35627,13 +35751,13 @@
               return !!n && t.parent.index < n;
             }
           }
-          class sE extends bs {
+          class gE extends bs {
             refresh() {
               const t = this.editor.model,
                 e = this.editor.plugins.get('TableUtils'),
                 n = e.getSelectionAffectedTableCells(t.document.selection),
                 o = n.length > 0;
-              (this.isEnabled = o), (this.value = o && n.every(t => Tx(e, t)));
+              (this.isEnabled = o), (this.value = o && n.every(t => Ox(e, t)));
             }
             execute(t = {}) {
               if (t.forceValue === this.value) return;
@@ -35645,14 +35769,14 @@
                 a = this.value ? r : s + 1;
               n.change(t => {
                 if (a) {
-                  const e = $x(i, a);
-                  for (const { cell: n, column: o } of e) Kx(n, o, a, t);
+                  const e = tE(i, a);
+                  for (const { cell: n, column: o } of e) eE(n, o, a, t);
                 }
-                Sx('headingColumns', a, i, t, 0);
+                zx('headingColumns', a, i, t, 0);
               });
             }
           }
-          class aE extends fs {
+          class mE extends fs {
             static get pluginName() {
               return 'TableUtils';
             }
@@ -35663,7 +35787,7 @@
               const e = t.parent,
                 n = e.parent,
                 o = n.getChildIndex(e),
-                i = new Px(n, { row: o });
+                i = new Vx(n, { row: o });
               for (const { cell: e, row: n, column: o } of i)
                 if (e === t) return { row: n, column: o };
             }
@@ -35672,9 +35796,9 @@
                 o = e.rows || 2,
                 i = e.columns || 2;
               return (
-                cE(t, n, 0, o, i),
-                e.headingRows && Sx('headingRows', Math.min(e.headingRows, o), n, t, 0),
-                e.headingColumns && Sx('headingColumns', Math.min(e.headingColumns, i), n, t, 0),
+                pE(t, n, 0, o, i),
+                e.headingRows && zx('headingRows', Math.min(e.headingRows, o), n, t, 0),
+                e.headingColumns && zx('headingColumns', Math.min(e.headingColumns, i), n, t, 0),
                 n
               );
             }
@@ -35690,10 +35814,10 @@
                 throw new _('tableutils-insertrows-insert-out-of-range', this, { options: e });
               n.change(e => {
                 const n = t.getAttribute('headingRows') || 0;
-                if ((n > o && Sx('headingRows', n + i, t, e, 0), !r && (0 === o || o === a)))
-                  return void cE(e, t, o, i, c);
+                if ((n > o && zx('headingRows', n + i, t, e, 0), !r && (0 === o || o === a)))
+                  return void pE(e, t, o, i, c);
                 const l = r ? Math.max(o, s) : o,
-                  d = new Px(t, { endRow: l }),
+                  d = new Vx(t, { endRow: l }),
                   h = new Array(c).fill(1);
                 for (const { row: t, column: n, cellHeight: a, cellWidth: c, cell: l } of d) {
                   const d = t + a - 1,
@@ -35708,7 +35832,7 @@
                   for (let t = 0; t < h.length; t++) {
                     const o = h[t],
                       i = e.createPositionAt(n, 'end');
-                    o > 0 && Ix(e, i, o > 1 ? { colspan: o } : void 0), (t += Math.abs(o) - 1);
+                    o > 0 && Lx(e, i, o > 1 ? { colspan: o } : void 0), (t += Math.abs(o) - 1);
                   }
                 }
               });
@@ -35723,10 +35847,10 @@
                 const r = this.getColumns(t);
                 if (0 === o || r === o) {
                   for (const n of t.getChildren())
-                    n.is('element', 'tableRow') && lE(i, e, e.createPositionAt(n, o ? 'end' : 0));
+                    n.is('element', 'tableRow') && fE(i, e, e.createPositionAt(n, o ? 'end' : 0));
                   return;
                 }
-                const s = new Px(t, { column: o, includeAllSlots: !0 });
+                const s = new Vx(t, { column: o, includeAllSlots: !0 });
                 for (const t of s) {
                   const {
                     row: n,
@@ -35740,7 +35864,7 @@
                     e.setAttribute('colspan', l + i, r);
                     const t = c + d - 1;
                     for (let e = n; e <= t; e++) s.skipRow(e);
-                  } else lE(i, e, t.getPositionBefore());
+                  } else fE(i, e, t.getPositionBefore());
                 }
               });
             }
@@ -35760,7 +35884,7 @@
                   { cellsToMove: o, cellsToTrim: i } = (function (t, { first: e, last: n }) {
                     const o = new Map(),
                       i = [];
-                    for (const { row: r, column: s, cellHeight: a, cell: c } of new Px(t, {
+                    for (const { row: r, column: s, cellHeight: a, cell: c } of new Vx(t, {
                       endRow: n,
                     })) {
                       const t = r + a - 1;
@@ -35777,7 +35901,7 @@
                   })(t, n);
                 if (o.size) {
                   !(function (t, e, n, o) {
-                    const i = new Px(t, { includeAllSlots: !0, row: e }),
+                    const i = new Vx(t, { includeAllSlots: !0, row: e }),
                       r = [...i],
                       s = t.getChild(e);
                     let a;
@@ -35785,19 +35909,19 @@
                       if (n.has(t)) {
                         const { cell: e, rowspan: i } = n.get(t),
                           r = a ? o.createPositionAfter(a) : o.createPositionAt(s, 0);
-                        o.move(o.createRangeOn(e), r), Sx('rowspan', i, e, o), (a = e);
+                        o.move(o.createRangeOn(e), r), zx('rowspan', i, e, o), (a = e);
                       } else i && (a = e);
                   })(t, s + 1, o, e);
                 }
                 for (let n = s; n >= r; n--) e.remove(t.getChild(n));
-                for (const { rowspan: t, cell: n } of i) Sx('rowspan', t, n, e);
+                for (const { rowspan: t, cell: n } of i) zx('rowspan', t, n, e);
                 !(function (t, { first: e, last: n }, o) {
                   const i = t.getAttribute('headingRows') || 0;
                   if (e < i) {
-                    Sx('headingRows', n < i ? i - (n - e + 1) : e, t, o, 0);
+                    zx('headingRows', n < i ? i - (n - e + 1) : e, t, o, 0);
                   }
                 })(t, n, e),
-                  Zx(t, this) || Qx(t, this);
+                  oE(t, this) || iE(t, this);
               });
             }
             removeColumns(t, e) {
@@ -35814,11 +35938,11 @@
                   }
                 })(t, { first: o, last: r }, e);
                 for (let n = r; n >= o; n--)
-                  for (const { cell: o, column: i, cellWidth: r } of [...new Px(t)])
+                  for (const { cell: o, column: i, cellWidth: r } of [...new Vx(t)])
                     i <= n && r > 1 && i + r > n
-                      ? Sx('colspan', r - 1, o, e)
+                      ? zx('colspan', r - 1, o, e)
                       : i === n && e.remove(o);
-                Qx(t, this) || Zx(t, this);
+                iE(t, this) || oE(t, this);
               });
             }
             splitCellVertically(t, e = 2) {
@@ -35828,15 +35952,15 @@
                 r = parseInt(t.getAttribute('colspan') || '1');
               n.change(n => {
                 if (r > 1) {
-                  const { newCellsSpan: o, updatedSpan: s } = dE(r, e);
-                  Sx('colspan', s, t, n);
+                  const { newCellsSpan: o, updatedSpan: s } = kE(r, e);
+                  zx('colspan', s, t, n);
                   const a = {};
                   o > 1 && (a.colspan = o), i > 1 && (a.rowspan = i);
-                  lE(r > e ? e - 1 : r - 1, n, n.createPositionAfter(t), a);
+                  fE(r > e ? e - 1 : r - 1, n, n.createPositionAfter(t), a);
                 }
                 if (r < e) {
                   const s = e - r,
-                    a = [...new Px(o)],
+                    a = [...new Vx(o)],
                     { column: c } = a.find(({ cell: e }) => e === t),
                     l = a.filter(
                       ({ cell: e, cellWidth: n, column: o }) =>
@@ -35844,9 +35968,9 @@
                     );
                   for (const { cell: t, cellWidth: e } of l) n.setAttribute('colspan', e + s, t);
                   const d = {};
-                  i > 1 && (d.rowspan = i), lE(s, n, n.createPositionAfter(t), d);
+                  i > 1 && (d.rowspan = i), fE(s, n, n.createPositionAfter(t), d);
                   const h = o.getAttribute('headingColumns') || 0;
-                  h > c && Sx('headingColumns', h + s, o, n);
+                  h > c && zx('headingColumns', h + s, o, n);
                 }
               });
             }
@@ -35859,9 +35983,9 @@
                 a = parseInt(t.getAttribute('colspan') || '1');
               n.change(n => {
                 if (s > 1) {
-                  const o = [...new Px(i, { startRow: r, endRow: r + s - 1, includeAllSlots: !0 })],
-                    { newCellsSpan: c, updatedSpan: l } = dE(s, e);
-                  Sx('rowspan', l, t, n);
+                  const o = [...new Vx(i, { startRow: r, endRow: r + s - 1, includeAllSlots: !0 })],
+                    { newCellsSpan: c, updatedSpan: l } = kE(s, e);
+                  zx('rowspan', l, t, n);
                   const { column: d } = o.find(({ cell: e }) => e === t),
                     h = {};
                   c > 1 && (h.rowspan = c), a > 1 && (h.colspan = a);
@@ -35870,21 +35994,21 @@
                     o >= r + l &&
                       e === d &&
                       (o + r + l) % c == 0 &&
-                      lE(1, n, t.getPositionBefore(), h);
+                      fE(1, n, t.getPositionBefore(), h);
                   }
                 }
                 if (s < e) {
                   const o = e - s,
-                    c = [...new Px(i, { startRow: 0, endRow: r })];
+                    c = [...new Vx(i, { startRow: 0, endRow: r })];
                   for (const { cell: e, cellHeight: i, row: s } of c)
                     if (e !== t && s + i > r) {
                       const t = i + o;
                       n.setAttribute('rowspan', t, e);
                     }
                   const l = {};
-                  a > 1 && (l.colspan = a), cE(n, i, r + 1, o, 1, l);
+                  a > 1 && (l.colspan = a), pE(n, i, r + 1, o, 1, l);
                   const d = i.getAttribute('headingRows') || 0;
-                  d > r && Sx('headingRows', d + o, i, n);
+                  d > r && zx('headingRows', d + o, i, n);
                 }
               });
             }
@@ -35901,7 +36025,7 @@
               );
             }
             createTableWalker(t, e = {}) {
-              return new Px(t, e);
+              return new Vx(t, e);
             }
             getSelectedTableCells(t) {
               const e = [];
@@ -35929,7 +36053,7 @@
             }
             getColumnIndexes(t) {
               const e = t[0].findAncestor('table'),
-                n = [...new Px(e)].filter(e => t.includes(e.cell)).map(t => t.column);
+                n = [...new Vx(e)].filter(e => t.includes(e.cell)).map(t => t.column);
               return this._getFirstLastIndexesObject(n);
             }
             isSelectionRectangular(t) {
@@ -35959,7 +36083,7 @@
               return i == o;
             }
             sortRanges(t) {
-              return Array.from(t).sort(hE);
+              return Array.from(t).sort(bE);
             }
             _getFirstLastIndexesObject(t) {
               const e = t.sort((t, e) => t - e);
@@ -35978,34 +36102,34 @@
               return t < n === e < n;
             }
           }
-          function cE(t, e, n, o, i, r = {}) {
+          function pE(t, e, n, o, i, r = {}) {
             for (let s = 0; s < o; s++) {
               const o = t.createElement('tableRow');
-              t.insert(o, e, n), lE(i, t, t.createPositionAt(o, 'end'), r);
+              t.insert(o, e, n), fE(i, t, t.createPositionAt(o, 'end'), r);
             }
           }
-          function lE(t, e, n, o = {}) {
-            for (let i = 0; i < t; i++) Ix(e, n, o);
+          function fE(t, e, n, o = {}) {
+            for (let i = 0; i < t; i++) Lx(e, n, o);
           }
-          function dE(t, e) {
+          function kE(t, e) {
             if (t < e) return { newCellsSpan: 1, updatedSpan: 1 };
             const n = Math.floor(t / e);
             return { newCellsSpan: n, updatedSpan: t - n * e + n };
           }
-          function hE(t, e) {
+          function bE(t, e) {
             const n = t.start,
               o = e.start;
             return n.isBefore(o) ? -1 : 1;
           }
-          class uE extends bs {
+          class wE extends bs {
             refresh() {
-              const t = this.editor.plugins.get(aE),
+              const t = this.editor.plugins.get(mE),
                 e = t.getSelectedTableCells(this.editor.model.document.selection);
               this.isEnabled = t.isSelectionRectangular(e);
             }
             execute() {
               const t = this.editor.model,
-                e = this.editor.plugins.get(aE);
+                e = this.editor.plugins.get(mE);
               t.change(n => {
                 const o = e.getSelectedTableCells(t.document.selection),
                   i = o.shift(),
@@ -36014,34 +36138,34 @@
                       i = 0;
                     for (const t of e) {
                       const { row: e, column: r } = n.getCellLocation(t);
-                      (o = pE(t, r, o, 'colspan')), (i = pE(t, e, i, 'rowspan'));
+                      (o = _E(t, r, o, 'colspan')), (i = _E(t, e, i, 'rowspan'));
                     }
                     const { row: r, column: s } = n.getCellLocation(t),
                       a = o - s,
                       c = i - r;
                     return { mergeWidth: a, mergeHeight: c };
                   })(i, o, e);
-                Sx('colspan', r, i, n), Sx('rowspan', s, i, n);
-                for (const t of o) gE(t, i, n);
-                Jx(i.findAncestor('table'), e), n.setSelection(i, 'in');
+                zx('colspan', r, i, n), zx('rowspan', s, i, n);
+                for (const t of o) AE(t, i, n);
+                rE(i.findAncestor('table'), e), n.setSelection(i, 'in');
               });
             }
           }
-          function gE(t, e, n) {
-            mE(t) ||
-              (mE(e) && n.remove(n.createRangeIn(e)),
+          function AE(t, e, n) {
+            CE(t) ||
+              (CE(e) && n.remove(n.createRangeIn(e)),
               n.move(n.createRangeIn(t), n.createPositionAt(e, 'end'))),
               n.remove(t);
           }
-          function mE(t) {
+          function CE(t) {
             const e = t.getChild(0);
             return 1 == t.childCount && e.is('element', 'paragraph') && e.isEmpty;
           }
-          function pE(t, e, n, o) {
+          function _E(t, e, n, o) {
             const i = parseInt(t.getAttribute(o) || '1');
             return Math.max(n, e + i);
           }
-          class fE extends bs {
+          class vE extends bs {
             constructor(t) {
               super(t), (this.affectsData = !1);
             }
@@ -36065,7 +36189,7 @@
               });
             }
           }
-          class kE extends bs {
+          class yE extends bs {
             constructor(t) {
               super(t), (this.affectsData = !1);
             }
@@ -36087,14 +36211,14 @@
                 c = Math.min(s.column, a.column),
                 l = Math.max(s.column, a.column),
                 d = [];
-              for (const t of new Px(r, { startColumn: c, endColumn: l }))
+              for (const t of new Vx(r, { startColumn: c, endColumn: l }))
                 d.push(e.createRangeOn(t.cell));
               e.change(t => {
                 t.setSelection(d);
               });
             }
           }
-          function bE(t) {
+          function xE(t) {
             t.document.registerPostFixer(e =>
               (function (t, e) {
                 const n = e.document.differ.getChanges();
@@ -36106,14 +36230,14 @@
                     ('insert' != e.type && 'remove' != e.type) ||
                       ('tableRow' != e.name && 'tableCell' != e.name) ||
                       (n = e.position.findAncestor('table')),
-                    CE(e) && (n = e.range.start.findAncestor('table')),
-                    n && !i.has(n) && ((o = wE(n, t) || o), (o = AE(n, t) || o), i.add(n));
+                    SE(e) && (n = e.range.start.findAncestor('table')),
+                    n && !i.has(n) && ((o = EE(n, t) || o), (o = DE(n, t) || o), i.add(n));
                 }
                 return o;
               })(e, t),
             );
           }
-          function wE(t, e) {
+          function EE(t, e) {
             let n = !1;
             const o = (function (t) {
               const e = parseInt(t.getAttribute('headingRows') || '0'),
@@ -36122,7 +36246,7 @@
                   0,
                 ),
                 o = [];
-              for (const { row: i, cell: r, cellHeight: s } of new Px(t)) {
+              for (const { row: i, cell: r, cellHeight: s } of new Vx(t)) {
                 if (s < 2) continue;
                 const t = i < e ? e : n;
                 if (i + s > t) {
@@ -36134,15 +36258,15 @@
             })(t);
             if (o.length) {
               n = !0;
-              for (const t of o) Sx('rowspan', t.rowspan, t.cell, e, 1);
+              for (const t of o) zx('rowspan', t.rowspan, t.cell, e, 1);
             }
             return n;
           }
-          function AE(t, e) {
+          function DE(t, e) {
             let n = !1;
             const o = (function (t) {
                 const e = new Array(t.childCount).fill(0);
-                for (const { rowIndex: n } of new Px(t, { includeAllSlots: !0 })) e[n]++;
+                for (const { rowIndex: n } of new Vx(t, { includeAllSlots: !0 })) e[n]++;
                 return e;
               })(t),
               i = [];
@@ -36159,75 +36283,75 @@
               for (const [i, s] of r.entries()) {
                 const r = o - s;
                 if (r) {
-                  for (let n = 0; n < r; n++) Ix(e, e.createPositionAt(t.getChild(i), 'end'));
+                  for (let n = 0; n < r; n++) Lx(e, e.createPositionAt(t.getChild(i), 'end'));
                   n = !0;
                 }
               }
             }
             return n;
           }
-          function CE(t) {
+          function SE(t) {
             if ('attribute' !== t.type) return !1;
             const e = t.attributeKey;
             return 'headingRows' === e || 'colspan' === e || 'rowspan' === e;
           }
-          function _E(t) {
+          function IE(t) {
             t.document.registerPostFixer(e =>
               (function (t, e) {
                 const n = e.document.differ.getChanges();
                 let o = !1;
                 for (const e of n)
-                  'insert' == e.type && 'table' == e.name && (o = vE(e.position.nodeAfter, t) || o),
+                  'insert' == e.type && 'table' == e.name && (o = TE(e.position.nodeAfter, t) || o),
                     'insert' == e.type &&
                       'tableRow' == e.name &&
-                      (o = yE(e.position.nodeAfter, t) || o),
+                      (o = ME(e.position.nodeAfter, t) || o),
                     'insert' == e.type &&
                       'tableCell' == e.name &&
-                      (o = xE(e.position.nodeAfter, t) || o),
+                      (o = BE(e.position.nodeAfter, t) || o),
                     ('remove' != e.type && 'insert' != e.type) ||
-                      !EE(e) ||
-                      (o = xE(e.position.parent, t) || o);
+                      !NE(e) ||
+                      (o = BE(e.position.parent, t) || o);
                 return o;
               })(e, t),
             );
           }
-          function vE(t, e) {
+          function TE(t, e) {
             let n = !1;
-            for (const o of t.getChildren()) o.is('element', 'tableRow') && (n = yE(o, e) || n);
+            for (const o of t.getChildren()) o.is('element', 'tableRow') && (n = ME(o, e) || n);
             return n;
           }
-          function yE(t, e) {
+          function ME(t, e) {
             let n = !1;
-            for (const o of t.getChildren()) n = xE(o, e) || n;
+            for (const o of t.getChildren()) n = BE(o, e) || n;
             return n;
           }
-          function xE(t, e) {
+          function BE(t, e) {
             if (0 == t.childCount) return e.insertElement('paragraph', t), !0;
             const n = Array.from(t.getChildren()).filter(t => t.is('$text'));
             for (const t of n) e.wrap(e.createRangeOn(t), 'paragraph');
             return !!n.length;
           }
-          function EE(t) {
+          function NE(t) {
             return (
               !!t.position.parent.is('element', 'tableCell') &&
               (('insert' == t.type && '$text' == t.name) || 'remove' == t.type)
             );
           }
-          function DE(t, e) {
+          function PE(t, e) {
             if (!t.is('element', 'paragraph')) return !1;
             const n = e.toViewElement(t);
-            return !!n && jx(t) !== n.is('element', 'span');
+            return !!n && Wx(t) !== n.is('element', 'span');
           }
-          var SE = n(3881),
-            IE = {
+          var zE = n(3881),
+            LE = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(SE.Z, IE);
-          SE.Z.locals;
-          class TE extends fs {
+          Vi()(zE.Z, LE);
+          zE.Z.locals;
+          class OE extends fs {
             constructor(t) {
               super(t), (this._additionalSlots = []);
             }
@@ -36235,14 +36359,14 @@
               return 'TableEditing';
             }
             static get requires() {
-              return [aE];
+              return [mE];
             }
             init() {
               const t = this.editor,
                 e = t.model,
                 n = e.schema,
                 o = t.conversion,
-                i = t.plugins.get(aE);
+                i = t.plugins.get(mE);
               n.register('table', {
                 inheritAllFrom: '$blockObject',
                 allowAttributes: ['headingRows', 'headingColumns'],
@@ -36270,18 +36394,18 @@
                       : n.consumable.revert(e.viewItem, { name: !0, classes: 'table' });
                   });
                 }),
-                o.for('upcast').add(Mx()),
+                o.for('upcast').add(Rx()),
                 o
                   .for('editingDowncast')
                   .elementToStructure({
                     model: { name: 'table', attributes: ['headingRows'] },
-                    view: Lx(i, { asWidget: !0, additionalSlots: this._additionalSlots }),
+                    view: Ux(i, { asWidget: !0, additionalSlots: this._additionalSlots }),
                   }),
                 o
                   .for('dataDowncast')
                   .elementToStructure({
                     model: { name: 'table', attributes: ['headingRows'] },
-                    view: Lx(i, { additionalSlots: this._additionalSlots }),
+                    view: Ux(i, { additionalSlots: this._additionalSlots }),
                   }),
                 o.for('upcast').elementToElement({ model: 'tableRow', view: 'tr' }),
                 o.for('upcast').add(t => {
@@ -36302,61 +36426,61 @@
                   }),
                 o.for('upcast').elementToElement({ model: 'tableCell', view: 'td' }),
                 o.for('upcast').elementToElement({ model: 'tableCell', view: 'th' }),
-                o.for('upcast').add(Bx('td')),
-                o.for('upcast').add(Bx('th')),
+                o.for('upcast').add(jx('td')),
+                o.for('upcast').add(jx('th')),
                 o
                   .for('editingDowncast')
-                  .elementToElement({ model: 'tableCell', view: Ox({ asWidget: !0 }) }),
-                o.for('dataDowncast').elementToElement({ model: 'tableCell', view: Ox() }),
+                  .elementToElement({ model: 'tableCell', view: Gx({ asWidget: !0 }) }),
+                o.for('dataDowncast').elementToElement({ model: 'tableCell', view: Gx() }),
                 o
                   .for('editingDowncast')
                   .elementToElement({
                     model: 'paragraph',
-                    view: Rx({ asWidget: !0 }),
+                    view: qx({ asWidget: !0 }),
                     converterPriority: 'high',
                   }),
                 o
                   .for('dataDowncast')
-                  .elementToElement({ model: 'paragraph', view: Rx(), converterPriority: 'high' }),
+                  .elementToElement({ model: 'paragraph', view: qx(), converterPriority: 'high' }),
                 o.for('downcast').attributeToAttribute({ model: 'colspan', view: 'colspan' }),
                 o
                   .for('upcast')
                   .attributeToAttribute({
-                    model: { key: 'colspan', value: ME('colspan') },
+                    model: { key: 'colspan', value: RE('colspan') },
                     view: 'colspan',
                   }),
                 o.for('downcast').attributeToAttribute({ model: 'rowspan', view: 'rowspan' }),
                 o
                   .for('upcast')
                   .attributeToAttribute({
-                    model: { key: 'rowspan', value: ME('rowspan') },
+                    model: { key: 'rowspan', value: RE('rowspan') },
                     view: 'rowspan',
                   }),
                 t.config.define('table.defaultHeadings.rows', 0),
                 t.config.define('table.defaultHeadings.columns', 0),
-                t.commands.add('insertTable', new Fx(t)),
-                t.commands.add('insertTableRowAbove', new Vx(t, { order: 'above' })),
-                t.commands.add('insertTableRowBelow', new Vx(t, { order: 'below' })),
-                t.commands.add('insertTableColumnLeft', new Hx(t, { order: 'left' })),
-                t.commands.add('insertTableColumnRight', new Hx(t, { order: 'right' })),
-                t.commands.add('removeTableRow', new oE(t)),
-                t.commands.add('removeTableColumn', new iE(t)),
-                t.commands.add('splitTableCellVertically', new Ux(t, { direction: 'vertically' })),
+                t.commands.add('insertTable', new $x(t)),
+                t.commands.add('insertTableRowAbove', new Kx(t, { order: 'above' })),
+                t.commands.add('insertTableRowBelow', new Kx(t, { order: 'below' })),
+                t.commands.add('insertTableColumnLeft', new Yx(t, { order: 'left' })),
+                t.commands.add('insertTableColumnRight', new Yx(t, { order: 'right' })),
+                t.commands.add('removeTableRow', new dE(t)),
+                t.commands.add('removeTableColumn', new hE(t)),
+                t.commands.add('splitTableCellVertically', new Zx(t, { direction: 'vertically' })),
                 t.commands.add(
                   'splitTableCellHorizontally',
-                  new Ux(t, { direction: 'horizontally' }),
+                  new Zx(t, { direction: 'horizontally' }),
                 ),
-                t.commands.add('mergeTableCells', new uE(t)),
-                t.commands.add('mergeTableCellRight', new eE(t, { direction: 'right' })),
-                t.commands.add('mergeTableCellLeft', new eE(t, { direction: 'left' })),
-                t.commands.add('mergeTableCellDown', new eE(t, { direction: 'down' })),
-                t.commands.add('mergeTableCellUp', new eE(t, { direction: 'up' })),
-                t.commands.add('setTableColumnHeader', new sE(t)),
-                t.commands.add('setTableRowHeader', new rE(t)),
-                t.commands.add('selectTableRow', new fE(t)),
-                t.commands.add('selectTableColumn', new kE(t)),
-                bE(e),
-                _E(e),
+                t.commands.add('mergeTableCells', new wE(t)),
+                t.commands.add('mergeTableCellRight', new cE(t, { direction: 'right' })),
+                t.commands.add('mergeTableCellLeft', new cE(t, { direction: 'left' })),
+                t.commands.add('mergeTableCellDown', new cE(t, { direction: 'down' })),
+                t.commands.add('mergeTableCellUp', new cE(t, { direction: 'up' })),
+                t.commands.add('setTableColumnHeader', new gE(t)),
+                t.commands.add('setTableRowHeader', new uE(t)),
+                t.commands.add('selectTableRow', new vE(t)),
+                t.commands.add('selectTableColumn', new yE(t)),
+                xE(e),
+                IE(e),
                 this.listenTo(e.document, 'change:data', () => {
                   !(function (t, e) {
                     const n = t.document.differ;
@@ -36375,7 +36499,7 @@
                       if (!n) continue;
                       const i = n.getAttribute('headingRows') || 0,
                         r = n.getAttribute('headingColumns') || 0,
-                        s = new Px(n);
+                        s = new Vx(n);
                       for (const t of s) {
                         const n = t.row < i || t.column < r ? 'th' : 'td',
                           s = e.mapper.toViewElement(t.cell);
@@ -36394,7 +36518,7 @@
                         e.is('element', 'tableCell') && o.add(e);
                       }
                       for (const t of o.values()) {
-                        const n = Array.from(t.getChildren()).filter(t => DE(t, e.mapper));
+                        const n = Array.from(t.getChildren()).filter(t => PE(t, e.mapper));
                         for (const t of n) e.reconvertItem(t);
                       }
                     })(e, t.editing);
@@ -36404,22 +36528,22 @@
               this._additionalSlots.push(t);
             }
           }
-          function ME(t) {
+          function RE(t) {
             return e => {
               const n = parseInt(e.getAttribute(t));
               return Number.isNaN(n) || n <= 0 ? null : n;
             };
           }
-          var BE = n(1613),
-            NE = {
+          var jE = n(1613),
+            FE = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(BE.Z, NE);
-          BE.Z.locals;
-          class PE extends Gi {
+          Vi()(jE.Z, FE);
+          jE.Z.locals;
+          class VE extends Gi {
             constructor(t) {
               super(t);
               const e = this.bindTemplate;
@@ -36514,7 +36638,7 @@
               return this.createCollection(t);
             }
           }
-          class zE extends fs {
+          class HE extends fs {
             static get pluginName() {
               return 'TableUI';
             }
@@ -36524,7 +36648,7 @@
                 n = 'ltr' === t.locale.contentLanguageDirection;
               t.ui.componentFactory.add('insertTable', n => {
                 const o = t.commands.get('insertTable'),
-                  i = Am(n);
+                  i = vm(n);
                 let r;
                 return (
                   i.bind('isEnabled').to(o),
@@ -36535,7 +36659,7 @@
                   }),
                   i.on('change:isOpen', () => {
                     r ||
-                      ((r = new PE(n)),
+                      ((r = new VE(n)),
                       i.panelView.children.add(r),
                       r.delegate('execute').to(i),
                       i.on('execute', () => {
@@ -36672,7 +36796,7 @@
             }
             _prepareDropdown(t, e, n, o) {
               const i = this.editor,
-                r = Am(o),
+                r = vm(o),
                 s = this._fillDropdownWithListOptions(r, n);
               return (
                 r.buttonView.set({ label: t, icon: e, tooltip: !0 }),
@@ -36685,7 +36809,7 @@
             }
             _prepareMergeSplitButtonDropdown(t, e, n, o) {
               const i = this.editor,
-                r = Am(o, pm),
+                r = vm(o, bm),
                 s = 'mergeTableCells',
                 a = i.commands.get(s),
                 c = this._fillDropdownWithListOptions(r, n);
@@ -36705,13 +36829,13 @@
               const n = this.editor,
                 o = [],
                 i = new Ii();
-              for (const t of e) LE(t, n, o, i);
-              return vm(t, i), o;
+              for (const t of e) UE(t, n, o, i);
+              return Em(t, i), o;
             }
           }
-          function LE(t, e, n, o) {
+          function UE(t, e, n, o) {
             if ('button' === t.type || 'switchbutton' === t.type) {
-              const o = (t.model = new tf(t.model)),
+              const o = (t.model = new of(t.model)),
                 { commandName: i, bindIsOn: r } = t.model,
                 s = e.commands.get(i);
               n.push(s),
@@ -36722,21 +36846,21 @@
             }
             o.add(t);
           }
-          var OE = n(6945),
-            RE = {
+          var GE = n(6945),
+            qE = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(OE.Z, RE);
-          OE.Z.locals;
-          class jE extends fs {
+          Vi()(GE.Z, qE);
+          GE.Z.locals;
+          class WE extends fs {
             static get pluginName() {
               return 'TableSelection';
             }
             static get requires() {
-              return [aE, aE];
+              return [mE, mE];
             }
             init() {
               const t = this.editor,
@@ -36755,13 +36879,13 @@
                 this._enablePluginDisabling();
             }
             getSelectedTableCells() {
-              const t = this.editor.plugins.get(aE),
+              const t = this.editor.plugins.get(mE),
                 e = this.editor.model.document.selection,
                 n = t.getSelectedTableCells(e);
               return 0 == n.length ? null : n;
             }
             getSelectionAsFragment() {
-              const t = this.editor.plugins.get(aE),
+              const t = this.editor.plugins.get(mE),
                 e = this.getSelectedTableCells();
               return e
                 ? this.editor.model.change(n => {
@@ -36773,9 +36897,9 @@
                       d = r;
                     if (t.isSelectionRectangular(e)) {
                       const t = { firstColumn: i, lastColumn: r, firstRow: s, lastRow: a };
-                      (l = Xx(c, t)), (d = tE(c, t));
+                      (l = sE(c, t)), (d = aE(c, t));
                     }
-                    const h = Gx(c, { startRow: s, startColumn: i, endRow: l, endColumn: d }, n);
+                    const h = Qx(c, { startRow: s, startColumn: i, endRow: l, endColumn: d }, n);
                     return n.insert(h, o, 0), o;
                   })
                 : null;
@@ -36839,7 +36963,7 @@
               });
             }
             _handleDeleteContent(t, e) {
-              const n = this.editor.plugins.get(aE),
+              const n = this.editor.plugins.get(mE),
                 o = e[0],
                 i = e[1],
                 r = this.editor.model,
@@ -36875,7 +36999,7 @@
                 c = Math.max(o.column, i.column),
                 l = new Array(s - r + 1).fill(null).map(() => []),
                 d = { startRow: r, endRow: s, startColumn: a, endColumn: c };
-              for (const { row: e, cell: n } of new Px(t.findAncestor('table'), d))
+              for (const { row: e, cell: n } of new Vx(t.findAncestor('table'), d))
                 l[e - r].push(n);
               const h = i.row < o.row,
                 u = i.column < o.column;
@@ -36886,12 +37010,12 @@
               );
             }
           }
-          class FE extends fs {
+          class $E extends fs {
             static get pluginName() {
               return 'TableClipboard';
             }
             static get requires() {
-              return [jE, aE];
+              return [WE, mE];
             }
             init() {
               const t = this.editor,
@@ -36907,7 +37031,7 @@
                 this.decorate('_replaceTableSlotCell');
             }
             _onCopyCut(t, e) {
-              const n = this.editor.plugins.get(jE);
+              const n = this.editor.plugins.get(WE);
               if (!n.getSelectedTableCells()) return;
               if (
                 'cut' == t.name &&
@@ -36927,7 +37051,7 @@
             _onInsertContent(t, e, n) {
               if (n && !n.is('documentSelection')) return;
               const o = this.editor.model,
-                i = this.editor.plugins.get(aE);
+                i = this.editor.plugins.get(mE);
               let r = this.getTableIfOnlyTableInContent(e, o);
               if (!r) return;
               const s = i.getSelectionAffectedTableCells(o.document.selection);
@@ -36960,12 +37084,12 @@
                               const { firstRow: o, lastRow: i, firstColumn: r, lastColumn: s } = e,
                                 a = { first: o, last: i },
                                 c = { first: r, last: s };
-                              HE(t, r, a, n),
-                                HE(t, s + 1, a, n),
-                                VE(t, o, c, n),
-                                VE(t, i + 1, c, n, o);
+                              YE(t, r, a, n),
+                                YE(t, s + 1, a, n),
+                                KE(t, o, c, n),
+                                KE(t, i + 1, c, n, o);
                             })(i, a, n)
-                          : ((a.lastRow = Xx(i, a)), (a.lastColumn = tE(i, a)));
+                          : ((a.lastRow = sE(i, a)), (a.lastColumn = aE(i, a)));
                         return a;
                       })(s, e, t, i),
                       o = n.lastRow - n.firstRow + 1,
@@ -36976,7 +37100,7 @@
                         endRow: Math.min(o, e.height) - 1,
                         endColumn: Math.min(a, e.width) - 1,
                       };
-                    r = Gx(r, c, t);
+                    r = Qx(r, c, t);
                     const l = s[0].findAncestor('table'),
                       d = this._replaceSelectedCellsWithPasted(r, e, l, n, t);
                     if (this.editor.plugins.get('TableSelection').isEnabled) {
@@ -36984,17 +37108,17 @@
                       t.setSelection(e);
                     } else t.setSelection(d[0], 0);
                   }))
-                : Jx(r, i);
+                : rE(r, i);
             }
             _replaceSelectedCellsWithPasted(t, e, n, o, i) {
               const { width: r, height: s } = e,
                 a = (function (t, e, n) {
                   const o = new Array(n).fill(null).map(() => new Array(e).fill(null));
-                  for (const { column: e, row: n, cell: i } of new Px(t)) o[n][e] = i;
+                  for (const { column: e, row: n, cell: i } of new Vx(t)) o[n][e] = i;
                   return o;
                 })(t, r, s),
                 c = [
-                  ...new Px(n, {
+                  ...new Vx(n, {
                     startRow: o.firstRow,
                     endRow: o.lastRow,
                     startColumn: o.firstColumn,
@@ -37013,7 +37137,7 @@
                   g = u ? i.cloneElement(u) : null,
                   m = this._replaceTableSlotCell(t, g, d, i);
                 m &&
-                  (Yx(m, e, n, o.lastRow, o.lastColumn, i),
+                  (nE(m, e, n, o.lastRow, o.lastColumn, i),
                   l.push(m),
                   (d = i.createPositionAfter(m)));
               }
@@ -37022,11 +37146,11 @@
                 g = o.firstRow < h && h <= o.lastRow,
                 m = o.firstColumn < u && u <= o.lastColumn;
               if (g) {
-                const t = VE(n, h, { first: o.firstColumn, last: o.lastColumn }, i, o.firstRow);
+                const t = KE(n, h, { first: o.firstColumn, last: o.lastColumn }, i, o.firstRow);
                 l.push(...t);
               }
               if (m) {
-                const t = HE(n, u, { first: o.firstRow, last: o.lastRow }, i);
+                const t = YE(n, u, { first: o.firstRow, last: o.lastRow }, i);
                 l.push(...t);
               }
               return l;
@@ -37050,29 +37174,29 @@
               return null;
             }
           }
-          function VE(t, e, n, o, i = 0) {
+          function KE(t, e, n, o, i = 0) {
             if (e < 1) return;
-            return qx(t, e, i)
-              .filter(({ column: t, cellWidth: e }) => UE(t, e, n))
-              .map(({ cell: t }) => Wx(t, e, o));
+            return Jx(t, e, i)
+              .filter(({ column: t, cellWidth: e }) => ZE(t, e, n))
+              .map(({ cell: t }) => Xx(t, e, o));
           }
-          function HE(t, e, n, o) {
+          function YE(t, e, n, o) {
             if (e < 1) return;
-            return $x(t, e)
-              .filter(({ row: t, cellHeight: e }) => UE(t, e, n))
-              .map(({ cell: t, column: n }) => Kx(t, n, e, o));
+            return tE(t, e)
+              .filter(({ row: t, cellHeight: e }) => ZE(t, e, n))
+              .map(({ cell: t, column: n }) => eE(t, n, e, o));
           }
-          function UE(t, e, n) {
+          function ZE(t, e, n) {
             const o = t + e - 1,
               { first: i, last: r } = n;
             return (t >= i && t <= r) || (t < i && o >= i);
           }
-          class GE extends fs {
+          class QE extends fs {
             static get pluginName() {
               return 'TableKeyboard';
             }
             static get requires() {
-              return [jE, aE];
+              return [WE, mE];
             }
             init() {
               const t = this.editor.editing.view.document;
@@ -37096,7 +37220,7 @@
             }
             _handleTab(t, e) {
               const n = this.editor,
-                o = this.editor.plugins.get(aE),
+                o = this.editor.plugins.get(mE),
                 i = this.editor.plugins.get('TableSelection'),
                 r = n.model.document.selection,
                 s = !e.shiftKey;
@@ -37137,7 +37261,7 @@
                 (e.preventDefault(), e.stopPropagation(), t.stop());
             }
             _handleArrowKeys(t, e) {
-              const n = this.editor.plugins.get(aE),
+              const n = this.editor.plugins.get(mE),
                 o = this.editor.plugins.get('TableSelection'),
                 i = this.editor.model,
                 r = i.document.selection,
@@ -37180,7 +37304,7 @@
             _navigateFromCellInDirection(t, e, n = !1) {
               const o = this.editor.model,
                 i = t.findAncestor('table'),
-                r = [...new Px(i, { includeAllSlots: !0 })],
+                r = [...new Vx(i, { includeAllSlots: !0 })],
                 { row: s, column: a } = r[r.length - 1],
                 c = r.find(({ cell: e }) => e == t);
               let { row: l, column: d } = c;
@@ -37216,7 +37340,7 @@
               }
             }
           }
-          class qE extends el {
+          class JE extends el {
             constructor() {
               super(...arguments), (this.domEventType = ['mousemove', 'mouseleave']);
             }
@@ -37224,23 +37348,23 @@
               this.fire(t.type, t);
             }
           }
-          class WE extends fs {
+          class XE extends fs {
             static get pluginName() {
               return 'TableMouse';
             }
             static get requires() {
-              return [jE, aE];
+              return [WE, mE];
             }
             init() {
-              this.editor.editing.view.addObserver(qE),
+              this.editor.editing.view.addObserver(JE),
                 this._enableShiftClickSelection(),
                 this._enableMouseDragSelection();
             }
             _enableShiftClickSelection() {
               const t = this.editor,
-                e = t.plugins.get(aE);
+                e = t.plugins.get(mE);
               let n = !1;
-              const o = t.plugins.get(jE);
+              const o = t.plugins.get(WE);
               this.listenTo(t.editing.view.document, 'mousedown', (i, r) => {
                 const s = t.model.document.selection;
                 if (!this.isEnabled || !o.isEnabled) return;
@@ -37248,7 +37372,7 @@
                 const a = o.getAnchorCell() || e.getTableCellsContainingSelection(s)[0];
                 if (!a) return;
                 const c = this._getModelTableCellFromDomEvent(r);
-                c && $E(a, c) && ((n = !0), o.setCellSelection(a, c), r.preventDefault());
+                c && tD(a, c) && ((n = !0), o.setCellSelection(a, c), r.preventDefault());
               }),
                 this.listenTo(t.editing.view.document, 'mouseup', () => {
                   n = !1;
@@ -37268,7 +37392,7 @@
                 n,
                 o = !1,
                 i = !1;
-              const r = t.plugins.get(jE);
+              const r = t.plugins.get(WE);
               this.listenTo(t.editing.view.document, 'mousedown', (t, n) => {
                 this.isEnabled &&
                   r.isEnabled &&
@@ -37281,7 +37405,7 @@
                   if (!s.domEvent.buttons) return;
                   if (!e) return;
                   const a = this._getModelTableCellFromDomEvent(s);
-                  a && $E(e, a) && ((n = a), o || n == e || (o = !0)),
+                  a && tD(e, a) && ((n = a), o || n == e || (o = !0)),
                     o && ((i = !0), r.setCellSelection(e, n), s.preventDefault());
                 }),
                 this.listenTo(t.editing.view.document, 'mouseup', () => {
@@ -37304,45 +37428,10 @@
                 .parent.findAncestor('tableCell', { includeSelf: !0 });
             }
           }
-          function $E(t, e) {
+          function tD(t, e) {
             return t.parent.parent == e.parent.parent;
           }
-          var KE = n(6306),
-            YE = {
-              injectType: 'singletonStyleTag',
-              attributes: { 'data-cke': !0 },
-              insert: 'head',
-              singleton: !0,
-            };
-          Vi()(KE.Z, YE);
-          KE.Z.locals;
-          function ZE(t) {
-            const e = t.getSelectedElement();
-            return e && JE(e) ? e : null;
-          }
-          function QE(t) {
-            const e = t.getFirstPosition();
-            if (!e) return null;
-            let n = e.parent;
-            for (; n; ) {
-              if (n.is('element') && JE(n)) return n;
-              n = n.parent;
-            }
-            return null;
-          }
-          function JE(t) {
-            return !!t.getCustomProperty('table') && Nk(t);
-          }
-          var XE = n(7368),
-            tD = {
-              injectType: 'singletonStyleTag',
-              attributes: { 'data-cke': !0 },
-              insert: 'head',
-              singleton: !0,
-            };
-          Vi()(XE.Z, tD);
-          XE.Z.locals;
-          var eD = n(9247),
+          var eD = n(6306),
             nD = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
@@ -37351,50 +37440,42 @@
             };
           Vi()(eD.Z, nD);
           eD.Z.locals;
-          var oD = n(4070),
-            iD = {
+          function oD(t) {
+            const e = t.getSelectedElement();
+            return e && rD(e) ? e : null;
+          }
+          function iD(t) {
+            const e = t.getFirstPosition();
+            if (!e) return null;
+            let n = e.parent;
+            for (; n; ) {
+              if (n.is('element') && rD(n)) return n;
+              n = n.parent;
+            }
+            return null;
+          }
+          function rD(t) {
+            return !!t.getCustomProperty('table') && Lk(t);
+          }
+          var sD = n(7368),
+            aD = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(oD.Z, iD);
-          oD.Z.locals;
-          var rD = n(6237),
-            sD = {
+          Vi()(sD.Z, aD);
+          sD.Z.locals;
+          var cD = n(9247),
+            lD = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(rD.Z, sD);
-          rD.Z.locals;
-          var aD = n(5087),
-            cD = {
-              injectType: 'singletonStyleTag',
-              attributes: { 'data-cke': !0 },
-              insert: 'head',
-              singleton: !0,
-            };
-          Vi()(aD.Z, cD);
-          aD.Z.locals;
-          const lD = _p.defaultPositions;
-          lD.northArrowSouth,
-            lD.northArrowSouthWest,
-            lD.northArrowSouthEast,
-            lD.southArrowNorth,
-            lD.southArrowNorthWest,
-            lD.southArrowNorthEast,
-            lD.viewportStickyNorth;
-          Object.defineProperty,
-            Object.getOwnPropertySymbols,
-            Object.prototype.hasOwnProperty,
-            Object.prototype.propertyIsEnumerable;
-          Object.defineProperty,
-            Object.getOwnPropertySymbols,
-            Object.prototype.hasOwnProperty,
-            Object.prototype.propertyIsEnumerable;
-          var dD = n(7341),
+          Vi()(cD.Z, lD);
+          cD.Z.locals;
+          var dD = n(4070),
             hD = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
@@ -37403,7 +37484,7 @@
             };
           Vi()(dD.Z, hD);
           dD.Z.locals;
-          var uD = n(2128),
+          var uD = n(6237),
             gD = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
@@ -37412,7 +37493,7 @@
             };
           Vi()(uD.Z, gD);
           uD.Z.locals;
-          var mD = n(4101),
+          var mD = n(5087),
             pD = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
@@ -37421,22 +37502,65 @@
             };
           Vi()(mD.Z, pD);
           mD.Z.locals;
-          var fD = Object.defineProperty,
-            kD = Object.getOwnPropertySymbols,
-            bD = Object.prototype.hasOwnProperty,
-            wD = Object.prototype.propertyIsEnumerable,
-            AD = (t, e, n) =>
+          const fD = xp.defaultPositions;
+          fD.northArrowSouth,
+            fD.northArrowSouthWest,
+            fD.northArrowSouthEast,
+            fD.southArrowNorth,
+            fD.southArrowNorthWest,
+            fD.southArrowNorthEast,
+            fD.viewportStickyNorth;
+          Object.defineProperty,
+            Object.getOwnPropertySymbols,
+            Object.prototype.hasOwnProperty,
+            Object.prototype.propertyIsEnumerable;
+          Object.defineProperty,
+            Object.getOwnPropertySymbols,
+            Object.prototype.hasOwnProperty,
+            Object.prototype.propertyIsEnumerable;
+          var kD = n(7341),
+            bD = {
+              injectType: 'singletonStyleTag',
+              attributes: { 'data-cke': !0 },
+              insert: 'head',
+              singleton: !0,
+            };
+          Vi()(kD.Z, bD);
+          kD.Z.locals;
+          var wD = n(2128),
+            AD = {
+              injectType: 'singletonStyleTag',
+              attributes: { 'data-cke': !0 },
+              insert: 'head',
+              singleton: !0,
+            };
+          Vi()(wD.Z, AD);
+          wD.Z.locals;
+          var CD = n(4101),
+            _D = {
+              injectType: 'singletonStyleTag',
+              attributes: { 'data-cke': !0 },
+              insert: 'head',
+              singleton: !0,
+            };
+          Vi()(CD.Z, _D);
+          CD.Z.locals;
+          var vD = Object.defineProperty,
+            yD = Object.getOwnPropertySymbols,
+            xD = Object.prototype.hasOwnProperty,
+            ED = Object.prototype.propertyIsEnumerable,
+            DD = (t, e, n) =>
               e in t
-                ? fD(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
+                ? vD(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n })
                 : (t[e] = n),
-            CD = (t, e) => {
-              for (var n in e || (e = {})) bD.call(e, n) && AD(t, n, e[n]);
-              if (kD) for (var n of kD(e)) wD.call(e, n) && AD(t, n, e[n]);
+            SD = (t, e) => {
+              for (var n in e || (e = {})) xD.call(e, n) && DD(t, n, e[n]);
+              if (yD) for (var n of yD(e)) ED.call(e, n) && DD(t, n, e[n]);
               return t;
             };
-          const _D = { autoRefresh: !0 },
-            vD = 36e5;
-          class yD extends Y() {
+          const ID = { autoRefresh: !0 },
+            TD = 36e5;
+          class MD extends Y() {
             constructor(t, e = {}) {
               if ((super(), !t)) throw new _('token-missing-token-url', this);
               e.initValue && this._validateTokenValue(e.initValue),
@@ -37464,7 +37588,7 @@
                         );
                         var e;
                       }),
-                (this._options = CD(CD({}, _D), e));
+                (this._options = SD(SD({}, ID), e));
             }
             init() {
               return new Promise((t, e) => {
@@ -37503,31 +37627,31 @@
               try {
                 const [, t] = this.value.split('.'),
                   { exp: e } = JSON.parse(atob(t));
-                if (!e) return vD;
+                if (!e) return TD;
                 return Math.floor((1e3 * e - Date.now()) / 2);
               } catch (t) {
-                return vD;
+                return TD;
               }
             }
             static create(t, e = {}) {
-              return new yD(t, e).init();
+              return new MD(t, e).init();
             }
           }
-          const xD = /^data:(\S*?);base64,/;
-          class ED extends P() {
+          const BD = /^data:(\S*?);base64,/;
+          class ND extends P() {
             constructor(t, e, n) {
               if ((super(), !t)) throw new _('fileuploader-missing-file', null);
               if (!e) throw new _('fileuploader-missing-token', null);
               if (!n) throw new _('fileuploader-missing-api-address', null);
               (this.file = (function (t) {
                 if ('string' != typeof t) return !1;
-                const e = t.match(xD);
+                const e = t.match(BD);
                 return !(!e || !e.length);
               })(t)
                 ? (function (t, e = 512) {
                     try {
-                      const n = t.match(xD)[1],
-                        o = atob(t.replace(xD, '')),
+                      const n = t.match(BD)[1],
+                        o = atob(t.replace(BD, '')),
                         i = [];
                       for (let t = 0; t < o.length; t += e) {
                         const n = o.slice(t, t + e),
@@ -37605,28 +37729,28 @@
               );
             }
           }
-          class DD {
+          class PD {
             constructor(t, e) {
               if (!t) throw new _('uploadgateway-missing-token', null);
               if (!e) throw new _('uploadgateway-missing-api-address', null);
               (this._token = t), (this._apiAddress = e);
             }
             upload(t) {
-              return new ED(t, this._token, this._apiAddress);
+              return new ND(t, this._token, this._apiAddress);
             }
           }
-          class SD extends vs {
+          class zD extends vs {
             static get pluginName() {
               return 'CloudServicesCore';
             }
             createToken(t, e) {
-              return new yD(t, e);
+              return new MD(t, e);
             }
             createUploadGateway(t, e) {
-              return new DD(t, e);
+              return new PD(t, e);
             }
           }
-          var ID = (t, e, n) =>
+          var LD = (t, e, n) =>
             new Promise((o, i) => {
               var r = t => {
                   try {
@@ -37645,21 +37769,21 @@
                 a = t => (t.done ? o(t.value) : Promise.resolve(t.value).then(r, s));
               a((n = n.apply(t, e)).next());
             });
-          const TD = ['left', 'right', 'center', 'justify'];
-          function MD(t) {
-            return TD.includes(t);
+          const OD = ['left', 'right', 'center', 'justify'];
+          function RD(t) {
+            return OD.includes(t);
           }
-          function BD(t, e) {
+          function jD(t, e) {
             return 'rtl' == e.contentLanguageDirection ? 'right' === t : 'left' === t;
           }
-          function ND(t) {
+          function FD(t) {
             const e = t
                 .map(t => {
                   let e;
                   return (e = 'string' == typeof t ? { name: t } : t), e;
                 })
                 .filter(t => {
-                  const e = TD.includes(t.name);
+                  const e = OD.includes(t.name);
                   return e || v('alignment-config-name-not-recognized', { option: t }), e;
                 }),
               n = e.filter(t => Boolean(t.className)).length;
@@ -37684,8 +37808,8 @@
               e
             );
           }
-          const PD = 'alignment';
-          class zD extends bs {
+          const VD = 'alignment';
+          class HD extends bs {
             refresh() {
               const t = this.editor.locale,
                 e = Ti(this.editor.model.document.selection.getSelectedBlocks());
@@ -37705,31 +37829,31 @@
                     this._canBeAligned(t),
                   ),
                   o = e[0].getAttribute('alignment');
-                BD(r, n) || o === r || !r
+                jD(r, n) || o === r || !r
                   ? (function (t, e) {
-                      for (const n of t) e.removeAttribute(PD, n);
+                      for (const n of t) e.removeAttribute(VD, n);
                     })(e, t)
                   : (function (t, e, n) {
-                      for (const o of t) e.setAttribute(PD, n, o);
+                      for (const o of t) e.setAttribute(VD, n, o);
                     })(e, t, r);
               });
             }
             _canBeAligned(t) {
-              return this.editor.model.schema.checkAttribute(t, PD);
+              return this.editor.model.schema.checkAttribute(t, VD);
             }
           }
-          class LD extends fs {
+          class UD extends fs {
             static get pluginName() {
               return 'AlignmentEditing';
             }
             constructor(t) {
-              super(t), t.config.define('alignment', { options: TD.map(t => ({ name: t })) });
+              super(t), t.config.define('alignment', { options: OD.map(t => ({ name: t })) });
             }
             init() {
               const t = this.editor,
                 e = t.locale,
                 n = t.model.schema,
-                o = ND(t.config.get('alignment.options')).filter(t => MD(t.name) && !BD(t.name, e)),
+                o = FD(t.config.get('alignment.options')).filter(t => RD(t.name) && !jD(t.name, e)),
                 i = o.some(t => !!t.className);
               n.extend('$block', { allowAttributes: 'alignment' }),
                 t.model.schema.setAttributeProperties('alignment', { isFormatting: !0 }),
@@ -37777,16 +37901,16 @@
                 return e;
               })(o);
               for (const e of s) t.conversion.for('upcast').attributeToAttribute(e);
-              t.commands.add('alignment', new zD(t));
+              t.commands.add('alignment', new HD(t));
             }
           }
-          const OD = new Map([
-            ['left', Xg.alignLeft],
-            ['right', Xg.alignRight],
-            ['center', Xg.alignCenter],
-            ['justify', Xg.alignJustify],
+          const GD = new Map([
+            ['left', nm.alignLeft],
+            ['right', nm.alignRight],
+            ['center', nm.alignCenter],
+            ['justify', nm.alignJustify],
           ]);
-          class RD extends fs {
+          class qD extends fs {
             get localizedOptionTitles() {
               const t = this.editor.t;
               return {
@@ -37803,24 +37927,24 @@
               const t = this.editor,
                 e = t.ui.componentFactory,
                 n = t.t,
-                o = ND(t.config.get('alignment.options'));
+                o = FD(t.config.get('alignment.options'));
               o
                 .map(t => t.name)
-                .filter(MD)
+                .filter(RD)
                 .forEach(t => this._addButton(t)),
                 e.add('alignment', i => {
-                  const r = Am(i);
-                  Cm(r, () => o.map(t => e.create(`alignment:${t.name}`)), {
+                  const r = vm(i);
+                  ym(r, () => o.map(t => e.create(`alignment:${t.name}`)), {
                     enableActiveItemFocusOnDropdownOpen: !0,
                     isVertical: !0,
                     ariaLabel: n('Text alignment toolbar'),
                   }),
                     r.buttonView.set({ label: n('Text alignment'), tooltip: !0 }),
                     r.extendTemplate({ attributes: { class: 'ck-alignment-dropdown' } });
-                  const s = 'rtl' === i.contentLanguageDirection ? OD.get('right') : OD.get('left'),
+                  const s = 'rtl' === i.contentLanguageDirection ? GD.get('right') : GD.get('left'),
                     a = t.commands.get('alignment');
                   return (
-                    r.buttonView.bind('icon').to(a, 'value', t => OD.get(t) || s),
+                    r.buttonView.bind('icon').to(a, 'value', t => GD.get(t) || s),
                     r.bind('isEnabled').to(a, 'isEnabled'),
                     this.listenTo(r, 'execute', () => {
                       t.editing.view.focus();
@@ -37837,7 +37961,7 @@
                 return (
                   i.set({
                     label: this.localizedOptionTitles[t],
-                    icon: OD.get(t),
+                    icon: GD.get(t),
                     tooltip: !0,
                     isToggleable: !0,
                   }),
@@ -37851,7 +37975,7 @@
               });
             }
           }
-          class jD extends bs {
+          class WD extends bs {
             refresh() {
               const t = this.editor.model,
                 e = t.document;
@@ -37886,7 +38010,7 @@
               });
             }
           }
-          class FD extends fs {
+          class $D extends fs {
             static get pluginName() {
               return 'HighlightEditing';
             }
@@ -37952,19 +38076,19 @@
                   return e;
                 })(e),
               ),
-                t.commands.add('highlight', new jD(t));
+                t.commands.add('highlight', new WD(t));
             }
           }
-          var VD = n(8234),
-            HD = {
+          var KD = n(8234),
+            YD = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(VD.Z, HD);
-          VD.Z.locals;
-          class UD extends fs {
+          Vi()(KD.Z, YD);
+          KD.Z.locals;
+          class ZD extends fs {
             get localizedOptionTitles() {
               const t = this.editor.t;
               return {
@@ -37987,13 +38111,13 @@
             _addRemoveHighlightButton() {
               const t = this.editor.t,
                 e = this.editor.commands.get('highlight');
-              this._addButton('removeHighlight', t('Remove highlight'), Xg.eraser, null, t => {
+              this._addButton('removeHighlight', t('Remove highlight'), nm.eraser, null, t => {
                 t.bind('isEnabled').to(e, 'isEnabled');
               });
             }
             _addHighlighterButton(t) {
               const e = this.editor.commands.get('highlight');
-              this._addButton('highlight:' + t.model, t.title, GD(t.type), t.model, function (n) {
+              this._addButton('highlight:' + t.model, t.title, QD(t.type), t.model, function (n) {
                 n.bind('isEnabled').to(e, 'isEnabled'),
                   n.bind('isOn').to(e, 'value', e => e === t.model),
                   (n.iconView.fillColor = t.color),
@@ -38023,7 +38147,7 @@
                 r = t.reduce((t, e) => ((t[e.model] = e), t), {});
               o.add('highlight', s => {
                 const a = e.commands.get('highlight'),
-                  c = Am(s, pm),
+                  c = vm(s, bm),
                   l = c.buttonView;
                 l.set({
                   label: n('Highlight'),
@@ -38032,7 +38156,7 @@
                   commandValue: i.model,
                   isToggleable: !0,
                 }),
-                  l.bind('icon').to(a, 'value', t => GD(d(t, 'type'))),
+                  l.bind('icon').to(a, 'value', t => QD(d(t, 'type'))),
                   l.bind('color').to(a, 'value', t => d(t, 'color')),
                   l.bind('commandValue').to(a, 'value', t => d(t, 'model')),
                   l.bind('isOn').to(a, 'value', t => !!t),
@@ -38043,7 +38167,7 @@
                 }
                 return (
                   c.bind('isEnabled').to(a, 'isEnabled'),
-                  Cm(
+                  ym(
                     c,
                     () => {
                       const e = t.map(t => {
@@ -38077,12 +38201,12 @@
               });
             }
           }
-          function GD(t) {
+          function QD(t) {
             return 'marker' === t
               ? '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path class="ck-icon__fill" d="M10.798 1.59 3.002 12.875l1.895 1.852 2.521 1.402 6.997-12.194z"/><path d="m2.556 16.727.234-.348c-.297-.151-.462-.293-.498-.426-.036-.137.002-.416.115-.837.094-.25.15-.449.169-.595a4.495 4.495 0 0 0 0-.725c-.209-.621-.303-1.041-.284-1.26.02-.218.178-.506.475-.862l6.77-9.414c.539-.91 1.605-.85 3.199.18 1.594 1.032 2.188 1.928 1.784 2.686l-5.877 10.36c-.158.412-.333.673-.526.782-.193.108-.604.179-1.232.21-.362.131-.608.237-.738.318-.13.081-.305.238-.526.47-.293.265-.504.397-.632.397-.096 0-.27-.075-.524-.226l-.31.41-1.6-1.12zm-.279.415 1.575 1.103-.392.515H1.19l1.087-1.618zm8.1-13.656-4.953 6.9L8.75 12.57l4.247-7.574c.175-.25-.188-.647-1.092-1.192-.903-.546-1.412-.652-1.528-.32zM8.244 18.5 9.59 17h9.406v1.5H8.245z"/></svg>'
               : '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path class="ck-icon__fill" d="M10.126 2.268 2.002 13.874l1.895 1.852 2.521 1.402L14.47 5.481l-1.543-2.568-2.801-.645z"/><path d="m4.5 18.088-2.645-1.852-.04-2.95-.006-.005.006-.008v-.025l.011.008L8.73 2.97c.165-.233.356-.417.567-.557l-1.212.308L4.604 7.9l-.83-.558 3.694-5.495 2.708-.69 1.65 1.145.046.018.85-1.216 2.16 1.512-.856 1.222c.828.967 1.144 2.141.432 3.158L7.55 17.286l.006.005-3.055.797H4.5zm-.634.166-1.976.516-.026-1.918 2.002 1.402zM9.968 3.817l-.006-.004-6.123 9.184 3.277 2.294 6.108-9.162.005.003c.317-.452-.16-1.332-1.064-1.966-.891-.624-1.865-.776-2.197-.349zM8.245 18.5 9.59 17h9.406v1.5H8.245z"/></svg>';
           }
-          function qD(t) {
+          function JD(t) {
             const e = t.t,
               n = t.config.get('codeBlock.languages');
             for (const t of n)
@@ -38090,7 +38214,7 @@
                 void 0 === t.class && (t.class = `language-${t.language}`);
             return n;
           }
-          function WD(t, e, n) {
+          function XD(t, e, n) {
             const o = {};
             for (const i of t)
               if ('class' === e) {
@@ -38098,10 +38222,10 @@
               } else o[i[e]] = i[n];
             return o;
           }
-          function $D(t) {
+          function tS(t) {
             return t.data.match(/^(\s*)/)[0];
           }
-          function KD(t) {
+          function eS(t) {
             const e = t.document.selection,
               n = [];
             if (e.isCollapsed) return [e.anchor];
@@ -38110,20 +38234,20 @@
               if (!e.is('$textProxy')) continue;
               const { parent: o, startOffset: i } = e.textNode;
               if (!o.is('element', 'codeBlock')) continue;
-              const r = $D(e.textNode),
+              const r = tS(e.textNode),
                 s = t.createPositionAt(o, i + r.length);
               n.push(s);
             }
             return n;
           }
-          function YD(t) {
+          function nS(t) {
             const e = Ti(t.getSelectedBlocks());
             return !!e && e.is('element', 'codeBlock');
           }
-          function ZD(t, e) {
+          function oS(t, e) {
             return !e.is('rootElement') && !t.isLimit(e) && t.checkChild(e.parent, 'codeBlock');
           }
-          class QD extends bs {
+          class iS extends bs {
             constructor(t) {
               super(t), (this._lastLanguage = null);
             }
@@ -38134,7 +38258,7 @@
               const e = this.editor,
                 n = e.model,
                 o = n.document.selection,
-                i = qD(e)[0],
+                i = JD(e)[0],
                 r = Array.from(o.getSelectedBlocks()),
                 s = null == t.forceValue ? !this.value : t.forceValue,
                 a = (function (t, e, n) {
@@ -38155,12 +38279,12 @@
               const t = this.editor.model.document.selection,
                 e = this.editor.model.schema,
                 n = Ti(t.getSelectedBlocks());
-              return !!n && ZD(e, n);
+              return !!n && oS(e, n);
             }
             _applyCodeBlock(t, e, n) {
               this._lastLanguage = n;
               const o = this.editor.model.schema,
-                i = e.filter(t => ZD(o, t));
+                i = e.filter(t => oS(o, t));
               for (const e of i)
                 t.rename(e, 'codeBlock'),
                   t.setAttribute('language', n, e),
@@ -38188,7 +38312,7 @@
               }
             }
           }
-          class JD extends bs {
+          class rS extends bs {
             constructor(t) {
               super(t), (this._indentSequence = t.config.get('codeBlock.indentSequence'));
             }
@@ -38198,7 +38322,7 @@
             execute() {
               const t = this.editor.model;
               t.change(e => {
-                const n = KD(t);
+                const n = eS(t);
                 for (const o of n) {
                   const n = e.createText(this._indentSequence);
                   t.insertContent(n, o);
@@ -38206,10 +38330,10 @@
               });
             }
             _checkEnabled() {
-              return !!this._indentSequence && YD(this.editor.model.document.selection);
+              return !!this._indentSequence && nS(this.editor.model.document.selection);
             }
           }
-          class XD extends bs {
+          class sS extends bs {
             constructor(t) {
               super(t), (this._indentSequence = t.config.get('codeBlock.indentSequence'));
             }
@@ -38219,9 +38343,9 @@
             execute() {
               const t = this.editor.model;
               t.change(() => {
-                const e = KD(t);
+                const e = eS(t);
                 for (const n of e) {
-                  const e = tS(t, n, this._indentSequence);
+                  const e = aS(t, n, this._indentSequence);
                   e && t.deleteContent(t.createSelection(e));
                 }
               });
@@ -38229,10 +38353,10 @@
             _checkEnabled() {
               if (!this._indentSequence) return !1;
               const t = this.editor.model;
-              return !!YD(t.document.selection) && KD(t).some(e => tS(t, e, this._indentSequence));
+              return !!nS(t.document.selection) && eS(t).some(e => aS(t, e, this._indentSequence));
             }
           }
-          function tS(t, e, n) {
+          function aS(t, e, n) {
             const o = (function (t) {
               let e = t.parent.getChild(t.index);
               (e && !e.is('element', 'softBreak')) || (e = t.nodeBefore);
@@ -38240,7 +38364,7 @@
               return e;
             })(e);
             if (!o) return null;
-            const i = $D(o),
+            const i = tS(o),
               r = i.lastIndexOf(n);
             if (r + n.length !== i.length) return null;
             if (-1 === r) return null;
@@ -38250,9 +38374,9 @@
               t.createPositionAt(s, a + r + n.length),
             );
           }
-          function eS(t, e, n = !1) {
-            const o = WD(e, 'language', 'class'),
-              i = WD(e, 'language', 'label');
+          function cS(t, e, n = !1) {
+            const o = XD(e, 'language', 'class'),
+              i = XD(e, 'language', 'label');
             return (e, r, s) => {
               const { writer: a, mapper: c, consumable: l } = s;
               if (!l.consume(r.item, 'insert')) return;
@@ -38266,13 +38390,13 @@
               a.insert(h, p), c.bindElements(r.item, m);
             };
           }
-          const nS = 'paragraph';
-          class oS extends fs {
+          const lS = 'paragraph';
+          class dS extends fs {
             static get pluginName() {
               return 'CodeBlockEditing';
             }
             static get requires() {
-              return [xk];
+              return [Sk];
             }
             constructor(t) {
               super(t),
@@ -38302,10 +38426,10 @@
                 n = t.model,
                 o = t.editing.view,
                 i = t.plugins.has('DocumentListEditing'),
-                r = qD(t);
-              t.commands.add('codeBlock', new QD(t)),
-                t.commands.add('indentCodeBlock', new JD(t)),
-                t.commands.add('outdentCodeBlock', new XD(t)),
+                r = JD(t);
+              t.commands.add('codeBlock', new iS(t)),
+                t.commands.add('indentCodeBlock', new rS(t)),
+                t.commands.add('outdentCodeBlock', new sS(t)),
                 this.listenTo(
                   o.document,
                   'tab',
@@ -38329,8 +38453,8 @@
                 t.model.schema.addChildCheck((t, e) => {
                   if (t.endsWith('codeBlock') && e.isObject) return !1;
                 }),
-                t.editing.downcastDispatcher.on('insert:codeBlock', eS(n, r, !0)),
-                t.data.downcastDispatcher.on('insert:codeBlock', eS(n, r)),
+                t.editing.downcastDispatcher.on('insert:codeBlock', cS(n, r, !0)),
+                t.data.downcastDispatcher.on('insert:codeBlock', cS(n, r)),
                 t.data.downcastDispatcher.on(
                   'insert:softBreak',
                   (function (t) {
@@ -38347,7 +38471,7 @@
                 t.data.upcastDispatcher.on(
                   'element:code',
                   (function (t, e) {
-                    const n = WD(e, 'class', 'language'),
+                    const n = XD(e, 'class', 'language'),
                       o = e[0].language;
                     return (t, e, i) => {
                       const r = e.viewItem,
@@ -38462,12 +38586,12 @@
                           r = o.selection.getLastPosition(),
                           s = r.nodeAfter;
                         if (e || !o.selection.isCollapsed || !r.isAtStart) return !1;
-                        if (!rS(s)) return !1;
+                        if (!uS(s)) return !1;
                         return (
                           t.model.change(e => {
                             t.execute('enter');
                             const n = o.selection.anchor.parent.previousSibling;
-                            e.rename(n, nS),
+                            e.rename(n, lS),
                               e.setSelection(n, 'in'),
                               t.model.schema.removeDisallowedAttributes([n], e),
                               e.remove(s);
@@ -38491,15 +38615,15 @@
                             !s.previousSibling
                           )
                             return !1;
-                          if (rS(s) && rS(s.previousSibling))
+                          if (uS(s) && uS(s.previousSibling))
                             a = n.createRange(
                               n.createPositionBefore(s.previousSibling),
                               n.createPositionAfter(s),
                             );
                           else if (
-                            iS(s) &&
-                            rS(s.previousSibling) &&
-                            rS(s.previousSibling.previousSibling)
+                            hS(s) &&
+                            uS(s.previousSibling) &&
+                            uS(s.previousSibling.previousSibling)
                           )
                             a = n.createRange(
                               n.createPositionBefore(s.previousSibling.previousSibling),
@@ -38508,11 +38632,11 @@
                           else {
                             if (
                               !(
-                                iS(s) &&
-                                rS(s.previousSibling) &&
-                                iS(s.previousSibling.previousSibling) &&
+                                hS(s) &&
+                                uS(s.previousSibling) &&
+                                hS(s.previousSibling.previousSibling) &&
                                 s.previousSibling.previousSibling &&
-                                rS(s.previousSibling.previousSibling.previousSibling)
+                                uS(s.previousSibling.previousSibling.previousSibling)
                               )
                             )
                               return !1;
@@ -38527,7 +38651,7 @@
                             t.model.change(e => {
                               e.remove(a), t.execute('enter');
                               const n = o.selection.anchor.parent;
-                              e.rename(n, nS), t.model.schema.removeDisallowedAttributes([n], e);
+                              e.rename(n, lS), t.model.schema.removeDisallowedAttributes([n], e);
                             }),
                             i.scrollToTheSelection(),
                             !0
@@ -38539,7 +38663,7 @@
                             o = n.selection.getLastPosition(),
                             i = o.nodeBefore || o.textNode;
                           let r;
-                          i && i.is('$text') && (r = $D(i));
+                          i && i.is('$text') && (r = tS(i));
                           t.model.change(e => {
                             t.execute('shiftEnter'), r && e.insertText(r, n.selection.anchor);
                           });
@@ -38551,22 +38675,22 @@
                 );
             }
           }
-          function iS(t) {
+          function hS(t) {
             return t && t.is('$text') && !t.data.match(/\S/);
           }
-          function rS(t) {
+          function uS(t) {
             return t && t.is('element', 'softBreak');
           }
-          var sS = n(8343),
-            aS = {
+          var gS = n(8343),
+            mS = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(sS.Z, aS);
-          sS.Z.locals;
-          class cS extends fs {
+          Vi()(gS.Z, mS);
+          gS.Z.locals;
+          class pS extends fs {
             static get pluginName() {
               return 'CodeBlockUI';
             }
@@ -38574,10 +38698,10 @@
               const t = this.editor,
                 e = t.t,
                 n = t.ui.componentFactory,
-                o = qD(t);
+                o = JD(t);
               n.add('codeBlock', n => {
                 const i = t.commands.get('codeBlock'),
-                  r = Am(n, pm),
+                  r = vm(n, bm),
                   s = r.buttonView,
                   a = e('Insert code block');
                 return (
@@ -38601,7 +38725,7 @@
                   }),
                   (r.class = 'ck-code-block-dropdown'),
                   r.bind('isEnabled').to(i),
-                  vm(r, () => this._getLanguageListItemDefinitions(o), {
+                  Em(r, () => this._getLanguageListItemDefinitions(o), {
                     role: 'menu',
                     ariaLabel: a,
                   }),
@@ -38615,7 +38739,7 @@
               for (const o of t) {
                 const t = {
                   type: 'button',
-                  model: new tf({
+                  model: new of({
                     _codeBlockLanguage: o.language,
                     label: o.label,
                     role: 'menuitemradio',
@@ -38628,7 +38752,7 @@
               return n;
             }
           }
-          class lS extends bs {
+          class fS extends bs {
             constructor(t, e) {
               super(t), (this.attributeKey = e);
             }
@@ -38668,7 +38792,7 @@
                   });
             }
           }
-          class dS extends Y(Ii) {
+          class kS extends Y(Ii) {
             constructor(t) {
               super(t),
                 this.set('isEmpty', !0),
@@ -38683,16 +38807,16 @@
               return !!this.find(e => e.color === t);
             }
           }
-          var hS = n(1896),
-            uS = {
+          var bS = n(1896),
+            wS = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(hS.Z, uS);
-          hS.Z.locals;
-          class gS extends Gi {
+          Vi()(bS.Z, wS);
+          bS.Z.locals;
+          class AS extends Gi {
             constructor(
               t,
               {
@@ -38717,7 +38841,7 @@
                   keystrokeHandler: this.keystrokes,
                   actions: { focusPrevious: 'shift + tab', focusNext: 'tab' },
                 })),
-                (this.colorGridsPageView = new mS(t, {
+                (this.colorGridsPageView = new CS(t, {
                   colors: e,
                   columns: n,
                   removeButtonLabel: o,
@@ -38727,7 +38851,7 @@
                   focusTracker: this.focusTracker,
                   focusables: this._focusables,
                 })),
-                (this.colorPickerPageView = new pS(t, {
+                (this.colorPickerPageView = new _S(t, {
                   focusables: this._focusables,
                   focusTracker: this.focusTracker,
                   keystrokes: this.keystrokes,
@@ -38802,7 +38926,7 @@
                 this.colorPickerPageView.delegate('cancel').to(this));
             }
           }
-          class mS extends Gi {
+          class CS extends Gi {
             constructor(
               t,
               {
@@ -38823,7 +38947,7 @@
                 (this.items = this.createCollection()),
                 (this.colorDefinitions = e),
                 (this.columns = n),
-                (this.documentColors = new dS()),
+                (this.documentColors = new kS()),
                 (this.documentColorsCount = r),
                 (this._focusables = c),
                 (this._removeButtonLabel = o),
@@ -38922,7 +39046,7 @@
             _createRemoveColorButton() {
               const t = new wr();
               return (
-                t.set({ withText: !0, icon: Xg.eraser, label: this._removeButtonLabel }),
+                t.set({ withText: !0, icon: nm.eraser, label: this._removeButtonLabel }),
                 (t.class = 'ck-color-table__remove-color'),
                 t.on('execute', () => {
                   this.fire('execute', { value: null, source: 'removeColorButton' });
@@ -38972,7 +39096,7 @@
                 : this.documentColors.add({ color: t, label: t, options: { hasBorder: !1 } });
             }
           }
-          class pS extends Gi {
+          class _S extends Gi {
             constructor(
               t,
               { focusTracker: e, focusables: n, keystrokes: o, colorPickerConfig: i },
@@ -39003,7 +39127,7 @@
             }
             render() {
               super.render();
-              const t = new ip(this.locale, this._pickerConfig);
+              const t = new ap(this.locale, this._pickerConfig);
               (this.colorPickerView = t),
                 this.colorPickerView.render(),
                 this.selectedColor && (t.color = this.selectedColor),
@@ -39070,14 +39194,14 @@
                 o = new wr(t);
               return (
                 n.set({
-                  icon: Xg.check,
+                  icon: nm.check,
                   class: 'ck-button-save',
                   withText: !1,
                   label: e('Accept'),
                   type: 'submit',
                 }),
                 o.set({
-                  icon: Xg.cancel,
+                  icon: nm.cancel,
                   class: 'ck-button-cancel',
                   withText: !1,
                   label: e('Cancel'),
@@ -39097,11 +39221,11 @@
               });
             }
           }
-          const fS = 'fontSize',
-            kS = 'fontFamily',
-            bS = 'fontColor',
-            wS = 'fontBackgroundColor';
-          function AS(t, e) {
+          const vS = 'fontSize',
+            yS = 'fontFamily',
+            xS = 'fontColor',
+            ES = 'fontBackgroundColor';
+          function DS(t, e) {
             const n = { model: { key: t, values: [] }, view: {}, upcastAlso: {} };
             for (const t of e)
               n.model.values.push(t.model),
@@ -39109,22 +39233,22 @@
                 t.upcastAlso && (n.upcastAlso[t.model] = t.upcastAlso);
             return n;
           }
-          function CS(t) {
+          function SS(t) {
             return e => e.getStyle(t).replace(/\s/g, '');
           }
-          function _S(t) {
+          function IS(t) {
             return (e, { writer: n }) =>
               n.createAttributeElement('span', { style: `${t}:${e}` }, { priority: 7 });
           }
-          class vS extends lS {
+          class TS extends fS {
             constructor(t) {
-              super(t, kS);
+              super(t, yS);
             }
           }
-          function yS(t) {
-            return t.map(xS).filter(t => void 0 !== t);
+          function MS(t) {
+            return t.map(BS).filter(t => void 0 !== t);
           }
-          function xS(t) {
+          function BS(t) {
             return 'object' == typeof t
               ? t
               : 'default' === t
@@ -39133,7 +39257,7 @@
               ? (function (t) {
                   const e = t.replace(/"|'/g, '').split(','),
                     n = e[0],
-                    o = e.map(ES).join(', ');
+                    o = e.map(NS).join(', ');
                   return {
                     title: n,
                     model: o,
@@ -39142,16 +39266,16 @@
                 })(t)
               : void 0;
           }
-          function ES(t) {
+          function NS(t) {
             return (t = t.trim()).indexOf(' ') > 0 && (t = `'${t}'`), t;
           }
-          class DS extends fs {
+          class PS extends fs {
             static get pluginName() {
               return 'FontFamilyEditing';
             }
             constructor(t) {
               super(t),
-                t.config.define(kS, {
+                t.config.define(yS, {
                   options: [
                     'default',
                     'Arial, Helvetica, sans-serif',
@@ -39168,21 +39292,21 @@
             }
             init() {
               const t = this.editor;
-              t.model.schema.extend('$text', { allowAttributes: kS }),
-                t.model.schema.setAttributeProperties(kS, { isFormatting: !0, copyOnEnter: !0 });
-              const e = yS(t.config.get('fontFamily.options')).filter(t => t.model),
-                n = AS(kS, e);
+              t.model.schema.extend('$text', { allowAttributes: yS }),
+                t.model.schema.setAttributeProperties(yS, { isFormatting: !0, copyOnEnter: !0 });
+              const e = MS(t.config.get('fontFamily.options')).filter(t => t.model),
+                n = DS(yS, e);
               t.config.get('fontFamily.supportAllValues')
                 ? (this._prepareAnyValueConverters(), this._prepareCompatibilityConverter())
                 : t.conversion.attributeToElement(n),
-                t.commands.add(kS, new vS(t));
+                t.commands.add(yS, new TS(t));
             }
             _prepareAnyValueConverters() {
               const t = this.editor;
               t.conversion
                 .for('downcast')
                 .attributeToElement({
-                  model: kS,
+                  model: yS,
                   view: (t, { writer: e }) =>
                     e.createAttributeElement(
                       'span',
@@ -39193,7 +39317,7 @@
                 t.conversion
                   .for('upcast')
                   .elementToAttribute({
-                    model: { key: kS, value: t => t.getStyle('font-family') },
+                    model: { key: yS, value: t => t.getStyle('font-family') },
                     view: { name: 'span', styles: { 'font-family': /.*/ } },
                   });
             }
@@ -39202,11 +39326,11 @@
                 .for('upcast')
                 .elementToAttribute({
                   view: { name: 'font', attributes: { face: /.*/ } },
-                  model: { key: kS, value: t => t.getAttribute('face') },
+                  model: { key: yS, value: t => t.getAttribute('face') },
                 });
             }
           }
-          class SS extends fs {
+          class zS extends fs {
             static get pluginName() {
               return 'FontFamilyUI';
             }
@@ -39214,12 +39338,12 @@
               const t = this.editor,
                 e = t.t,
                 n = this._getLocalizedOptions(),
-                o = t.commands.get(kS),
+                o = t.commands.get(yS),
                 i = e('Font Family');
-              t.ui.componentFactory.add(kS, e => {
-                const r = Am(e);
+              t.ui.componentFactory.add(yS, e => {
+                const r = vm(e);
                 return (
-                  vm(
+                  Em(
                     r,
                     () =>
                       (function (t, e) {
@@ -39227,8 +39351,8 @@
                         for (const o of t) {
                           const t = {
                             type: 'button',
-                            model: new tf({
-                              commandName: kS,
+                            model: new of({
+                              commandName: yS,
                               commandParam: o.model,
                               label: o.title,
                               role: 'menuitemradio',
@@ -39277,35 +39401,35 @@
             _getLocalizedOptions() {
               const t = this.editor,
                 e = t.t;
-              return yS(t.config.get(kS).options).map(
+              return MS(t.config.get(yS).options).map(
                 t => ('Default' === t.title && (t.title = e('Default')), t),
               );
             }
           }
-          class IS extends fs {
+          class LS extends fs {
             static get requires() {
-              return [DS, SS];
+              return [PS, zS];
             }
             static get pluginName() {
               return 'FontFamily';
             }
           }
-          class TS extends lS {
+          class OS extends fS {
             constructor(t) {
-              super(t, fS);
+              super(t, vS);
             }
           }
-          function MS(t) {
+          function RS(t) {
             return t
               .map(t =>
                 (function (t) {
                   'number' == typeof t && (t = String(t));
-                  if ('object' == typeof t && ((e = t), e.title && e.model && e.view)) return NS(t);
+                  if ('object' == typeof t && ((e = t), e.title && e.model && e.view)) return FS(t);
                   var e;
                   const n = (function (t) {
-                    return 'string' == typeof t ? BS[t] : BS[t.model];
+                    return 'string' == typeof t ? jS[t] : jS[t.model];
                   })(t);
-                  if (n) return NS(n);
+                  if (n) return FS(n);
                   if ('default' === t) return { model: void 0, title: 'Default' };
                   if (
                     (function (t) {
@@ -39320,13 +39444,13 @@
                     return;
                   return (function (t) {
                     'string' == typeof t && (t = { title: t, model: `${parseFloat(t)}px` });
-                    return (t.view = { name: 'span', styles: { 'font-size': t.model } }), NS(t);
+                    return (t.view = { name: 'span', styles: { 'font-size': t.model } }), FS(t);
                   })(t);
                 })(t),
               )
               .filter(t => void 0 !== t);
           }
-          const BS = {
+          const jS = {
             get tiny() {
               return {
                 title: 'Tiny',
@@ -39356,12 +39480,12 @@
               };
             },
           };
-          function NS(t) {
+          function FS(t) {
             return (
               t.view && 'string' != typeof t.view && !t.view.priority && (t.view.priority = 7), t
             );
           }
-          const PS = [
+          const VS = [
             'x-small',
             'x-small',
             'small',
@@ -39371,28 +39495,28 @@
             'xx-large',
             'xxx-large',
           ];
-          class zS extends fs {
+          class HS extends fs {
             static get pluginName() {
               return 'FontSizeEditing';
             }
             constructor(t) {
               super(t),
-                t.config.define(fS, {
+                t.config.define(vS, {
                   options: ['tiny', 'small', 'default', 'big', 'huge'],
                   supportAllValues: !1,
                 });
             }
             init() {
               const t = this.editor;
-              t.model.schema.extend('$text', { allowAttributes: fS }),
-                t.model.schema.setAttributeProperties(fS, { isFormatting: !0, copyOnEnter: !0 });
+              t.model.schema.extend('$text', { allowAttributes: vS }),
+                t.model.schema.setAttributeProperties(vS, { isFormatting: !0, copyOnEnter: !0 });
               const e = t.config.get('fontSize.supportAllValues'),
-                n = MS(this.editor.config.get('fontSize.options')).filter(t => t.model),
-                o = AS(fS, n);
+                n = RS(this.editor.config.get('fontSize.options')).filter(t => t.model),
+                o = DS(vS, n);
               e
                 ? (this._prepareAnyValueConverters(o), this._prepareCompatibilityConverter())
                 : t.conversion.attributeToElement(o),
-                t.commands.add(fS, new TS(t));
+                t.commands.add(vS, new OS(t));
             }
             _prepareAnyValueConverters(t) {
               const e = this.editor,
@@ -39407,7 +39531,7 @@
               if (n.length)
                 throw new _('font-size-invalid-use-of-named-presets', null, { presets: n });
               e.conversion.for('downcast').attributeToElement({
-                model: fS,
+                model: vS,
                 view: (t, { writer: e }) => {
                   if (t)
                     return e.createAttributeElement(
@@ -39420,7 +39544,7 @@
                 e.conversion
                   .for('upcast')
                   .elementToAttribute({
-                    model: { key: fS, value: t => t.getStyle('font-size') },
+                    model: { key: vS, value: t => t.getStyle('font-size') },
                     view: { name: 'span', styles: { 'font-size': /.*/ } },
                   });
             }
@@ -39428,30 +39552,30 @@
               this.editor.conversion.for('upcast').elementToAttribute({
                 view: { name: 'font', attributes: { size: /^[+-]?\d{1,3}$/ } },
                 model: {
-                  key: fS,
+                  key: vS,
                   value: t => {
                     const e = t.getAttribute('size'),
                       n = '-' === e[0] || '+' === e[0];
                     let o = parseInt(e, 10);
                     n && (o = 3 + o);
-                    const i = PS.length - 1,
+                    const i = VS.length - 1,
                       r = Math.min(Math.max(o, 0), i);
-                    return PS[r];
+                    return VS[r];
                   },
                 },
               });
             }
           }
-          var LS = n(6007),
-            OS = {
+          var US = n(6007),
+            GS = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(LS.Z, OS);
-          LS.Z.locals;
-          class RS extends fs {
+          Vi()(US.Z, GS);
+          US.Z.locals;
+          class qS extends fs {
             static get pluginName() {
               return 'FontSizeUI';
             }
@@ -39459,12 +39583,12 @@
               const t = this.editor,
                 e = t.t,
                 n = this._getLocalizedOptions(),
-                o = t.commands.get(fS),
+                o = t.commands.get(vS),
                 i = e('Font Size');
-              t.ui.componentFactory.add(fS, e => {
-                const r = Am(e);
+              t.ui.componentFactory.add(vS, e => {
+                const r = vm(e);
                 return (
-                  vm(
+                  Em(
                     r,
                     () =>
                       (function (t, e) {
@@ -39472,8 +39596,8 @@
                         for (const o of t) {
                           const t = {
                             type: 'button',
-                            model: new tf({
-                              commandName: fS,
+                            model: new of({
+                              commandName: vS,
                               commandParam: o.model,
                               label: o.title,
                               class: 'ck-fontsize-option',
@@ -39519,35 +39643,35 @@
                   Big: e('Big'),
                   Huge: e('Huge'),
                 };
-              return MS(t.config.get(fS).options).map(t => {
+              return RS(t.config.get(vS).options).map(t => {
                 const e = n[t.title];
                 return e && e != t.title && (t = Object.assign({}, t, { title: e })), t;
               });
             }
           }
-          class jS extends fs {
+          class WS extends fs {
             static get requires() {
-              return [zS, RS];
+              return [HS, qS];
             }
             static get pluginName() {
               return 'FontSize';
             }
             normalizeSizeOptions(t) {
-              return MS(t);
+              return RS(t);
             }
           }
-          class FS extends lS {
+          class $S extends fS {
             constructor(t) {
-              super(t, bS);
+              super(t, xS);
             }
           }
-          class VS extends fs {
+          class KS extends fs {
             static get pluginName() {
               return 'FontColorEditing';
             }
             constructor(t) {
               super(t),
-                t.config.define(bS, {
+                t.config.define(xS, {
                   colors: [
                     { color: 'hsl(0, 0%, 0%)', label: 'Black' },
                     { color: 'hsl(0, 0%, 30%)', label: 'Dim grey' },
@@ -39571,21 +39695,21 @@
                   .for('upcast')
                   .elementToAttribute({
                     view: { name: 'span', styles: { color: /[\s\S]+/ } },
-                    model: { key: bS, value: CS('color') },
+                    model: { key: xS, value: SS('color') },
                   }),
                 t.conversion
                   .for('upcast')
                   .elementToAttribute({
                     view: { name: 'font', attributes: { color: /^#?\w+$/ } },
-                    model: { key: bS, value: t => t.getAttribute('color') },
+                    model: { key: xS, value: t => t.getAttribute('color') },
                   }),
-                t.conversion.for('downcast').attributeToElement({ model: bS, view: _S('color') }),
-                t.commands.add(bS, new FS(t)),
-                t.model.schema.extend('$text', { allowAttributes: bS }),
-                t.model.schema.setAttributeProperties(bS, { isFormatting: !0, copyOnEnter: !0 });
+                t.conversion.for('downcast').attributeToElement({ model: xS, view: IS('color') }),
+                t.commands.add(xS, new $S(t)),
+                t.model.schema.extend('$text', { allowAttributes: xS }),
+                t.model.schema.setAttributeProperties(xS, { isFormatting: !0, copyOnEnter: !0 });
             }
           }
-          class HS extends fs {
+          class YS extends fs {
             constructor(t, { commandName: e, componentName: n, icon: o, dropdownLabel: i }) {
               super(t),
                 (this.commandName = e),
@@ -39631,7 +39755,7 @@
                 a = i.documentColors,
                 c = !1 !== i.colorPicker;
               t.ui.componentFactory.add(this.componentName, e => {
-                const r = Am(e);
+                const r = vm(e);
                 let l = !1;
                 return (
                   (this.colorTableView = (function ({
@@ -39645,7 +39769,7 @@
                     colorPickerConfig: a,
                   }) {
                     const c = t.locale,
-                      l = new gS(c, {
+                      l = new AS(c, {
                         colors: e,
                         columns: n,
                         removeButtonLabel: o,
@@ -39694,7 +39818,7 @@
                           this.colorTableView.updateSelectedColors())
                         : this.colorTableView.showColorGrids();
                   }),
-                  xm(r, () =>
+                  Sm(r, () =>
                     r.colorTableView.colorGridsPageView.staticColorsGrid.items.find(t => t.isOn),
                   ),
                   r
@@ -39702,12 +39826,12 @@
               });
             }
           }
-          class US extends HS {
+          class ZS extends YS {
             constructor(t) {
               const e = t.locale.t;
               super(t, {
-                commandName: bS,
-                componentName: bS,
+                commandName: xS,
+                componentName: xS,
                 icon: '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M12.4 10.3 10 4.5l-2.4 5.8h4.8zm.5 1.2H7.1L5.7 15H4.2l5-12h1.6l5 12h-1.5L13 11.5zm3.1 7H4a1 1 0 0 1 0-2h12a1 1 0 0 1 0 2z"/></svg>',
                 dropdownLabel: e('Font Color'),
               });
@@ -39716,26 +39840,26 @@
               return 'FontColorUI';
             }
           }
-          class GS extends fs {
+          class QS extends fs {
             static get requires() {
-              return [VS, US];
+              return [KS, ZS];
             }
             static get pluginName() {
               return 'FontColor';
             }
           }
-          class qS extends lS {
+          class JS extends fS {
             constructor(t) {
-              super(t, wS);
+              super(t, ES);
             }
           }
-          class WS extends fs {
+          class XS extends fs {
             static get pluginName() {
               return 'FontBackgroundColorEditing';
             }
             constructor(t) {
               super(t),
-                t.config.define(wS, {
+                t.config.define(ES, {
                   colors: [
                     { color: 'hsl(0, 0%, 0%)', label: 'Black' },
                     { color: 'hsl(0, 0%, 30%)', label: 'Dim grey' },
@@ -39755,27 +39879,27 @@
                   ],
                   columns: 5,
                 }),
-                t.data.addStyleProcessorRules($g),
+                t.data.addStyleProcessorRules(Yg),
                 t.conversion
                   .for('upcast')
                   .elementToAttribute({
                     view: { name: 'span', styles: { 'background-color': /[\s\S]+/ } },
-                    model: { key: wS, value: CS('background-color') },
+                    model: { key: ES, value: SS('background-color') },
                   }),
                 t.conversion
                   .for('downcast')
-                  .attributeToElement({ model: wS, view: _S('background-color') }),
-                t.commands.add(wS, new qS(t)),
-                t.model.schema.extend('$text', { allowAttributes: wS }),
-                t.model.schema.setAttributeProperties(wS, { isFormatting: !0, copyOnEnter: !0 });
+                  .attributeToElement({ model: ES, view: IS('background-color') }),
+                t.commands.add(ES, new JS(t)),
+                t.model.schema.extend('$text', { allowAttributes: ES }),
+                t.model.schema.setAttributeProperties(ES, { isFormatting: !0, copyOnEnter: !0 });
             }
           }
-          class $S extends HS {
+          class tI extends YS {
             constructor(t) {
               const e = t.locale.t;
               super(t, {
-                commandName: wS,
-                componentName: wS,
+                commandName: ES,
+                componentName: ES,
                 icon: '<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4 2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8.38 9.262H7.62L10 5.506l2.38 5.756zm.532 1.285L14.34 16h1.426L10.804 4H9.196L4.234 16H5.66l1.428-3.453h5.824z"/></svg>',
                 dropdownLabel: e('Font Background Color'),
               });
@@ -39784,22 +39908,22 @@
               return 'FontBackgroundColorUI';
             }
           }
-          class KS extends fs {
+          class eI extends fs {
             static get requires() {
-              return [WS, $S];
+              return [XS, tI];
             }
             static get pluginName() {
               return 'FontBackgroundColor';
             }
           }
-          class YS extends bs {
+          class nI extends bs {
             refresh() {
               const t = this.editor.model,
                 e = t.schema,
                 n = t.document.selection;
               this.isEnabled = (function (t, e, n) {
                 const o = (function (t, e) {
-                  const n = jk(t, e),
+                  const n = Hk(t, e),
                     o = n.start.parent;
                   if (o.isEmpty && !o.is('element', '$root')) return o.parent;
                   return o;
@@ -39815,16 +39939,16 @@
               });
             }
           }
-          var ZS = n(2974),
-            QS = {
+          var oI = n(2974),
+            iI = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(ZS.Z, QS);
-          ZS.Z.locals;
-          class JS extends fs {
+          Vi()(oI.Z, iI);
+          oI.Z.locals;
+          class rI extends fs {
             static get pluginName() {
               return 'HorizontalLineEditing';
             }
@@ -39849,16 +39973,16 @@
                       e.addClass('ck-horizontal-line', i),
                       e.setCustomProperty('hr', !0, i),
                       (function (t, e, n) {
-                        return e.setCustomProperty('horizontalLine', !0, t), Pk(t, e, { label: n });
+                        return e.setCustomProperty('horizontalLine', !0, t), Ok(t, e, { label: n });
                       })(i, e, o)
                     );
                   },
                 }),
                 o.for('upcast').elementToElement({ view: 'hr', model: 'horizontalLine' }),
-                t.commands.add('horizontalLine', new YS(t));
+                t.commands.add('horizontalLine', new nI(t));
             }
           }
-          class XS extends fs {
+          class sI extends fs {
             static get pluginName() {
               return 'HorizontalLineUI';
             }
@@ -39893,16 +40017,16 @@
             Object.getOwnPropertySymbols,
             Object.prototype.hasOwnProperty,
             Object.prototype.propertyIsEnumerable;
-          var tI = n(5049),
-            eI = {
+          var aI = n(5049),
+            cI = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(tI.Z, eI);
-          tI.Z.locals;
-          function nI(t) {
+          Vi()(aI.Z, cI);
+          aI.Z.locals;
+          function lI(t) {
             const e = [
                 { name: 'address', isVoid: !1 },
                 { name: 'article', isVoid: !1 },
@@ -39954,40 +40078,40 @@
                 (function (t, e) {
                   return e.some(e => !e.isVoid && !!new RegExp(`<${e.name}( .*?)?>`).test(t));
                 })(t, e)
-                  ? oI(t, i++)
+                  ? dI(t, i++)
                   : (function (t, e) {
                       return e.some(e => new RegExp(`</${e.name}>`).test(t));
                     })(t, e)
-                  ? oI(t, --i)
-                  : oI(t, i),
+                  ? dI(t, --i)
+                  : dI(t, i),
               )
               .join('\n');
           }
-          function oI(t, e, n = '    ') {
+          function dI(t, e, n = '    ') {
             return `${n.repeat(Math.max(0, e))}${t}`;
           }
-          var iI = n(2896),
-            rI = {
+          var hI = n(2896),
+            uI = {
               injectType: 'singletonStyleTag',
               attributes: { 'data-cke': !0 },
               insert: 'head',
               singleton: !0,
             };
-          Vi()(iI.Z, rI);
-          iI.Z.locals;
-          const sI = 'SourceEditingMode';
-          function aI(t) {
+          Vi()(hI.Z, uI);
+          hI.Z.locals;
+          const gI = 'SourceEditingMode';
+          function mI(t) {
             return (function (t) {
               return t.startsWith('<');
             })(t)
-              ? nI(t)
+              ? lI(t)
               : t;
           }
-          class cI extends If {}
-          (cI.builtinPlugins = [
+          class pI extends Bf {}
+          (pI.builtinPlugins = [
             class extends fs {
               static get requires() {
-                return [Db, Ck, Nb, xk, Yf, Kb];
+                return [Tb, yk, Lb, Sk, Jf, Qb];
               }
               static get pluginName() {
                 return 'Essentials';
@@ -39995,7 +40119,7 @@
             },
             class extends fs {
               static get requires() {
-                return [Zb];
+                return [Xb];
               }
               static get pluginName() {
                 return 'CKFinderUploadAdapter';
@@ -40003,13 +40127,13 @@
               init() {
                 const t = this.editor.config.get('ckfinder.uploadUrl');
                 t &&
-                  (this.editor.plugins.get(Zb).createUploadAdapter = e =>
-                    new hw(e, t, this.editor.t));
+                  (this.editor.plugins.get(Xb).createUploadAdapter = e =>
+                    new mw(e, t, this.editor.t));
               }
             },
             class extends fs {
               static get requires() {
-                return [Kf];
+                return [Qf];
               }
               static get pluginName() {
                 return 'Autoformat';
@@ -40024,33 +40148,33 @@
               }
               _addListAutoformats() {
                 const t = this.editor.commands;
-                t.get('bulletedList') && uw(this.editor, this, /^[*-]\s$/, 'bulletedList'),
-                  t.get('numberedList') && uw(this.editor, this, /^1[.|)]\s$/, 'numberedList'),
-                  t.get('todoList') && uw(this.editor, this, /^\[\s?\]\s$/, 'todoList'),
+                t.get('bulletedList') && pw(this.editor, this, /^[*-]\s$/, 'bulletedList'),
+                  t.get('numberedList') && pw(this.editor, this, /^1[.|)]\s$/, 'numberedList'),
+                  t.get('todoList') && pw(this.editor, this, /^\[\s?\]\s$/, 'todoList'),
                   t.get('checkTodoList') &&
-                    uw(this.editor, this, /^\[\s?x\s?\]\s$/, () => {
+                    pw(this.editor, this, /^\[\s?x\s?\]\s$/, () => {
                       this.editor.execute('todoList'), this.editor.execute('checkTodoList');
                     });
               }
               _addBasicStylesAutoformats() {
                 const t = this.editor.commands;
                 if (t.get('bold')) {
-                  const t = pw(this.editor, 'bold');
-                  gw(this.editor, this, /(?:^|\s)(\*\*)([^*]+)(\*\*)$/g, t),
-                    gw(this.editor, this, /(?:^|\s)(__)([^_]+)(__)$/g, t);
+                  const t = bw(this.editor, 'bold');
+                  fw(this.editor, this, /(?:^|\s)(\*\*)([^*]+)(\*\*)$/g, t),
+                    fw(this.editor, this, /(?:^|\s)(__)([^_]+)(__)$/g, t);
                 }
                 if (t.get('italic')) {
-                  const t = pw(this.editor, 'italic');
-                  gw(this.editor, this, /(?:^|\s)(\*)([^*_]+)(\*)$/g, t),
-                    gw(this.editor, this, /(?:^|\s)(_)([^_]+)(_)$/g, t);
+                  const t = bw(this.editor, 'italic');
+                  fw(this.editor, this, /(?:^|\s)(\*)([^*_]+)(\*)$/g, t),
+                    fw(this.editor, this, /(?:^|\s)(_)([^_]+)(_)$/g, t);
                 }
                 if (t.get('code')) {
-                  const t = pw(this.editor, 'code');
-                  gw(this.editor, this, /(`)([^`]+)(`)$/g, t);
+                  const t = bw(this.editor, 'code');
+                  fw(this.editor, this, /(`)([^`]+)(`)$/g, t);
                 }
                 if (t.get('strikethrough')) {
-                  const t = pw(this.editor, 'strikethrough');
-                  gw(this.editor, this, /(~~)([^~]+)(~~)$/g, t);
+                  const t = bw(this.editor, 'strikethrough');
+                  fw(this.editor, this, /(~~)([^~]+)(~~)$/g, t);
                 }
               }
               _addHeadingAutoformats() {
@@ -40061,7 +40185,7 @@
                     .forEach(e => {
                       const n = e[7],
                         o = new RegExp(`^(#{${n}})\\s$`);
-                      uw(this.editor, this, o, () => {
+                      pw(this.editor, this, o, () => {
                         if (!t.isEnabled || t.value === e) return !1;
                         this.editor.execute('heading', { value: e });
                       });
@@ -40069,25 +40193,25 @@
               }
               _addBlockQuoteAutoformats() {
                 this.editor.commands.get('blockQuote') &&
-                  uw(this.editor, this, /^>\s$/, 'blockQuote');
+                  pw(this.editor, this, /^>\s$/, 'blockQuote');
               }
               _addCodeBlockAutoformats() {
                 const t = this.editor,
                   e = t.model.document.selection;
                 t.commands.get('codeBlock') &&
-                  uw(t, this, /^```$/, () => {
+                  pw(t, this, /^```$/, () => {
                     if (e.getFirstPosition().parent.is('element', 'listItem')) return !1;
                     this.editor.execute('codeBlock', { usePreviousLanguageChoice: !0 });
                   });
               }
               _addHorizontalLineAutoformats() {
                 this.editor.commands.get('horizontalLine') &&
-                  uw(this.editor, this, /^---$/, 'horizontalLine');
+                  pw(this.editor, this, /^---$/, 'horizontalLine');
               }
             },
             class extends fs {
               static get requires() {
-                return [bw, Aw];
+                return [Cw, vw];
               }
               static get pluginName() {
                 return 'Bold';
@@ -40095,7 +40219,7 @@
             },
             class extends fs {
               static get requires() {
-                return [Sw, Tw];
+                return [Mw, Nw];
               }
               static get pluginName() {
                 return 'Italic';
@@ -40103,7 +40227,7 @@
             },
             class extends fs {
               static get requires() {
-                return [Qw, tA];
+                return [tA, oA];
               }
               static get pluginName() {
                 return 'BlockQuote';
@@ -40114,7 +40238,7 @@
                 return 'CKBox';
               }
               static get requires() {
-                return [fA, eA];
+                return [wA, iA];
               }
             },
             class extends fs {
@@ -40122,7 +40246,7 @@
                 return 'CKFinder';
               }
               static get requires() {
-                return ['Link', 'CKFinderUploadAdapter', vA, AA];
+                return ['Link', 'CKFinderUploadAdapter', EA, vA];
               }
             },
             class extends vs {
@@ -40133,10 +40257,10 @@
                 return 'CloudServices';
               }
               static get requires() {
-                return [SD];
+                return [zD];
               }
               init() {
-                return ID(this, null, function* () {
+                return LD(this, null, function* () {
                   const t = this.context.config.get('cloudServices') || {};
                   for (const [e, n] of Object.entries(t)) this[e] = n;
                   if (!this.tokenUrl) return void (this.token = null);
@@ -40146,7 +40270,7 @@
                 });
               }
               registerTokenUrl(t) {
-                return ID(this, null, function* () {
+                return LD(this, null, function* () {
                   if (this._tokens.has(t)) return this.getTokenFor(t);
                   const e = this.context.plugins.get('CloudServicesCore'),
                     n = yield e.createToken(t).init();
@@ -40168,7 +40292,7 @@
                 return 'EasyImage';
               }
               static get requires() {
-                return [yA, 'ImageUpload'];
+                return [DA, 'ImageUpload'];
               }
               init() {
                 const t = this.editor;
@@ -40179,7 +40303,7 @@
             },
             class extends fs {
               static get requires() {
-                return [PA, OA];
+                return [OA, FA];
               }
               static get pluginName() {
                 return 'Heading';
@@ -40187,7 +40311,7 @@
             },
             class extends fs {
               static get requires() {
-                return [CC, vC];
+                return [yC, EC];
               }
               static get pluginName() {
                 return 'Image';
@@ -40195,7 +40319,7 @@
             },
             class extends fs {
               static get requires() {
-                return [EC, DC];
+                return [IC, TC];
               }
               static get pluginName() {
                 return 'ImageCaption';
@@ -40203,7 +40327,7 @@
             },
             class extends fs {
               static get requires() {
-                return [M_, P_];
+                return [P_, O_];
               }
               static get pluginName() {
                 return 'ImageStyle';
@@ -40211,7 +40335,7 @@
             },
             class extends fs {
               static get requires() {
-                return [ob, $A];
+                return [sb, ZA];
               }
               static get pluginName() {
                 return 'ImageToolbar';
@@ -40219,7 +40343,7 @@
               afterInit() {
                 const t = this.editor,
                   e = t.t,
-                  n = t.plugins.get(ob),
+                  n = t.plugins.get(sb),
                   o = t.plugins.get('ImageUtils');
                 var i;
                 n.register('image', {
@@ -40235,12 +40359,12 @@
                 return 'ImageUpload';
               }
               static get requires() {
-                return [t_, NC, FC];
+                return [o_, LC, UC];
               }
             },
             class extends fs {
               static get requires() {
-                return [$A];
+                return [ZA];
               }
               static get pluginName() {
                 return 'ImageResizeEditing';
@@ -40259,7 +40383,7 @@
               }
               init() {
                 const t = this.editor,
-                  e = new s_(t);
+                  e = new l_(t);
                 this._registerSchema(),
                   this._registerConverters('imageBlock'),
                   this._registerConverters('imageInline'),
@@ -40298,7 +40422,7 @@
             },
             class extends fs {
               static get requires() {
-                return [wb];
+                return [_b];
               }
               static get pluginName() {
                 return 'ImageResizeHandles';
@@ -40310,7 +40434,7 @@
               _setupResizerCreator() {
                 const t = this.editor,
                   e = t.editing.view;
-                e.addObserver(aC),
+                e.addObserver(dC),
                   this.listenTo(e.document, 'imageLoaded', (n, o) => {
                     if (
                       !o.target.matches(
@@ -40319,12 +40443,12 @@
                     )
                       return;
                     const i = t.editing.view.domConverter,
-                      r = i.domToView(o.target).findAncestor({ classes: a_ });
-                    let s = this.editor.plugins.get(wb).getResizerByViewElement(r);
+                      r = i.domToView(o.target).findAncestor({ classes: d_ });
+                    let s = this.editor.plugins.get(_b).getResizerByViewElement(r);
                     if (s) return void s.redraw();
                     const a = t.editing.mapper,
                       c = a.toModelElement(r);
-                    (s = t.plugins.get(wb).attachTo({
+                    (s = t.plugins.get(_b).attachTo({
                       unit: t.config.get('image.resizeUnit'),
                       modelElement: c,
                       viewElement: r,
@@ -40337,15 +40461,15 @@
                       },
                       onCommit(n) {
                         e.change(t => {
-                          t.removeClass(c_, r);
+                          t.removeClass(h_, r);
                         }),
                           t.execute('resizeImage', { width: n });
                       },
                     })),
                       s.on('updateSize', () => {
-                        r.hasClass(c_) ||
+                        r.hasClass(h_) ||
                           e.change(t => {
-                            t.addClass(c_, r);
+                            t.addClass(h_, r);
                           });
                       }),
                       s.bind('isEnabled').to(this);
@@ -40357,12 +40481,82 @@
                 return 'Indent';
               }
               static get requires() {
-                return [R_, V_];
+                return [V_, G_];
+              }
+            },
+            class extends fs {
+              constructor(t) {
+                super(t), t.config.define('indentBlock', { offset: 40, unit: 'px' });
+              }
+              static get pluginName() {
+                return 'IndentBlock';
+              }
+              init() {
+                const t = this.editor,
+                  e = t.config.get('indentBlock');
+                e.classes && e.classes.length
+                  ? (this._setupConversionUsingClasses(e.classes),
+                    t.commands.add(
+                      'indentBlock',
+                      new q_(t, new $_({ direction: 'forward', classes: e.classes })),
+                    ),
+                    t.commands.add(
+                      'outdentBlock',
+                      new q_(t, new $_({ direction: 'backward', classes: e.classes })),
+                    ))
+                  : (t.data.addStyleProcessorRules(Zg),
+                    this._setupConversionUsingOffset(),
+                    t.commands.add(
+                      'indentBlock',
+                      new q_(t, new W_({ direction: 'forward', offset: e.offset, unit: e.unit })),
+                    ),
+                    t.commands.add(
+                      'outdentBlock',
+                      new q_(t, new W_({ direction: 'backward', offset: e.offset, unit: e.unit })),
+                    ));
+              }
+              afterInit() {
+                const t = this.editor,
+                  e = t.model.schema,
+                  n = t.commands.get('indent'),
+                  o = t.commands.get('outdent'),
+                  i = t.config.get('heading.options');
+                ((i && i.map(t => t.model)) || K_).forEach(t => {
+                  e.isRegistered(t) && e.extend(t, { allowAttributes: 'blockIndent' });
+                }),
+                  e.setAttributeProperties('blockIndent', { isFormatting: !0 }),
+                  n.registerChildCommand(t.commands.get('indentBlock')),
+                  o.registerChildCommand(t.commands.get('outdentBlock'));
+              }
+              _setupConversionUsingOffset() {
+                const t = this.editor.conversion,
+                  e =
+                    'rtl' === this.editor.locale.contentLanguageDirection
+                      ? 'margin-right'
+                      : 'margin-left';
+                t
+                  .for('upcast')
+                  .attributeToAttribute({
+                    view: { styles: { [e]: /[\s\S]+/ } },
+                    model: { key: 'blockIndent', value: t => t.getStyle(e) },
+                  }),
+                  t
+                    .for('downcast')
+                    .attributeToAttribute({
+                      model: 'blockIndent',
+                      view: t => ({ key: 'style', value: { [e]: t } }),
+                    });
+              }
+              _setupConversionUsingClasses(t) {
+                const e = { model: { key: 'blockIndent', values: [] }, view: {} };
+                for (const n of t)
+                  e.model.values.push(n), (e.view[n] = { key: 'class', value: [n] });
+                this.editor.conversion.attributeToAttribute(e);
               }
             },
             class extends fs {
               static get requires() {
-                return [Nv, Gv, $v];
+                return [Fv, Qv, ty];
               }
               static get pluginName() {
                 return 'Link';
@@ -40370,7 +40564,7 @@
             },
             class extends fs {
               static get requires() {
-                return [Uy, my];
+                return [Zy, Cy];
               }
               static get pluginName() {
                 return 'List';
@@ -40378,28 +40572,28 @@
             },
             class extends fs {
               static get requires() {
-                return [nx, cx, ix, eb];
+                return [lx, px, hx, ib];
               }
               static get pluginName() {
                 return 'MediaEmbed';
               }
             },
-            TA,
+            NA,
             class extends fs {
               static get pluginName() {
                 return 'PasteFromOffice';
               }
               static get requires() {
-                return [Pf];
+                return [Of];
               }
               init() {
                 const t = this.editor,
                   e = t.plugins.get('ClipboardPipeline'),
                   n = t.editing.view.document,
                   o = [];
-                o.push(new wx(n)),
-                  o.push(new vx(n)),
-                  o.push(new xx(n)),
+                o.push(new Ex(n)),
+                  o.push(new Tx(n)),
+                  o.push(new Bx(n)),
                   e.on(
                     'inputTransformation',
                     (e, i) => {
@@ -40413,7 +40607,7 @@
                       const r = i.dataTransfer.getData('text/html'),
                         s = o.find(t => t.isActive(r));
                       s &&
-                        ((i._parsedData = Dx(r, n.stylesProcessor)),
+                        ((i._parsedData = Px(r, n.stylesProcessor)),
                         s.execute(i),
                         (i._isTransformedWithPasteFromOffice = !0));
                     },
@@ -40423,7 +40617,7 @@
             },
             class extends fs {
               static get requires() {
-                return [fC, $A];
+                return [wC, ZA];
               }
               static get pluginName() {
                 return 'PictureEditing';
@@ -40527,7 +40721,7 @@
             },
             class extends fs {
               static get requires() {
-                return [TE, zE, jE, WE, GE, FE, eb];
+                return [OE, HE, WE, XE, QE, $E, ib];
               }
               static get pluginName() {
                 return 'Table';
@@ -40535,7 +40729,7 @@
             },
             class extends fs {
               static get requires() {
-                return [ob];
+                return [sb];
               }
               static get pluginName() {
                 return 'TableToolbar';
@@ -40543,20 +40737,20 @@
               afterInit() {
                 const t = this.editor,
                   e = t.t,
-                  n = t.plugins.get(ob),
+                  n = t.plugins.get(sb),
                   o = t.config.get('table.contentToolbar'),
                   i = t.config.get('table.tableToolbar');
                 o &&
                   n.register('tableContent', {
                     ariaLabel: e('Table toolbar'),
                     items: o,
-                    getRelatedElement: QE,
+                    getRelatedElement: iD,
                   }),
                   i &&
                     n.register('table', {
                       ariaLabel: e('Table toolbar'),
                       items: i,
-                      getRelatedElement: ZE,
+                      getRelatedElement: oD,
                     });
               }
             },
@@ -40568,7 +40762,7 @@
                 return 'TextTransformation';
               }
               constructor(t) {
-                super(t), t.config.define('typing', { transformations: { include: ck } });
+                super(t), t.config.define('typing', { transformations: { include: hk } });
               }
               init() {
                 const t = this.editor.model.document.selection;
@@ -40588,16 +40782,16 @@
                     return (function (t) {
                       const e = new Set();
                       for (const n of t)
-                        if ('string' == typeof n && ak[n]) for (const t of ak[n]) e.add(t);
+                        if ('string' == typeof n && dk[n]) for (const t of dk[n]) e.add(t);
                         else e.add(n);
                       return Array.from(e);
                     })(t.include.concat(e).filter(o))
                       .filter(o)
-                      .map(t => ('string' == typeof t && sk[t] ? sk[t] : t))
+                      .map(t => ('string' == typeof t && lk[t] ? lk[t] : t))
                       .filter(t => 'object' == typeof t)
-                      .map(t => ({ from: lk(t.from), to: dk(t.to) }));
+                      .map(t => ({ from: uk(t.from), to: gk(t.to) }));
                   })(t.config.get('typing.transformations')),
-                  i = new Qf(t.model, t => {
+                  i = new tk(t.model, t => {
                     for (const e of o) {
                       if (e.from.test(t)) return { normalizedTransformation: e };
                     }
@@ -40619,7 +40813,7 @@
                       }
                       const r = c.start.getShiftedBy(l),
                         d = e.createRange(r, r.getShiftedBy(o.length)),
-                        h = hk(r);
+                        h = mk(r);
                       e.insertContent(t.createText(i, h), d), (l += i.length);
                     }
                     e.enqueueChange(() => {
@@ -40632,7 +40826,7 @@
             },
             class extends fs {
               static get requires() {
-                return [LD, RD];
+                return [UD, qD];
               }
               static get pluginName() {
                 return 'Alignment';
@@ -40640,7 +40834,7 @@
             },
             class extends fs {
               static get requires() {
-                return [FD, UD];
+                return [$D, ZD];
               }
               static get pluginName() {
                 return 'Highlight';
@@ -40648,7 +40842,7 @@
             },
             class extends fs {
               static get requires() {
-                return [oS, cS];
+                return [dS, pS];
               }
               static get pluginName() {
                 return 'CodeBlock';
@@ -40656,7 +40850,7 @@
             },
             class extends fs {
               static get requires() {
-                return [IS, jS, GS, KS];
+                return [LS, WS, QS, eI];
               }
               static get pluginName() {
                 return 'Font';
@@ -40664,7 +40858,7 @@
             },
             class extends fs {
               static get requires() {
-                return [JS, XS, eb];
+                return [rI, sI, ib];
               }
               static get pluginName() {
                 return 'HorizontalLine';
@@ -40787,7 +40981,7 @@
             },
             class extends fs {
               static get requires() {
-                return [Zb];
+                return [Xb];
               }
               static get pluginName() {
                 return 'SimpleUploadAdapter';
@@ -40796,7 +40990,7 @@
                 const t = this.editor.config.get('simpleUpload');
                 t &&
                   (t.uploadUrl
-                    ? (this.editor.plugins.get(Zb).createUploadAdapter = e => new aw(e, t))
+                    ? (this.editor.plugins.get(Xb).createUploadAdapter = e => new dw(e, t))
                     : v('simple-upload-adapter-missing-uploadurl'));
               }
             },
@@ -40812,7 +41006,7 @@
                 return 'SourceEditing';
               }
               static get requires() {
-                return [Jg];
+                return [em];
               }
               init() {
                 const t = this.editor,
@@ -40835,7 +41029,7 @@
                         'isEnabled',
                         t,
                         'isReadOnly',
-                        t.plugins.get(Jg),
+                        t.plugins.get(em),
                         'hasAny',
                         (t, e, n) => !!t && !e && !n,
                       ),
@@ -40898,7 +41092,7 @@
                     t.removeSelectionAttribute(n.document.selection.getAttributeKeys());
                 });
                 for (const [n, o] of e.domRoots) {
-                  const i = aI(t.data.get({ rootName: n })),
+                  const i = mI(t.data.get({ rootName: n })),
                     r = Ct(o.ownerDocument, 'textarea', {
                       rows: '1',
                       'aria-label': 'Source code editing area',
@@ -40945,11 +41139,11 @@
               }
               _disableCommands() {
                 const t = this.editor;
-                for (const e of t.commands.commands()) e.forceDisabled(sI);
+                for (const e of t.commands.commands()) e.forceDisabled(gI);
               }
               _enableCommands() {
                 const t = this.editor;
-                for (const e of t.commands.commands()) e.clearForceDisabled(sI);
+                for (const e of t.commands.commands()) e.clearForceDisabled(gI);
               }
               _handleReadOnlyMode(t) {
                 if (this.isSourceEditingMode)
@@ -40962,7 +41156,7 @@
             },
             class extends fs {
               static get requires() {
-                return [Gw, Ww];
+                return [$w, Yw];
               }
               static get pluginName() {
                 return 'Underline';
@@ -40970,7 +41164,7 @@
             },
             class extends fs {
               static get requires() {
-                return [Bw, Pw];
+                return [zw, Ow];
               }
               static get pluginName() {
                 return 'Strikethrough';
@@ -40978,7 +41172,7 @@
             },
             class extends fs {
               static get requires() {
-                return [_w, Ew];
+                return [xw, Iw];
               }
               static get pluginName() {
                 return 'Code';
@@ -40986,7 +41180,7 @@
             },
             class extends fs {
               static get requires() {
-                return [Lw, Rw];
+                return [jw, Vw];
               }
               static get pluginName() {
                 return 'Subscript';
@@ -40994,14 +41188,15 @@
             },
             class extends fs {
               static get requires() {
-                return [Fw, Hw];
+                return [Uw, qw];
               }
               static get pluginName() {
                 return 'Superscript';
               }
             },
           ]),
-            (cI.defaultConfig = {
+            (pI.defaultConfig = {
+              indentBlock: { offset: 4, unit: 'em' },
               image: {
                 toolbar: [
                   'imageStyle:inline',
@@ -41021,6 +41216,7 @@
                 { name: 'resizeImage:150', value: '150', label: '150%' },
                 { name: 'resizeImage:200', value: '200', label: '200%' },
               ],
+              fontFamily: { supportAllValues: !0 },
               toolbar: {
                 items: [
                   'undo',
@@ -41029,11 +41225,14 @@
                   'sourceEditing',
                   'heading',
                   'fontSize',
+                  'fontFamily',
                   '|',
                   'outdent',
                   'indent',
+                  'alignment',
                   'fontColor',
                   'fontBackgroundColor',
+                  'highlight',
                   '|',
                   'horizontalLine',
                   'codeBlock',
@@ -41052,8 +41251,6 @@
                       'code',
                       'subscript',
                       'superscript',
-                      'alignment',
-                      'highlight',
                     ],
                   },
                   {

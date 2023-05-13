@@ -30,7 +30,7 @@ import {
   ImageResizeEditing,
   ImageResizeHandles,
 } from '@ckeditor/ckeditor5-image';
-import { Indent } from '@ckeditor/ckeditor5-indent';
+import { Indent, IndentBlock } from '@ckeditor/ckeditor5-indent';
 import { Link } from '@ckeditor/ckeditor5-link';
 import { List } from '@ckeditor/ckeditor5-list';
 import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed';
@@ -76,6 +76,7 @@ export default class ClassicEditor extends ClassicEditorBase {
     | typeof CKFinder
     | typeof EasyImage
     | typeof Indent
+    | typeof IndentBlock
     | typeof Link
     | typeof List
     | typeof MediaEmbed
@@ -93,6 +94,10 @@ export default class ClassicEditor extends ClassicEditorBase {
     | typeof PictureEditing
   )[];
   static defaultConfig: {
+    indentBlock: {
+      offset: number;
+      unit: string;
+    };
     image: {
       toolbar: string[];
     };
@@ -108,6 +113,9 @@ export default class ClassicEditor extends ClassicEditorBase {
           label: string;
         }
     )[];
+    fontFamily: {
+      supportAllValues: boolean;
+    };
     toolbar: {
       items: (
         | string
