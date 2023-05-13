@@ -41002,6 +41002,16 @@
             },
           ]),
             (cI.defaultConfig = {
+              image: {
+                toolbar: [
+                  'imageStyle:inline',
+                  'imageStyle:block',
+                  'imageStyle:side',
+                  '|',
+                  'toggleImageCaption',
+                  'imageTextAlternative',
+                ],
+              },
               resizeOptions: [
                 { name: 'resizeImage:29', value: '20', label: '20%' },
                 { name: 'resizeImage:40', value: '40', label: '40%' },
@@ -41058,8 +41068,7 @@
                     withText: !0,
                     items: [
                       'uploadImage',
-                      'linkImage',
-                      'resizeImage',
+                      'imageStyle:inline',
                       'imageStyle:block',
                       'imageStyle:side',
                       'toggleImageCaption',
@@ -41072,17 +41081,6 @@
                     withText: !0,
                     items: ['blockQuote', 'insertTable'],
                   },
-                ],
-              },
-              image: {
-                toolbar: [
-                  'imageStyle:inline',
-                  'imageStyle:block',
-                  'imageStyle:side',
-                  '|',
-                  'toggleImageCaption',
-                  'imageTextAlternative',
-                  'resizeImage',
                 ],
               },
               table: { contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'] },
