@@ -1,4 +1,4 @@
-<div class="bg-slate-800 rounded-md mx-0 md:mx-5 p-5 mb-5">
+<div class="bg-neutral text-neutral-content rounded-md mx-0 md:mx-5 p-5 mb-5">
   <div>
     <h3 class="text-xl font-semibold">{{ title }}</h3>
     <div>
@@ -6,7 +6,7 @@
         <ng-icon name="heroCalendarDays" />
         <h5>{{ date | dayJs : 'YYYY/MM/DD hh:mm' }}</h5>
       </div>
-      <div class="flex items-center link link-accent" (click)="clickCategory.emit(category)">
+      <div class="flex items-center link link-secondary" (click)="clickCategory.emit(category)">
         <ng-icon name="heroHashtag" />
         <h5>{{ category.categoryName }}</h5>
       </div>
@@ -14,5 +14,5 @@
   </div>
   <div class="divider my-1"></div>
   <div>{{ previewContent | ellipsis }}</div>
-  <a class="link link-accent" (click)="showMore.emit(true)">... 繼續閱讀 ...</a>
+  <a class="link link-secondary" (click)="showMore.emit(true)">... 繼續閱讀 ...</a>
 </div>

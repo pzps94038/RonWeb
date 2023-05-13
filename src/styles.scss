@@ -4,9 +4,14 @@
 @tailwind utilities;
 @layer base {
   body {
-    @apply text-white;
+    @apply text-base-content;
   }
 }
+
 .grecaptcha-badge {
   visibility: hidden;
+}
+
+.ck.ck-balloon-panel.ck-balloon-panel_visible {
+  display: none !important;
 }

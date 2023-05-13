@@ -3,8 +3,8 @@
   [for]="control?.name"
   [class]="labelClass"
   [ngClass]="{
-      'text-green-700 dark:text-green-500': control?.touched && !control?.errors,
-      'text-red-700 dark:text-red-500': control?.touched && control?.errors
+      'text-success': control?.touched && !control?.errors,
+      'text-error': control?.touched && control?.errors
     }"
   class="block"
   >{{ labelName }}</label
@@ -17,7 +17,7 @@
   [class]="class"
   [ngClass]="{
     'input-error': control?.touched && control?.errors,
-    'input-accent': control?.touched && !control?.errors
+    'input-success': control?.touched && !control?.errors
   }"
   [class.input-xs]="size === 'xs'"
   [class.input-sm]="size === 'sm'"
@@ -25,7 +25,7 @@
   [class.input-lg]="size === 'lg'"
   [disabled]="disabled"
   [inputMode]="inputmode"
-  class="input input-bordered border-2 dark:text-white text-black"
+  class="input input-bordered border-2"
   [placeholder]="placeholder" />
 <ng-container *ngIf="control?.touched && control?.errors && showErrorMsg">
   <p *ngIf="control?.errors?.['required']" class="mt-2 text-sm text-red-600 dark:text-red-500">

@@ -43,7 +43,9 @@
               "node_modules/swiper/swiper-bundle.min.css",
               "node_modules/animate.css/animate.min.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/@ckeditor/ckeditor5-language/build/translations/zh.js"
+            ],
             "allowedCommonJsDependencies": [
               "lottie-web",
               "sweetalert2",

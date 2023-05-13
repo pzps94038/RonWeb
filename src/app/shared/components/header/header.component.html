@@ -10,21 +10,21 @@
     <ul class="flex justify-around">
       <li
         *ngFor="let link of links"
-        class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-[#0872BF] cursor-pointer mx-8">
+        class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-primary-focus cursor-pointer mx-8">
         <a class="w-full" [routerLink]="link.value">{{ link.name }}</a>
       </li>
       <li
         *ngIf="!isLogin();else isLoginState"
-        class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-[#0872BF] cursor-pointer mx-8">
+        class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-primary-focus cursor-pointer mx-8">
         <a class="w-full" routerLink="/login">登入</a>
       </li>
       <ng-template #isLoginState>
         <li
-          class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-[#0872BF] cursor-pointer mx-8">
+          class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-primary-focus cursor-pointer mx-8">
           <a class="w-full" routerLink="/setting">後台管理</a>
         </li>
         <li
-          class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-[#0872BF] cursor-pointer mx-8">
+          class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-primary-focus cursor-pointer mx-8">
           <a class="w-full" (click)="sharedSrv.logout()">登出</a>
         </li>
       </ng-template>
@@ -50,7 +50,7 @@
         <ul class="w-full overflow-hidden bg-primary text-secondary-content">
           <li
             *ngFor="let link of links"
-            class="flex justify-center border-2 border-white p-2 text-xl cursor-pointer">
+            class="flex justify-center border-2 border-neutral-content p-2 text-xl cursor-pointer">
             <a
               [routerLink]="link.value"
               class="w-full text-center"
@@ -60,13 +60,14 @@
           </li>
           <li
             *ngIf="!isLogin();else isLoginState"
-            class="flex justify-center border-2 border-white p-2 text-xl cursor-pointer">
+            class="flex justify-center border-2 border-neutral-content p-2 text-xl cursor-pointer">
             <a routerLink="/login" class="w-full text-center" (click)="mobileToggle = !mobileToggle"
               >登入</a
             >
           </li>
           <ng-template #isLoginState>
-            <li class="flex justify-center border-2 border-white p-2 text-xl cursor-pointer">
+            <li
+              class="flex justify-center border-2 border-neutral-content p-2 text-xl cursor-pointer">
               <a
                 class="w-full text-center"
                 routerLink="/setting"
@@ -74,7 +75,8 @@
                 >後台管理</a
               >
             </li>
-            <li class="flex justify-center border-2 border-white p-2 text-xl cursor-pointer">
+            <li
+              class="flex justify-center border-2 border-neutral-content p-2 text-xl cursor-pointer">
               <a class="w-full text-center" (click)="sharedSrv.logout()">登出</a>
             </li>
           </ng-template>
