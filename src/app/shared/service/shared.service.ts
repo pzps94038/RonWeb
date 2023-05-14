@@ -2,20 +2,22 @@ import { DeviceService } from 'src/app/shared/service/device.service';
 import { Injectable, inject, signal } from '@angular/core';
 import { BaseMessageResponse, ReturnCode, Token } from '../api/shared/shared.model';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, take } from 'rxjs';
 import { Router } from '@angular/router';
+import { SwalService } from './swal.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
-  device = inject(DeviceService);
+  deviceSrv = inject(DeviceService);
+  swalSrv = inject(SwalService);
   router = inject(Router);
   isLogin = signal(false);
   darkMode = signal(false);
 
   constructor() {
-    if (this.device.isClient) {
+    if (this.deviceSrv.isClient) {
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         this.darkMode.set(true);
       } else {
@@ -30,6 +32,7 @@ export class SharedService {
    */
   logout() {
     this.removeToken();
+    this.removeUserId();
     this.isLogin.set(false);
     this.router.navigate(['blog']);
   }
@@ -39,7 +42,7 @@ export class SharedService {
    * @returns
    */
   getToken() {
-    if (this.device.isClient) {
+    if (this.deviceSrv.isClient) {
       const localToken = localStorage.getItem('token');
       if (localToken) {
         const token = JSON.parse(localToken) as Token;
@@ -63,7 +66,7 @@ export class SharedService {
    * @param token
    */
   setToken(token: Token) {
-    if (this.device.isClient) {
+    if (this.deviceSrv.isClient) {
       localStorage.setItem('token', JSON.stringify(token));
     }
   }
@@ -72,8 +75,49 @@ export class SharedService {
    * 移除token
    */
   removeToken() {
-    if (this.device.isClient) {
+    if (this.deviceSrv.isClient) {
       localStorage.removeItem('token');
+    }
+  }
+
+  /**
+   * 取UserId
+   * @returns
+   */
+  getUserId() {
+    if (this.deviceSrv.isClient) {
+      const localUserId = localStorage.getItem('userId');
+      if (localUserId) {
+        const id = JSON.parse(localUserId) as string;
+        if (id) {
+          return id;
+        } else {
+          return undefined;
+        }
+      } else {
+        return undefined;
+      }
+    } else {
+      return undefined;
+    }
+  }
+
+  /**
+   * 存取userId
+   * @param
+   */
+  setUserId(userId: string) {
+    if (this.deviceSrv.isClient) {
+      localStorage.setItem('userId', userId);
+    }
+  }
+
+  /**
+   * 移除token
+   */
+  removeUserId() {
+    if (this.deviceSrv.isClient) {
+      localStorage.removeItem('userId');
     }
   }
 
@@ -82,8 +126,22 @@ export class SharedService {
    * @param res
    * @returns
    */
-  ifSuccess<T extends BaseMessageResponse>(res: T) {
-    return res.returnCode === ReturnCode.Success;
+  ifSuccess<T extends BaseMessageResponse>(res: T, showError = false) {
+    if (showError) {
+      if (res.returnCode === ReturnCode.Success) {
+        return true;
+      } else {
+        this.swalSrv
+          .alert({
+            text: res.returnMessage,
+          })
+          .pipe(take(1))
+          .subscribe();
+        return false;
+      }
+    } else {
+      return res.returnCode === ReturnCode.Success;
+    }
   }
 
   /**

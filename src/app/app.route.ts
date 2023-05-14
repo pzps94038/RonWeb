@@ -21,7 +21,9 @@ export const routes: Routes = [
   {
     path: 'setting',
     canActivate: [isLoginGuard],
+    canActivateChild: [isLoginGuard],
     loadComponent: () => import('./setting/setting.component').then(m => m.SettingComponent),
+    loadChildren: () => import('./setting/setting.route').then(m => m.routes),
   },
   {
     path: 'about-me',

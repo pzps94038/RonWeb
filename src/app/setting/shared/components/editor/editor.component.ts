@@ -1,8 +1,10 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import * as Editor from './ckeditor';
 import { CustomEditor } from './ckeditor';
+import { SharedService } from 'src/app/shared/service/shared.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-editor',
   standalone: true,
@@ -12,21 +14,16 @@ import { CustomEditor } from './ckeditor';
 })
 export class EditorComponent {
   editor = signal<CustomEditor>(Editor as unknown as CustomEditor);
+  sharedSrv = inject(SharedService);
   @Input() uploadUrl?: string;
   config = {
     simpleUpload: {
-      // The URL that the images are uploaded to.
-      uploadUrl: 'https://ron-web-api.herokuapp.com/api/Upload',
-
-      // Enable the XMLHttpRequest.withCredentials property.
+      uploadUrl: `${environment.baseUrl}/api/upload`,
       withCredentials: true,
-
-      // Headers sent along with the XMLHttpRequest to the upload server.
       headers: {
         'X-CSRF-TOKEN': 'CSRF-Token',
-        Authorization: 'Bearer <JSON Web Token>',
+        Authorization: `Bearer ${this.sharedSrv.getToken()?.accessToken ?? ''}`,
       },
     },
   };
-  constructor() {}
 }
