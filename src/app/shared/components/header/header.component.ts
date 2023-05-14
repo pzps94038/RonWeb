@@ -66,8 +66,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
         // 離開焦點
         if (!isIntersecting) {
           this.render.addClass(target, 'fixed');
-          this.render.addClass(target, 'bg-black');
-          this.render.removeClass(target, 'bg-transparent');
           this.render.removeClass(target, 'absolute');
         }
       });
@@ -80,8 +78,6 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
         )
         .subscribe(() => {
           this.render.addClass(header, 'absolute');
-          this.render.addClass(header, 'bg-transparent');
-          this.render.removeClass(header, 'bg-black');
           this.render.removeClass(header, 'fixed');
         });
     }
