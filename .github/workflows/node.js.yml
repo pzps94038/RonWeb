@@ -21,37 +21,18 @@ jobs:
             - run: npm ci
             - run: npm run prerender
             - name: Upload build artifact
-              if: github.ref == 'main'
+              if: github.ref == 'refs/heads/main'
               uses: actions/upload-artifact@v2
               with:
                   name: prerender
                   path: dist
                   retention-days: 1
             - run: npm run build:gitHubPage
-              if: github.ref == 'main'
+              if: github.ref == 'refs/heads/main'
             - name: Deploy to GitHub Pages
-              if: github.ref == 'main'
+              if: github.ref == 'refs/heads/main'
               uses: JamesIves/github-pages-deploy-action@4.1.5
               with:
                 branch: gh-pages
                 folder: dist/RonWeb/browser
                 token: ${{ secrets.TOKEN }}
-            - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
-              if: github.ref == 'main'
-              uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
-              with:
-                email: ${{ secrets.HEROKU_EMAIL }}
-                heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-                heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-                # Dockerfile directory.
-                dockerfile_directory: ./
-                # Dockerfile name.
-                dockerfile_name: Dockerfile
-                # (Optional, default: "")
-                # Additional options of docker build command.
-                docker_options: "--no-cache"
-                # (Optional, default: "web")
-                # Select the process type for which you want the docker container to be uploaded.
-                # By default, this argument is set to "web".
-                # For more information look at https://devcenter.heroku.com/articles/process-model
-                process_type: web
