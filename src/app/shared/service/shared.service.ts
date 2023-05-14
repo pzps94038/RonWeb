@@ -11,8 +11,17 @@ import { Router } from '@angular/router';
 export class SharedService {
   device = inject(DeviceService);
   router = inject(Router);
-
   isLogin = signal(false);
+  darkMode = signal(false);
+
+  constructor() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      this.darkMode.set(true);
+    } else {
+      this.darkMode.set(false);
+    }
+    this.toggleTheme(this.darkMode());
+  }
 
   /**
    * 登出
@@ -84,5 +93,15 @@ export class SharedService {
       const isEmpty = !((control?.value as string | undefined | null) ?? '').trim().length;
       return isEmpty ? { empty: { value: control.value } } : null;
     };
+  }
+
+  toggleTheme(darkMode: boolean) {
+    this.darkMode.set(darkMode);
+    const html = document.getElementsByTagName('html')[0];
+    if (darkMode) {
+      html.setAttribute('data-theme', 'business');
+    } else {
+      html.setAttribute('data-theme', 'winter');
+    }
   }
 }

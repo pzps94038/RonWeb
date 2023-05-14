@@ -2,27 +2,27 @@
   .ck {
     .ck-button.ck-on,
     a.ck.ck-button.ck-on {
-      @apply bg-neutral-focus;
+      @apply bg-base-100;
     }
     .ck-button:not(.ck-disabled):hover,
     a.ck.ck-button:not(.ck-disabled):hover {
-      @apply bg-neutral-focus;
+      @apply bg-base-100;
     }
     .ck-list__item .ck-button:hover:not(.ck-disabled) {
-      @apply bg-neutral-focus;
+      @apply bg-base-100;
     }
-    // @apply bg-neutral #{!important};
+    // @apply  bg-base-100 #{!important};
     .ck-toolbar__items,
     .ck-color-grids-page-view {
-      @apply bg-neutral;
+      @apply bg-base-100;
     }
     .ck-button,
     .ck-button__label {
-      @apply text-neutral-content;
+      @apply text-base-content;
     }
     .ck-list,
     .ck-content {
-      @apply bg-neutral text-neutral-content;
+      @apply bg-base-100 text-base-content;
     }
     .ck-insert-table-dropdown__grid,
     .ck-insert-table-dropdown__label,
@@ -32,10 +32,10 @@
     .ck-media-form,
     .ck-labeled-field-view__status,
     .ck-splitbutton__action {
-      @apply bg-neutral text-base-content #{!important};
+      @apply bg-base-100 text-base-content #{!important};
     }
     .ck-editor__editable pre {
-      @apply bg-neutral-focus text-base-content;
+      @apply bg-base-100 text-base-content;
     }
   }
 }

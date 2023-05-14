@@ -1,10 +1,8 @@
 <header
   #header
-  class="hidden lg:flex py-3 justify-between items-center top-0 w-full absolute z-50 bg-transparent">
+  class="hidden lg:flex py-3 justify-between items-center top-0 w-full absolute z-50 bg-opacity-90 bg-base-100">
   <div class="ml-14 flex items-center">
-    <a routerLink="/blog">
-      <img src="assets/images/logo.png" class="w-12 object-cover" alt="logo" loading="lazy" />
-    </a>
+    <a routerLink="/blog" class="font-bold text-3xl logo"> RON </a>
   </div>
   <div class="mr-14">
     <ul class="flex justify-around">
@@ -33,12 +31,11 @@
 </header>
 
 <header #mobile>
-  <nav class="flex lg:hidden fixed flex-wrap bg-black top-0 left-0 right-0 z-50 py-2">
+  <nav
+    class="flex lg:hidden fixed flex-wrap top-0 left-0 right-0 z-50 py-2 bg-opacity-90 bg-base-200">
     <div class="flex justify-between w-full">
       <div class="ml-5 flex items-center">
-        <a routerLink="/blog">
-          <img src="assets/images/logo.png" class="w-12 object-cover" alt="logo" loading="lazy" />
-        </a>
+        <a routerLink="/blog" class="font-bold text-3xl logo"> RON </a>
       </div>
       <div class="menu-icon" [class.open]="mobileToggle" (click)="mobileToggle = !mobileToggle">
         <div class="menu-icon_hamburger"></div>
@@ -47,10 +44,10 @@
     <div class="collapse w-full">
       <input type="checkbox" [hidden]="true" [(ngModel)]="mobileToggle" />
       <div class="collapse-content">
-        <ul class="w-full overflow-hidden bg-primary text-secondary-content">
+        <ul class="w-full overflow-hidden">
           <li
             *ngFor="let link of links"
-            class="flex justify-center border-2 border-neutral-content p-2 text-xl cursor-pointer">
+            class="flex justify-center border border-neutral-content p-2 text-xl cursor-pointer">
             <a
               [routerLink]="link.value"
               class="w-full text-center"
@@ -58,16 +55,20 @@
               >{{ link.name }}</a
             >
           </li>
-          <li
-            *ngIf="!isLogin();else isLoginState"
-            class="flex justify-center border-2 border-neutral-content p-2 text-xl cursor-pointer">
-            <a routerLink="/login" class="w-full text-center" (click)="mobileToggle = !mobileToggle"
-              >登入</a
-            >
-          </li>
-          <ng-template #isLoginState>
+          <ng-container *ngIf="!isLogin()">
             <li
-              class="flex justify-center border-2 border-neutral-content p-2 text-xl cursor-pointer">
+              class="flex justify-center border border-neutral-content p-2 text-xl cursor-pointer">
+              <a
+                routerLink="/login"
+                class="w-full text-center"
+                (click)="mobileToggle = !mobileToggle"
+                >登入</a
+              >
+            </li>
+          </ng-container>
+          <ng-container *ngIf="isLogin()">
+            <li
+              class="flex justify-center border border-neutral-content p-2 text-xl cursor-pointer">
               <a
                 class="w-full text-center"
                 routerLink="/setting"
@@ -76,10 +77,10 @@
               >
             </li>
             <li
-              class="flex justify-center border-2 border-neutral-content p-2 text-xl cursor-pointer">
+              class="flex justify-center border border-neutral-content p-2 text-xl cursor-pointer">
               <a class="w-full text-center" (click)="sharedSrv.logout()">登出</a>
             </li>
-          </ng-template>
+          </ng-container>
         </ul>
       </div>
     </div>

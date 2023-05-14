@@ -1,5 +1,7 @@
-$menu-color: rgb(255, 255, 255);
 $fatness: 5px;
+.logo {
+  letter-spacing: 2px;
+}
 @mixin transition {
   transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
@@ -16,7 +18,7 @@ $fatness: 5px;
   &_hamburger {
     width: 100%;
     height: $fatness;
-    background: $menu-color;
+    @apply bg-base-content;
     position: relative;
     border-radius: 5px;
     transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -26,7 +28,7 @@ $fatness: 5px;
       content: '';
       width: 100%;
       height: $fatness;
-      background: $menu-color;
+      @apply bg-base-content;
       border-radius: 5px;
       transform: translateY(-15px);
       transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -41,14 +43,14 @@ $fatness: 5px;
   &.open {
     .menu-icon_hamburger {
       transform: translateX(-30px);
-      background: transparent;
+      @apply bg-transparent;
       &:before {
         transform: translate(30px) rotate(45deg);
-        background: $menu-color;
+        @apply bg-base-content;
       }
       &:after {
         transform: translate(30px) rotate(-45deg);
-        background: $menu-color;
+        @apply bg-base-content;
       }
     }
   }

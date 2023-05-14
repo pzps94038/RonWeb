@@ -1,0 +1,6 @@
+<div
+  class="fixed right-10 bottom-10 w-14 h-14 bg-base-content rounded-full flex justify-center items-center text-base-100 text-2xl cursor-pointer"
+  (click)="toggleTheme()">
+  <ng-icon *ngIf="sharedSrv.darkMode()" name="heroMoon" />
+  <ng-icon *ngIf="!sharedSrv.darkMode()" name="heroSun " />
+</div>
