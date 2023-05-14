@@ -2,10 +2,10 @@
 <div
   class="bg-banner bg-cover bg-fixed bg-center h-80 md:h-96 flex justify-center items-center"></div>
 <div class="container mx-auto mt-5 flex flex-wrap">
-  <div class="w-full md:w-3/5 order-2 md:order-1">
+  <div class="w-full lg:w-4/6 md:w-3/5 order-2 md:order-1">
     <router-outlet />
   </div>
-  <div class="w-full md:w-2/5 flex flex-col flex-wrap order-1 md:order-2">
+  <div class="w-full lg:w-2/6 md:w-2/5 flex flex-col flex-wrap order-1 md:order-2">
     <form [formGroup]="form" class="w-full flex" (ngSubmit)="submit()">
       <div class="w-4/5 mx-2">
         <app-input
