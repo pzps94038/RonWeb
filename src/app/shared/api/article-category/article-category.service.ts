@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import {
   CreateArticleCategoryRequest,
   GetArticleCategoryResponse,
-  ModifyArticleCategoryRequest,
+  UpdateArticleCategoryRequest,
 } from './article-category.model';
 import { environment } from 'src/environments/environment';
 import { BaseMessageResponse } from '../shared/shared.model';
@@ -18,7 +18,7 @@ export class ArticleCategoryService {
     return this.http.get<GetArticleCategoryResponse>(`${environment.baseUrl}/articleCategory`);
   }
 
-  modifyArticleCategory(req: ModifyArticleCategoryRequest) {
+  updateArticleCategory(req: UpdateArticleCategoryRequest) {
     return this.http.patch<BaseMessageResponse>(
       `${environment.baseUrl}/articleCategory/${req.categoryId}`,
       req,

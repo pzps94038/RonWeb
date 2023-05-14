@@ -13,4 +13,4 @@ export type CreateArticleCategoryRequest = {
   categoryName: string;
 };
 
-export type ModifyArticleCategoryRequest = ArticleCategory;
+export type UpdateArticleCategoryRequest = ArticleCategory;

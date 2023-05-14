@@ -16,9 +16,9 @@ export const httpInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<any>> => {
-  const refresh = inject(RefreshTokenService);
+  const refreshSrv = inject(RefreshTokenService);
   const sharedSrv = inject(SharedService);
-  const swal = inject(SwalService);
+  const swalSrv = inject(SwalService);
   const accessToken = '';
   const authReq = req.clone({
     headers: req.headers.set('Authorization', `Bearer ${accessToken}`),
@@ -27,16 +27,18 @@ export const httpInterceptor: HttpInterceptorFn = (
   const refreshToken = (
     next: (req: HttpRequest<unknown>) => Observable<HttpEvent<unknown>>,
     req: HttpRequest<any>,
+    userId: string,
+    refreshToken: string,
     err: HttpErrorResponse,
   ) => {
-    return refresh.refreshToken({ userId: '', refreshToken: '' }).pipe(
+    return refreshSrv.refreshToken({ userId, refreshToken }).pipe(
       concatMap(({ returnCode, returnMessage, data }) => {
         if (returnCode === ReturnCode.Success) {
           const headers = req.headers.set('Authorization', `Bearer ${data.accessToken}`);
           const newReq = req.clone({ headers });
           return next(newReq);
         } else if (returnCode === ReturnCode.AuthExpired) {
-          return swal
+          return swalSrv
             .alert({
               text: returnMessage,
             })
@@ -52,8 +54,10 @@ export const httpInterceptor: HttpInterceptorFn = (
   };
   return next(authReq).pipe(
     catchError((err: HttpErrorResponse) => {
-      if (err.status === 401) {
-        return refreshToken(next, authReq, err);
+      const userId = sharedSrv.getUserId();
+      const token = sharedSrv.getToken()?.refreshToken;
+      if (err.status === 401 && userId && token) {
+        return refreshToken(next, authReq, userId, token, err);
       } else {
         throw err;
       }

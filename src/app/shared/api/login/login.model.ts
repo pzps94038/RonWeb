@@ -5,4 +5,8 @@ export type LoginRequest = {
   password: string;
 };
 
-export type LoginResponse = BaseResponse<Token>;
+export type LoginResponse = BaseResponse<
+  Token & {
+    userId: string;
+  }
+>;

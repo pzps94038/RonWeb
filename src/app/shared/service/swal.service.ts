@@ -32,4 +32,17 @@ export class SwalService {
     };
     return from(Swal.fire(config));
   }
+
+  confirm(options: SwalModel): Observable<SweetAlertResult<boolean>> {
+    const config = {
+      title: options.title,
+      text: options.text,
+      icon: options.icon ?? SwalIcon.Question,
+      showCancelButton: options.showCancelButton ?? true,
+      confirmButtonText: options.confirmButtonText ?? '確定',
+      cancelButtonText: options.cancelButtonText ?? '取消',
+      heightAuto: false,
+    };
+    return from(Swal.fire(config));
+  }
 }

@@ -20,3 +20,20 @@ export type Article = {
 };
 
 export type Articles = Article[];
+
+export type CreateArticleRequest = {
+  articleTitle: string;
+  previewContent: string;
+  content: string;
+  categoryId: string;
+  userId: string;
+};
+
+export type UpdateArticleRequest = {
+  articleId: string;
+  articleTitle: string;
+  previewContent: string;
+  content: string;
+  categoryId: string;
+  userId: string;
+};
