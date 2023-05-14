@@ -19,11 +19,12 @@ export const httpInterceptor: HttpInterceptorFn = (
   const refreshSrv = inject(RefreshTokenService);
   const sharedSrv = inject(SharedService);
   const swalSrv = inject(SwalService);
-  const accessToken = '';
-  const authReq = req.clone({
-    headers: req.headers.set('Authorization', `Bearer ${accessToken}`),
-  });
-
+  const accessToken = sharedSrv.getToken()?.accessToken;
+  if (accessToken) {
+    req = req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${accessToken}`),
+    });
+  }
   const refreshToken = (
     next: (req: HttpRequest<unknown>) => Observable<HttpEvent<unknown>>,
     req: HttpRequest<any>,
@@ -34,6 +35,7 @@ export const httpInterceptor: HttpInterceptorFn = (
     return refreshSrv.refreshToken({ userId, refreshToken }).pipe(
       concatMap(({ returnCode, returnMessage, data }) => {
         if (returnCode === ReturnCode.Success) {
+          sharedSrv.setToken(data);
           const headers = req.headers.set('Authorization', `Bearer ${data.accessToken}`);
           const newReq = req.clone({ headers });
           return next(newReq);
@@ -52,16 +54,16 @@ export const httpInterceptor: HttpInterceptorFn = (
       }),
     );
   };
-  return next(authReq).pipe(
+  return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
       const userId = sharedSrv.getUserId();
       const token = sharedSrv.getToken()?.refreshToken;
       if (err.status === 401 && userId && token) {
-        return refreshToken(next, authReq, userId, token, err);
+        return refreshToken(next, req, userId, token, err);
       } else {
         throw err;
       }
     }),
-    retry(2),
+    retry(1),
   );
 };
