@@ -15,12 +15,14 @@ export class SharedService {
   darkMode = signal(false);
 
   constructor() {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      this.darkMode.set(true);
-    } else {
-      this.darkMode.set(false);
+    if (this.device.isClient) {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        this.darkMode.set(true);
+      } else {
+        this.darkMode.set(false);
+      }
+      this.toggleTheme(this.darkMode());
     }
-    this.toggleTheme(this.darkMode());
   }
 
   /**
