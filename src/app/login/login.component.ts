@@ -76,10 +76,13 @@ export class LoginComponent {
           takeUntilDestroyed(this._destroyRef),
         )
         .subscribe(res => {
-          const { returnMessage, data } = res;
+          const {
+            returnMessage,
+            data: { token, userId },
+          } = res;
           if (this.sharedSrv.ifSuccess(res)) {
-            this.sharedSrv.setToken(data);
-            this.sharedSrv.setUserId(data.userId);
+            this.sharedSrv.setToken(token);
+            this.sharedSrv.setUserId(userId);
             this.sharedSrv.isLogin.set(true);
             this.router.navigate(['setting']);
           } else {
