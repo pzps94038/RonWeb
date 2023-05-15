@@ -1,6 +1,6 @@
 <ng-container *ngIf="!isError(); else error">
   <ng-container *ngIf="!isLoading(); else loading">
-    <button class="btn btn-primary my-5">新增文章</button>
+    <button class="btn btn-primary my-5" routerLink="/setting/article/create">新增文章</button>
     <div class="overflow-x-auto w-full">
       <table class="table table-zebra w-full">
         <thead>

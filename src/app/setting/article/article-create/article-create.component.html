@@ -1,1 +1,34 @@
-<p>article-create works!</p>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="my-5">
+    <app-input
+      labelName="文章標題"
+      labelClass="text-lg my-2 text-center md:text-left"
+      class="w-full"
+      placeholder="請輸入文章標題"
+      formControlName="articleTitle" />
+  </div>
+  <div class="my-5">
+    <app-select
+      labelName="文章分類"
+      labelClass="text-lg my-2 text-center md:text-left"
+      class="w-full"
+      formControlName="categoryId"
+      [options]="categoryOptions()" />
+  </div>
+  <div class="my-5">
+    <app-editor
+      labelName="預覽內容"
+      labelClass="text-lg my-2 text-center md:text-left"
+      placeholder="請輸入預覽內容"
+      formControlName="previewContent" />
+  </div>
+  <div class="my-5">
+    <app-editor
+      labelName="文章內容"
+      labelClass="text-lg my-2 text-center md:text-left"
+      formControlName="content" />
+  </div>
+  <div class="flex justify-end items-center">
+    <button type="submit" class="btn btn-primary">新增文章</button>
+  </div>
+</form>

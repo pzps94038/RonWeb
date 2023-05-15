@@ -88,7 +88,7 @@ export class SharedService {
     if (this.deviceSrv.isClient) {
       const localUserId = localStorage.getItem('userId');
       if (localUserId) {
-        const id = JSON.parse(localUserId) as string;
+        const id = localUserId as string;
         if (id) {
           return id;
         } else {

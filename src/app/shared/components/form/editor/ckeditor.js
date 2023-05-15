@@ -25541,12 +25541,10 @@
                 i = o.document;
               e.register('softBreak', { allowWhere: '$text', isInline: !0 }),
                 n.for('upcast').elementToElement({ model: 'softBreak', view: 'br' }),
-                n
-                  .for('downcast')
-                  .elementToElement({
-                    model: 'softBreak',
-                    view: (t, { writer: e }) => e.createEmptyElement('br'),
-                  }),
+                n.for('downcast').elementToElement({
+                  model: 'softBreak',
+                  view: (t, { writer: e }) => e.createEmptyElement('br'),
+                }),
                 o.addObserver(vk),
                 t.commands.add('shiftEnter', new xk(t)),
                 this.listenTo(
@@ -27257,12 +27255,10 @@
             }
             _setupDropMarker() {
               const t = this.editor;
-              t.conversion
-                .for('editingDowncast')
-                .markerToHighlight({
-                  model: 'drop-target',
-                  view: { classes: ['ck-clipboard-drop-target-range'] },
-                }),
+              t.conversion.for('editingDowncast').markerToHighlight({
+                model: 'drop-target',
+                view: { classes: ['ck-clipboard-drop-target-range'] },
+              }),
                 t.conversion.for('editingDowncast').markerToElement({
                   model: 'drop-target',
                   view: (e, { writer: n }) => {
@@ -29336,15 +29332,13 @@
                 t.conversion
                   .for('downcast')
                   .attributeToAttribute({ model: 'ckboxImageId', view: 'data-ckbox-resource-id' }),
-                t.conversion
-                  .for('upcast')
-                  .elementToAttribute({
-                    model: {
-                      key: 'ckboxImageId',
-                      value: t => t.getAttribute('data-ckbox-resource-id'),
-                    },
-                    view: { attributes: { 'data-ckbox-resource-id': /[\s\S]+/ } },
-                  });
+                t.conversion.for('upcast').elementToAttribute({
+                  model: {
+                    key: 'ckboxImageId',
+                    value: t => t.getAttribute('data-ckbox-resource-id'),
+                  },
+                  view: { attributes: { 'data-ckbox-resource-id': /[\s\S]+/ } },
+                });
             }
             _initFixers() {
               const t = this.editor,
@@ -29615,18 +29609,16 @@
                 t.commands.add('insertParagraph', new MA(t)),
                 e.schema.register('paragraph', { inheritAllFrom: '$block' }),
                 t.conversion.elementToElement({ model: 'paragraph', view: 'p' }),
-                t.conversion
-                  .for('upcast')
-                  .elementToElement({
-                    model: (t, { writer: e }) =>
-                      BA.paragraphLikeElements.has(t.name)
-                        ? t.isEmpty
-                          ? null
-                          : e.createElement('paragraph')
-                        : null,
-                    view: /.+/,
-                    converterPriority: 'low',
-                  });
+                t.conversion.for('upcast').elementToElement({
+                  model: (t, { writer: e }) =>
+                    BA.paragraphLikeElements.has(t.name)
+                      ? t.isEmpty
+                        ? null
+                        : e.createElement('paragraph')
+                      : null,
+                  view: /.+/,
+                  converterPriority: 'low',
+                });
             }
           };
           let NA = BA;
@@ -29730,13 +29722,11 @@
                 });
             }
             _addDefaultH1Conversion(t) {
-              t.conversion
-                .for('upcast')
-                .elementToElement({
-                  model: 'heading1',
-                  view: 'h1',
-                  converterPriority: w.get('low') + 1,
-                });
+              t.conversion.for('upcast').elementToElement({
+                model: 'heading1',
+                view: 'h1',
+                converterPriority: w.get('low') + 1,
+              });
             }
           }
           var RA = n(8733),
@@ -30427,12 +30417,10 @@
               n
                 .for('dataDowncast')
                 .elementToStructure({ model: 'imageBlock', view: (t, { writer: e }) => VA(e) }),
-                n
-                  .for('editingDowncast')
-                  .elementToStructure({
-                    model: 'imageBlock',
-                    view: (t, { writer: n }) => o.toImageWidget(VA(n), n, e('image widget')),
-                  }),
+                n.for('editingDowncast').elementToStructure({
+                  model: 'imageBlock',
+                  view: (t, { writer: n }) => o.toImageWidget(VA(n), n, e('image widget')),
+                }),
                 n
                   .for('downcast')
                   .add(lC(o, 'imageBlock', 'src'))
@@ -30532,12 +30520,10 @@
                 e = t.t,
                 n = t.conversion,
                 o = t.plugins.get('ImageUtils');
-              n
-                .for('dataDowncast')
-                .elementToElement({
-                  model: 'imageInline',
-                  view: (t, { writer: e }) => e.createEmptyElement('img'),
-                }),
+              n.for('dataDowncast').elementToElement({
+                model: 'imageInline',
+                view: (t, { writer: e }) => e.createEmptyElement('img'),
+              }),
                 n.for('editingDowncast').elementToStructure({
                   model: 'imageInline',
                   view: (t, { writer: n }) =>
@@ -30558,16 +30544,14 @@
                   .add(lC(o, 'imageInline', 'src'))
                   .add(lC(o, 'imageInline', 'alt'))
                   .add(cC(o, 'imageInline')),
-                n
-                  .for('upcast')
-                  .elementToElement({
-                    view: HA(t, 'imageInline'),
-                    model: (t, { writer: e }) =>
-                      e.createElement(
-                        'imageInline',
-                        t.hasAttribute('src') ? { src: t.getAttribute('src') } : void 0,
-                      ),
-                  });
+                n.for('upcast').elementToElement({
+                  view: HA(t, 'imageInline'),
+                  model: (t, { writer: e }) =>
+                    e.createElement(
+                      'imageInline',
+                      t.hasAttribute('src') ? { src: t.getAttribute('src') } : void 0,
+                    ),
+                });
             }
             _setupClipboardIntegration() {
               const t = this.editor,
@@ -30707,19 +30691,15 @@
                 n = t.plugins.get('ImageUtils'),
                 o = t.plugins.get('ImageCaptionUtils'),
                 i = t.t;
-              t.conversion
-                .for('upcast')
-                .elementToElement({
-                  view: t => o.matchImageCaptionViewElement(t),
+              t.conversion.for('upcast').elementToElement({
+                view: t => o.matchImageCaptionViewElement(t),
+                model: 'caption',
+              }),
+                t.conversion.for('dataDowncast').elementToElement({
                   model: 'caption',
+                  view: (t, { writer: e }) =>
+                    n.isBlockImage(t.parent) ? e.createContainerElement('figcaption') : null,
                 }),
-                t.conversion
-                  .for('dataDowncast')
-                  .elementToElement({
-                    model: 'caption',
-                    view: (t, { writer: e }) =>
-                      n.isBlockImage(t.parent) ? e.createContainerElement('figcaption') : null,
-                  }),
                 t.conversion.for('editingDowncast').elementToElement({
                   model: 'caption',
                   view: (t, { writer: o }) => {
@@ -31116,12 +31096,10 @@
                 a = new n_(t);
               t.commands.add('uploadImage', a),
                 t.commands.add('imageUpload', a),
-                n
-                  .for('upcast')
-                  .attributeToAttribute({
-                    view: { name: 'img', key: 'uploadId' },
-                    model: 'uploadId',
-                  }),
+                n.for('upcast').attributeToAttribute({
+                  view: { name: 'img', key: 'uploadId' },
+                  model: 'uploadId',
+                }),
                 this.listenTo(t.editing.view.document, 'clipboardInput', (e, n) => {
                   if (
                     ((o = n.dataTransfer),
@@ -32234,12 +32212,10 @@
                 t.conversion
                   .for('editingDowncast')
                   .attributeToElement({ model: 'linkHref', view: (t, e) => Av(Cv(t), e) }),
-                t.conversion
-                  .for('upcast')
-                  .elementToAttribute({
-                    view: { name: 'a', attributes: { href: !0 } },
-                    model: { key: 'linkHref', value: t => t.getAttribute('href') },
-                  }),
+                t.conversion.for('upcast').elementToAttribute({
+                  view: { name: 'a', attributes: { href: !0 } },
+                  model: { key: 'linkHref', value: t => t.getAttribute('href') },
+                }),
                 t.commands.add('link', new Ev(t)),
                 t.commands.add('unlink', new Sv(t));
               const e = (function (t, e) {
@@ -32303,12 +32279,10 @@
                       }
                     },
                   }),
-                  e.conversion
-                    .for('upcast')
-                    .elementToAttribute({
-                      view: Ov({ name: 'a' }, o._createPattern()),
-                      model: { key: o.id },
-                    });
+                  e.conversion.for('upcast').elementToAttribute({
+                    view: Ov({ name: 'a' }, o._createPattern()),
+                    model: { key: o.id },
+                  });
               });
             }
             _enableLinkOpen() {
@@ -32713,15 +32687,13 @@
                 t.conversion
                   .for('editingDowncast')
                   .markerToHighlight({ model: Zv, view: { classes: ['ck-fake-link-selection'] } }),
-                t.conversion
-                  .for('editingDowncast')
-                  .markerToElement({
-                    model: Zv,
-                    view: {
-                      name: 'span',
-                      classes: ['ck-fake-link-selection', 'ck-fake-link-selection_collapsed'],
-                    },
-                  });
+                t.conversion.for('editingDowncast').markerToElement({
+                  model: Zv,
+                  view: {
+                    name: 'span',
+                    classes: ['ck-fake-link-selection', 'ck-fake-link-selection_collapsed'],
+                  },
+                });
             }
             destroy() {
               super.destroy(),
@@ -36395,18 +36367,14 @@
                   });
                 }),
                 o.for('upcast').add(Rx()),
-                o
-                  .for('editingDowncast')
-                  .elementToStructure({
-                    model: { name: 'table', attributes: ['headingRows'] },
-                    view: Ux(i, { asWidget: !0, additionalSlots: this._additionalSlots }),
-                  }),
-                o
-                  .for('dataDowncast')
-                  .elementToStructure({
-                    model: { name: 'table', attributes: ['headingRows'] },
-                    view: Ux(i, { additionalSlots: this._additionalSlots }),
-                  }),
+                o.for('editingDowncast').elementToStructure({
+                  model: { name: 'table', attributes: ['headingRows'] },
+                  view: Ux(i, { asWidget: !0, additionalSlots: this._additionalSlots }),
+                }),
+                o.for('dataDowncast').elementToStructure({
+                  model: { name: 'table', attributes: ['headingRows'] },
+                  view: Ux(i, { additionalSlots: this._additionalSlots }),
+                }),
                 o.for('upcast').elementToElement({ model: 'tableRow', view: 'tr' }),
                 o.for('upcast').add(t => {
                   t.on(
@@ -36417,13 +36385,11 @@
                     { priority: 'high' },
                   );
                 }),
-                o
-                  .for('downcast')
-                  .elementToElement({
-                    model: 'tableRow',
-                    view: (t, { writer: e }) =>
-                      t.isEmpty ? e.createEmptyElement('tr') : e.createContainerElement('tr'),
-                  }),
+                o.for('downcast').elementToElement({
+                  model: 'tableRow',
+                  view: (t, { writer: e }) =>
+                    t.isEmpty ? e.createEmptyElement('tr') : e.createContainerElement('tr'),
+                }),
                 o.for('upcast').elementToElement({ model: 'tableCell', view: 'td' }),
                 o.for('upcast').elementToElement({ model: 'tableCell', view: 'th' }),
                 o.for('upcast').add(jx('td')),
@@ -36432,30 +36398,24 @@
                   .for('editingDowncast')
                   .elementToElement({ model: 'tableCell', view: Gx({ asWidget: !0 }) }),
                 o.for('dataDowncast').elementToElement({ model: 'tableCell', view: Gx() }),
-                o
-                  .for('editingDowncast')
-                  .elementToElement({
-                    model: 'paragraph',
-                    view: qx({ asWidget: !0 }),
-                    converterPriority: 'high',
-                  }),
+                o.for('editingDowncast').elementToElement({
+                  model: 'paragraph',
+                  view: qx({ asWidget: !0 }),
+                  converterPriority: 'high',
+                }),
                 o
                   .for('dataDowncast')
                   .elementToElement({ model: 'paragraph', view: qx(), converterPriority: 'high' }),
                 o.for('downcast').attributeToAttribute({ model: 'colspan', view: 'colspan' }),
-                o
-                  .for('upcast')
-                  .attributeToAttribute({
-                    model: { key: 'colspan', value: RE('colspan') },
-                    view: 'colspan',
-                  }),
+                o.for('upcast').attributeToAttribute({
+                  model: { key: 'colspan', value: RE('colspan') },
+                  view: 'colspan',
+                }),
                 o.for('downcast').attributeToAttribute({ model: 'rowspan', view: 'rowspan' }),
-                o
-                  .for('upcast')
-                  .attributeToAttribute({
-                    model: { key: 'rowspan', value: RE('rowspan') },
-                    view: 'rowspan',
-                  }),
+                o.for('upcast').attributeToAttribute({
+                  model: { key: 'rowspan', value: RE('rowspan') },
+                  view: 'rowspan',
+                }),
                 t.config.define('table.defaultHeadings.rows', 0),
                 t.config.define('table.defaultHeadings.columns', 0),
                 t.commands.add('insertTable', new $x(t)),
@@ -39303,31 +39263,21 @@
             }
             _prepareAnyValueConverters() {
               const t = this.editor;
-              t.conversion
-                .for('downcast')
-                .attributeToElement({
-                  model: yS,
-                  view: (t, { writer: e }) =>
-                    e.createAttributeElement(
-                      'span',
-                      { style: 'font-family:' + t },
-                      { priority: 7 },
-                    ),
-                }),
-                t.conversion
-                  .for('upcast')
-                  .elementToAttribute({
-                    model: { key: yS, value: t => t.getStyle('font-family') },
-                    view: { name: 'span', styles: { 'font-family': /.*/ } },
-                  });
+              t.conversion.for('downcast').attributeToElement({
+                model: yS,
+                view: (t, { writer: e }) =>
+                  e.createAttributeElement('span', { style: 'font-family:' + t }, { priority: 7 }),
+              }),
+                t.conversion.for('upcast').elementToAttribute({
+                  model: { key: yS, value: t => t.getStyle('font-family') },
+                  view: { name: 'span', styles: { 'font-family': /.*/ } },
+                });
             }
             _prepareCompatibilityConverter() {
-              this.editor.conversion
-                .for('upcast')
-                .elementToAttribute({
-                  view: { name: 'font', attributes: { face: /.*/ } },
-                  model: { key: yS, value: t => t.getAttribute('face') },
-                });
+              this.editor.conversion.for('upcast').elementToAttribute({
+                view: { name: 'font', attributes: { face: /.*/ } },
+                model: { key: yS, value: t => t.getAttribute('face') },
+              });
             }
           }
           class zS extends fs {
@@ -39541,12 +39491,10 @@
                     );
                 },
               }),
-                e.conversion
-                  .for('upcast')
-                  .elementToAttribute({
-                    model: { key: vS, value: t => t.getStyle('font-size') },
-                    view: { name: 'span', styles: { 'font-size': /.*/ } },
-                  });
+                e.conversion.for('upcast').elementToAttribute({
+                  model: { key: vS, value: t => t.getStyle('font-size') },
+                  view: { name: 'span', styles: { 'font-size': /.*/ } },
+                });
             }
             _prepareCompatibilityConverter() {
               this.editor.conversion.for('upcast').elementToAttribute({
@@ -39691,18 +39639,14 @@
                   ],
                   columns: 5,
                 }),
-                t.conversion
-                  .for('upcast')
-                  .elementToAttribute({
-                    view: { name: 'span', styles: { color: /[\s\S]+/ } },
-                    model: { key: xS, value: SS('color') },
-                  }),
-                t.conversion
-                  .for('upcast')
-                  .elementToAttribute({
-                    view: { name: 'font', attributes: { color: /^#?\w+$/ } },
-                    model: { key: xS, value: t => t.getAttribute('color') },
-                  }),
+                t.conversion.for('upcast').elementToAttribute({
+                  view: { name: 'span', styles: { color: /[\s\S]+/ } },
+                  model: { key: xS, value: SS('color') },
+                }),
+                t.conversion.for('upcast').elementToAttribute({
+                  view: { name: 'font', attributes: { color: /^#?\w+$/ } },
+                  model: { key: xS, value: t => t.getAttribute('color') },
+                }),
                 t.conversion.for('downcast').attributeToElement({ model: xS, view: IS('color') }),
                 t.commands.add(xS, new $S(t)),
                 t.model.schema.extend('$text', { allowAttributes: xS }),
@@ -39880,12 +39824,10 @@
                   columns: 5,
                 }),
                 t.data.addStyleProcessorRules(Yg),
-                t.conversion
-                  .for('upcast')
-                  .elementToAttribute({
-                    view: { name: 'span', styles: { 'background-color': /[\s\S]+/ } },
-                    model: { key: ES, value: SS('background-color') },
-                  }),
+                t.conversion.for('upcast').elementToAttribute({
+                  view: { name: 'span', styles: { 'background-color': /[\s\S]+/ } },
+                  model: { key: ES, value: SS('background-color') },
+                }),
                 t.conversion
                   .for('downcast')
                   .attributeToElement({ model: ES, view: IS('background-color') }),
@@ -39958,12 +39900,10 @@
                 n = t.t,
                 o = t.conversion;
               e.register('horizontalLine', { inheritAllFrom: '$blockObject' }),
-                o
-                  .for('dataDowncast')
-                  .elementToElement({
-                    model: 'horizontalLine',
-                    view: (t, { writer: e }) => e.createEmptyElement('hr'),
-                  }),
+                o.for('dataDowncast').elementToElement({
+                  model: 'horizontalLine',
+                  view: (t, { writer: e }) => e.createEmptyElement('hr'),
+                }),
                 o.for('editingDowncast').elementToStructure({
                   model: 'horizontalLine',
                   view: (t, { writer: e }) => {
@@ -40409,15 +40349,13 @@
                       : (o.removeStyle('width', i), o.removeClass('image_resized', i));
                   }),
                 ),
-                  e.conversion
-                    .for('upcast')
-                    .attributeToAttribute({
-                      view: {
-                        name: 'imageBlock' === t ? 'figure' : 'img',
-                        styles: { width: /.+/ },
-                      },
-                      model: { key: 'width', value: t => t.getStyle('width') },
-                    });
+                  e.conversion.for('upcast').attributeToAttribute({
+                    view: {
+                      name: 'imageBlock' === t ? 'figure' : 'img',
+                      styles: { width: /.+/ },
+                    },
+                    model: { key: 'width', value: t => t.getStyle('width') },
+                  });
               }
             },
             class extends fs {
@@ -40534,18 +40472,14 @@
                     'rtl' === this.editor.locale.contentLanguageDirection
                       ? 'margin-right'
                       : 'margin-left';
-                t
-                  .for('upcast')
-                  .attributeToAttribute({
-                    view: { styles: { [e]: /[\s\S]+/ } },
-                    model: { key: 'blockIndent', value: t => t.getStyle(e) },
-                  }),
-                  t
-                    .for('downcast')
-                    .attributeToAttribute({
-                      model: 'blockIndent',
-                      view: t => ({ key: 'style', value: { [e]: t } }),
-                    });
+                t.for('upcast').attributeToAttribute({
+                  view: { styles: { [e]: /[\s\S]+/ } },
+                  model: { key: 'blockIndent', value: t => t.getStyle(e) },
+                }),
+                  t.for('downcast').attributeToAttribute({
+                    model: 'blockIndent',
+                    view: t => ({ key: 'style', value: { [e]: t } }),
+                  });
               }
               _setupConversionUsingClasses(t) {
                 const e = { model: { key: 'blockIndent', values: [] }, view: {} };

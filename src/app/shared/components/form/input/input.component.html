@@ -1,6 +1,6 @@
 <label
   *ngIf="labelName"
-  [for]="control?.name"
+  [for]="ngControl?.name"
   [class]="labelClass"
   [ngClass]="{
       'text-success': control?.touched && !control?.errors,
@@ -11,7 +11,7 @@
 >
 <input
   [type]="type"
-  [id]="control?.name"
+  [id]="ngControl?.name"
   [(ngModel)]="val"
   (ngModelChange)="change()"
   [class]="class"

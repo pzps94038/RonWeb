@@ -40,6 +40,12 @@ version: 0.1
         body:
           application/json:
             example: !include examples/article/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/article/create.json
 /api/article-category/{id}:
   patch:
     uriParameters:
@@ -68,6 +74,12 @@ version: 0.1
         body:
           application/json:
             example: !include examples/article-category/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/article-category/create.json
 /api/article-label/{id}:
   patch:
     uriParameters:
