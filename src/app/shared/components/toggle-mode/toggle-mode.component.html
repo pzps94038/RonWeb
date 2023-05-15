@@ -1,8 +1,8 @@
 <div
   class="fixed right-10 bottom-10 w-14 h-14 bg-base-content rounded-full flex justify-center items-center text-base-100 text-2xl cursor-pointer"
   (click)="toggleTheme()">
-  <ng-icon *ngIf="!dark(); else darkMode" name="heroSun" />
+  <ng-icon *ngIf="!dark(); else darkMode" name="heroSun" class="animate__bounceIn" />
   <ng-template #darkMode>
-    <ng-icon *ngIf="sharedSrv.darkMode()" name="heroMoon" />
+    <ng-icon name="heroMoon" class="animate__bounceIn" />
   </ng-template>
 </div>
