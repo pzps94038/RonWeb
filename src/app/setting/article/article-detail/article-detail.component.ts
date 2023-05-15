@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ErrorComponent } from 'src/app/shared/components/error/error.component';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
 import { DayJsPipe } from 'src/app/shared/pipe/day-js.pipe';
@@ -24,6 +24,7 @@ import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
     PaginationComponent,
     DayJsPipe,
     RouterOutlet,
+    RouterLink,
   ],
   templateUrl: './article-detail.component.html',
   styleUrls: ['./article-detail.component.scss'],

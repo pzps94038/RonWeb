@@ -9,23 +9,27 @@
   class="block"
   >{{ labelName }}</label
 >
-<textarea
-  [rows]="rows"
-  [id]="ngControl?.name"
-  [placeholder]="placeholder"
-  [class]="class"
-  [class.textarea-xs]="size === 'xs'"
-  [class.textarea-sm]="size === 'sm'"
-  [class.textarea-md]="size === 'md'"
-  [class.textarea-lg]="size === 'lg'"
+<select
+  class="select select-bordered border-2"
   [ngClass]="{
-    'textarea-error': control?.touched && control?.errors,
-    'textarea-success': control?.touched && !control?.errors
-  }"
+  'select-error': control?.touched && control?.errors,
+  'select-success': control?.touched && !control?.errors
+}"
+  [class.select-xs]="size === 'xs'"
+  [class.select-sm]="size === 'sm'"
+  [class.select-md]="size === 'md'"
+  [class.select-lg]="size === 'lg'"
+  [class]="class"
   [disabled]="disabled"
   [(ngModel)]="val"
-  (ngModelChange)="change()"
-  class="textarea textarea-bordered border-2"></textarea>
+  (ngModelChange)="change()">
+  <option
+    *ngFor="let option of options"
+    [disabled]="option.disabled ?? false"
+    [value]="option.value">
+    {{ option.text }}
+  </option>
+</select>
 <ng-container *ngIf="control?.touched && control?.errors && showErrorMsg">
   <p *ngIf="control?.errors?.['required']" class="mt-2 text-sm text-red-600 dark:text-red-500">
     <span class="font-medium">此欄位必填</span>

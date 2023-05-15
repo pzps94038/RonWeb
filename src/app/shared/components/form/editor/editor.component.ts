@@ -5,14 +5,17 @@ import * as Editor from './ckeditor';
 import { CustomEditor } from './ckeditor';
 import { SharedService } from 'src/app/shared/service/shared.service';
 import { environment } from 'src/environments/environment';
+import { BasicComponent, CONTROL_VALUE_ACCESSOR } from '../base/base.component';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [CommonModule, CKEditorModule],
+  imports: [CommonModule, CKEditorModule, FormsModule],
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
+  providers: [CONTROL_VALUE_ACCESSOR(EditorComponent)],
 })
-export class EditorComponent {
+export class EditorComponent extends BasicComponent {
   editor = signal<CustomEditor>(Editor as unknown as CustomEditor);
   sharedSrv = inject(SharedService);
   @Input() uploadUrl?: string;
