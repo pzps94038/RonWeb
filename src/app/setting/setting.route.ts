@@ -12,6 +12,12 @@ export const routes: Routes = [
     loadChildren: () => import('./article/article.route').then(m => m.routes),
   },
   {
+    path: 'article-category',
+    loadComponent: () =>
+      import('./article-category/article-category.component').then(m => m.ArticleCategoryComponent),
+    loadChildren: () => import('./article-category/article-category.route').then(m => m.routes),
+  },
+  {
     path: '**',
     pathMatch: 'full',
     redirectTo: '',
