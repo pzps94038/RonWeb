@@ -76,11 +76,9 @@ export class LoginComponent {
           takeUntilDestroyed(this._destroyRef),
         )
         .subscribe(res => {
-          const {
-            returnMessage,
-            data: { token, userId },
-          } = res;
+          const { returnMessage, data } = res;
           if (this.sharedSrv.ifSuccess(res)) {
+            const { token, userId } = data;
             this.sharedSrv.setToken(token);
             this.sharedSrv.setUserId(userId);
             this.sharedSrv.isLogin.set(true);
