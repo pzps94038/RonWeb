@@ -14,6 +14,6 @@
     </div>
   </div>
   <div class="divider my-1"></div>
-  <div>{{ previewContent | safe : 'html' }}</div>
+  <div [innerHTML]="previewContent | safe : 'html'"></div>
   <a class="link link-secondary" (click)="showMore.emit(true)">... 繼續閱讀 ...</a>
 </div>
