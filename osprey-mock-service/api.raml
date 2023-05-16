@@ -46,6 +46,17 @@ version: 0.1
         body:
           application/json:
             example: !include examples/article/create.json
+/api/article/updateArticleViews/{id}:
+  patch:
+      uriParameters:
+        id:
+          description: The ID of the article to retrieve
+          type: string
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/article/updateArticleViews.json
 /api/article-category/{id}:
   patch:
     uriParameters:
