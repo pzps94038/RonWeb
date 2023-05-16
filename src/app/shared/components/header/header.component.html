@@ -5,7 +5,7 @@
     <a routerLink="/blog" class="font-bold text-3xl logo"> RON </a>
   </div>
   <div class="mr-14">
-    <ul class="flex justify-around">
+    <ul class="flex justify-around list-none">
       <li
         *ngFor="let link of links"
         class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-primary-focus cursor-pointer mx-8">
@@ -44,7 +44,7 @@
     <div class="collapse w-full">
       <input type="checkbox" [hidden]="true" [(ngModel)]="mobileToggle" />
       <div class="collapse-content">
-        <ul class="w-full overflow-hidden">
+        <ul class="w-full overflow-hidden list-none">
           <li
             *ngFor="let link of links"
             class="flex justify-center border border-neutral-content p-2 text-xl cursor-pointer">

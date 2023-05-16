@@ -4,7 +4,13 @@
 @tailwind utilities;
 @layer base {
   body {
-    @apply text-base-content;
+    @apply text-base-content bg-base-100;
+  }
+  ul {
+    @apply list-disc;
+  }
+  ol {
+    @apply list-decimal;
   }
 }
 

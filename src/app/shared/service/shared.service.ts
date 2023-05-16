@@ -18,12 +18,17 @@ export class SharedService {
 
   constructor() {
     if (this.deviceSrv.isClient) {
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        this.darkMode.set(true);
+      const theme = localStorage.getItem('theme');
+      if (theme) {
+        this.toggleTheme(JSON.parse(theme) as boolean);
       } else {
-        this.darkMode.set(false);
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          this.darkMode.set(true);
+        } else {
+          this.darkMode.set(false);
+        }
+        this.toggleTheme(this.darkMode());
       }
-      this.toggleTheme(this.darkMode());
     }
   }
 
@@ -160,8 +165,10 @@ export class SharedService {
     const html = document.getElementsByTagName('html')[0];
     if (darkMode) {
       html.setAttribute('data-theme', 'business');
+      localStorage.setItem('theme', JSON.stringify(true));
     } else {
       html.setAttribute('data-theme', 'winter');
+      localStorage.setItem('theme', JSON.stringify(false));
     }
   }
 }
