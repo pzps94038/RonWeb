@@ -67,4 +67,16 @@ export class ArticleService {
   deleteArticle(id: string) {
     return this.http.delete<BaseMessageResponse>(`${environment.baseUrl}/article/${id}`);
   }
+
+  /**
+   * 更新文章瀏覽次數
+   * @param id
+   * @returns
+   */
+  updateArticleViews(id: string) {
+    return this.http.patch<BaseMessageResponse>(
+      `${environment.baseUrl}/article/updateArticleViews/${id}`,
+      {},
+    );
+  }
 }
