@@ -21,7 +21,7 @@ export class EditorComponent extends BasicComponent {
   @Input() uploadUrl?: string;
   config = {
     simpleUpload: {
-      uploadUrl: `${environment.baseUrl}/api/upload`,
+      uploadUrl: `${environment.baseUrl}/upload`,
       withCredentials: true,
       headers: {
         'X-CSRF-TOKEN': 'CSRF-Token',
