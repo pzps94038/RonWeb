@@ -51,7 +51,7 @@ export class ArticleCreateComponent implements OnInit {
     this.articleCategorySrv
       .getArticleCategory()
       .pipe(
-        filter(res => this.sharedSrv.ifSuccess(res, true)),
+        filter(res => this.sharedSrv.ifSuccess(res)),
         map(({ data }) => data),
         map(array =>
           array.map(({ categoryId, categoryName }) => {
@@ -81,7 +81,6 @@ export class ArticleCreateComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    console.warn(this.sharedSrv.getUserId());
     const req = {
       articleTitle: this.form.get('articleTitle')!.value,
       previewContent: this.form.get('previewContent')!.value,
@@ -92,7 +91,7 @@ export class ArticleCreateComponent implements OnInit {
     this.articleSrv
       .createArticle(req)
       .pipe(
-        filter(res => this.sharedSrv.ifSuccess(res, true)),
+        filter(res => this.sharedSrv.ifSuccess(res)),
         switchMap(({ returnMessage }) =>
           this.swalSrv.alert({
             icon: SwalIcon.Success,

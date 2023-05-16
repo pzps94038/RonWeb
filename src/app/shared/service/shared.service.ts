@@ -126,7 +126,7 @@ export class SharedService {
    * @param res
    * @returns
    */
-  ifSuccess<T extends BaseMessageResponse>(res: T, showError = false) {
+  ifSuccess<T extends BaseMessageResponse>(res: T, showError = true) {
     if (showError) {
       if (res.returnCode === ReturnCode.Success) {
         return true;

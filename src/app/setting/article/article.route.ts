@@ -12,7 +12,7 @@ export const routes: Routes = [
       import('./article-detail/article-detail.component').then(m => m.ArticleDetailComponent),
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     loadComponent: () =>
       import('./article-edit/article-edit.component').then(m => m.ArticleEditComponent),
   },

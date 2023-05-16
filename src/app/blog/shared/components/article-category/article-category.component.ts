@@ -43,7 +43,7 @@ export class ArticleCategoryComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res)) {
+        if (this.sharedSrv.ifSuccess(res, false)) {
           this.categorys.set(res.data);
         } else {
           this.isError.set(true);
