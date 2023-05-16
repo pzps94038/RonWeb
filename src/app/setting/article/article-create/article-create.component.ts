@@ -12,15 +12,18 @@ import {
   Options,
   SelectComponent,
 } from 'src/app/shared/components/form/select/select.component';
-import { filter, map, switchMap } from 'rxjs';
+import { filter, finalize, map, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { CreateArticleRequest } from 'src/app/shared/api/article/article.model';
 import { Router } from '@angular/router';
+import { LoadArticleComponent } from '../shared/load-article/load-article.component';
 
 @Component({
   selector: 'app-article-create',
   standalone: true,
+  templateUrl: './article-create.component.html',
+  styleUrls: ['./article-create.component.scss'],
   imports: [
     CommonModule,
     InputComponent,
@@ -28,9 +31,8 @@ import { Router } from '@angular/router';
     EditorComponent,
     ReactiveFormsModule,
     SelectComponent,
+    LoadArticleComponent,
   ],
-  templateUrl: './article-create.component.html',
-  styleUrls: ['./article-create.component.scss'],
 })
 export class ArticleCreateComponent implements OnInit {
   sharedSrv = inject(SharedService);
@@ -38,6 +40,8 @@ export class ArticleCreateComponent implements OnInit {
   articleCategorySrv = inject(ArticleCategoryService);
   articleSrv = inject(ArticleService);
   router = inject(Router);
+  isLoading = signal(false);
+  createIsLoading = signal(false);
   private _destroyRef = inject(DestroyRef);
   categoryOptions = signal<Options>([]);
   form = new FormGroup({
@@ -48,6 +52,7 @@ export class ArticleCreateComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.isLoading.set(true);
     this.articleCategorySrv
       .getArticleCategory()
       .pipe(
@@ -61,6 +66,7 @@ export class ArticleCreateComponent implements OnInit {
             } as Option;
           }),
         ),
+        finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(options => {
@@ -88,6 +94,7 @@ export class ArticleCreateComponent implements OnInit {
       categoryId: this.form.get('categoryId')!.value,
       userId: this.sharedSrv.getUserId(),
     } as CreateArticleRequest;
+    this.createIsLoading.set(true);
     this.articleSrv
       .createArticle(req)
       .pipe(
@@ -98,6 +105,7 @@ export class ArticleCreateComponent implements OnInit {
             text: returnMessage,
           }),
         ),
+        finalize(() => this.createIsLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(() => {

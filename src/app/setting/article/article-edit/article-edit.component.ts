@@ -10,7 +10,7 @@ import {
 } from 'src/app/shared/components/form/select/select.component';
 import { TextAreaComponent } from 'src/app/shared/components/form/text-area/text-area.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, map, switchMap, tap } from 'rxjs';
+import { filter, finalize, map, switchMap, tap } from 'rxjs';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import {
   CreateArticleRequest,
@@ -21,10 +21,13 @@ import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
+import { LoadArticleComponent } from '../shared/load-article/load-article.component';
 
 @Component({
   selector: 'app-article-edit',
   standalone: true,
+  templateUrl: './article-edit.component.html',
+  styleUrls: ['./article-edit.component.scss'],
   imports: [
     CommonModule,
     InputComponent,
@@ -32,9 +35,8 @@ import { ArticleCategorys } from 'src/app/shared/api/article-category/article-ca
     EditorComponent,
     ReactiveFormsModule,
     SelectComponent,
+    LoadArticleComponent,
   ],
-  templateUrl: './article-edit.component.html',
-  styleUrls: ['./article-edit.component.scss'],
 })
 export class ArticleEditComponent {
   sharedSrv = inject(SharedService);
@@ -43,6 +45,8 @@ export class ArticleEditComponent {
   articleSrv = inject(ArticleService);
   route = inject(ActivatedRoute);
   router = inject(Router);
+  isLoading = signal(false);
+  editIsLoading = signal(false);
   private _destroyRef = inject(DestroyRef);
   categoryOptions = signal<Options>([]);
   form = new FormGroup({
@@ -56,6 +60,7 @@ export class ArticleEditComponent {
   ngOnInit(): void {
     this.route.paramMap
       .pipe(
+        tap(() => this.isLoading.set(true)),
         filter(param => !!param.get('id')),
         map(param => param.get('id')!),
         switchMap(id => this.articleSrv.getArticleById(id)),
@@ -91,6 +96,7 @@ export class ArticleEditComponent {
           ...(options as Options),
         ];
         this.categoryOptions.set(options as Options);
+        this.isLoading.set(false);
       });
   }
 
@@ -107,6 +113,7 @@ export class ArticleEditComponent {
       categoryId: this.form.get('categoryId')!.value,
       userId: this.sharedSrv.getUserId(),
     } as UpdateArticleRequest;
+    this.editIsLoading.set(true);
     this.articleSrv
       .updateArticle(req)
       .pipe(
@@ -117,6 +124,7 @@ export class ArticleEditComponent {
             text: returnMessage,
           }),
         ),
+        finalize(() => this.editIsLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(() => {
