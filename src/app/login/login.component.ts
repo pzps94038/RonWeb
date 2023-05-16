@@ -77,7 +77,7 @@ export class LoginComponent {
         )
         .subscribe(res => {
           const { returnMessage, data } = res;
-          if (this.sharedSrv.ifSuccess(res)) {
+          if (this.sharedSrv.ifSuccess(res, false)) {
             const { token, userId } = data;
             this.sharedSrv.setToken(token);
             this.sharedSrv.setUserId(userId);

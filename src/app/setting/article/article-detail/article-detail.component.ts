@@ -65,7 +65,7 @@ export class ArticleDetailComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res)) {
+        if (this.sharedSrv.ifSuccess(res, false)) {
           const {
             data: { total, articles },
           } = res;
@@ -93,7 +93,7 @@ export class ArticleDetailComponent {
       .pipe(
         filter(({ isConfirmed }) => isConfirmed),
         switchMap(() => this.articleSrv.deleteArticle(id)),
-        filter(res => this.sharedSrv.ifSuccess(res, true)),
+        filter(res => this.sharedSrv.ifSuccess(res)),
         switchMap(res => this.swalSrv.alert({ icon: SwalIcon.Success, text: res.returnMessage })),
         takeUntilDestroyed(this._destroyRef),
       )

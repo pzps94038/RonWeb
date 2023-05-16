@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res)) {
+        if (this.sharedSrv.ifSuccess(res, false)) {
           const {
             data: { total, articles },
           } = res;

@@ -15,6 +15,7 @@ export type Article = {
   categoryId: string;
   categoryName: string;
   previewContent: string;
+  content: string;
   viewCount: number;
   createDate: string;
 };

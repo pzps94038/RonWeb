@@ -2,18 +2,13 @@
   "returnCode": "00",
   "returnMessage": "string",
   "data": {
-    "articleId": "string",
-    "articleTitle": "string",
-    "content": "string",
-    "categoryId": "string",
-    "categoryName": "string",
+    "articleId": "文章ID",
+    "articleTitle": "文章標題",
+    "previewContent": "預覽內容",
+    "content": "內容",
+    "categoryId": "2",
+    "categoryName": "分類2",
     "viewCount": 0,
-    "labels": [
-      {
-        "labelId": "string",
-        "labelName": "string"
-      }
-    ],
     "createDate": "2023-05-03T12:02:18.878Z"
   }
 }
