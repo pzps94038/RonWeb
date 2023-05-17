@@ -8,7 +8,11 @@ import { SharedService } from 'src/app/shared/service/shared.service';
 import { Articles } from 'src/app/shared/api/article/article.model';
 import { catchError, finalize, delay, filter } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ArticleCategory } from 'src/app/shared/api/article-category/article-category.model';
+import {
+  ArticleCategory,
+  Category,
+  Categorys,
+} from 'src/app/shared/api/article-category/article-category.model';
 import { ErrorComponent } from 'src/app/shared/components/error/error.component';
 import { LoadingCardComponent } from '../shared/components/loading-card/loading-card.component';
 
@@ -76,7 +80,7 @@ export class HomeComponent implements OnInit {
     this.router.navigateByUrl(`/blog/article/${id}`);
   }
 
-  navigateCategory({ categoryId }: ArticleCategory) {
+  navigateCategory({ categoryId }: Category) {
     this.router.navigateByUrl(`/blog/category/${categoryId}`);
   }
 

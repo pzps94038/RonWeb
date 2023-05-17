@@ -1,1 +1,66 @@
-<p>article works!</p>
+<div
+  class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
+  <ng-container *ngIf="!isError(); else error">
+    <ng-container *ngIf="!isLoading() && article(); else loading">
+      <div>
+        <h3 class="text-xl font-semibold">{{ article()!.articleTitle }}</h3>
+        <div>
+          <div class="flex items-center">
+            <ng-icon name="heroCalendarDays" />
+            <h4>{{ article()!.createDate| dayJs : 'YYYY/MM/DD hh:mm' }}</h4>
+          </div>
+          <a
+            class="flex items-center link link-secondary"
+            [routerLink]="['blog', 'category', article()!.categoryId]">
+            <ng-icon name="heroHashtag" />
+            <h5>{{ article()!.categoryName }}</h5>
+          </a>
+        </div>
+      </div>
+      <div class="divider my-1"></div>
+      <div [innerHTML]=" article()!.previewContent | safe: 'html'"></div>
+      <div class="py-5"></div>
+      <div [innerHTML]=" article()!.content| safe: 'html'"></div>
+    </ng-container>
+  </ng-container>
+  <ng-template #loading>
+    <div>
+      <div class="flex items-center">
+        <div
+          class="h-5 my-2 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      </div>
+      <div>
+        <div class="flex items-center">
+          <div
+            class="h-5 my-2 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+        </div>
+      </div>
+    </div>
+    <div class="divider my-1"></div>
+    <div>
+      <div
+        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      <div
+        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      <div
+        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      <div
+        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      <div
+        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      <div
+        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      <div
+        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      <div
+        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      <div
+        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      <div
+        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+    </div>
+  </ng-template>
+  <ng-template #error>
+    <app-error (refresh)="getArticleById(articleId())" />
+  </ng-template>
+</div>
