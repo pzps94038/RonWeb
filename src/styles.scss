@@ -21,3 +21,14 @@
 .ck.ck-balloon-panel.ck-balloon-panel_visible {
   display: none !important;
 }
+
+.ck-content {
+  pre {
+    @apply bg-base-300 text-base-content border rounded-sm p-4 text-left #{!important};
+    tab-size: 4;
+    white-space: pre-wrap;
+  }
+  pre[data-language]:after {
+    @apply bg-base-content text-base-300 text-xs leading-4 right-[10px] -top-[1px] #{!important};
+  }
+}

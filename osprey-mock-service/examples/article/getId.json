@@ -4,7 +4,7 @@
   "data": {
     "articleId": "文章ID",
     "articleTitle": "文章標題",
-    "previewContent": "預覽內容",
+    "previewContent": "<p>1</p><p>&nbsp;</p><pre><code>scadfasdasd</code></pre>",
     "content": "內容",
     "categoryId": "2",
     "categoryName": "分類2",
