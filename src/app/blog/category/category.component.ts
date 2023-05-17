@@ -10,7 +10,10 @@ import { SharedService } from 'src/app/shared/service/shared.service';
 import { ErrorComponent } from 'src/app/shared/components/error/error.component';
 import { ArticleCardComponent } from '../shared/components/article-card/article-card.component';
 import { LoadingCardComponent } from '../shared/components/loading-card/loading-card.component';
-import { ArticleCategory } from 'src/app/shared/api/article-category/article-category.model';
+import {
+  ArticleCategory,
+  Category,
+} from 'src/app/shared/api/article-category/article-category.model';
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 import { LoadingKeywordComponent } from '../shared/components/loading-keyword/loading-keyword.component';
 
@@ -98,7 +101,7 @@ export class CategoryComponent implements OnInit {
     this.router.navigateByUrl(`/blog/article/${id}`);
   }
 
-  navigateCategory({ categoryId }: ArticleCategory) {
+  navigateCategory({ categoryId }: Category) {
     this.router.navigateByUrl(`/blog/category/${categoryId}`);
   }
 

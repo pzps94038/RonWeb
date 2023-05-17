@@ -4,23 +4,28 @@
   "data": [
     {
       "categoryId": "1",
-      "categoryName": "分類1"
+      "categoryName": "分類1",
+      "createDate": "2023-05-08T13:22:00.124Z"
     },
     {
       "categoryId": "2",
-      "categoryName": "分類2"
+      "categoryName": "分類2",
+      "createDate": "2023-05-08T13:22:00.124Z"
     },
     {
       "categoryId": "3",
-      "categoryName": "分類3"
+      "categoryName": "分類3",
+      "createDate": "2023-05-08T13:22:00.124Z"
     },
     {
       "categoryId": "4",
-      "categoryName": "分類4"
+      "categoryName": "分類4",
+      "createDate": "2023-05-08T13:22:00.124Z"
     },
     {
       "categoryId": "5",
-      "categoryName": "分類5"
+      "categoryName": "分類5",
+      "createDate": "2023-05-08T13:22:00.124Z"
     }
   ]
 }

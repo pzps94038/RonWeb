@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, combineLatest, filter, finalize, map, delay } from 'rxjs';
-import { ArticleCategory } from 'src/app/shared/api/article-category/article-category.model';
+import {
+  ArticleCategory,
+  Category,
+} from 'src/app/shared/api/article-category/article-category.model';
 import { Articles } from 'src/app/shared/api/article/article.model';
 import { SearchService } from 'src/app/shared/api/search/search.service';
 import { SharedService } from 'src/app/shared/service/shared.service';
@@ -93,7 +96,7 @@ export class SearchComponent implements OnInit {
     this.router.navigateByUrl(`/blog/article/${id}`);
   }
 
-  navigateCategory({ categoryId }: ArticleCategory) {
+  navigateCategory({ categoryId }: Category) {
     this.router.navigateByUrl(`/blog/category/${categoryId}`);
   }
 
