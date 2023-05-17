@@ -7,7 +7,7 @@
       {
         "articleId": "string",
         "articleTitle": "string",
-        "previewContent": "string",
+        "previewContent": "<p>1</p><p>&nbsp;</p><pre><code>scadfasdasd</code></pre>",
         "categoryId": "string",
         "categoryName": "string",
         "viewCount": 0,

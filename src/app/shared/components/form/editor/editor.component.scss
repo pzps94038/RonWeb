@@ -34,8 +34,8 @@
     .ck-splitbutton__action {
       @apply bg-base-100 text-base-content #{!important};
     }
-    .ck-editor__editable pre {
-      @apply bg-base-100 text-base-content;
+    .ck-editor__editable {
+      @apply px-5;
     }
   }
 }
