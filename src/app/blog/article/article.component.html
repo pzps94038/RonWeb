@@ -18,9 +18,9 @@
         </div>
       </div>
       <div class="divider my-1"></div>
-      <div [innerHTML]=" article()!.previewContent | safe: 'html'"></div>
+      <div class="ck-content" [innerHTML]=" article()!.previewContent | safe: 'html'"></div>
       <div class="py-5"></div>
-      <div [innerHTML]=" article()!.content| safe: 'html'"></div>
+      <div class="ck-content" [innerHTML]=" article()!.content| safe: 'html'"></div>
     </ng-container>
   </ng-container>
   <ng-template #loading>
