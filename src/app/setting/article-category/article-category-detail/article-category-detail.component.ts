@@ -70,7 +70,6 @@ export class ArticleCategoryDetailComponent {
           } = res;
           this.total.set(total);
           this.categorys.set(categorys);
-          console.warn(this.categorys());
         } else {
           this.isError.set(true);
         }
@@ -88,7 +87,8 @@ export class ArticleCategoryDetailComponent {
   deleteArticleCategory(id: string) {
     this.swalSrv
       .confirm({
-        text: '確定要刪除分類嗎?',
+        title: '確定要刪除分類嗎?',
+        text: '這個操作將永久刪除該分類及相關的所有文章。請確認您的決定，因為這些內容將無法恢復。',
       })
       .pipe(
         filter(({ isConfirmed }) => isConfirmed),
