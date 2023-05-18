@@ -70,7 +70,6 @@ export class ArticleCategoryDetailComponent {
           } = res;
           this.total.set(total);
           this.categorys.set(categorys);
-          console.warn(this.categorys());
         } else {
           this.isError.set(true);
         }
