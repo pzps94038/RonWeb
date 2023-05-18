@@ -14,6 +14,8 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroCalendarDays, heroHashtag, heroTag } from '@ng-icons/heroicons/outline';
 import { DayJsPipe } from '../../shared/pipe/day-js.pipe';
 import { SafePipe } from '../../shared/pipe/safe.pipe';
+import { DisqusComponent } from '../../shared/components/disqus/disqus.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-article',
@@ -21,13 +23,26 @@ import { SafePipe } from '../../shared/pipe/safe.pipe';
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.scss'],
   providers: [provideIcons({ heroCalendarDays, heroHashtag, heroTag })],
-  imports: [CommonModule, ErrorComponent, NgIconComponent, DayJsPipe, RouterLink, SafePipe],
+  imports: [
+    CommonModule,
+    ErrorComponent,
+    NgIconComponent,
+    DayJsPipe,
+    RouterLink,
+    SafePipe,
+    DisqusComponent,
+  ],
 })
 export class ArticleComponent {
   articleSrv = inject(ArticleService);
   route = inject(ActivatedRoute);
   sharedSrv = inject(SharedService);
   router = inject(Router);
+  ///#region disqusSetting
+  url = signal<string>('');
+  shortname = environment.shortname;
+  //#endregion
+
   articleId = signal<string>('');
   article = signal<Article | undefined>(undefined);
   isLoading = signal(false);
@@ -40,6 +55,7 @@ export class ArticleComponent {
         filter(param => !!param.get('id')),
         map(param => param.get('id')!),
         tap(id => this.articleId.set(id)),
+        tap(() => this.url.set(location.href)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(id => this.getArticleById(id));
