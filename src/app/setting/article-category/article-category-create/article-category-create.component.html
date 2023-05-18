@@ -1,1 +1,19 @@
-<p>article-category-create works!</p>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="my-5">
+    <app-input
+      labelName="分類"
+      labelClass="text-lg my-2 text-center md:text-left"
+      class="w-full"
+      placeholder="請輸入分類"
+      formControlName="categoryName" />
+  </div>
+  <div class="flex justify-end items-center">
+    <button
+      type="submit"
+      [disabled]="isLoading()"
+      [class.loading]="isLoading()"
+      class="btn btn-primary">
+      新增分類
+    </button>
+  </div>
+</form>

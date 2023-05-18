@@ -1,0 +1,9 @@
+{
+  "returnCode": "00",
+  "returnMessage": "string",
+  "data": {
+    "categoryId": "1",
+    "categoryName": "分類1",
+    "createDate": "2023-05-08T13:22:00.124Z"
+  }
+}

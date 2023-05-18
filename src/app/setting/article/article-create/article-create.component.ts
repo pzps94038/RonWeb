@@ -57,7 +57,7 @@ export class ArticleCreateComponent implements OnInit {
       .getArticleCategory()
       .pipe(
         filter(res => this.sharedSrv.ifSuccess(res)),
-        map(({ data }) => data),
+        map(({ data: { categorys } }) => categorys),
         map(array =>
           array.map(({ categoryId, categoryName }) => {
             return {

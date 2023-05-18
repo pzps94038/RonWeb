@@ -1,0 +1,81 @@
+<ng-container *ngIf="!isError(); else error">
+  <ng-container *ngIf="!isLoading(); else loading">
+    <button class="btn btn-primary mb-5" routerLink="/setting/article-category/create">
+      新增分類
+    </button>
+    <div class="overflow-x-auto w-full">
+      <table class="table table-zebra w-full">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="text-lg">分類</th>
+            <th class="text-lg">建立日期</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let category of categorys()">
+            <th class="flex">
+              <button
+                type="button"
+                class="btn btn-primary m-1 flex justify-center items-center"
+                [routerLink]="'/setting/article-category/edit/' + category.categoryId">
+                <ng-icon name="heroPencilSquare" />
+              </button>
+              <button
+                type="button"
+                class="btn btn-error m-1 flex justify-center items-center"
+                (click)="deleteArticleCategory(category.categoryId)">
+                <ng-icon name="heroTrash" />
+              </button>
+            </th>
+            <td>{{ category.categoryName }}</td>
+            <td>{{ category.createDate | dayJs : 'YYYY/MM/DD hh:mm' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)" />
+  </ng-container>
+</ng-container>
+<ng-template #loading>
+  <div class="overflow-x-auto w-full">
+    <table class="table table-zebra w-full">
+      <tbody>
+        <tr>
+          <td></td>
+          <td class="text-lg">分類</td>
+          <td class="text-lg">建立日期</td>
+        </tr>
+        <tr *ngFor="let i of [1,2,3,4,5]">
+          <td>
+            <div
+              class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+          </td>
+          <td>
+            <div
+              class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+          </td>
+          <td>
+            <div
+              class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+          </td>
+          <td>
+            <div
+              class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+          </td>
+          <td>
+            <div
+              class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <app-pagination [total]="total()" [currentPage]="page()" (change)=" paginationChange($event)" />
+</ng-template>
+<ng-template #error>
+  <div
+    class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
+    <app-error (refresh)="refreshArticleCategory()" />
+  </div>
+</ng-template>
