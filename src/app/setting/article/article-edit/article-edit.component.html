@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isLoading();else isNotLoading">
+<ng-container *ngIf="!isLoading();else loading">
   <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="my-5">
       <app-input
@@ -40,6 +40,6 @@
     </div>
   </form>
 </ng-container>
-<ng-template #isNotLoading>
+<ng-template #loading>
   <app-load-article />
 </ng-template>

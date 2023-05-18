@@ -44,7 +44,10 @@ export class ArticleCategoryComponent {
       )
       .subscribe(res => {
         if (this.sharedSrv.ifSuccess(res, false)) {
-          this.categorys.set(res.data);
+          const {
+            data: { categorys },
+          } = res;
+          this.categorys.set(categorys);
         } else {
           this.isError.set(true);
         }

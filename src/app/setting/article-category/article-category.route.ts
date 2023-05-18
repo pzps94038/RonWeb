@@ -14,7 +14,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     loadComponent: () =>
       import('./article-category-edit/article-category-edit.component').then(
         m => m.ArticleCategoryEditComponent,

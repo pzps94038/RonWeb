@@ -75,7 +75,7 @@ export class ArticleEditComponent {
         }),
         switchMap(() => this.articleCategorySrv.getArticleCategory()),
         filter(res => this.sharedSrv.ifSuccess(res, true)),
-        map(({ data }) => data),
+        map(({ data: { categorys } }) => categorys),
         map((array: ArticleCategorys) =>
           array.map(({ categoryId, categoryName }) => {
             return {
