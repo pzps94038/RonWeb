@@ -18,9 +18,16 @@
         </div>
       </div>
       <div class="divider my-1"></div>
-      <div class="ck-content" [innerHTML]=" article()!.previewContent | safe: 'html'"></div>
+      <div class="ck-content" [innerHTML]="article()!.previewContent | safe: 'html'"></div>
       <div class="py-5"></div>
-      <div class="ck-content" [innerHTML]=" article()!.content| safe: 'html'"></div>
+      <div class="ck-content" [innerHTML]="article()!.content| safe: 'html'"></div>
+      <app-disqus
+        [url]="url()"
+        [identifier]="article()!.articleId"
+        [title]="article()!.articleTitle"
+        [category]="article()!.categoryName"
+        [shortname]="shortname"
+        language="zh-TW" />
     </ng-container>
   </ng-container>
   <ng-template #loading>
