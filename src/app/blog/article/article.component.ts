@@ -16,6 +16,7 @@ import { DayJsPipe } from '../../shared/pipe/day-js.pipe';
 import { SafePipe } from '../../shared/pipe/safe.pipe';
 import { DisqusComponent } from '../../shared/components/disqus/disqus.component';
 import { environment } from 'src/environments/environment';
+import { GiscusComponent } from '../../shared/components/giscus/giscus.component';
 
 @Component({
   selector: 'app-article',
@@ -31,6 +32,7 @@ import { environment } from 'src/environments/environment';
     RouterLink,
     SafePipe,
     DisqusComponent,
+    GiscusComponent,
   ],
 })
 export class ArticleComponent {

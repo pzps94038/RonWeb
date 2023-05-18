@@ -21,6 +21,8 @@
       <div class="ck-content" [innerHTML]="article()!.previewContent | safe: 'html'"></div>
       <div class="py-5"></div>
       <div class="ck-content" [innerHTML]="article()!.content| safe: 'html'"></div>
+      <div class="divider my-5"></div>
+      <app-giscus />
     </ng-container>
   </ng-container>
   <ng-template #loading>
