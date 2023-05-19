@@ -1,8 +1,8 @@
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InputComponent } from 'src/app/shared/components/form/input/input.component';
-import { TextAreaComponent } from 'src/app/shared/components/form/text-area/text-area.component';
-import { EditorComponent } from 'src/app/shared/components/form/editor/editor.component';
+import { InputComponent } from 'src/app/shared/component/form/input/input.component';
+import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-area.component';
+import { EditorComponent } from 'src/app/shared/component/form/editor/editor.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalIcon, SwalService } from 'src/app/shared/service/swal.service';
@@ -11,13 +11,13 @@ import {
   Option,
   Options,
   SelectComponent,
-} from 'src/app/shared/components/form/select/select.component';
+} from 'src/app/shared/component/form/select/select.component';
 import { filter, finalize, map, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { CreateArticleRequest } from 'src/app/shared/api/article/article.model';
 import { Router } from '@angular/router';
-import { LoadArticleComponent } from '../shared/load-article/load-article.component';
+import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
 
 @Component({
   selector: 'app-article-create',

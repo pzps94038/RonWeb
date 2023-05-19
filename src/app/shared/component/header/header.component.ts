@@ -1,4 +1,4 @@
-import { DeviceService } from './../../service/device.service';
+import { DeviceService } from '../../service/device.service';
 import {
   AfterViewInit,
   Component,

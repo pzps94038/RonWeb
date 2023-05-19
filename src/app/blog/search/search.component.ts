@@ -10,11 +10,11 @@ import {
 import { Articles } from 'src/app/shared/api/article/article.model';
 import { SearchService } from 'src/app/shared/api/search/search.service';
 import { SharedService } from 'src/app/shared/service/shared.service';
-import { ErrorComponent } from 'src/app/shared/components/error/error.component';
-import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
-import { ArticleCardComponent } from '../shared/components/article-card/article-card.component';
-import { LoadingCardComponent } from '../shared/components/loading-card/loading-card.component';
-import { LoadingKeywordComponent } from '../shared/components/loading-keyword/loading-keyword.component';
+import { ErrorComponent } from 'src/app/shared/component/error/error.component';
+import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';
+import { ArticleCardComponent } from '../shared/component/article-card/article-card.component';
+import { LoadingCardComponent } from '../shared/component/loading-card/loading-card.component';
+import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loading-keyword.component';
 
 @Component({
   selector: 'app-search',

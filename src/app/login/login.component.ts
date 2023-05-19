@@ -1,14 +1,14 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InputComponent } from '../shared/components/form/input/input.component';
+import { InputComponent } from '../shared/component/form/input/input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FooterComponent } from '../shared/components/footer/footer.component';
-import { HeaderComponent } from '../shared/components/header/header.component';
+import { FooterComponent } from '../shared/component/footer/footer.component';
+import { HeaderComponent } from '../shared/component/header/header.component';
 import {
   AnimationPathConfig,
   NgLottieComponent,
-} from '../shared/components/ng-lottie/ng-lottie.component';
+} from '../shared/component/ng-lottie/ng-lottie.component';
 import { LoginService } from '../shared/api/login/login.service';
 import { SharedService } from '../shared/service/shared.service';
 import { catchError, finalize } from 'rxjs';

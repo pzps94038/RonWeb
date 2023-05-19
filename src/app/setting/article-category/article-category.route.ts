@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { titleResolver } from 'src/app/shared/resolve/title.resolver';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,12 @@ export const routes: Routes = [
       import('./article-category-detail/article-category-detail.component').then(
         m => m.ArticleCategoryDetailComponent,
       ),
+    data: {
+      title: '分類明細',
+    },
+    resolve: {
+      titleResolver,
+    },
   },
   {
     path: 'edit/:id',
@@ -19,6 +26,12 @@ export const routes: Routes = [
       import('./article-category-edit/article-category-edit.component').then(
         m => m.ArticleCategoryEditComponent,
       ),
+    data: {
+      title: '分類編輯',
+    },
+    resolve: {
+      titleResolver,
+    },
   },
   {
     path: 'create',
@@ -26,6 +39,12 @@ export const routes: Routes = [
       import('./article-category-create/article-category-create.component').then(
         m => m.ArticleCategoryCreateComponent,
       ),
+    data: {
+      title: '分類新增',
+    },
+    resolve: {
+      titleResolver,
+    },
   },
   {
     path: '**',

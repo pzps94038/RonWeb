@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   NgLottieComponent,
   AnimationPathConfig,
-} from 'src/app/shared/components/ng-lottie/ng-lottie.component';
+} from 'src/app/shared/component/ng-lottie/ng-lottie.component';
 
 @Component({
   selector: 'app-not-found',

@@ -46,7 +46,6 @@ export class DisqusComponent {
     this._document.defaultView.disqus_config = config;
   }
 
-  /** DISQUS events */
   @Output() newComment = new EventEmitter<DisqusComment>(true);
   @Output() ready = new EventEmitter<DisqusReady>(true);
   @Output() paginate = new EventEmitter<any>(true);
@@ -58,8 +57,6 @@ export class DisqusComponent {
   ) {}
 
   ngOnChanges() {
-    /** Reset Disqus if any input changed */
-
     if (!this.DISQUS) {
       this.addDisqusScript();
     } else {
@@ -67,9 +64,7 @@ export class DisqusComponent {
     }
   }
 
-  /** Add DISQUS script */
   addDisqusScript() {
-    /** Set DISQUS config */
     this.disqus_config = this.getConfig();
     const disqusScript = this.renderer.createElement('script');
     disqusScript.src = `//${this.shortname}.disqus.com/embed.js`;
@@ -79,7 +74,6 @@ export class DisqusComponent {
     this.renderer.appendChild(this.el.nativeElement, disqusScript);
   }
 
-  /** Reset DISQUS with the new config */
   reset() {
     this.DISQUS.reset({
       reload: true,
@@ -87,7 +81,6 @@ export class DisqusComponent {
     });
   }
 
-  /** Create DISQUS config from the inputs */
   getConfig() {
     const self = this;
     return function (this: any) {
@@ -96,7 +89,6 @@ export class DisqusComponent {
       this.page.title = self.title;
       this.category_id = self.category;
       this.language = self.language;
-      /* Available callbacks are afterRender, onInit, onNewComment, onPaginate, onReady, preData, preInit, preReset */
       this.callbacks.onNewComment = [(e: any) => self.newComment.emit(e)];
       this.callbacks.onReady = [(e: any) => self.ready.emit(e)];
       this.callbacks.onPaginate = [(e: any) => self.paginate.emit(e)];
@@ -104,7 +96,6 @@ export class DisqusComponent {
   }
 
   validateUrl(url: string) {
-    /** Validate URL input */
     if (url) {
       const r = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 
@@ -114,7 +105,6 @@ export class DisqusComponent {
         console.warn('[Disqus]: Invalid URL');
       }
     }
-    /** DISQUS will fallback to "Window.location.href" when URL is undefined */
     return undefined;
   }
 }

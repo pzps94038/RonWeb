@@ -4,19 +4,19 @@ import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap, filter, map, switchMap, delay, catchError, finalize } from 'rxjs';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
-import { Options } from 'src/app/shared/components/header/header.component';
+import { Options } from 'src/app/shared/component/header/header.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 import { SharedService } from 'src/app/shared/service/shared.service';
 import { Article } from 'src/app/shared/api/article/article.model';
-import { ErrorComponent } from '../../shared/components/error/error.component';
+import { ErrorComponent } from '../../shared/component/error/error.component';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroCalendarDays, heroHashtag, heroTag } from '@ng-icons/heroicons/outline';
 import { DayJsPipe } from '../../shared/pipe/day-js.pipe';
 import { SafePipe } from '../../shared/pipe/safe.pipe';
-import { DisqusComponent } from '../../shared/components/disqus/disqus.component';
+import { DisqusComponent } from '../../shared/component/disqus/disqus.component';
 import { environment } from 'src/environments/environment';
-import { GiscusComponent } from '../../shared/components/giscus/giscus.component';
+import { GiscusComponent } from '../../shared/component/giscus/giscus.component';
 
 @Component({
   selector: 'app-article',
@@ -78,6 +78,8 @@ export class ArticleComponent {
       .subscribe(res => {
         if (this.sharedSrv.ifSuccess(res, false)) {
           const { data } = res;
+          const { articleTitle } = data;
+          this.sharedSrv.setTitle(articleTitle);
           this.article.set(data);
         } else if (res.returnCode === ReturnCode.NotFound) {
           this.router.navigate(['blog', 'notFound']);

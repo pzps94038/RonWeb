@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../shared/components/header/header.component';
+import { HeaderComponent } from '../shared/component/header/header.component';
 import { ScrollAnimateDirective } from '../shared/directive/scroll-animate.directive';
-import { InputComponent } from '../shared/components/form/input/input.component';
+import { InputComponent } from '../shared/component/form/input/input.component';
 import {
   AbstractControl,
   FormControl,
@@ -15,8 +15,8 @@ import {
 import { HttpClientModule } from '@angular/common/http';
 import { DeviceService } from '../shared/service/device.service';
 import { Router, RouterOutlet } from '@angular/router';
-import { ArticleCategoryComponent } from './shared/components/article-category/article-category.component';
-import { FooterComponent } from '../shared/components/footer/footer.component';
+import { ArticleCategoryComponent } from './shared/component/article-category/article-category.component';
+import { FooterComponent } from '../shared/component/footer/footer.component';
 import { SharedService } from '../shared/service/shared.service';
 
 export function emptyValidator(): ValidatorFn {

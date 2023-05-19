@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { IntroComponent } from './intro/intro.component';
 import { ContactComponent } from './contact/contact.component';
-import { NgTypedComponent } from '../shared/components/ng-typed/ng-typed.component';
+import { NgTypedComponent } from '../shared/component/ng-typed/ng-typed.component';
 import { SkillsComponent } from './skills/skills.component';
 import { ExperienceComponent } from './experience/experience.component';
-import { HeaderComponent } from '../shared/components/header/header.component';
-import { FooterComponent } from '../shared/components/footer/footer.component';
+import { HeaderComponent } from '../shared/component/header/header.component';
+import { FooterComponent } from '../shared/component/footer/footer.component';
 
 @Component({
   selector: 'app-about-me',
