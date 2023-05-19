@@ -78,9 +78,9 @@ export class ArticleComponent {
       .subscribe(res => {
         if (this.sharedSrv.ifSuccess(res, false)) {
           const { data } = res;
-          this.article.set(data);
           const { articleTitle } = data;
           this.sharedSrv.setTitle(articleTitle);
+          this.article.set(data);
         } else if (res.returnCode === ReturnCode.NotFound) {
           this.router.navigate(['blog', 'notFound']);
         } else {
