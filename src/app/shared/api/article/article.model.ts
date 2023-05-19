@@ -1,4 +1,5 @@
 import { BaseResponse } from '../shared/shared.model';
+import { UploadFiles } from '../upload/upload.model';
 
 export type GetArticleResponse = BaseResponse<ArticleResponse>;
 
@@ -28,6 +29,8 @@ export type CreateArticleRequest = {
   content: string;
   categoryId: string;
   userId: string;
+  prevFiles: UploadFiles;
+  contentFiles: UploadFiles;
 };
 
 export type UpdateArticleRequest = {
@@ -37,4 +40,6 @@ export type UpdateArticleRequest = {
   content: string;
   categoryId: string;
   userId: string;
+  prevFiles: UploadFiles;
+  contentFiles: UploadFiles;
 };

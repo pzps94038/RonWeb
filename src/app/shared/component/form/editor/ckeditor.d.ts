@@ -40,7 +40,6 @@ import { Table, TableToolbar } from '@ckeditor/ckeditor5-table';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 import { CloudServices } from '@ckeditor/ckeditor5-cloud-services';
 import { Alignment } from '@ckeditor/ckeditor5-alignment';
-import { Highlight } from '@ckeditor/ckeditor5-highlight';
 import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
 import { Font } from '@ckeditor/ckeditor5-font';
 import { HorizontalLine } from '@ckeditor/ckeditor5-horizontal-line';
@@ -84,7 +83,6 @@ export default class ClassicEditor extends ClassicEditorBase {
     | typeof Table
     | typeof TableToolbar
     | typeof Alignment
-    | typeof Highlight
     | typeof CodeBlock
     | typeof Font
     | typeof HorizontalLine

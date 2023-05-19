@@ -18,6 +18,7 @@ import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { CreateArticleRequest } from 'src/app/shared/api/article/article.model';
 import { Router } from '@angular/router';
 import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
+import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model';
 
 @Component({
   selector: 'app-article-create',
@@ -42,14 +43,16 @@ export class ArticleCreateComponent implements OnInit {
   router = inject(Router);
   isLoading = signal(false);
   createIsLoading = signal(false);
-  private _destroyRef = inject(DestroyRef);
   categoryOptions = signal<Options>([]);
+  prevFiles = signal<UploadFiles>([]);
+  contentFiles = signal<UploadFiles>([]);
   form = new FormGroup({
     articleTitle: new FormControl('', [Validators.required]),
     previewContent: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl('', [Validators.required]),
   });
+  private _destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.isLoading.set(true);
@@ -93,6 +96,8 @@ export class ArticleCreateComponent implements OnInit {
       content: this.form.get('content')!.value,
       categoryId: this.form.get('categoryId')!.value,
       userId: this.sharedSrv.getUserId(),
+      prevFiles: this.prevFiles(),
+      contentFiles: this.contentFiles(),
     } as CreateArticleRequest;
     this.createIsLoading.set(true);
     this.articleSrv
@@ -111,5 +116,13 @@ export class ArticleCreateComponent implements OnInit {
       .subscribe(() => {
         this.router.navigate(['/setting/article']);
       });
+  }
+
+  previewUpload(file: UploadFile) {
+    this.prevFiles.update(files => [...files, file]);
+  }
+
+  contentUpload(file: UploadFile) {
+    this.contentFiles.update(files => [...files, file]);
   }
 }
