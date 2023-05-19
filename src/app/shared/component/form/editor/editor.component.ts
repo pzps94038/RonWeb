@@ -53,7 +53,7 @@ export class UploadAdapter {
           const formData = new FormData();
           formData.append('file', file);
           this.uploadSrv
-            .upload(file)
+            .upload(formData)
             .pipe(
               take(1),
               filter(res => {
