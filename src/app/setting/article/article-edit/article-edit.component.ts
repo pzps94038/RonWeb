@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EditorComponent } from 'src/app/shared/component/form/editor/editor.component';
@@ -22,6 +22,8 @@ import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
 import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
+import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model';
+import { UploadService } from 'src/app/shared/api/upload/upload.service';
 
 @Component({
   selector: 'app-article-edit',
@@ -47,8 +49,10 @@ export class ArticleEditComponent {
   router = inject(Router);
   isLoading = signal(false);
   editIsLoading = signal(false);
-  private _destroyRef = inject(DestroyRef);
+  files = signal<UploadFiles>([]);
   categoryOptions = signal<Options>([]);
+  prevFiles = signal<UploadFiles>([]);
+  contentFiles = signal<UploadFiles>([]);
   form = new FormGroup({
     articleId: new FormControl('', [Validators.required]),
     articleTitle: new FormControl('', [Validators.required]),
@@ -56,6 +60,7 @@ export class ArticleEditComponent {
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl('', [Validators.required]),
   });
+  private _destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.route.paramMap
@@ -112,6 +117,8 @@ export class ArticleEditComponent {
       content: this.form.get('content')!.value,
       categoryId: this.form.get('categoryId')!.value,
       userId: this.sharedSrv.getUserId(),
+      prevFiles: this.prevFiles(),
+      contentFiles: this.contentFiles(),
     } as UpdateArticleRequest;
     this.editIsLoading.set(true);
     this.articleSrv
@@ -130,5 +137,13 @@ export class ArticleEditComponent {
       .subscribe(() => {
         this.router.navigate(['/setting/article']);
       });
+  }
+
+  previewUpload(file: UploadFile) {
+    this.prevFiles.update(files => [...files, file]);
+  }
+
+  contentUpload(file: UploadFile) {
+    this.contentFiles.update(files => [...files, file]);
   }
 }

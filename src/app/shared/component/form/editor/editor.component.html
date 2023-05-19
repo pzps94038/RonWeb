@@ -10,8 +10,8 @@
   >{{ labelName }}</label
 >
 <ckeditor
+  (ready)="onReady($event)"
   [editor]="editor()"
-  [config]="config"
   [class]="class"
   [(ngModel)]="val"
   (ngModelChange)="change()"
