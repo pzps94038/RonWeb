@@ -4,7 +4,7 @@ import { ArticleCategoryService } from 'src/app/shared/api/article-category/arti
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, finalize } from 'rxjs';
 import { SharedService } from 'src/app/shared/service/shared.service';
-import { ErrorComponent } from 'src/app/shared/components/error/error.component';
+import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
 import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';

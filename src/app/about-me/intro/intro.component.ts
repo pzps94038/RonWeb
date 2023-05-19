@@ -1,13 +1,13 @@
 import { ScrollAnimateDirective } from '../../shared/directive/scroll-animate.directive';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgTypedComponent } from 'src/app/shared/components/ng-typed/ng-typed.component';
+import { NgTypedComponent } from 'src/app/shared/component/ng-typed/ng-typed.component';
 import { TypedOptions } from 'typed.js';
 import {
   AnimationPathConfig,
   NgLottieComponent,
-} from 'src/app/shared/components/ng-lottie/ng-lottie.component';
-import { HeaderComponent } from '../../shared/components/header/header.component';
+} from 'src/app/shared/component/ng-lottie/ng-lottie.component';
+import { HeaderComponent } from '../../shared/component/header/header.component';
 
 @Component({
   selector: 'app-intro',

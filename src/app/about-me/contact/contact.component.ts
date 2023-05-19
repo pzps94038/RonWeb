@@ -1,12 +1,12 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputComponent } from 'src/app/shared/components/form/input/input.component';
-import { TextAreaComponent } from 'src/app/shared/components/form/text-area/text-area.component';
+import { InputComponent } from 'src/app/shared/component/form/input/input.component';
+import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-area.component';
 import {
   AnimationPathConfig,
   NgLottieComponent,
-} from 'src/app/shared/components/ng-lottie/ng-lottie.component';
+} from 'src/app/shared/component/ng-lottie/ng-lottie.component';
 import { ScrollAnimateDirective } from 'src/app/shared/directive/scroll-animate.directive';
 import { environment } from 'src/environments/environment';
 import { ContactUsService } from 'src/app/shared/api/contact-us/contact-us.service';

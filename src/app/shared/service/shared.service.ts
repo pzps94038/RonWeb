@@ -5,6 +5,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { BehaviorSubject, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { SwalService } from './swal.service';
+import { Title } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ export class SharedService {
   deviceSrv = inject(DeviceService);
   swalSrv = inject(SwalService);
   router = inject(Router);
+  titleSrv = inject(Title);
   isLogin = signal(false);
   darkMode = signal(false);
 
@@ -160,6 +162,10 @@ export class SharedService {
     };
   }
 
+  /**
+   * 切換模式
+   * @param darkMode
+   */
   toggleTheme(darkMode: boolean) {
     this.darkMode.set(darkMode);
     const html = document.getElementsByTagName('html')[0];
@@ -170,5 +176,19 @@ export class SharedService {
       html.setAttribute('data-theme', 'winter');
       localStorage.setItem('theme', JSON.stringify(false));
     }
+  }
+
+  /**
+   * 設定標題
+   * @param title
+   */
+  setTitle(title?: string) {
+    const baseTitle = 'Ron Web - 探索學習的無限可能，分享技術的無盡價值';
+    if (title) {
+      title = title.concat(' | ', baseTitle);
+    } else {
+      title = baseTitle;
+    }
+    this.titleSrv.setTitle(title);
   }
 }

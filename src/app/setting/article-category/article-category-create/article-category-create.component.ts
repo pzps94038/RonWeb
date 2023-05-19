@@ -7,7 +7,7 @@ import { ArticleCategoryService } from 'src/app/shared/api/article-category/arti
 import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { Router } from '@angular/router';
-import { InputComponent } from '../../../shared/components/form/input/input.component';
+import { InputComponent } from '../../../shared/component/form/input/input.component';
 import { CreateArticleCategoryRequest } from 'src/app/shared/api/article-category/article-category.model';
 
 @Component({

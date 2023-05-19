@@ -11,10 +11,10 @@ import {
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import { UpdateArticleRequest } from 'src/app/shared/api/article/article.model';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
-import { Options } from 'src/app/shared/components/header/header.component';
+import { Options } from 'src/app/shared/component/header/header.component';
 import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
-import { InputComponent } from '../../../shared/components/form/input/input.component';
+import { InputComponent } from '../../../shared/component/form/input/input.component';
 
 @Component({
   selector: 'app-article-category-edit',

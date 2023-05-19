@@ -1,14 +1,14 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EditorComponent } from 'src/app/shared/components/form/editor/editor.component';
-import { InputComponent } from 'src/app/shared/components/form/input/input.component';
+import { EditorComponent } from 'src/app/shared/component/form/editor/editor.component';
+import { InputComponent } from 'src/app/shared/component/form/input/input.component';
 import {
   Options,
   SelectComponent,
   Option,
-} from 'src/app/shared/components/form/select/select.component';
-import { TextAreaComponent } from 'src/app/shared/components/form/text-area/text-area.component';
+} from 'src/app/shared/component/form/select/select.component';
+import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-area.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, finalize, map, switchMap, tap } from 'rxjs';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
@@ -21,7 +21,7 @@ import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
-import { LoadArticleComponent } from '../shared/load-article/load-article.component';
+import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
 
 @Component({
   selector: 'app-article-edit',

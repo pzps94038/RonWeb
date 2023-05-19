@@ -7,11 +7,11 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, filter, finalize, switchMap } from 'rxjs';
-import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { PaginationComponent } from '../../../shared/component/pagination/pagination.component';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { DayJsPipe } from '../../../shared/pipe/day-js.pipe';
-import { ErrorComponent } from '../../../shared/components/error/error.component';
+import { ErrorComponent } from '../../../shared/component/error/error.component';
 
 @Component({
   selector: 'app-article-category-detail',

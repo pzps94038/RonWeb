@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { SharedService } from './shared/service/shared.service';
-import { ToggleModeComponent } from './shared/components/toggle-mode/toggle-mode.component';
+import { ToggleModeComponent } from './shared/component/toggle-mode/toggle-mode.component';
 
 @Component({
   selector: 'app-root',
