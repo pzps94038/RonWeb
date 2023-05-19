@@ -48,14 +48,14 @@ export class ArticleCategoryEditComponent {
         filter(res => this.sharedSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(({ categoryId, categoryName }) => {
-          this.form.get<string>('articleId')?.setValue(categoryId);
-          this.form.get<string>('categoryName')?.setValue(categoryName);
+          this.form.get('categoryId')?.setValue(categoryId);
+          this.form.get('categoryName')?.setValue(categoryName);
         }),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(({ categoryId, categoryName }) => {
-        this.form.get<string>('articleId')?.setValue(categoryId);
-        this.form.get<string>('categoryName')?.setValue(categoryName);
+        this.form.get('categoryId')?.setValue(categoryId);
+        this.form.get('categoryName')?.setValue(categoryName);
         this.isLoading.set(false);
       });
   }
