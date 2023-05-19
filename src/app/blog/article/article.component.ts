@@ -40,11 +40,6 @@ export class ArticleComponent {
   route = inject(ActivatedRoute);
   sharedSrv = inject(SharedService);
   router = inject(Router);
-  ///#region disqusSetting
-  url = signal<string>('');
-  shortname = environment.shortname;
-  //#endregion
-
   articleId = signal<string>('');
   article = signal<Article | undefined>(undefined);
   isLoading = signal(false);
@@ -57,7 +52,6 @@ export class ArticleComponent {
         filter(param => !!param.get('id')),
         map(param => param.get('id')!),
         tap(id => this.articleId.set(id)),
-        tap(() => this.url.set(location.href)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(id => this.getArticleById(id));
@@ -81,11 +75,16 @@ export class ArticleComponent {
           const { articleTitle } = data;
           this.sharedSrv.setTitle(articleTitle);
           this.article.set(data);
+          this.updateArticleViews(id);
         } else if (res.returnCode === ReturnCode.NotFound) {
           this.router.navigate(['blog', 'notFound']);
         } else {
           this.isError.set(true);
         }
       });
+  }
+
+  updateArticleViews(id: string) {
+    this.articleSrv.updateArticleViews(id).pipe(takeUntilDestroyed(this._destroyRef)).subscribe();
   }
 }

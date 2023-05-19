@@ -71,7 +71,7 @@
       </tbody>
     </table>
   </div>
-  <app-pagination [total]="total()" [currentPage]="page()" (change)=" paginationChange($event)" />
+  <app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)" />
 </ng-template>
 <ng-template #error>
   <div
