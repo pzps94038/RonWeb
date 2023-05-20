@@ -11,18 +11,18 @@
           </div>
           <a
             class="flex items-center link link-secondary"
-            [routerLink]="['blog', 'category', article()!.categoryId]">
+            [routerLink]="['/blog', 'category', article()!.categoryId]">
             <ng-icon name="heroFolder" class="mr-1" />
             <h5>{{ article()!.categoryName }}</h5>
           </a>
           <div class="flex flex-wrap">
-            <div
+            <a
               *ngFor="let label of article()?.labels ?? []"
               class="flex items-center link link-secondary mr-1"
-              [routerLink]="['blog', 'label', label.labelId]">
+              [routerLink]="['/blog', 'label', label.labelId]">
               <ng-icon name="heroHashtag" />
               <h5>{{ label.labelName }}</h5>
-            </div>
+            </a>
           </div>
         </div>
       </div>

@@ -15,12 +15,11 @@
         <tbody>
           <tr *ngFor="let article of articles()">
             <th class="flex">
-              <button
-                type="button"
+              <a
                 class="btn btn-primary m-1 flex justify-center items-center"
-                [routerLink]="'/setting/article/edit/' + article.articleId">
+                [routerLink]="['/setting', 'article', 'edit',article.articleId]">
                 <ng-icon name="heroPencilSquare" />
-              </button>
+              </a>
               <button
                 type="button"
                 class="btn btn-error m-1 flex justify-center items-center"
