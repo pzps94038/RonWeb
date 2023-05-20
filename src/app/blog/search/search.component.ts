@@ -16,6 +16,7 @@ import { ArticleCardComponent } from '../shared/component/article-card/article-c
 import { LoadingCardComponent } from '../shared/component/loading-card/loading-card.component';
 import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loading-keyword.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
+import { HighlightKeywordPipe } from 'src/app/shared/pipe/keyword-style.pipe';
 
 @Component({
   selector: 'app-search',
