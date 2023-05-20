@@ -39,3 +39,21 @@
     }
   }
 }
+:host ::ng-deep ckeditor.editor-error {
+  .ck-content {
+    @apply border-error #{!important};
+  }
+  .ck-toolbar__separator,
+  .ck-toolbar {
+    @apply bg-error border-error  #{!important};
+  }
+}
+:host ::ng-deep ckeditor.editor-success {
+  .ck-content {
+    @apply border-success #{!important};
+  }
+  .ck-toolbar__separator,
+  .ck-toolbar {
+    @apply bg-success border-success #{!important};
+  }
+}
