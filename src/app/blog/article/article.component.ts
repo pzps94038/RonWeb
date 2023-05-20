@@ -55,9 +55,9 @@ export class ArticleComponent {
       .subscribe(id => this.getArticleById(id));
   }
 
-  getArticleById(id: number) {
+  getArticleById(id: number, cache: boolean = true) {
     this.articleSrv
-      .getArticleById(id)
+      .getArticleById(id, cache)
       .pipe(
         tap(() => this.isLoading.set(true)),
         catchError(err => {

@@ -8,28 +8,50 @@ import {
 } from './article-category.model';
 import { environment } from 'src/environments/environment';
 import { BaseMessageResponse } from '../shared/shared.model';
+import { Observable, shareReplay } from 'rxjs';
+import { TransferService } from '../../service/transfer.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ArticleCategoryService {
   private http = inject(HttpClient);
+  transferSrv = inject(TransferService);
+  articleCategoryMap = new Map<undefined | number, Observable<GetArticleCategoryResponse>>();
+  articleCategoryByIdMap = new Map<
+    undefined | number,
+    Observable<GetArticleCategoryByIdResponse>
+  >();
 
-  getArticleCategory(page?: number) {
-    if (page) {
-      const params = new HttpParams().append('page', page);
-      return this.http.get<GetArticleCategoryResponse>(`${environment.baseUrl}/articleCategory`, {
-        params,
-      });
-    } else {
-      return this.http.get<GetArticleCategoryResponse>(`${environment.baseUrl}/articleCategory`);
-    }
+  getArticleCategory(page?: number, cache: boolean = true) {
+    const fn = () => {
+      if (cache && this.articleCategoryMap.has(page)) {
+        return this.articleCategoryMap.get(page)!;
+      }
+      const params = page ? new HttpParams().append('page', page) : undefined;
+      const category$ = this.http
+        .get<GetArticleCategoryResponse>(`${environment.baseUrl}/articleCategory`, {
+          params,
+        })
+        .pipe(shareReplay());
+      this.articleCategoryMap.set(page, category$);
+      return category$;
+    };
+    return this.transferSrv.transfer(`categoryList-${page}`, fn);
   }
 
-  getArticleCategoryById(id: number) {
-    return this.http.get<GetArticleCategoryByIdResponse>(
-      `${environment.baseUrl}/articleCategory/${id}`,
-    );
+  getArticleCategoryById(id: number, cache: boolean = true) {
+    const fn = () => {
+      if (cache && this.articleCategoryByIdMap.has(id)) {
+        return this.articleCategoryByIdMap.get(id)!;
+      }
+      const category$ = this.http
+        .get<GetArticleCategoryByIdResponse>(`${environment.baseUrl}/articleCategory/${id}`)
+        .pipe(shareReplay());
+      this.articleCategoryByIdMap.set(id, category$);
+      return category$;
+    };
+    return this.transferSrv.transfer(`category-${id}`, fn);
   }
 
   updateArticleCategory(req: UpdateArticleCategoryRequest) {

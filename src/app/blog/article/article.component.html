@@ -49,6 +49,6 @@
     </div>
   </ng-template>
   <ng-template #error>
-    <app-error (refresh)="getArticleById(articleId()!)" />
+    <app-error (refresh)="getArticleById(articleId()!, false)" />
   </ng-template>
 </div>

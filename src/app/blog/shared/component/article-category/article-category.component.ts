@@ -29,11 +29,11 @@ export class ArticleCategoryComponent {
     this.getArticleCategory();
   }
 
-  getArticleCategory() {
+  getArticleCategory(cache: boolean = true) {
     this.isLoading.set(true);
     this.isError.set(false);
     this.articleCategorySrv
-      .getArticleCategory()
+      .getArticleCategory(undefined, cache)
       .pipe(
         catchError(err => {
           this.isError.set(true);
