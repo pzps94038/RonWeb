@@ -13,6 +13,10 @@
   (ready)="onReady($event)"
   [editor]="editor()"
   [class]="class"
+  [ngClass]="{
+    'editor-error': control?.touched && control?.errors,
+    'editor-success': control?.touched && !control?.errors
+  }"
   [(ngModel)]="val"
   (ngModelChange)="change()"
   [disabled]="disabled" />
