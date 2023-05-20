@@ -1,5 +1,5 @@
 <div
-  class="fixed right-10 bottom-10 w-14 h-14 bg-base-content rounded-full flex justify-center items-center text-base-100 text-2xl cursor-pointer"
+  class="fixed right-10 bottom-10 w-14 h-14 bg-base-content rounded-full flex justify-center items-center text-base-100 text-2xl cursor-pointer z-50"
   (click)="toggleTheme()">
   <ng-icon *ngIf="!dark(); else darkMode" name="heroSun" class="animate__bounceIn" />
   <ng-template #darkMode>

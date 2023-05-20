@@ -1,0 +1,32 @@
+<label
+  *ngIf="labelName"
+  [id]="ngControl?.name"
+  [class]="labelClass"
+  [ngClass]="{
+      'text-success': control?.touched && !control?.errors,
+      'text-error': control?.touched && control?.errors
+    }"
+  class="block"
+  >{{ labelName }}</label
+>
+<ng-select
+  class="custom"
+  [ngClass]="{
+    'multiple-select-error': control?.touched && control?.errors,
+    'multiple-select-success': control?.touched && !control?.errors
+  }"
+  [placeholder]="placeholder"
+  [class]="class"
+  [disabled]="disabled"
+  [multiple]="true"
+  [(ngModel)]="val"
+  (ngModelChange)="change()">
+  <ng-option *ngFor="let option of options" [value]="option.value" [disabled]="option.disabled"
+    >{{option.text}}</ng-option
+  >
+</ng-select>
+<ng-container *ngIf="control?.touched && control?.errors && showErrorMsg">
+  <p *ngIf="control?.errors?.['required']" class="mt-2 text-sm text-red-600 dark:text-red-500">
+    <span class="font-medium">此欄位必填</span>
+  </p>
+</ng-container>

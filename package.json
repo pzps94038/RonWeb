@@ -48,6 +48,7 @@
     "@ckeditor/ckeditor5-source-editing": "^37.1.0",
     "@ng-icons/core": "^23.3.0",
     "@ng-icons/heroicons": "^23.3.0",
+    "@ng-select/ng-select": "^10.0.4",
     "@nguniversal/express-engine": "^16.0.0",
     "animate.css": "^4.1.1",
     "daisyui": "^2.51.5",

@@ -17,6 +17,15 @@
         [options]="categoryOptions()" />
     </div>
     <div class="my-5">
+      <app-multiple-select
+        labelName="文章標籤"
+        placeholder="請選擇文章標籤"
+        labelClass="text-lg my-2 text-center md:text-left"
+        class="w-full"
+        formControlName="labels"
+        [options]="labelOptions()" />
+    </div>
+    <div class="my-5">
       <app-editor
         labelName="預覽內容"
         labelClass="text-lg my-2 text-center md:text-left"
