@@ -14,6 +14,8 @@
       }"
       [labels]="article.labels"
       [previewContent]="article.previewContent"
+      [highlightKeyword]="true"
+      [keyword]="keyword()"
       (category)="navigateCategory($event)"
       (label)="navigateLabel($event)"
       (showMore)="showMore(article.articleId)" />

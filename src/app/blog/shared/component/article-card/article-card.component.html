@@ -23,6 +23,8 @@
     </div>
   </div>
   <div class="divider my-1"></div>
-  <div class="ck-content" [innerHTML]="previewContent | safe : 'html'"></div>
+  <div
+    class="ck-content"
+    [innerHTML]="(highlightKeyword ? (previewContent | highlightKeyword : keyword) : previewContent) | safe : 'html'"></div>
   <a class="link link-secondary" (click)="showMore.emit(true)">... 繼續閱讀 ...</a>
 </div>
