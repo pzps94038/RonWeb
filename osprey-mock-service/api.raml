@@ -7,7 +7,7 @@ version: 0.1
     uriParameters:
       id:
         description: The ID of the article
-        type: string
+        type: number
     responses:
       200:
         body:
@@ -17,7 +17,7 @@ version: 0.1
     uriParameters:
       id:
         description: The ID of the article
-        type: string
+        type: number
     responses:
       200:
         body:
@@ -27,7 +27,7 @@ version: 0.1
     uriParameters:
       id:
         description: The ID of the article
-        type: string
+        type: number
     responses:
       200:
         body:
@@ -51,7 +51,7 @@ version: 0.1
       uriParameters:
         id:
           description: The ID of the article
-          type: string
+          type: number
       responses:
         200:
           body:
@@ -75,7 +75,7 @@ version: 0.1
     uriParameters:
       id:
         description: The ID of the article-category
-        type: string
+        type: number
     responses:
       200:
         body:
@@ -85,7 +85,7 @@ version: 0.1
     uriParameters:
       id:
         description: The ID of the article
-        type: string
+        type: number
     responses:
       200:
         body:
@@ -95,12 +95,56 @@ version: 0.1
     uriParameters:
       id:
         description: The ID of the article
-        type: string
+        type: number
     responses:
       200:
         body:
           application/json:
             example: !include examples/article-category/delete.json
+/api/articleLabel:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/article-label/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/article-label/create.json
+/api/articleLabel/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the article-label
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/article-label/getId.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the article-label
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/article-label/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the article-label
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/article-label/delete.json
 /api/login:
   post:
     responses:
@@ -136,6 +180,13 @@ version: 0.1
         body:
           application/json:
             example: !include examples/search/category.json
+/api/search/label/{id}:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/search/label.json
 /api/upload:
   post:
     responses:

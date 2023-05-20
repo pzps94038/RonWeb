@@ -1,0 +1,35 @@
+<ng-container *ngIf="!isError(); else error">
+  <ng-container *ngIf="!isLoading(); else loading">
+    <div
+      class="p-5 bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 mb-5">
+      <h3>以下是{{ label() }}的搜尋結果：</h3>
+    </div>
+    <app-article-card
+      *ngFor="let article of articles()"
+      [title]="article.articleTitle"
+      [date]="article.createDate"
+      [category]="{
+        categoryId: article.categoryId,
+        categoryName: article.categoryName
+      }"
+      [labels]="article.labels"
+      [previewContent]="article.previewContent"
+      (category)="navigateCategory($event)"
+      (label)="navigateLabel($event)"
+      (showMore)="showMore(article.articleId)" />
+  </ng-container>
+</ng-container>
+<ng-template #loading>
+  <app-loading-keyword></app-loading-keyword>
+  <app-loading-card></app-loading-card>
+  <app-loading-card></app-loading-card>
+  <app-loading-card></app-loading-card>
+</ng-template>
+<ng-template #error>
+  <div
+    class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
+    <app-error (refresh)="searchLabel(labelId()!, page())" />
+  </div>
+</ng-template>
+<app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)">
+</app-pagination>

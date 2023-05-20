@@ -1,3 +1,4 @@
+import { ArticleLabels } from '../article-label/article-label.model';
 import { BaseResponse } from '../shared/shared.model';
 import { UploadFiles } from '../upload/upload.model';
 
@@ -11,11 +12,12 @@ export type ArticleResponse = {
 export type GetArticleByIdResponse = BaseResponse<Article>;
 
 export type Article = {
-  articleId: string;
+  articleId: number;
   articleTitle: string;
-  categoryId: string;
+  categoryId: number;
   categoryName: string;
   previewContent: string;
+  labels: ArticleLabels;
   content: string;
   viewCount: number;
   createDate: string;
@@ -27,19 +29,19 @@ export type CreateArticleRequest = {
   articleTitle: string;
   previewContent: string;
   content: string;
-  categoryId: string;
-  userId: string;
+  categoryId: number;
+  userId: number;
   prevFiles: UploadFiles;
   contentFiles: UploadFiles;
 };
 
 export type UpdateArticleRequest = {
-  articleId: string;
+  articleId: number;
   articleTitle: string;
   previewContent: string;
   content: string;
-  categoryId: string;
-  userId: string;
+  categoryId: number;
+  userId: number;
   prevFiles: UploadFiles;
   contentFiles: UploadFiles;
 };

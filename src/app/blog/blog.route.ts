@@ -33,6 +33,16 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'label/:id',
+    loadComponent: () => import('./label/label.component').then(m => m.LabelComponent),
+    data: {
+      title: '標籤搜尋',
+    },
+    resolve: {
+      titleResolver,
+    },
+  },
+  {
     path: 'article/:id',
     loadComponent: () => import('./article/article.component').then(m => m.ArticleComponent),
   },

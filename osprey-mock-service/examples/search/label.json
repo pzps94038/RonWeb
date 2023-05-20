@@ -1,0 +1,20 @@
+{
+  "returnCode": "00",
+  "returnMessage": "string",
+  "data": {
+    "total": 34,
+    "keyword": "標籤",
+    "articles": [
+      {
+        "articleId": 1,
+        "articleTitle": "string",
+        "previewContent": "string",
+        "categoryId": 1,
+        "categoryName": "string",
+        "labels": [],
+        "viewCount": 0,
+        "createDate": "2023-05-09T13:39:54.428Z"
+      }
+    ]
+  }
+}

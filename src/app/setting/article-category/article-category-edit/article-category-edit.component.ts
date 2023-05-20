@@ -5,6 +5,7 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { tap, filter, map, switchMap, finalize } from 'rxjs';
 import {
+  ArticleCategory,
   ArticleCategorys,
   UpdateArticleCategoryRequest,
 } from 'src/app/shared/api/article-category/article-category.model';
@@ -34,7 +35,7 @@ export class ArticleCategoryEditComponent {
   isError = signal(false);
   private _destroyRef = inject(DestroyRef);
   form = new FormGroup({
-    categoryId: new FormControl('', [Validators.required]),
+    categoryId: new FormControl<undefined | number>(undefined, [Validators.required]),
     categoryName: new FormControl('', [Validators.required]),
   });
 
@@ -44,6 +45,8 @@ export class ArticleCategoryEditComponent {
         tap(() => this.isLoading.set(true)),
         filter(param => !!param.get('id')),
         map(param => param.get('id')!),
+        filter(id => !isNaN(parseInt(id))),
+        map(id => parseInt(id)),
         switchMap(id => this.articleCategorySrv.getArticleCategoryById(id)),
         filter(res => this.sharedSrv.ifSuccess(res)),
         map(({ data }) => data),
@@ -53,7 +56,8 @@ export class ArticleCategoryEditComponent {
         }),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(({ categoryId, categoryName }) => {
+      .subscribe(res => {
+        const { categoryId, categoryName } = res as ArticleCategory;
         this.form.get('categoryId')?.setValue(categoryId);
         this.form.get('categoryName')?.setValue(categoryName);
         this.isLoading.set(false);

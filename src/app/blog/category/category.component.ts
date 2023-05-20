@@ -16,6 +16,7 @@ import {
 } from 'src/app/shared/api/article-category/article-category.model';
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loading-keyword.component';
+import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 
 @Component({
   selector: 'app-category',
@@ -37,7 +38,7 @@ export class CategoryComponent implements OnInit {
   searchSrv = inject(SearchService);
   sharedSrv = inject(SharedService);
   category = signal('');
-  categoryId = signal<string>('');
+  categoryId = signal<number | undefined>(undefined);
   total = signal(0);
   articles = signal<Articles>([]);
   isLoading = signal(false);
@@ -49,7 +50,7 @@ export class CategoryComponent implements OnInit {
     combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(
         filter(([params]) => {
-          if (!!params.get('id')) {
+          if (!!params.get('id') && !isNaN(parseInt(params.get('id')!))) {
             return true;
           } else {
             this.router.navigate(['blog']);
@@ -59,16 +60,16 @@ export class CategoryComponent implements OnInit {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(([params, queryParam]) => {
-        const id = params.get('id');
-        this.categoryId.set(id as string);
+        const id = parseInt(params.get('id')!);
+        this.categoryId.set(id);
         const page = queryParam.get('page');
         const num = page ? parseInt(page) : 1;
         this.page.set(isNaN(num) ? 1 : num);
-        this.searchCategory(this.categoryId(), this.page());
+        this.searchCategory(id, this.page());
       });
   }
 
-  searchCategory(id: string, page?: number) {
+  searchCategory(id: number, page?: number) {
     this.isError.set(false);
     this.isLoading.set(true);
     this.searchSrv
@@ -97,12 +98,16 @@ export class CategoryComponent implements OnInit {
       });
   }
 
-  showMore(id: string) {
+  showMore(id: number) {
     this.router.navigateByUrl(`/blog/article/${id}`);
   }
 
   navigateCategory({ categoryId }: Category) {
     this.router.navigateByUrl(`/blog/category/${categoryId}`);
+  }
+
+  navigateLabel({ labelId }: ArticleLabel) {
+    this.router.navigateByUrl(`/blog/label/${labelId}`);
   }
 
   paginationChange(page: number) {

@@ -12,8 +12,10 @@
         categoryId: article.categoryId,
         categoryName: article.categoryName
       }"
+      [labels]="article.labels"
       [previewContent]="article.previewContent"
       (category)="navigateCategory($event)"
+      (label)="navigateLabel($event)"
       (showMore)="showMore(article.articleId)" />
   </ng-container>
 </ng-container>
@@ -26,7 +28,7 @@
 <ng-template #error>
   <div
     class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
-    <app-error (refresh)="searchCategory(categoryId(), page())" />
+    <app-error (refresh)="searchCategory(categoryId()!, page())" />
   </div>
 </ng-template>
 <app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)">

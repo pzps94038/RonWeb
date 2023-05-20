@@ -15,6 +15,7 @@ import {
 } from 'src/app/shared/api/article-category/article-category.model';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { LoadingCardComponent } from '../shared/component/loading-card/loading-card.component';
+import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 
 @Component({
   selector: 'app-home',
@@ -76,12 +77,16 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  showMore(id: string) {
+  showMore(id: number) {
     this.router.navigateByUrl(`/blog/article/${id}`);
   }
 
   navigateCategory({ categoryId }: Category) {
     this.router.navigateByUrl(`/blog/category/${categoryId}`);
+  }
+
+  navigateLabel({ labelId }: ArticleLabel) {
+    this.router.navigateByUrl(`/blog/label/${labelId}`);
   }
 
   paginationChange(page: number) {

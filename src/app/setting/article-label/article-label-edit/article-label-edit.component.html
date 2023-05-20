@@ -1,0 +1,31 @@
+<ng-container *ngIf="!isLoading();else loading">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="my-5">
+      <app-input
+        labelName="標籤"
+        labelClass="text-lg my-2 text-center md:text-left"
+        class="w-full"
+        placeholder="請輸入標籤"
+        formControlName="labelName" />
+    </div>
+    <div class="flex justify-end items-center">
+      <button
+        type="submit"
+        [disabled]="isLoading()"
+        [class.loading]="isLoading()"
+        class="btn btn-primary">
+        修改標籤
+      </button>
+    </div>
+  </form>
+</ng-container>
+<ng-template #loading>
+  <div class="bg-base-100 border border-base-content/10 text-base-content rounded-md p-5 mb-5">
+    <div>
+      <div class="flex items-center">
+        <div
+          class="h-5 my-2 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

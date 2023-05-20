@@ -18,6 +18,12 @@ export const routes: Routes = [
     loadChildren: () => import('./article-category/article-category.route').then(m => m.routes),
   },
   {
+    path: 'article-label',
+    loadComponent: () =>
+      import('./article-label/article-label.component').then(m => m.ArticleLabelComponent),
+    loadChildren: () => import('./article-label/article-label.route').then(m => m.routes),
+  },
+  {
     path: '**',
     pathMatch: 'full',
     redirectTo: '',

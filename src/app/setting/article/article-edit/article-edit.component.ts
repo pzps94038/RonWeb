@@ -54,21 +54,21 @@ export class ArticleEditComponent {
   prevFiles = signal<UploadFiles>([]);
   contentFiles = signal<UploadFiles>([]);
   form = new FormGroup({
-    articleId: new FormControl('', [Validators.required]),
+    articleId: new FormControl<undefined | number>(undefined, [Validators.required]),
     articleTitle: new FormControl('', [Validators.required]),
     previewContent: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),
-    categoryId: new FormControl('', [Validators.required]),
+    categoryId: new FormControl<undefined | number>(undefined, [Validators.required]),
   });
   private _destroyRef = inject(DestroyRef);
-
+  constructor() {}
   ngOnInit(): void {
     this.route.paramMap
       .pipe(
         tap(() => this.isLoading.set(true)),
         filter(param => !!param.get('id')),
         map(param => param.get('id')!),
-        switchMap(id => this.articleSrv.getArticleById(id)),
+        switchMap(id => this.articleSrv.getArticleById(parseInt(id))),
         filter(res => this.sharedSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(({ articleId, articleTitle, previewContent, content, categoryId }) => {

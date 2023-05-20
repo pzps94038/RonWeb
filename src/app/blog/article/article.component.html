@@ -6,15 +6,24 @@
         <h3 class="text-xl font-semibold">{{ article()!.articleTitle }}</h3>
         <div>
           <div class="flex items-center">
-            <ng-icon name="heroCalendarDays" />
+            <ng-icon name="heroCalendarDays" class="mr-1" />
             <h4>{{ article()!.createDate| dayJs : 'YYYY/MM/DD hh:mm' }}</h4>
           </div>
           <a
             class="flex items-center link link-secondary"
             [routerLink]="['blog', 'category', article()!.categoryId]">
-            <ng-icon name="heroHashtag" />
+            <ng-icon name="heroFolder" class="mr-1" />
             <h5>{{ article()!.categoryName }}</h5>
           </a>
+          <div class="flex flex-wrap">
+            <div
+              *ngFor="let label of article()?.labels ?? []"
+              class="flex items-center link link-secondary mr-1"
+              [routerLink]="['blog', 'label', label.labelId]">
+              <ng-icon name="heroHashtag" />
+              <h5>{{ label.labelName }}</h5>
+            </div>
+          </div>
         </div>
       </div>
       <div class="divider my-1"></div>
@@ -40,6 +49,6 @@
     </div>
   </ng-template>
   <ng-template #error>
-    <app-error (refresh)="getArticleById(articleId())" />
+    <app-error (refresh)="getArticleById(articleId()!)" />
   </ng-template>
 </div>

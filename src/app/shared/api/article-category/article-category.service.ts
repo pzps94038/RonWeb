@@ -26,7 +26,7 @@ export class ArticleCategoryService {
     }
   }
 
-  getArticleCategoryById(id: string) {
+  getArticleCategoryById(id: number) {
     return this.http.get<GetArticleCategoryByIdResponse>(
       `${environment.baseUrl}/articleCategory/${id}`,
     );
@@ -39,16 +39,11 @@ export class ArticleCategoryService {
     );
   }
 
-  createAtircleCategory(req: CreateArticleCategoryRequest) {
+  createArticleCategory(req: CreateArticleCategoryRequest) {
     return this.http.post<BaseMessageResponse>(`${environment.baseUrl}/articleCategory`, req);
   }
 
-  /**
-   * 刪除文章
-   * @param id
-   * @returns
-   */
-  deleteAtircleCategory(id: string) {
+  deleteArticleCategory(id: number) {
     return this.http.delete<BaseMessageResponse>(`${environment.baseUrl}/articleCategory/${id}`);
   }
 }

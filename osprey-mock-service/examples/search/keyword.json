@@ -3,32 +3,35 @@
   "returnMessage": "string",
   "data": {
     "total": 73,
-    "keyword": "string",
+    "keyword": "關鍵字",
     "articles": [
       {
-        "articleId": "string",
+        "articleId": 1,
         "articleTitle": "string",
         "previewContent": "string",
-        "categoryId": "string",
+        "categoryId": 1,
         "categoryName": "string",
         "viewCount": 0,
+        "labels": [],
         "createDate": "2023-05-09T13:39:54.428Z"
       },
       {
-        "articleId": "string",
+        "articleId": 2,
         "articleTitle": "string",
         "previewContent": "string",
-        "categoryId": "string",
+        "categoryId": 1,
         "categoryName": "string",
         "viewCount": 0,
+        "labels": [],
         "createDate": "2023-05-09T13:39:54.428Z"
       },
       {
-        "articleId": "string",
+        "articleId": 1,
         "articleTitle": "string",
         "previewContent": "string",
-        "categoryId": "string",
+        "categoryId": 3,
         "categoryName": "string",
+        "labels": [],
         "viewCount": 0,
         "createDate": "2023-05-09T13:39:54.428Z"
       }

@@ -6,7 +6,7 @@ export type LoginRequest = {
 };
 export type UserInfo = {
   token: Token;
-  userId: string;
+  userId: number;
 };
 
 export type LoginResponse = BaseResponse<UserInfo>;

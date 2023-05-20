@@ -50,7 +50,7 @@ export class ArticleCreateComponent implements OnInit {
     articleTitle: new FormControl('', [Validators.required]),
     previewContent: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),
-    categoryId: new FormControl('', [Validators.required]),
+    categoryId: new FormControl<undefined | number>(undefined, [Validators.required]),
   });
   private _destroyRef = inject(DestroyRef);
 

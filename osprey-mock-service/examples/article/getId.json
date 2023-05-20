@@ -2,12 +2,29 @@
   "returnCode": "00",
   "returnMessage": "string",
   "data": {
-    "articleId": "文章ID",
+    "articleId": 1,
     "articleTitle": "文章標題",
     "previewContent": "<p>1</p><p>&nbsp;</p><pre><code>scadfasdasd</code></pre>",
     "content": "內容",
-    "categoryId": "2",
+    "categoryId": 1,
     "categoryName": "分類2",
+    "labels": [
+      {
+        "labelId": 1,
+        "labelName": "標籤",
+        "createDate": "2023-05-08T13:22:00.124Z"
+      },
+      {
+        "labelId": 1,
+        "labelName": "標籤",
+        "createDate": "2023-05-08T13:22:00.124Z"
+      },
+      {
+        "labelId": 1,
+        "labelName": "標籤",
+        "createDate": "2023-05-08T13:22:00.124Z"
+      }
+    ],
     "viewCount": 0,
     "createDate": "2023-05-03T12:02:18.878Z"
   }

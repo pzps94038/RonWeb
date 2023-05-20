@@ -1,0 +1,9 @@
+{
+  "returnCode": "00",
+  "returnMessage": "string",
+  "data": {
+    "labelId": 1,
+    "labelName": "標籤",
+    "createDate": "2023-05-08T13:22:00.124Z"
+  }
+}
