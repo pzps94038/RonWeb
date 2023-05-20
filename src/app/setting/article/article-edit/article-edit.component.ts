@@ -10,7 +10,7 @@ import {
 } from 'src/app/shared/component/form/select/select.component';
 import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-area.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, finalize, map, switchMap, tap } from 'rxjs';
+import { filter, finalize, forkJoin, map, switchMap, tap } from 'rxjs';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import {
   CreateArticleRequest,
@@ -64,49 +64,24 @@ export class ArticleEditComponent {
     articleTitle: new FormControl('', [Validators.required]),
     previewContent: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),
-    categoryId: new FormControl<undefined | number>(undefined, [Validators.required]),
+    categoryId: new FormControl<string | number>('', [Validators.required]),
     labels: new FormControl<number[]>([], [Validators.required]),
   });
   private _destroyRef = inject(DestroyRef);
-  constructor() {}
+
   ngOnInit(): void {
-    this.route.paramMap
-      .pipe(
-        tap(() => this.isLoading.set(true)),
-        filter(param => !!param.get('id')),
-        map(param => param.get('id')!),
-        switchMap(id => this.articleSrv.getArticleById(parseInt(id))),
-        filter(res => this.sharedSrv.ifSuccess(res)),
-        map(({ data }) => data),
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe(({ articleId, articleTitle, previewContent, content, categoryId, labels }) => {
-        this.form.get('articleId')?.setValue(articleId);
-        this.form.get('articleTitle')?.setValue(articleTitle);
-        this.form.get('content')?.setValue(content);
-        this.form.get('categoryId')?.setValue(categoryId);
-        this.form.get('previewContent')?.setValue(previewContent);
-        const labelVal = labels.map(({ labelId }) => labelId);
-        this.form.get('labels')?.setValue(labelVal);
-        this.isLoading.set(false);
-      });
-    this.articleCategorySrv
-      .getArticleCategory()
-      .pipe(
-        filter(res => this.sharedSrv.ifSuccess(res)),
-        map(({ data: { categorys } }) => categorys),
-        map(array =>
-          array.map(({ categoryId, categoryName }) => {
-            return {
-              value: categoryId,
-              text: categoryName,
-            } as Option;
-          }),
-        ),
-        finalize(() => this.isLoading.set(false)),
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe(options => {
+    const category$ = this.articleCategorySrv.getArticleCategory().pipe(
+      filter(res => this.sharedSrv.ifSuccess(res)),
+      map(({ data: { categorys } }) => categorys),
+      map(array =>
+        array.map(({ categoryId, categoryName }) => {
+          return {
+            value: categoryId,
+            text: categoryName,
+          } as Option;
+        }),
+      ),
+      tap(options => {
         options = [
           {
             text: '請選擇文章分類',
@@ -116,26 +91,43 @@ export class ArticleEditComponent {
           ...options,
         ];
         this.categoryOptions.set(options);
-      });
-    this.articleLabelSrv
-      .getArticleLabel()
+      }),
+    );
+    const label$ = this.articleLabelSrv.getArticleLabel().pipe(
+      filter(res => this.sharedSrv.ifSuccess(res)),
+      map(({ data: { labels } }) => labels),
+      map(array =>
+        array.map(label => {
+          return {
+            value: label.labelId,
+            text: label.labelName,
+          } as Option;
+        }),
+      ),
+      tap(options => this.labelOptions.set(options)),
+    );
+    this.route.paramMap
       .pipe(
+        tap(() => this.isLoading.set(true)),
+        filter(param => !!param.get('id')),
+        map(param => param.get('id')!),
+        switchMap(id => this.articleSrv.getArticleById(parseInt(id))),
         filter(res => this.sharedSrv.ifSuccess(res)),
-        map(({ data: { labels } }) => labels),
-        map(array =>
-          array.map(label => {
-            return {
-              value: label.labelId,
-              text: label.labelName,
-            } as Option;
-          }),
-        ),
-        finalize(() => this.isLoading.set(false)),
+        map(({ data }) => data),
+        tap(data => {
+          const { articleId, articleTitle, previewContent, content, categoryId, labels } = data;
+          this.form.get('articleId')?.setValue(articleId);
+          this.form.get('articleTitle')?.setValue(articleTitle);
+          this.form.get('content')?.setValue(content);
+          this.form.get('categoryId')?.setValue(categoryId);
+          this.form.get('previewContent')?.setValue(previewContent);
+          const labelVal = labels.map(({ labelId }) => labelId);
+          this.form.get('labels')?.setValue(labelVal);
+        }),
+        switchMap(() => forkJoin([category$, label$])),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(options => {
-        this.labelOptions.set(options);
-      });
+      .subscribe(() => this.isLoading.set(false));
   }
 
   submit() {

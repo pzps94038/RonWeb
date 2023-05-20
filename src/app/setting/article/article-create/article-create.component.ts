@@ -12,7 +12,7 @@ import {
   Options,
   SelectComponent,
 } from 'src/app/shared/component/form/select/select.component';
-import { filter, finalize, map, switchMap } from 'rxjs';
+import { filter, finalize, forkJoin, map, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { CreateArticleRequest } from 'src/app/shared/api/article/article.model';
@@ -57,29 +57,24 @@ export class ArticleCreateComponent implements OnInit {
     previewContent: new FormControl('', [Validators.required]),
     labels: new FormControl([], [Validators.required]),
     content: new FormControl('', [Validators.required]),
-    categoryId: new FormControl<undefined | number>(undefined, [Validators.required]),
+    categoryId: new FormControl<number | string>('', [Validators.required]),
   });
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.isLoading.set(true);
-    this.articleCategorySrv
-      .getArticleCategory()
-      .pipe(
-        filter(res => this.sharedSrv.ifSuccess(res)),
-        map(({ data: { categorys } }) => categorys),
-        map(array =>
-          array.map(({ categoryId, categoryName }) => {
-            return {
-              value: categoryId,
-              text: categoryName,
-            } as Option;
-          }),
-        ),
-        finalize(() => this.isLoading.set(false)),
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe(options => {
+    const category$ = this.articleCategorySrv.getArticleCategory().pipe(
+      filter(res => this.sharedSrv.ifSuccess(res)),
+      map(({ data: { categorys } }) => categorys),
+      map(array =>
+        array.map(({ categoryId, categoryName }) => {
+          return {
+            value: categoryId,
+            text: categoryName,
+          } as Option;
+        }),
+      ),
+      tap(options => {
         options = [
           {
             text: '請選擇文章分類',
@@ -89,26 +84,27 @@ export class ArticleCreateComponent implements OnInit {
           ...options,
         ];
         this.categoryOptions.set(options);
-      });
-    this.articleLabelSrv
-      .getArticleLabel()
+      }),
+    );
+    const label$ = this.articleLabelSrv.getArticleLabel().pipe(
+      filter(res => this.sharedSrv.ifSuccess(res)),
+      map(({ data: { labels } }) => labels),
+      map(array =>
+        array.map(label => {
+          return {
+            value: label.labelId,
+            text: label.labelName,
+          } as Option;
+        }),
+      ),
+      tap(options => this.labelOptions.set(options)),
+    );
+    forkJoin([category$, label$])
       .pipe(
-        filter(res => this.sharedSrv.ifSuccess(res)),
-        map(({ data: { labels } }) => labels),
-        map(array =>
-          array.map(label => {
-            return {
-              value: label.labelId,
-              text: label.labelName,
-            } as Option;
-          }),
-        ),
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(options => {
-        this.labelOptions.set(options);
-      });
+      .subscribe();
   }
 
   submit() {
