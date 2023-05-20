@@ -29,11 +29,11 @@ export class ArticleLabelComponent {
     this.getArticleLabel();
   }
 
-  getArticleLabel() {
+  getArticleLabel(cache: boolean = true) {
     this.isLoading.set(true);
     this.isError.set(false);
     this.articleLabelSrv
-      .getArticleLabel()
+      .getArticleLabel(undefined, cache)
       .pipe(
         catchError(err => {
           this.isError.set(true);

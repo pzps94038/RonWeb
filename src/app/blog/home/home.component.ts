@@ -51,11 +51,11 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getArticle(page?: number) {
+  getArticle(page?: number, cache: boolean = true) {
     this.isError.set(false);
     this.isLoading.set(true);
     this.articleSrv
-      .getArticle(page)
+      .getArticle(page, cache)
       .pipe(
         catchError(err => {
           this.isError.set(true);
