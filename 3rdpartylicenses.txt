@@ -65,6 +65,9 @@ MIT
 @ng-icons/heroicons
 MIT
 
+@ng-select/ng-select
+MIT
+
 animate.css
 MIT
 The MIT License (MIT)
