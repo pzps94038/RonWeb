@@ -19,6 +19,9 @@ import { CreateArticleRequest } from 'src/app/shared/api/article/article.model';
 import { Router } from '@angular/router';
 import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
 import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model';
+import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
+import { MultipleSelectComponent } from 'src/app/shared/component/form/multiple-select/multiple-select.component';
+import { ArticleLabel, ArticleLabels } from 'src/app/shared/api/article-label/article-label.model';
 
 @Component({
   selector: 'app-article-create',
@@ -32,6 +35,7 @@ import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model'
     EditorComponent,
     ReactiveFormsModule,
     SelectComponent,
+    MultipleSelectComponent,
     LoadArticleComponent,
   ],
 })
@@ -39,16 +43,19 @@ export class ArticleCreateComponent implements OnInit {
   sharedSrv = inject(SharedService);
   swalSrv = inject(SwalService);
   articleCategorySrv = inject(ArticleCategoryService);
+  articleLabelSrv = inject(ArticleLabelService);
   articleSrv = inject(ArticleService);
   router = inject(Router);
   isLoading = signal(false);
   createIsLoading = signal(false);
   categoryOptions = signal<Options>([]);
+  labelOptions = signal<Options>([]);
   prevFiles = signal<UploadFiles>([]);
   contentFiles = signal<UploadFiles>([]);
   form = new FormGroup({
     articleTitle: new FormControl('', [Validators.required]),
     previewContent: new FormControl('', [Validators.required]),
+    labels: new FormControl([], [Validators.required]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<undefined | number>(undefined, [Validators.required]),
   });
@@ -83,6 +90,25 @@ export class ArticleCreateComponent implements OnInit {
         ];
         this.categoryOptions.set(options);
       });
+    this.articleLabelSrv
+      .getArticleLabel()
+      .pipe(
+        filter(res => this.sharedSrv.ifSuccess(res)),
+        map(({ data: { labels } }) => labels),
+        map(array =>
+          array.map(label => {
+            return {
+              value: label.labelId,
+              text: label.labelName,
+            } as Option;
+          }),
+        ),
+        finalize(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe(options => {
+        this.labelOptions.set(options);
+      });
   }
 
   submit() {
@@ -90,6 +116,16 @@ export class ArticleCreateComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
+    const labelIds = (this.form.get('labels')?.value ?? []) as number[];
+    const labels = this.labelOptions()
+      .filter(a => labelIds.includes(a.value))
+      .map(
+        a =>
+          ({
+            labelId: a.value,
+            labelName: a.text,
+          } as ArticleLabel),
+      );
     const req = {
       articleTitle: this.form.get('articleTitle')!.value,
       previewContent: this.form.get('previewContent')!.value,
@@ -98,6 +134,7 @@ export class ArticleCreateComponent implements OnInit {
       userId: this.sharedSrv.getUserId(),
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),
+      labels,
     } as CreateArticleRequest;
     this.createIsLoading.set(true);
     this.articleSrv

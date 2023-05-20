@@ -33,6 +33,7 @@ export type CreateArticleRequest = {
   userId: number;
   prevFiles: UploadFiles;
   contentFiles: UploadFiles;
+  labels: ArticleLabels;
 };
 
 export type UpdateArticleRequest = {
@@ -44,4 +45,5 @@ export type UpdateArticleRequest = {
   userId: number;
   prevFiles: UploadFiles;
   contentFiles: UploadFiles;
+  labels: ArticleLabels;
 };

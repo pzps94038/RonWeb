@@ -1,0 +1,36 @@
+.ng-select.custom ::ng-deep {
+  .ng-select-container {
+    @apply bg-base-100 text-base-content py-2 border-base-content/40;
+    .ng-value {
+      @apply bg-base-content text-base-100;
+      .ng-value-icon:hover {
+        @apply bg-base-content text-base-100;
+      }
+    }
+    .ng-placeholder {
+      @apply static #{!important};
+    }
+  }
+
+  .ng-option {
+    @apply bg-base-100 text-base-content;
+  }
+
+  .ng-option-marked {
+    @apply bg-base-content text-base-100;
+  }
+
+  .ng-option-selected {
+    @apply bg-neutral text-neutral-content  #{!important};
+  }
+}
+.ng-select.multiple-select-success ::ng-deep {
+  .ng-select-container {
+    @apply border-success #{!important};
+  }
+}
+.ng-select.multiple-select-error ::ng-deep {
+  .ng-select-container {
+    @apply border-error #{!important};
+  }
+}

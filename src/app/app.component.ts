@@ -7,9 +7,9 @@ import { ToggleModeComponent } from './shared/component/toggle-mode/toggle-mode.
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, ToggleModeComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  imports: [CommonModule, RouterOutlet, ToggleModeComponent],
 })
 export class AppComponent implements OnInit {
   sharedSrv = inject(SharedService);

@@ -24,6 +24,9 @@ import { ArticleCategorys } from 'src/app/shared/api/article-category/article-ca
 import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
 import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model';
 import { UploadService } from 'src/app/shared/api/upload/upload.service';
+import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
+import { MultipleSelectComponent } from 'src/app/shared/component/form/multiple-select/multiple-select.component';
+import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 
 @Component({
   selector: 'app-article-edit',
@@ -38,12 +41,14 @@ import { UploadService } from 'src/app/shared/api/upload/upload.service';
     ReactiveFormsModule,
     SelectComponent,
     LoadArticleComponent,
+    MultipleSelectComponent,
   ],
 })
 export class ArticleEditComponent {
   sharedSrv = inject(SharedService);
   swalSrv = inject(SwalService);
   articleCategorySrv = inject(ArticleCategoryService);
+  articleLabelSrv = inject(ArticleLabelService);
   articleSrv = inject(ArticleService);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -51,6 +56,7 @@ export class ArticleEditComponent {
   editIsLoading = signal(false);
   files = signal<UploadFiles>([]);
   categoryOptions = signal<Options>([]);
+  labelOptions = signal<Options>([]);
   prevFiles = signal<UploadFiles>([]);
   contentFiles = signal<UploadFiles>([]);
   form = new FormGroup({
@@ -59,6 +65,7 @@ export class ArticleEditComponent {
     previewContent: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<undefined | number>(undefined, [Validators.required]),
+    labels: new FormControl<number[]>([], [Validators.required]),
   });
   private _destroyRef = inject(DestroyRef);
   constructor() {}
@@ -71,17 +78,24 @@ export class ArticleEditComponent {
         switchMap(id => this.articleSrv.getArticleById(parseInt(id))),
         filter(res => this.sharedSrv.ifSuccess(res)),
         map(({ data }) => data),
-        tap(({ articleId, articleTitle, previewContent, content, categoryId }) => {
-          this.form.get('articleId')?.setValue(articleId);
-          this.form.get('articleTitle')?.setValue(articleTitle);
-          this.form.get('content')?.setValue(content);
-          this.form.get('categoryId')?.setValue(categoryId);
-          this.form.get('previewContent')?.setValue(previewContent);
-        }),
-        switchMap(() => this.articleCategorySrv.getArticleCategory()),
-        filter(res => this.sharedSrv.ifSuccess(res, true)),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe(({ articleId, articleTitle, previewContent, content, categoryId, labels }) => {
+        this.form.get('articleId')?.setValue(articleId);
+        this.form.get('articleTitle')?.setValue(articleTitle);
+        this.form.get('content')?.setValue(content);
+        this.form.get('categoryId')?.setValue(categoryId);
+        this.form.get('previewContent')?.setValue(previewContent);
+        const labelVal = labels.map(({ labelId }) => labelId);
+        this.form.get('labels')?.setValue(labelVal);
+        this.isLoading.set(false);
+      });
+    this.articleCategorySrv
+      .getArticleCategory()
+      .pipe(
+        filter(res => this.sharedSrv.ifSuccess(res)),
         map(({ data: { categorys } }) => categorys),
-        map((array: ArticleCategorys) =>
+        map(array =>
           array.map(({ categoryId, categoryName }) => {
             return {
               value: categoryId,
@@ -89,6 +103,7 @@ export class ArticleEditComponent {
             } as Option;
           }),
         ),
+        finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(options => {
@@ -98,10 +113,28 @@ export class ArticleEditComponent {
             value: '',
             disabled: true,
           },
-          ...(options as Options),
+          ...options,
         ];
-        this.categoryOptions.set(options as Options);
-        this.isLoading.set(false);
+        this.categoryOptions.set(options);
+      });
+    this.articleLabelSrv
+      .getArticleLabel()
+      .pipe(
+        filter(res => this.sharedSrv.ifSuccess(res)),
+        map(({ data: { labels } }) => labels),
+        map(array =>
+          array.map(label => {
+            return {
+              value: label.labelId,
+              text: label.labelName,
+            } as Option;
+          }),
+        ),
+        finalize(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe(options => {
+        this.labelOptions.set(options);
       });
   }
 
@@ -110,6 +143,16 @@ export class ArticleEditComponent {
     if (!this.form.valid) {
       return;
     }
+    const labelIds = (this.form.get('labels')?.value ?? []) as number[];
+    const labels = this.labelOptions()
+      .filter(a => labelIds.includes(a.value))
+      .map(
+        a =>
+          ({
+            labelId: a.value,
+            labelName: a.text,
+          } as ArticleLabel),
+      );
     const req = {
       articleId: this.form.get('articleId')!.value,
       articleTitle: this.form.get('articleTitle')!.value,
@@ -119,6 +162,7 @@ export class ArticleEditComponent {
       userId: this.sharedSrv.getUserId(),
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),
+      labels,
     } as UpdateArticleRequest;
     this.editIsLoading.set(true);
     this.articleSrv
