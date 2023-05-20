@@ -8,7 +8,7 @@ export type ArticleCategoryResponse = {
 };
 
 export type ArticleCategory = {
-  categoryId: string;
+  categoryId: number;
   categoryName: string;
   createDate: string;
 };
@@ -23,11 +23,11 @@ export type Categorys = Category[];
 
 export type CreateArticleCategoryRequest = {
   categoryName: string;
-  userId: string;
+  userId: number;
 };
 
 export type UpdateArticleCategoryRequest = {
-  categoryId: string;
+  categoryId: number;
   categoryName: string;
-  userId: string;
+  userId: number;
 };

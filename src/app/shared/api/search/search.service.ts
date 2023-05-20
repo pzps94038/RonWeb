@@ -25,7 +25,7 @@ export class SearchService {
     }
   }
 
-  category(id: string, page?: number) {
+  category(id: number, page?: number) {
     if (page) {
       const params = new HttpParams().append('page', page);
       return this.http.get<SearchKeywordResponse>(`${environment.baseUrl}/search/category/${id}`, {
@@ -34,6 +34,20 @@ export class SearchService {
     } else {
       const params = new HttpParams().append('id', id);
       return this.http.get<SearchKeywordResponse>(`${environment.baseUrl}/search/category/${id}`, {
+        params,
+      });
+    }
+  }
+
+  label(id: number, page?: number) {
+    if (page) {
+      const params = new HttpParams().append('page', page);
+      return this.http.get<SearchKeywordResponse>(`${environment.baseUrl}/search/label/${id}`, {
+        params,
+      });
+    } else {
+      const params = new HttpParams().append('id', id);
+      return this.http.get<SearchKeywordResponse>(`${environment.baseUrl}/search/label/${id}`, {
         params,
       });
     }

@@ -95,7 +95,8 @@ export class SharedService {
     if (this.deviceSrv.isClient) {
       const localUserId = localStorage.getItem('userId');
       if (localUserId) {
-        const id = localUserId as string;
+        const userId = parseInt(localUserId);
+        const id = isNaN(userId) ? undefined : userId;
         if (id) {
           return id;
         } else {
@@ -113,9 +114,9 @@ export class SharedService {
    * 存取userId
    * @param
    */
-  setUserId(userId: string) {
+  setUserId(userId: number) {
     if (this.deviceSrv.isClient) {
-      localStorage.setItem('userId', userId);
+      localStorage.setItem('userId', JSON.stringify(userId));
     }
   }
 

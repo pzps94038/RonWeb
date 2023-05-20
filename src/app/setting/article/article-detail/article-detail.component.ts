@@ -85,7 +85,7 @@ export class ArticleDetailComponent {
     });
   }
 
-  deleteArticle(id: string) {
+  deleteArticle(id: number) {
     this.swalSrv
       .confirm({
         text: '確定要刪除文章嗎?',

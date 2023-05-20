@@ -34,7 +34,7 @@ export class ArticleService {
    * @param id
    * @returns
    */
-  getArticleById(id: string) {
+  getArticleById(id: number) {
     return this.http.get<GetArticleByIdResponse>(`${environment.baseUrl}/article/${id}`);
   }
 
@@ -64,7 +64,7 @@ export class ArticleService {
    * @param id
    * @returns
    */
-  deleteArticle(id: string) {
+  deleteArticle(id: number) {
     return this.http.delete<BaseMessageResponse>(`${environment.baseUrl}/article/${id}`);
   }
 
@@ -73,7 +73,7 @@ export class ArticleService {
    * @param id
    * @returns
    */
-  updateArticleViews(id: string) {
+  updateArticleViews(id: number) {
     return this.http.patch<BaseMessageResponse>(
       `${environment.baseUrl}/article/updateArticleViews/${id}`,
       {},

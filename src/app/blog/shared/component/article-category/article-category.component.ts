@@ -8,13 +8,13 @@ import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
 import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroHashtag } from '@ng-icons/heroicons/outline';
+import { heroFolder, heroHashtag } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-article-category',
   standalone: true,
   imports: [CommonModule, ErrorComponent, RouterLink, NgIconComponent],
-  providers: [provideIcons({ heroHashtag })],
+  providers: [provideIcons({ heroFolder })],
   templateUrl: './article-category.component.html',
   styleUrls: ['./article-category.component.scss'],
 })

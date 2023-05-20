@@ -15,6 +15,7 @@ import { PaginationComponent } from 'src/app/shared/component/pagination/paginat
 import { ArticleCardComponent } from '../shared/component/article-card/article-card.component';
 import { LoadingCardComponent } from '../shared/component/loading-card/loading-card.component';
 import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loading-keyword.component';
+import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 
 @Component({
   selector: 'app-search',
@@ -92,12 +93,16 @@ export class SearchComponent implements OnInit {
       });
   }
 
-  showMore(id: string) {
+  showMore(id: number) {
     this.router.navigateByUrl(`/blog/article/${id}`);
   }
 
   navigateCategory({ categoryId }: Category) {
     this.router.navigateByUrl(`/blog/category/${categoryId}`);
+  }
+
+  navigateLabel({ labelId }: ArticleLabel) {
+    this.router.navigateByUrl(`/blog/label/${labelId}`);
   }
 
   paginationChange(page: number) {

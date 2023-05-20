@@ -18,6 +18,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { ArticleCategoryComponent } from './shared/component/article-category/article-category.component';
 import { FooterComponent } from '../shared/component/footer/footer.component';
 import { SharedService } from '../shared/service/shared.service';
+import { ArticleLabelComponent } from './shared/component/article-label/article-label.component';
 
 export function emptyValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -29,6 +30,8 @@ export function emptyValidator(): ValidatorFn {
 @Component({
   selector: 'app-blog',
   standalone: true,
+  templateUrl: './blog.component.html',
+  styleUrls: ['./blog.component.scss'],
   imports: [
     HeaderComponent,
     CommonModule,
@@ -40,9 +43,8 @@ export function emptyValidator(): ValidatorFn {
     ReactiveFormsModule,
     ArticleCategoryComponent,
     FooterComponent,
+    ArticleLabelComponent,
   ],
-  templateUrl: './blog.component.html',
-  styleUrls: ['./blog.component.scss'],
 })
 export class BlogComponent {
   sharedSrv = inject(SharedService);

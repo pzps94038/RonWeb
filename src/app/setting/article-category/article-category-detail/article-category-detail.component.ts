@@ -84,7 +84,7 @@ export class ArticleCategoryDetailComponent {
     });
   }
 
-  deleteArticleCategory(id: string) {
+  deleteArticleCategory(id: number) {
     this.swalSrv
       .confirm({
         title: '確定要刪除分類嗎?',
@@ -92,7 +92,7 @@ export class ArticleCategoryDetailComponent {
       })
       .pipe(
         filter(({ isConfirmed }) => isConfirmed),
-        switchMap(() => this.articleCategorySrv.deleteAtircleCategory(id)),
+        switchMap(() => this.articleCategorySrv.deleteArticleCategory(id)),
         filter(res => this.sharedSrv.ifSuccess(res)),
         switchMap(res => this.swalSrv.alert({ icon: SwalIcon.Success, text: res.returnMessage })),
         takeUntilDestroyed(this._destroyRef),

@@ -5,11 +5,28 @@
     "total": 23,
     "articles": [
       {
-        "articleId": "string",
+        "articleId": 1,
         "articleTitle": "string",
         "previewContent": "<p>1</p><p>&nbsp;</p><pre><code>scadfasdasd</code></pre>",
-        "categoryId": "string",
+        "categoryId": 1,
         "categoryName": "string",
+        "labels": [
+          {
+            "labelId": 1,
+            "labelName": "標籤",
+            "createDate": "2023-05-08T13:22:00.124Z"
+          },
+          {
+            "labelId": 1,
+            "labelName": "標籤",
+            "createDate": "2023-05-08T13:22:00.124Z"
+          },
+          {
+            "labelId": 1,
+            "labelName": "標籤",
+            "createDate": "2023-05-08T13:22:00.124Z"
+          }
+        ],
         "viewCount": 0,
         "createDate": "2023-05-08T13:22:00.124Z"
       }

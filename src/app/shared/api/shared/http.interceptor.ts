@@ -28,7 +28,7 @@ export const httpInterceptor: HttpInterceptorFn = (
   const refreshToken = (
     next: (req: HttpRequest<unknown>) => Observable<HttpEvent<unknown>>,
     req: HttpRequest<any>,
-    userId: string,
+    userId: number,
     refreshToken: string,
     err: HttpErrorResponse,
   ) => {

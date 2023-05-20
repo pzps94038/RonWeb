@@ -4,8 +4,8 @@
     <ng-container *ngIf="!isLoading(); else loading">
       <div class="my-1" *ngFor="let category of categorys()">
         <a class="link link-secondary w-full flex" [routerLink]="['category', category.categoryId]">
-          <div class="mr-1">
-            <ng-icon name="heroHashtag" />
+          <div class="mr-1 flex justify-center items-center">
+            <ng-icon name="heroFolder" />
           </div>
           {{ category.categoryName }}
         </a>
@@ -14,14 +14,7 @@
   </ng-container>
   <ng-template #loading>
     <div
-      class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
-    <div
-      class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
-    <div
-      class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
-    <div
-      class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
-    <div
+      *ngFor="let i of [1, 2, 3, 4, 5]"
       class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
   </ng-template>
   <ng-template #error>

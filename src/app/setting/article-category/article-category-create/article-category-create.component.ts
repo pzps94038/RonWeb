@@ -39,7 +39,7 @@ export class ArticleCategoryCreateComponent {
     } as CreateArticleCategoryRequest;
     this.isLoading.set(true);
     this.articleCategorySrv
-      .createAtircleCategory(req)
+      .createArticleCategory(req)
       .pipe(
         filter(res => this.sharedSrv.ifSuccess(res)),
         switchMap(({ returnMessage }) =>

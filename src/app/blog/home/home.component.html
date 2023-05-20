@@ -8,8 +8,10 @@
         categoryId: article.categoryId,
         categoryName: article.categoryName
       }"
+      [labels]="article.labels"
       [previewContent]="article.previewContent"
       (category)="navigateCategory($event)"
+      (label)="navigateLabel($event)"
       (showMore)="showMore(article.articleId)" />
   </ng-container>
 </ng-container>
