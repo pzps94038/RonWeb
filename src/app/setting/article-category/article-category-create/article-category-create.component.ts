@@ -4,11 +4,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { filter, finalize, switchMap } from 'rxjs';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { Router } from '@angular/router';
 import { InputComponent } from '../../../shared/component/form/input/input.component';
 import { CreateArticleCategoryRequest } from 'src/app/shared/api/article-category/article-category.model';
+import { ApiService } from 'src/app/shared/service/api.service';
+import { UserService } from 'src/app/shared/service/user.service';
 
 @Component({
   selector: 'app-article-category-create',
@@ -18,7 +19,8 @@ import { CreateArticleCategoryRequest } from 'src/app/shared/api/article-categor
   imports: [CommonModule, InputComponent, ReactiveFormsModule],
 })
 export class ArticleCategoryCreateComponent {
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
+  userSrv = inject(UserService);
   swalSrv = inject(SwalService);
   articleCategorySrv = inject(ArticleCategoryService);
   router = inject(Router);
@@ -35,13 +37,13 @@ export class ArticleCategoryCreateComponent {
     }
     const req = {
       categoryName: this.form.get('categoryName')!.value,
-      userId: this.sharedSrv.getUserId(),
+      userId: this.userSrv.getUserId(),
     } as CreateArticleCategoryRequest;
     this.isLoading.set(true);
     this.articleCategorySrv
       .createArticleCategory(req)
       .pipe(
-        filter(res => this.sharedSrv.ifSuccess(res)),
+        filter(res => this.apiSrv.ifSuccess(res)),
         switchMap(({ returnMessage }) =>
           this.swalSrv.alert({
             icon: SwalIcon.Success,

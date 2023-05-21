@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, finalize } from 'rxjs';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
 import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroFolder, heroHashtag } from '@ng-icons/heroicons/outline';
+import { heroFolder } from '@ng-icons/heroicons/outline';
+import { ApiService } from 'src/app/shared/service/api.service';
 
 @Component({
   selector: 'app-article-category',
@@ -20,7 +20,7 @@ import { heroFolder, heroHashtag } from '@ng-icons/heroicons/outline';
 })
 export class ArticleCategoryComponent {
   articleCategorySrv = inject(ArticleCategoryService);
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
   categorys = signal<ArticleCategorys>([]);
   isLoading = signal(false);
   isError = signal(false);
@@ -43,7 +43,7 @@ export class ArticleCategoryComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res, false)) {
+        if (this.apiSrv.ifSuccess(res, false)) {
           const {
             data: { categorys },
           } = res;

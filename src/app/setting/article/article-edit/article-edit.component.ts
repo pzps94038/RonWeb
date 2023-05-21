@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnDestroy, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EditorComponent } from 'src/app/shared/component/form/editor/editor.component';
@@ -12,21 +12,17 @@ import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, finalize, forkJoin, map, switchMap, tap } from 'rxjs';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
-import {
-  CreateArticleRequest,
-  UpdateArticleRequest,
-} from 'src/app/shared/api/article/article.model';
+import { UpdateArticleRequest } from 'src/app/shared/api/article/article.model';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
 import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
 import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model';
-import { UploadService } from 'src/app/shared/api/upload/upload.service';
 import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
 import { MultipleSelectComponent } from 'src/app/shared/component/form/multiple-select/multiple-select.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
+import { ApiService } from 'src/app/shared/service/api.service';
+import { UserService } from 'src/app/shared/service/user.service';
 
 @Component({
   selector: 'app-article-edit',
@@ -45,7 +41,8 @@ import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.mod
   ],
 })
 export class ArticleEditComponent {
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
+  userSrv = inject(UserService);
   swalSrv = inject(SwalService);
   articleCategorySrv = inject(ArticleCategoryService);
   articleLabelSrv = inject(ArticleLabelService);
@@ -71,7 +68,7 @@ export class ArticleEditComponent {
 
   ngOnInit(): void {
     const category$ = this.articleCategorySrv.getArticleCategory().pipe(
-      filter(res => this.sharedSrv.ifSuccess(res)),
+      filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { categorys } }) => categorys),
       map(array =>
         array.map(({ categoryId, categoryName }) => {
@@ -94,7 +91,7 @@ export class ArticleEditComponent {
       }),
     );
     const label$ = this.articleLabelSrv.getArticleLabel().pipe(
-      filter(res => this.sharedSrv.ifSuccess(res)),
+      filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { labels } }) => labels),
       map(array =>
         array.map(label => {
@@ -112,7 +109,7 @@ export class ArticleEditComponent {
         filter(param => !!param.get('id')),
         map(param => param.get('id')!),
         switchMap(id => this.articleSrv.getArticleById(parseInt(id))),
-        filter(res => this.sharedSrv.ifSuccess(res)),
+        filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(data => {
           const { articleId, articleTitle, previewContent, content, categoryId, labels } = data;
@@ -151,7 +148,7 @@ export class ArticleEditComponent {
       previewContent: this.form.get('previewContent')!.value,
       content: this.form.get('content')!.value,
       categoryId: this.form.get('categoryId')!.value,
-      userId: this.sharedSrv.getUserId(),
+      userId: this.userSrv.getUserId(),
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),
       labels,
@@ -160,7 +157,7 @@ export class ArticleEditComponent {
     this.articleSrv
       .updateArticle(req)
       .pipe(
-        filter(res => this.sharedSrv.ifSuccess(res, true)),
+        filter(res => this.apiSrv.ifSuccess(res, true)),
         switchMap(({ returnMessage }) =>
           this.swalSrv.alert({
             icon: SwalIcon.Success,

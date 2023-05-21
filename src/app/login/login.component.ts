@@ -1,5 +1,5 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '../shared/component/form/input/input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -10,11 +10,12 @@ import {
   NgLottieComponent,
 } from '../shared/component/ng-lottie/ng-lottie.component';
 import { LoginService } from '../shared/api/login/login.service';
-import { SharedService } from '../shared/service/shared.service';
 import { catchError, finalize } from 'rxjs';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroXMark } from '@ng-icons/heroicons/outline';
 import { Router } from '@angular/router';
+import { ApiService } from '../shared/service/api.service';
+import { UserService } from '../shared/service/user.service';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +35,8 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   loginSrv = inject(LoginService);
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
+  userSrv = inject(UserService);
   router = inject(Router);
   loading = signal(false);
 
@@ -77,11 +79,11 @@ export class LoginComponent {
         )
         .subscribe(res => {
           const { returnMessage, data } = res;
-          if (this.sharedSrv.ifSuccess(res, false)) {
+          if (this.apiSrv.ifSuccess(res, false)) {
             const { token, userId } = data;
-            this.sharedSrv.setToken(token);
-            this.sharedSrv.setUserId(userId);
-            this.sharedSrv.isLogin.set(true);
+            this.userSrv.setToken(token);
+            this.userSrv.setUserId(userId);
+            this.userSrv.isLogin.set(true);
             this.router.navigate(['setting']);
           } else {
             this.errMsg.set(returnMessage);

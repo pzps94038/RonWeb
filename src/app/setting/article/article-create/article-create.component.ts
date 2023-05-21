@@ -4,7 +4,6 @@ import { InputComponent } from 'src/app/shared/component/form/input/input.compon
 import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-area.component';
 import { EditorComponent } from 'src/app/shared/component/form/editor/editor.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalIcon, SwalService } from 'src/app/shared/service/swal.service';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import {
@@ -21,7 +20,9 @@ import { LoadArticleComponent } from '../shared/component/load-article/load-arti
 import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model';
 import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
 import { MultipleSelectComponent } from 'src/app/shared/component/form/multiple-select/multiple-select.component';
-import { ArticleLabel, ArticleLabels } from 'src/app/shared/api/article-label/article-label.model';
+import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
+import { ApiService } from 'src/app/shared/service/api.service';
+import { UserService } from 'src/app/shared/service/user.service';
 
 @Component({
   selector: 'app-article-create',
@@ -40,7 +41,8 @@ import { ArticleLabel, ArticleLabels } from 'src/app/shared/api/article-label/ar
   ],
 })
 export class ArticleCreateComponent implements OnInit {
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
+  userSrv = inject(UserService);
   swalSrv = inject(SwalService);
   articleCategorySrv = inject(ArticleCategoryService);
   articleLabelSrv = inject(ArticleLabelService);
@@ -64,7 +66,7 @@ export class ArticleCreateComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading.set(true);
     const category$ = this.articleCategorySrv.getArticleCategory().pipe(
-      filter(res => this.sharedSrv.ifSuccess(res)),
+      filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { categorys } }) => categorys),
       map(array =>
         array.map(({ categoryId, categoryName }) => {
@@ -87,7 +89,7 @@ export class ArticleCreateComponent implements OnInit {
       }),
     );
     const label$ = this.articleLabelSrv.getArticleLabel().pipe(
-      filter(res => this.sharedSrv.ifSuccess(res)),
+      filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { labels } }) => labels),
       map(array =>
         array.map(label => {
@@ -127,7 +129,7 @@ export class ArticleCreateComponent implements OnInit {
       previewContent: this.form.get('previewContent')!.value,
       content: this.form.get('content')!.value,
       categoryId: this.form.get('categoryId')!.value,
-      userId: this.sharedSrv.getUserId(),
+      userId: this.userSrv.getUserId(),
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),
       labels,
@@ -136,7 +138,7 @@ export class ArticleCreateComponent implements OnInit {
     this.articleSrv
       .createArticle(req)
       .pipe(
-        filter(res => this.sharedSrv.ifSuccess(res)),
+        filter(res => this.apiSrv.ifSuccess(res)),
         switchMap(({ returnMessage }) =>
           this.swalSrv.alert({
             icon: SwalIcon.Success,

@@ -1,7 +1,6 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalIcon, SwalService } from 'src/app/shared/service/swal.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
@@ -12,6 +11,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { DayJsPipe } from '../../../shared/pipe/day-js.pipe';
 import { ErrorComponent } from '../../../shared/component/error/error.component';
+import { ApiService } from 'src/app/shared/service/api.service';
 
 @Component({
   selector: 'app-article-category-detail',
@@ -30,7 +30,7 @@ import { ErrorComponent } from '../../../shared/component/error/error.component'
 })
 export class ArticleCategoryDetailComponent {
   articleCategorySrv = inject(ArticleCategoryService);
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
   swalSrv = inject(SwalService);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -64,7 +64,7 @@ export class ArticleCategoryDetailComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res, false)) {
+        if (this.apiSrv.ifSuccess(res, false)) {
           const {
             data: { total, categorys },
           } = res;
@@ -93,7 +93,7 @@ export class ArticleCategoryDetailComponent {
       .pipe(
         filter(({ isConfirmed }) => isConfirmed),
         switchMap(() => this.articleCategorySrv.deleteArticleCategory(id)),
-        filter(res => this.sharedSrv.ifSuccess(res)),
+        filter(res => this.apiSrv.ifSuccess(res)),
         switchMap(res => this.swalSrv.alert({ icon: SwalIcon.Success, text: res.returnMessage })),
         takeUntilDestroyed(this._destroyRef),
       )

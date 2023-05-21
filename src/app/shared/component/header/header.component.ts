@@ -4,21 +4,17 @@ import {
   Component,
   DestroyRef,
   ElementRef,
-  Inject,
   OnDestroy,
-  OnInit,
-  PLATFORM_ID,
   Renderer2,
   ViewChild,
   inject,
-  signal,
 } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { filter, fromEvent } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SharedService } from '../../service/shared.service';
+import { UserService } from '../../service/user.service';
 export type Option = {
   name: string;
   value: string;
@@ -35,9 +31,9 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   @ViewChild('header') header?: ElementRef<HTMLElement>;
   @ViewChild('mobile') mobile?: ElementRef<HTMLElement>;
   render = inject(Renderer2);
-  sharedSrv = inject(SharedService);
+  userSrv = inject(UserService);
   device = inject(DeviceService);
-  isLogin = this.sharedSrv.isLogin;
+  isLogin = this.userSrv.isLogin;
   links: Options = [
     {
       name: '首頁',

@@ -1,19 +1,10 @@
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  DestroyRef,
-  AfterViewInit,
-  OnDestroy,
-} from '@angular/core';
+import { Component, ElementRef, inject, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationStart, NavigationEnd, Router } from '@angular/router';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { DeviceService } from '../../service/device.service';
-import { SharedService } from '../../service/shared.service';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { ThemeService } from '../../service/theme.service';
 @Component({
   selector: 'app-giscus',
   standalone: true,
@@ -22,10 +13,10 @@ import { toObservable } from '@angular/core/rxjs-interop';
 })
 export class GiscusComponent implements OnInit, AfterViewInit, OnDestroy {
   deviceSrv = inject(DeviceService);
-  sharedSrv = inject(SharedService);
+  themeSrv = inject(ThemeService);
   elementRef = inject(ElementRef<HTMLElement>);
   router = inject(Router);
-  darkMode$ = toObservable(this.sharedSrv.darkMode);
+  darkMode$ = toObservable(this.themeSrv.darkMode);
   private _destroy$ = new Subject<any>();
 
   ngOnInit(): void {
@@ -79,7 +70,6 @@ export class GiscusComponent implements OnInit, AfterViewInit, OnDestroy {
       scriptTag.setAttribute('data-reactions-enabled', '1');
       scriptTag.setAttribute('data-emit-metadata', '0');
       scriptTag.setAttribute('data-theme', darkMode ? 'dark_tritanopia' : 'light_tritanopia');
-      this.sharedSrv.darkMode;
       scriptTag.setAttribute('data-lang', 'zh-TW');
       scriptTag.setAttribute('data-loading', 'lazy');
       scriptTag.setAttribute('crossorigin', 'anonymous');

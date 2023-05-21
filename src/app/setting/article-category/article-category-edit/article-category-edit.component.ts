@@ -6,16 +6,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { tap, filter, map, switchMap, finalize } from 'rxjs';
 import {
   ArticleCategory,
-  ArticleCategorys,
   UpdateArticleCategoryRequest,
 } from 'src/app/shared/api/article-category/article-category.model';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
-import { UpdateArticleRequest } from 'src/app/shared/api/article/article.model';
-import { ArticleService } from 'src/app/shared/api/article/article.service';
-import { Options } from 'src/app/shared/component/header/header.component';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { InputComponent } from '../../../shared/component/form/input/input.component';
+import { ApiService } from 'src/app/shared/service/api.service';
+import { UserService } from 'src/app/shared/service/user.service';
 
 @Component({
   selector: 'app-article-category-edit',
@@ -25,7 +22,8 @@ import { InputComponent } from '../../../shared/component/form/input/input.compo
   imports: [CommonModule, InputComponent, ReactiveFormsModule],
 })
 export class ArticleCategoryEditComponent {
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
+  userSrv = inject(UserService);
   swalSrv = inject(SwalService);
   articleCategorySrv = inject(ArticleCategoryService);
   route = inject(ActivatedRoute);
@@ -48,7 +46,7 @@ export class ArticleCategoryEditComponent {
         filter(id => !isNaN(parseInt(id))),
         map(id => parseInt(id)),
         switchMap(id => this.articleCategorySrv.getArticleCategoryById(id)),
-        filter(res => this.sharedSrv.ifSuccess(res)),
+        filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(({ categoryId, categoryName }) => {
           this.form.get('categoryId')?.setValue(categoryId);
@@ -72,13 +70,13 @@ export class ArticleCategoryEditComponent {
     const req = {
       categoryId: this.form.get('categoryId')!.value,
       categoryName: this.form.get('categoryName')!.value,
-      userId: this.sharedSrv.getUserId(),
+      userId: this.userSrv.getUserId(),
     } as UpdateArticleCategoryRequest;
     this.editIsLoading.set(true);
     this.articleCategorySrv
       .updateArticleCategory(req)
       .pipe(
-        filter(res => this.sharedSrv.ifSuccess(res, true)),
+        filter(res => this.apiSrv.ifSuccess(res, true)),
         switchMap(({ returnMessage }) =>
           this.swalSrv.alert({
             icon: SwalIcon.Success,

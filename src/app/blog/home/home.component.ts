@@ -4,18 +4,14 @@ import { CommonModule } from '@angular/common';
 import { ArticleCardComponent } from '../shared/component/article-card/article-card.component';
 import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { Articles } from 'src/app/shared/api/article/article.model';
-import { catchError, finalize, delay, filter } from 'rxjs';
+import { catchError, finalize } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  ArticleCategory,
-  Category,
-  Categorys,
-} from 'src/app/shared/api/article-category/article-category.model';
+import { Category } from 'src/app/shared/api/article-category/article-category.model';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { LoadingCardComponent } from '../shared/component/loading-card/loading-card.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
+import { ApiService } from 'src/app/shared/service/api.service';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +28,7 @@ import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.mod
 })
 export class HomeComponent implements OnInit {
   articleSrv = inject(ArticleService);
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   total = signal(0);
@@ -65,7 +61,7 @@ export class HomeComponent implements OnInit {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res, false)) {
+        if (this.apiSrv.ifSuccess(res, false)) {
           const {
             data: { total, articles },
           } = res;
