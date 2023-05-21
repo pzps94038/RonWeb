@@ -5,14 +5,16 @@ import {
   DestroyRef,
   ElementRef,
   OnDestroy,
+  OnInit,
   Renderer2,
   ViewChild,
   inject,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { filter, fromEvent } from 'rxjs';
+import { delay, filter, fromEvent } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserService } from '../../service/user.service';
 export type Option = {
@@ -33,7 +35,9 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   render = inject(Renderer2);
   userSrv = inject(UserService);
   device = inject(DeviceService);
+  router = inject(Router);
   isLogin = this.userSrv.isLogin;
+  progressLoading = signal(false);
   links: Options = [
     {
       name: '首頁',
@@ -47,6 +51,25 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   mobileToggle: boolean = false;
   private _observers: IntersectionObserver[] = [];
   private _destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationStart),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        this.progressLoading.set(true);
+      });
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        this.progressLoading.set(false);
+      });
+  }
 
   ngOnDestroy() {
     for (const observer of this._observers) {

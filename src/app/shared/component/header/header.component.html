@@ -28,6 +28,9 @@
       </ng-template>
     </ul>
   </div>
+  <progress
+    *ngIf="progressLoading()"
+    class="w-full progress progress-secondary h-1 absolute bottom-0"></progress>
 </header>
 
 <header #mobile>
@@ -86,5 +89,8 @@
         </ul>
       </div>
     </div>
+    <progress
+      *ngIf="progressLoading()"
+      class="w-full progress progress-secondary h-1 absolute bottom-0"></progress>
   </nav>
 </header>

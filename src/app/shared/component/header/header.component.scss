@@ -55,3 +55,16 @@ $fatness: 5px;
     }
   }
 }
+
+.progress:indeterminate::after {
+  animation: progress-loading 2.5s infinite ease-in-out;
+  animation-name: progress-loading;
+}
+@keyframes progress-loading {
+  0% {
+    transform: translateX(0); /* 从左侧位置开始 */
+  }
+  100% {
+    transform: translateX(500%); /* 到达右侧位置 */
+  }
+}
