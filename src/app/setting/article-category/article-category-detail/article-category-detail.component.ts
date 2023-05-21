@@ -54,7 +54,7 @@ export class ArticleCategoryDetailComponent {
     this.isError.set(false);
     this.isLoading.set(true);
     this.articleCategorySrv
-      .getArticleCategory(page)
+      .getArticleCategory(page, false)
       .pipe(
         catchError(err => {
           this.isError.set(true);

@@ -54,7 +54,7 @@ export class ArticleLabelDetailComponent {
     this.isError.set(false);
     this.isLoading.set(true);
     this.articleLabelSrv
-      .getArticleLabel(page)
+      .getArticleLabel(page, false)
       .pipe(
         catchError(err => {
           this.isError.set(true);
