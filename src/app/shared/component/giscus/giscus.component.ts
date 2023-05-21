@@ -56,7 +56,7 @@ export class GiscusComponent implements OnInit, AfterViewInit, OnDestroy {
     const element = this.elementRef.nativeElement;
     this.darkMode$.pipe(takeUntil(this._destroy$)).subscribe(darkMode => {
       if (scriptTag) {
-        element.removeChild(scriptTag);
+        this.elementRef.nativeElement.innerHTML = '';
         scriptTag = document.createElement('script');
       } else {
         scriptTag = document.createElement('script');
