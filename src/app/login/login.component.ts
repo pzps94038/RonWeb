@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { InputComponent } from '../shared/component/form/input/input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FooterComponent } from '../shared/component/footer/footer.component';
-import { HeaderComponent } from '../shared/component/header/header.component';
 import {
   AnimationPathConfig,
   NgLottieComponent,
@@ -27,7 +26,6 @@ import { UserService } from '../shared/service/user.service';
     InputComponent,
     ReactiveFormsModule,
     FooterComponent,
-    HeaderComponent,
     NgLottieComponent,
     NgIconComponent,
   ],

@@ -1,38 +1,20 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../shared/component/header/header.component';
 import { ScrollAnimateDirective } from '../shared/directive/scroll-animate.directive';
 import { InputComponent } from '../shared/component/form/input/input.component';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Router, RouterOutlet } from '@angular/router';
 import { ArticleCategoryComponent } from './shared/component/article-category/article-category.component';
 import { FooterComponent } from '../shared/component/footer/footer.component';
 import { ArticleLabelComponent } from './shared/component/article-label/article-label.component';
 import { ValidService } from '../shared/service/valid.service';
-
-export function emptyValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const isEmpty = !((control?.value as string | undefined | null) ?? '').trim().length;
-    return isEmpty ? { empty: { value: control.value } } : null;
-  };
-}
-
 @Component({
   selector: 'app-blog',
   standalone: true,
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.scss'],
   imports: [
-    HeaderComponent,
     CommonModule,
     ScrollAnimateDirective,
     InputComponent,
