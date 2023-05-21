@@ -43,7 +43,7 @@ export class ArticleLabelEditComponent implements OnInit {
         map(param => param.get('id')!),
         filter(id => !isNaN(parseInt(id))),
         map(id => parseInt(id)),
-        switchMap(id => this.articleLabelSrv.getArticleLabelById(id)),
+        switchMap(id => this.articleLabelSrv.getArticleLabelById(id, false)),
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(({ labelId, labelName }) => {

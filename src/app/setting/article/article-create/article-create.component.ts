@@ -65,7 +65,7 @@ export class ArticleCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading.set(true);
-    const category$ = this.articleCategorySrv.getArticleCategory().pipe(
+    const category$ = this.articleCategorySrv.getArticleCategory(undefined, false).pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { categorys } }) => categorys),
       map(array =>
@@ -88,7 +88,7 @@ export class ArticleCreateComponent implements OnInit {
         this.categoryOptions.set(options);
       }),
     );
-    const label$ = this.articleLabelSrv.getArticleLabel().pipe(
+    const label$ = this.articleLabelSrv.getArticleLabel(undefined, false).pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { labels } }) => labels),
       map(array =>
