@@ -5,7 +5,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap, filter, map, catchError, finalize } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { Article } from 'src/app/shared/api/article/article.model';
 import { ErrorComponent } from '../../shared/component/error/error.component';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
@@ -14,6 +13,8 @@ import { DayJsPipe } from '../../shared/pipe/day-js.pipe';
 import { SafePipe } from '../../shared/pipe/safe.pipe';
 import { DisqusComponent } from '../../shared/component/disqus/disqus.component';
 import { GiscusComponent } from '../../shared/component/giscus/giscus.component';
+import { ApiService } from 'src/app/shared/service/api.service';
+import { SeoService } from 'src/app/shared/service/seo.service';
 
 @Component({
   selector: 'app-article',
@@ -35,7 +36,8 @@ import { GiscusComponent } from '../../shared/component/giscus/giscus.component'
 export class ArticleComponent {
   articleSrv = inject(ArticleService);
   route = inject(ActivatedRoute);
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
+  seoSrv = inject(SeoService);
   router = inject(Router);
   articleId = signal<number | undefined>(undefined);
   article = signal<Article | undefined>(undefined);
@@ -68,10 +70,14 @@ export class ArticleComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res, false)) {
+        if (this.apiSrv.ifSuccess(res, false)) {
           const { data } = res;
-          const { articleTitle } = data;
-          this.sharedSrv.setTitle(articleTitle);
+          const { articleTitle, previewContent } = data;
+          this.seoSrv.setSeo({
+            description: previewContent,
+            title: articleTitle,
+            keywords: articleTitle,
+          });
           this.article.set(data);
           this.updateArticleViews(id);
         } else if (res.returnCode === ReturnCode.NotFound) {

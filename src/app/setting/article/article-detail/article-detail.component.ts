@@ -10,8 +10,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, finalize, filter, switchMap } from 'rxjs';
 import { Articles } from 'src/app/shared/api/article/article.model';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
+import { ApiService } from 'src/app/shared/service/api.service';
 
 @Component({
   selector: 'app-article-detail',
@@ -31,7 +31,7 @@ import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 })
 export class ArticleDetailComponent {
   articleSrv = inject(ArticleService);
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
   swalSrv = inject(SwalService);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -65,7 +65,7 @@ export class ArticleDetailComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res, false)) {
+        if (this.apiSrv.ifSuccess(res, false)) {
           const {
             data: { total, articles },
           } = res;
@@ -93,7 +93,7 @@ export class ArticleDetailComponent {
       .pipe(
         filter(({ isConfirmed }) => isConfirmed),
         switchMap(() => this.articleSrv.deleteArticle(id)),
-        filter(res => this.sharedSrv.ifSuccess(res)),
+        filter(res => this.apiSrv.ifSuccess(res)),
         switchMap(res => this.swalSrv.alert({ icon: SwalIcon.Success, text: res.returnMessage })),
         takeUntilDestroyed(this._destroyRef),
       )

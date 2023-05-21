@@ -13,12 +13,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { DeviceService } from '../shared/service/device.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { ArticleCategoryComponent } from './shared/component/article-category/article-category.component';
 import { FooterComponent } from '../shared/component/footer/footer.component';
-import { SharedService } from '../shared/service/shared.service';
 import { ArticleLabelComponent } from './shared/component/article-label/article-label.component';
+import { ValidService } from '../shared/service/valid.service';
 
 export function emptyValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -47,10 +46,10 @@ export function emptyValidator(): ValidatorFn {
   ],
 })
 export class BlogComponent {
-  sharedSrv = inject(SharedService);
+  validSrv = inject(ValidService);
   router = inject(Router);
   form = new FormGroup({
-    keyword: new FormControl('', [Validators.required, this.sharedSrv.emptyValidator()]),
+    keyword: new FormControl('', [Validators.required, this.validSrv.emptyValidator()]),
   });
 
   submit() {

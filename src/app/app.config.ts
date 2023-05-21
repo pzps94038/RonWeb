@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.route';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpInterceptor } from './shared/api/shared/http.interceptor';
+import { EllipsisPipe } from './shared/pipe/ellipsis.pipe';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,5 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     importProvidersFrom([]),
+    EllipsisPipe,
   ],
 };

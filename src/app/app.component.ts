@@ -1,8 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { SharedService } from './shared/service/shared.service';
 import { ToggleModeComponent } from './shared/component/toggle-mode/toggle-mode.component';
+import { UserService } from './shared/service/user.service';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +11,12 @@ import { ToggleModeComponent } from './shared/component/toggle-mode/toggle-mode.
   styleUrls: ['./app.component.scss'],
   imports: [CommonModule, RouterOutlet, ToggleModeComponent],
 })
-export class AppComponent implements OnInit {
-  sharedSrv = inject(SharedService);
+export class AppComponent {
+  userSrv = inject(UserService);
 
-  ngOnInit(): void {
-    const token = this.sharedSrv.getToken();
+  constructor() {
+    const token = this.userSrv.getToken();
     const isLogin = !!token;
-    this.sharedSrv.isLogin.set(isLogin);
+    this.userSrv.isLogin.set(isLogin);
   }
 }

@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroHashtag, heroTag } from '@ng-icons/heroicons/outline';
+import { heroHashtag } from '@ng-icons/heroicons/outline';
 import { catchError, finalize } from 'rxjs';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
 import { ArticleLabels } from 'src/app/shared/api/article-label/article-label.model';
+import { ApiService } from 'src/app/shared/service/api.service';
 
 @Component({
   selector: 'app-article-label',
@@ -20,7 +20,7 @@ import { ArticleLabels } from 'src/app/shared/api/article-label/article-label.mo
 })
 export class ArticleLabelComponent {
   articleLabelSrv = inject(ArticleLabelService);
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
   labels = signal<ArticleLabels>([]);
   isLoading = signal(false);
   isError = signal(false);
@@ -43,7 +43,7 @@ export class ArticleLabelComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res, false)) {
+        if (this.apiSrv.ifSuccess(res, false)) {
           const {
             data: { labels },
           } = res;

@@ -10,16 +10,16 @@ import { Observable, catchError, concatMap, retry, switchMap, tap, throwError } 
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { ReturnCode } from './shared.model';
 import { SwalService } from '../../service/swal.service';
-import { SharedService } from '../../service/shared.service';
+import { UserService } from '../../service/user.service';
 
 export const httpInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<any>> => {
   const refreshSrv = inject(RefreshTokenService);
-  const sharedSrv = inject(SharedService);
   const swalSrv = inject(SwalService);
-  const accessToken = sharedSrv.getToken()?.accessToken;
+  const userSrv = inject(UserService);
+  const accessToken = userSrv.getToken()?.accessToken;
   if (accessToken) {
     req = req.clone({
       headers: req.headers.set('Authorization', `Bearer ${accessToken}`),
@@ -35,7 +35,7 @@ export const httpInterceptor: HttpInterceptorFn = (
     return refreshSrv.refreshToken({ userId, refreshToken }).pipe(
       concatMap(({ returnCode, returnMessage, data }) => {
         if (returnCode === ReturnCode.Success) {
-          sharedSrv.setToken(data);
+          userSrv.setToken(data);
           const headers = req.headers.set('Authorization', `Bearer ${data.accessToken}`);
           const newReq = req.clone({ headers });
           return next(newReq);
@@ -45,7 +45,7 @@ export const httpInterceptor: HttpInterceptorFn = (
               text: returnMessage,
             })
             .pipe(
-              tap(() => sharedSrv.logout()),
+              tap(() => userSrv.logout()),
               switchMap(() => throwError(() => err)),
             );
         } else {
@@ -56,8 +56,8 @@ export const httpInterceptor: HttpInterceptorFn = (
   };
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
-      const userId = sharedSrv.getUserId();
-      const token = sharedSrv.getToken()?.refreshToken;
+      const userId = userSrv.getUserId();
+      const token = userSrv.getToken()?.refreshToken;
       if (err.status === 401 && userId && token) {
         return refreshToken(next, req, userId, token, err);
       } else {

@@ -4,12 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputComponent } from 'src/app/shared/component/form/input/input.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalIcon, SwalService } from 'src/app/shared/service/swal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap, filter, map, switchMap, finalize } from 'rxjs';
 import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
+import { ApiService } from 'src/app/shared/service/api.service';
+import { UserService } from 'src/app/shared/service/user.service';
 
 @Component({
   selector: 'app-article-label-edit',
@@ -19,7 +20,8 @@ import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.mod
   styleUrls: ['./article-label-edit.component.scss'],
 })
 export class ArticleLabelEditComponent implements OnInit {
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
+  userSrv = inject(UserService);
   swalSrv = inject(SwalService);
   articleLabelSrv = inject(ArticleLabelService);
   route = inject(ActivatedRoute);
@@ -42,7 +44,7 @@ export class ArticleLabelEditComponent implements OnInit {
         filter(id => !isNaN(parseInt(id))),
         map(id => parseInt(id)),
         switchMap(id => this.articleLabelSrv.getArticleLabelById(id)),
-        filter(res => this.sharedSrv.ifSuccess(res)),
+        filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(({ labelId, labelName }) => {
           this.form.get('labelId')?.setValue(labelId);
@@ -66,13 +68,13 @@ export class ArticleLabelEditComponent implements OnInit {
     const req = {
       labelId: this.form.get('labelId')!.value,
       labelName: this.form.get('labelName')!.value,
-      userId: this.sharedSrv.getUserId(),
+      userId: this.userSrv.getUserId(),
     } as UpdateArticleLabelRequest;
     this.editIsLoading.set(true);
     this.articleLabelSrv
       .updateArticleLabel(req)
       .pipe(
-        filter(res => this.sharedSrv.ifSuccess(res, true)),
+        filter(res => this.apiSrv.ifSuccess(res, true)),
         switchMap(({ returnMessage }) =>
           this.swalSrv.alert({
             icon: SwalIcon.Success,

@@ -1,11 +1,11 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { SharedService } from '../service/shared.service';
 import { inject } from '@angular/core';
+import { UserService } from '../service/user.service';
 
 export const isNotLoginGuard: CanActivateFn = (route, state) => {
-  const sharedSrv = inject(SharedService);
+  const userSrv = inject(UserService);
   const router = inject(Router);
-  if (!sharedSrv.isLogin()) {
+  if (!userSrv.isLogin()) {
     return true;
   } else {
     router.navigate(['blog']);

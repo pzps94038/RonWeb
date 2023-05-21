@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError, finalize, filter, switchMap } from 'rxjs';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
 import { heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
@@ -12,6 +11,7 @@ import { PaginationComponent } from 'src/app/shared/component/pagination/paginat
 import { DayJsPipe } from 'src/app/shared/pipe/day-js.pipe';
 import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
 import { ArticleLabels } from 'src/app/shared/api/article-label/article-label.model';
+import { ApiService } from 'src/app/shared/service/api.service';
 
 @Component({
   selector: 'app-article-label-detail',
@@ -30,7 +30,7 @@ import { ArticleLabels } from 'src/app/shared/api/article-label/article-label.mo
 })
 export class ArticleLabelDetailComponent {
   articleLabelSrv = inject(ArticleLabelService);
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
   swalSrv = inject(SwalService);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -64,7 +64,7 @@ export class ArticleLabelDetailComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res, false)) {
+        if (this.apiSrv.ifSuccess(res, false)) {
           const {
             data: { total, labels },
           } = res;
@@ -93,7 +93,7 @@ export class ArticleLabelDetailComponent {
       .pipe(
         filter(({ isConfirmed }) => isConfirmed),
         switchMap(() => this.articleLabelSrv.deleteArticleLabel(id)),
-        filter(res => this.sharedSrv.ifSuccess(res)),
+        filter(res => this.apiSrv.ifSuccess(res)),
         switchMap(res => this.swalSrv.alert({ icon: SwalIcon.Success, text: res.returnMessage })),
         takeUntilDestroyed(this._destroyRef),
       )

@@ -2,21 +2,17 @@ import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, combineLatest, filter, finalize, map, delay } from 'rxjs';
-import {
-  ArticleCategory,
-  Category,
-} from 'src/app/shared/api/article-category/article-category.model';
+import { catchError, combineLatest, filter, finalize } from 'rxjs';
+import { Category } from 'src/app/shared/api/article-category/article-category.model';
 import { Articles } from 'src/app/shared/api/article/article.model';
 import { SearchService } from 'src/app/shared/api/search/search.service';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';
 import { ArticleCardComponent } from '../shared/component/article-card/article-card.component';
 import { LoadingCardComponent } from '../shared/component/loading-card/loading-card.component';
 import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loading-keyword.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
-import { HighlightKeywordPipe } from 'src/app/shared/pipe/keyword-style.pipe';
+import { ApiService } from 'src/app/shared/service/api.service';
 
 @Component({
   selector: 'app-search',
@@ -36,7 +32,7 @@ export class SearchComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   searchSrv = inject(SearchService);
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
   keyword = signal('');
   total = signal(0);
   articles = signal<Articles>([]);
@@ -82,7 +78,7 @@ export class SearchComponent implements OnInit {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res, false)) {
+        if (this.apiSrv.ifSuccess(res, false)) {
           const {
             data: { total, articles },
           } = res;

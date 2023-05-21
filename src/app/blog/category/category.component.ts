@@ -6,7 +6,6 @@ import { PaginationComponent } from 'src/app/shared/component/pagination/paginat
 import { catchError, combineLatest, delay, filter, finalize, map } from 'rxjs';
 import { SearchService } from 'src/app/shared/api/search/search.service';
 import { Articles } from 'src/app/shared/api/article/article.model';
-import { SharedService } from 'src/app/shared/service/shared.service';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { ArticleCardComponent } from '../shared/component/article-card/article-card.component';
 import { LoadingCardComponent } from '../shared/component/loading-card/loading-card.component';
@@ -17,6 +16,7 @@ import {
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loading-keyword.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
+import { ApiService } from 'src/app/shared/service/api.service';
 
 @Component({
   selector: 'app-category',
@@ -36,7 +36,7 @@ export class CategoryComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   searchSrv = inject(SearchService);
-  sharedSrv = inject(SharedService);
+  apiSrv = inject(ApiService);
   category = signal('');
   categoryId = signal<number | undefined>(undefined);
   total = signal(0);
@@ -83,7 +83,7 @@ export class CategoryComponent implements OnInit {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        if (this.sharedSrv.ifSuccess(res, false)) {
+        if (this.apiSrv.ifSuccess(res, false)) {
           const {
             data: { total, articles, keyword },
           } = res;

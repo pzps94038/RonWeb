@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { titleResolver } from 'src/app/shared/resolve/title.resolver';
+import { seoResolver } from 'src/app/shared/resolve/seo.resolver';
 
 export const routes: Routes = [
   {
@@ -15,7 +15,7 @@ export const routes: Routes = [
       title: '文章明細',
     },
     resolve: {
-      titleResolver,
+      seoResolver,
     },
   },
   {
@@ -26,7 +26,7 @@ export const routes: Routes = [
       title: '文章編輯',
     },
     resolve: {
-      titleResolver,
+      seoResolver,
     },
   },
   {
@@ -37,7 +37,7 @@ export const routes: Routes = [
       title: '文章新增',
     },
     resolve: {
-      titleResolver,
+      seoResolver,
     },
   },
   {
