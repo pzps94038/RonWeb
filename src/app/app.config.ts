@@ -1,6 +1,6 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideClientHydration } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.route';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpInterceptor } from './shared/api/shared/http.interceptor';
@@ -11,7 +11,7 @@ export const appConfig: ApplicationConfig = {
     // httpcline
     provideHttpClient(withInterceptors([httpInterceptor])),
     // 路由
-    provideRouter(routes),
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'top' })),
     provideClientHydration(),
     importProvidersFrom([]),
     EllipsisPipe,
