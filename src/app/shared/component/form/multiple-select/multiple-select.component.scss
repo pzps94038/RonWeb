@@ -10,6 +10,9 @@
     .ng-placeholder {
       @apply static #{!important};
     }
+    .ng-value-container .ng-input > input {
+      @apply bg-base-100 text-base-content;
+    }
   }
 
   .ng-option {
@@ -19,7 +22,6 @@
   .ng-option-marked {
     @apply bg-base-content text-base-100;
   }
-
   .ng-option-selected {
     @apply bg-neutral text-neutral-content  #{!important};
   }
