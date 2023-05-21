@@ -30,6 +30,35 @@
       <div class="ck-content" [innerHTML]="article()!.previewContent | safe: 'html'"></div>
       <div class="py-5"></div>
       <div class="ck-content" [innerHTML]="article()!.content| safe: 'html'"></div>
+      <ng-container *ngIf="article()?.prevArticle || article()?.nextArticle">
+        <div class="divider my-5"></div>
+        <div class="flex justify-between">
+          <div class="w-1/2 flex justify-start">
+            <a
+              [routerLink]="['/blog','article',article()!.prevArticle?.articleId]"
+              *ngIf="article()?.prevArticle">
+              <div class="w-full flex justify-start items-center">
+                <span class="text-xl">←</span> 上一篇文章
+              </div>
+              <div class="w-full py-1 flex justify-start items-center link link-info">
+                {{ article()!.prevArticle!.articleTitle }}
+              </div>
+            </a>
+          </div>
+          <div class="w-1/2 flex justify-end flex-wrap">
+            <a
+              [routerLink]="['/blog','article',article()!.nextArticle!.articleId]"
+              *ngIf="article()?.nextArticle">
+              <div class="w-full flex justify-end items-cente">
+                下一篇文章 <span class="text-xl">→</span>
+              </div>
+              <div class="w-full py-1 flex justify-end items-center link link-info">
+                {{ article()!.nextArticle!.articleTitle }}
+              </div>
+            </a>
+          </div>
+        </div>
+      </ng-container>
       <div class="divider my-5"></div>
       <app-giscus />
     </ng-container>

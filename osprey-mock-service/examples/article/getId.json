@@ -21,6 +21,14 @@
       }
     ],
     "viewCount": 0,
-    "createDate": "2023-05-03T12:02:18.878Z"
+    "createDate": "2023-05-03T12:02:18.878Z",
+    "prevArticle": {
+      "articleId": 1,
+      "articleTitle": "上個文章"
+    },
+    "nextArticle": {
+      "articleId": 3,
+      "articleTitle": "下個文章"
+    }
   }
 }
