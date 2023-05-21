@@ -1,12 +1,12 @@
 <div
   class="bg-banner bg-cover bg-fixed bg-center h-80 md:h-96 flex justify-center items-center"></div>
 <div class="container mx-auto mt-5 flex flex-wrap">
-  <div class="w-full lg:w-4/6 md:w-3/5 order-2 md:order-1">
+  <div class="w-full md:w-3/5 lg:w-9/12 order-2 md:order-1">
     <router-outlet />
   </div>
-  <div class="w-full lg:w-2/6 md:w-2/5 flex flex-col flex-wrap order-1 md:order-2">
+  <div class="w-full md:w-2/5 lg:w-3/12 flex flex-col flex-wrap order-1 md:order-2">
     <form [formGroup]="form" class="w-full flex" (ngSubmit)="submit()">
-      <div class="w-4/5 mx-2">
+      <div class="w-8/12 mx-2">
         <app-input
           [showErrorMsg]="false"
           type="search"
@@ -15,7 +15,7 @@
           inputmode="search"
           formControlName="keyword" />
       </div>
-      <button class="btn btn-primary w-1/5">搜尋</button>
+      <button class="btn btn-primary w-4/12">搜尋</button>
     </form>
     <div class="my-5 w-full">
       <app-article-category />
