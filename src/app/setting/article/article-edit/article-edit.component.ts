@@ -67,7 +67,7 @@ export class ArticleEditComponent {
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
-    const category$ = this.articleCategorySrv.getArticleCategory().pipe(
+    const category$ = this.articleCategorySrv.getArticleCategory(undefined, false).pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { categorys } }) => categorys),
       map(array =>
@@ -90,7 +90,7 @@ export class ArticleEditComponent {
         this.categoryOptions.set(options);
       }),
     );
-    const label$ = this.articleLabelSrv.getArticleLabel().pipe(
+    const label$ = this.articleLabelSrv.getArticleLabel(undefined, false).pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { labels } }) => labels),
       map(array =>
@@ -108,7 +108,7 @@ export class ArticleEditComponent {
         tap(() => this.isLoading.set(true)),
         filter(param => !!param.get('id')),
         map(param => param.get('id')!),
-        switchMap(id => this.articleSrv.getArticleById(parseInt(id))),
+        switchMap(id => this.articleSrv.getArticleById(parseInt(id), false)),
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(data => {

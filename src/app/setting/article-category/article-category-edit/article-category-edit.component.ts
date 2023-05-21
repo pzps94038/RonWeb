@@ -45,7 +45,7 @@ export class ArticleCategoryEditComponent {
         map(param => param.get('id')!),
         filter(id => !isNaN(parseInt(id))),
         map(id => parseInt(id)),
-        switchMap(id => this.articleCategorySrv.getArticleCategoryById(id)),
+        switchMap(id => this.articleCategorySrv.getArticleCategoryById(id, false)),
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(({ categoryId, categoryName }) => {
