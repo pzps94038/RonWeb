@@ -2,6 +2,7 @@ import { Injectable, Renderer2, inject } from '@angular/core';
 import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
 import { EllipsisPipe } from '../pipe/ellipsis.pipe';
 import { DeviceService } from './device.service';
+
 export type Seo = {
   title?: string;
   description?: string;
@@ -30,9 +31,8 @@ export class SeoService {
       title = siteName;
     }
     description = description ?? '';
-    const tempElement = document.createElement('div');
-    tempElement.innerHTML = description;
-    description = tempElement.textContent ?? '';
+    // 使用正則表達式將HTML標籤移除
+    description = description.replace(/<[^>]+>/g, '');
     const tags: MetaDefinition[] = [
       { name: 'keywords', content: keywords ?? '' },
       { name: 'description', content: this.ellipsisPipe.transform(description ?? '') },
