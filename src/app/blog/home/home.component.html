@@ -23,7 +23,7 @@
 <ng-template #error>
   <div
     class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
-    <app-error (refresh)="getArticle(page(), false)" />
+    <app-error (refresh)="getArticle(page())" />
   </div>
 </ng-template>
 <app-pagination [total]="total()" [currentPage]="page()" (change)=" paginationChange($event)">

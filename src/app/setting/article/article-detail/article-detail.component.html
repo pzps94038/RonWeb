@@ -1,6 +1,19 @@
 <ng-container *ngIf="!isError(); else error">
   <ng-container *ngIf="!isLoading(); else loading">
-    <button class="btn btn-primary mb-5" routerLink="/setting/article/create">新增文章</button>
+    <div class="flex justify-between flex-wrap">
+      <div class="flex w-full mb-5 md:w-1/2 lg:w-1/3">
+        <div class="w-10/12">
+          <app-input
+            [(ngModel)]="keyword"
+            type="search"
+            class="w-full"
+            placeholder="搜尋關鍵字"
+            inputmode="search" />
+        </div>
+        <button class="btn btn-primary mx-2 w-2/12 md:w-3/12" (click)="search()">搜尋</button>
+      </div>
+      <button class="btn btn-primary mb-5" routerLink="/setting/article/create">新增文章</button>
+    </div>
     <div class="overflow-x-auto w-full">
       <table class="table table-zebra w-full">
         <thead>
@@ -35,7 +48,7 @@
         </tbody>
       </table>
     </div>
-    <app-pagination [total]="total()" [currentPage]="page()" (change)=" paginationChange($event)" />
+    <app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)" />
   </ng-container>
 </ng-container>
 <ng-template #loading>
@@ -74,11 +87,11 @@
       </tbody>
     </table>
   </div>
-  <app-pagination [total]="total()" [currentPage]="page()" (change)=" paginationChange($event)" />
+  <app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)" />
 </ng-template>
 <ng-template #error>
   <div
     class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
-    <app-error (refresh)="getArticle()" />
+    <app-error (refresh)="getArticle(page(), queryKeyword)" />
   </div>
 </ng-template>

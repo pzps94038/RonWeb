@@ -17,7 +17,6 @@ import { TransferService } from '../../service/transfer.service';
 export class ArticleService {
   http = inject(HttpClient);
   transferSrv = inject(TransferService);
-  articleMap = new Map<undefined | number, Observable<GetArticleResponse>>();
   articleByIdMap = new Map<undefined | number, Observable<GetArticleByIdResponse>>();
 
   /**
@@ -25,22 +24,17 @@ export class ArticleService {
    * @param page
    * @returns
    */
-  getArticle(page?: number, cache: boolean = true) {
-    const fn = () => {
-      if (cache && this.articleMap.has(page)) {
-        return this.articleMap.get(page)!;
-      }
-      const params = page ? new HttpParams().append('page', page) : undefined;
-
-      const article$ = this.http
-        .get<GetArticleResponse>(`${environment.baseUrl}/article`, {
-          params,
-        })
-        .pipe(shareReplay());
-      this.articleMap.set(page, article$);
-      return article$;
-    };
-    return this.transferSrv.transfer(`articleList-${page}`, fn, cache);
+  getArticle(page?: number, keyword?: string) {
+    let params = new HttpParams();
+    if (page) {
+      params = params.append('page', page);
+    }
+    if (keyword) {
+      params = params.append('keyword', keyword);
+    }
+    return this.http.get<GetArticleResponse>(`${environment.baseUrl}/article`, {
+      params,
+    });
   }
 
   /**
