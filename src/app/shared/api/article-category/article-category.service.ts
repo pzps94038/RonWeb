@@ -25,32 +25,42 @@ export class ArticleCategoryService {
 
   getArticleCategory(page?: number, cache: boolean = true) {
     const fn = () => {
-      if (cache && this.articleCategoryMap.has(page)) {
-        return this.articleCategoryMap.get(page)!;
+      if (!cache || !this.articleCategoryMap.has(page)) {
+        const params = page ? new HttpParams().append('page', page) : undefined;
+        const category$ = this.http
+          .get<GetArticleCategoryResponse>(`${environment.baseUrl}/articleCategory`, {
+            params,
+          })
+          .pipe(shareReplay());
+        this.articleCategoryMap.set(page, category$);
       }
-      const params = page ? new HttpParams().append('page', page) : undefined;
-      const category$ = this.http
-        .get<GetArticleCategoryResponse>(`${environment.baseUrl}/articleCategory`, {
-          params,
-        })
-        .pipe(shareReplay());
-      this.articleCategoryMap.set(page, category$);
-      return category$;
+
+      return this.articleCategoryMap.get(page)!;
     };
+
+    if (!cache) {
+      return fn(); // 直接返回分类流
+    }
+
     return this.transferSrv.transfer(`categoryList-${page}`, fn);
   }
 
   getArticleCategoryById(id: number, cache: boolean = true) {
     const fn = () => {
-      if (cache && this.articleCategoryByIdMap.has(id)) {
-        return this.articleCategoryByIdMap.get(id)!;
+      if (!cache || !this.articleCategoryByIdMap.has(id)) {
+        const category$ = this.http
+          .get<GetArticleCategoryByIdResponse>(`${environment.baseUrl}/articleCategory/${id}`)
+          .pipe(shareReplay());
+        this.articleCategoryByIdMap.set(id, category$);
       }
-      const category$ = this.http
-        .get<GetArticleCategoryByIdResponse>(`${environment.baseUrl}/articleCategory/${id}`)
-        .pipe(shareReplay());
-      this.articleCategoryByIdMap.set(id, category$);
-      return category$;
+
+      return this.articleCategoryByIdMap.get(id)!;
     };
+
+    if (!cache) {
+      return fn(); // 直接返回分类流
+    }
+
     return this.transferSrv.transfer(`category-${id}`, fn);
   }
 

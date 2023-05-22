@@ -22,32 +22,42 @@ export class ArticleLabelService {
 
   getArticleLabel(page?: number, cache: boolean = true) {
     const fn = () => {
-      if (cache && this.articleLabelMap.has(page)) {
-        return this.articleLabelMap.get(page)!;
+      if (!cache || !this.articleLabelMap.has(page)) {
+        const params = page ? new HttpParams().append('page', page) : undefined;
+        const label$ = this.http
+          .get<GetArticleLabelResponse>(`${environment.baseUrl}/articleLabel`, {
+            params,
+          })
+          .pipe(shareReplay());
+        this.articleLabelMap.set(page, label$);
       }
-      const params = page ? new HttpParams().append('page', page) : undefined;
-      const label$ = this.http
-        .get<GetArticleLabelResponse>(`${environment.baseUrl}/articleLabel`, {
-          params,
-        })
-        .pipe(shareReplay());
-      this.articleLabelMap.set(page, label$);
-      return label$;
+
+      return this.articleLabelMap.get(page)!;
     };
+
+    if (!cache) {
+      return fn(); // 直接返回标签流
+    }
+
     return this.transferSrv.transfer(`labelList-${page}`, fn);
   }
 
   getArticleLabelById(id: number, cache: boolean = true) {
     const fn = () => {
-      if (cache && this.articleLabelByIdMap.has(id)) {
-        return this.articleLabelByIdMap.get(id)!;
+      if (!cache || !this.articleLabelByIdMap.has(id)) {
+        const label$ = this.http
+          .get<GetArticleLabelByIdResponse>(`${environment.baseUrl}/articleLabel/${id}`)
+          .pipe(shareReplay());
+        this.articleLabelByIdMap.set(id, label$);
       }
-      const label$ = this.http
-        .get<GetArticleLabelByIdResponse>(`${environment.baseUrl}/articleLabel/${id}`)
-        .pipe(shareReplay());
-      this.articleLabelByIdMap.set(id, label$);
-      return label$;
+
+      return this.articleLabelByIdMap.get(id)!;
     };
+
+    if (!cache) {
+      return fn(); // 直接返回标签流
+    }
+
     return this.transferSrv.transfer(`label-${id}`, fn);
   }
 
