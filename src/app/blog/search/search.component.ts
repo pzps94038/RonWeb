@@ -13,6 +13,7 @@ import { LoadingCardComponent } from '../shared/component/loading-card/loading-c
 import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loading-keyword.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
+import { ArticleService } from 'src/app/shared/api/article/article.service';
 
 @Component({
   selector: 'app-search',
@@ -31,7 +32,7 @@ import { ApiService } from 'src/app/shared/service/api.service';
 export class SearchComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
-  searchSrv = inject(SearchService);
+  articleSrv = inject(ArticleService);
   apiSrv = inject(ApiService);
   keyword = signal('');
   total = signal(0);
@@ -67,8 +68,8 @@ export class SearchComponent implements OnInit {
   searchKeyword(keyword: string, page?: number) {
     this.isError.set(false);
     this.isLoading.set(true);
-    this.searchSrv
-      .keyword(keyword, page)
+    this.articleSrv
+      .getArticle(page, keyword)
       .pipe(
         catchError(err => {
           this.isError.set(true);

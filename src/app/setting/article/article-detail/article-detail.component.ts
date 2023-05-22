@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
@@ -12,6 +13,7 @@ import { Articles } from 'src/app/shared/api/article/article.model';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { ApiService } from 'src/app/shared/service/api.service';
+import { InputComponent } from 'src/app/shared/component/form/input/input.component';
 
 @Component({
   selector: 'app-article-detail',
@@ -25,6 +27,8 @@ import { ApiService } from 'src/app/shared/service/api.service';
     DayJsPipe,
     RouterOutlet,
     RouterLink,
+    FormsModule,
+    InputComponent,
   ],
   templateUrl: './article-detail.component.html',
   styleUrls: ['./article-detail.component.scss'],
@@ -40,22 +44,28 @@ export class ArticleDetailComponent {
   isLoading = signal(false);
   isError = signal(false);
   page = signal(1);
+  keyword?: string;
+  queryKeyword?: string;
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit() {
     this.route.queryParamMap.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(params => {
       const page = params.get('page');
+      const keyword = (params.get('keyword') ? params.get('keyword') : undefined) as
+        | string
+        | undefined;
       const num = page ? parseInt(page) : 1;
       this.page.set(isNaN(num) ? 1 : num);
-      this.getArticle(this.page());
+      this.queryKeyword = keyword;
+      this.getArticle(this.page(), keyword);
     });
   }
 
-  getArticle(page?: number) {
+  getArticle(page: number, keyword?: string) {
     this.isError.set(false);
     this.isLoading.set(true);
     this.articleSrv
-      .getArticle(page, false)
+      .getArticle(page, keyword)
       .pipe(
         catchError(err => {
           this.isError.set(true);
@@ -77,10 +87,11 @@ export class ArticleDetailComponent {
       });
   }
 
-  paginationChange(page: number) {
+  paginationChange(page?: number) {
     this.router.navigate(['/setting/article'], {
       queryParams: {
         page,
+        keyword: !!this.queryKeyword ? this.queryKeyword : undefined,
       },
     });
   }
@@ -97,6 +108,11 @@ export class ArticleDetailComponent {
         switchMap(res => this.swalSrv.alert({ icon: SwalIcon.Success, text: res.returnMessage })),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() => this.getArticle());
+      .subscribe(() => this.paginationChange(1));
+  }
+
+  search() {
+    this.queryKeyword = this.keyword;
+    this.paginationChange(1);
   }
 }

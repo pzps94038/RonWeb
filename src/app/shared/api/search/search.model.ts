@@ -7,6 +7,4 @@ export type Search = {
   keyword: string;
 };
 
-export type SearchKeywordResponse = BaseResponse<Search>;
-
-export type SearchCategoryResponse = BaseResponse<Search>;
+export type SearchResponse = BaseResponse<Search>;
