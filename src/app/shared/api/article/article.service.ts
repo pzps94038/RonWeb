@@ -27,25 +27,20 @@ export class ArticleService {
    */
   getArticle(page?: number, cache: boolean = true) {
     const fn = () => {
-      if (!cache || !this.articleMap.has(page)) {
-        const params = page ? new HttpParams().append('page', page) : undefined;
-
-        const article$ = this.http
-          .get<GetArticleResponse>(`${environment.baseUrl}/article`, {
-            params,
-          })
-          .pipe(shareReplay());
-        this.articleMap.set(page, article$);
+      if (cache && this.articleMap.has(page)) {
+        return this.articleMap.get(page)!;
       }
+      const params = page ? new HttpParams().append('page', page) : undefined;
 
-      return this.articleMap.get(page)!;
+      const article$ = this.http
+        .get<GetArticleResponse>(`${environment.baseUrl}/article`, {
+          params,
+        })
+        .pipe(shareReplay());
+      this.articleMap.set(page, article$);
+      return article$;
     };
-
-    if (!cache) {
-      return fn(); // 直接返回文章流
-    }
-
-    return this.transferSrv.transfer(`articleList-${page}`, fn);
+    return this.transferSrv.transfer(`articleList-${page}`, fn, cache);
   }
 
   /**
@@ -55,21 +50,16 @@ export class ArticleService {
    */
   getArticleById(id: number, cache: boolean = true) {
     const fn = () => {
-      if (!cache || !this.articleByIdMap.has(id)) {
-        const article$ = this.http
-          .get<GetArticleByIdResponse>(`${environment.baseUrl}/article/${id}`)
-          .pipe(shareReplay());
-        this.articleByIdMap.set(id, article$);
+      if (cache && this.articleByIdMap.has(id)) {
+        return this.articleByIdMap.get(id)!;
       }
-
-      return this.articleByIdMap.get(id)!;
+      const article$ = this.http
+        .get<GetArticleByIdResponse>(`${environment.baseUrl}/article/${id}`)
+        .pipe(shareReplay());
+      this.articleByIdMap.set(id, article$);
+      return article$;
     };
-
-    if (!cache) {
-      return fn(); // 直接返回文章流
-    }
-
-    return this.transferSrv.transfer(`article-${id}`, fn);
+    return this.transferSrv.transfer(`article-${id}`, fn, cache);
   }
 
   /**

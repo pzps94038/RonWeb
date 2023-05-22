@@ -22,43 +22,33 @@ export class ArticleLabelService {
 
   getArticleLabel(page?: number, cache: boolean = true) {
     const fn = () => {
-      if (!cache || !this.articleLabelMap.has(page)) {
-        const params = page ? new HttpParams().append('page', page) : undefined;
-        const label$ = this.http
-          .get<GetArticleLabelResponse>(`${environment.baseUrl}/articleLabel`, {
-            params,
-          })
-          .pipe(shareReplay());
-        this.articleLabelMap.set(page, label$);
+      if (cache && this.articleLabelMap.has(page)) {
+        return this.articleLabelMap.get(page)!;
       }
-
-      return this.articleLabelMap.get(page)!;
+      const params = page ? new HttpParams().append('page', page) : undefined;
+      const label$ = this.http
+        .get<GetArticleLabelResponse>(`${environment.baseUrl}/articleLabel`, {
+          params,
+        })
+        .pipe(shareReplay());
+      this.articleLabelMap.set(page, label$);
+      return label$;
     };
-
-    if (!cache) {
-      return fn(); // 直接返回标签流
-    }
-
-    return this.transferSrv.transfer(`labelList-${page}`, fn);
+    return this.transferSrv.transfer(`labelList-${page}`, fn, cache);
   }
 
   getArticleLabelById(id: number, cache: boolean = true) {
     const fn = () => {
-      if (!cache || !this.articleLabelByIdMap.has(id)) {
-        const label$ = this.http
-          .get<GetArticleLabelByIdResponse>(`${environment.baseUrl}/articleLabel/${id}`)
-          .pipe(shareReplay());
-        this.articleLabelByIdMap.set(id, label$);
+      if (cache && this.articleLabelByIdMap.has(id)) {
+        return this.articleLabelByIdMap.get(id)!;
       }
-
-      return this.articleLabelByIdMap.get(id)!;
+      const label$ = this.http
+        .get<GetArticleLabelByIdResponse>(`${environment.baseUrl}/articleLabel/${id}`)
+        .pipe(shareReplay());
+      this.articleLabelByIdMap.set(id, label$);
+      return label$;
     };
-
-    if (!cache) {
-      return fn(); // 直接返回标签流
-    }
-
-    return this.transferSrv.transfer(`label-${id}`, fn);
+    return this.transferSrv.transfer(`label-${id}`, fn, cache);
   }
 
   updateArticleLabel(req: UpdateArticleLabelRequest) {
