@@ -92,7 +92,11 @@ let urls = [
       sitemapCount = sitemapCount + 1;
       const ws = sitemapStream.pipe(createWriteStream(resolve(path)));
 
-      return [new URL(path, 'https://ronweb.zeabur.app/').toString(), sitemapStream, ws];
+      return [
+        new URL(`sitemap-${i + 1}.xml`, 'https://ronweb.zeabur.app/').toString(),
+        sitemapStream,
+        ws,
+      ];
     },
   });
 
