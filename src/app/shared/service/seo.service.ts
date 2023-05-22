@@ -29,7 +29,10 @@ export class SeoService {
     } else {
       title = siteName;
     }
-
+    description = description ?? '';
+    const tempElement = document.createElement('div');
+    tempElement.innerHTML = description;
+    description = tempElement.textContent ?? '';
     const tags: MetaDefinition[] = [
       { name: 'keywords', content: keywords ?? '' },
       { name: 'description', content: this.ellipsisPipe.transform(description ?? '') },
