@@ -9,27 +9,77 @@
 
 <url>
   <loc>https://ronweb.zeabur.app/blog</loc>
-  <lastmod>2023-05-17T10:39:43+00:00</lastmod>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
   <loc>https://ronweb.zeabur.app/about-me</loc>
-  <lastmod>2023-05-17T10:39:43+00:00</lastmod>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://ronweb.zeabur.app/login</loc>
-  <lastmod>2023-05-17T10:39:43+00:00</lastmod>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://ronweb.zeabur.app/blog/category/6457abd1b133fef8623595a8</loc>
-  <lastmod>2023-05-17T10:39:43+00:00</lastmod>
+  <loc>https://ronweb.zeabur.app/blog/category/1</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://ronweb.zeabur.app/blog/category/6458ab74b1561c2da9fb5d83</loc>
-  <lastmod>2023-05-17T10:39:43+00:00</lastmod>
+  <loc>https://ronweb.zeabur.app/blog/category/2</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ronweb.zeabur.app/blog/category/3</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ronweb.zeabur.app/blog/category/4</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ronweb.zeabur.app/blog/label/1</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ronweb.zeabur.app/blog/label/2</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ronweb.zeabur.app/blog/label/3</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ronweb.zeabur.app/blog/label/4</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ronweb.zeabur.app/blog/label/5</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ronweb.zeabur.app/blog/label/6</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ronweb.zeabur.app/blog/label/7</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ronweb.zeabur.app/blog/label/8</loc>
+  <lastmod>2023-05-22T03:22:25+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 
