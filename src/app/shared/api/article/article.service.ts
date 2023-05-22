@@ -40,7 +40,7 @@ export class ArticleService {
       this.articleMap.set(page, article$);
       return article$;
     };
-    return this.transferSrv.transfer(`articleList-${page}`, fn);
+    return this.transferSrv.transfer(`articleList-${page}`, fn, cache);
   }
 
   /**
@@ -59,7 +59,7 @@ export class ArticleService {
       this.articleByIdMap.set(id, article$);
       return article$;
     };
-    return this.transferSrv.transfer(`article-${id}`, fn);
+    return this.transferSrv.transfer(`article-${id}`, fn, cache);
   }
 
   /**

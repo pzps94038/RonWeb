@@ -34,7 +34,7 @@ export class ArticleLabelService {
       this.articleLabelMap.set(page, label$);
       return label$;
     };
-    return this.transferSrv.transfer(`labelList-${page}`, fn);
+    return this.transferSrv.transfer(`labelList-${page}`, fn, cache);
   }
 
   getArticleLabelById(id: number, cache: boolean = true) {
@@ -48,7 +48,7 @@ export class ArticleLabelService {
       this.articleLabelByIdMap.set(id, label$);
       return label$;
     };
-    return this.transferSrv.transfer(`label-${id}`, fn);
+    return this.transferSrv.transfer(`label-${id}`, fn, cache);
   }
 
   updateArticleLabel(req: UpdateArticleLabelRequest) {

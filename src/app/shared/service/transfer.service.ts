@@ -9,9 +9,13 @@ export class TransferService {
   transferState = inject(TransferState);
   deviceSrv = inject(DeviceService);
 
-  transfer<T>(key: string, fn: (...args: any[]) => Observable<T>): Observable<T> {
+  transfer<T>(
+    key: string,
+    fn: (...args: any[]) => Observable<T>,
+    cache: boolean = true,
+  ): Observable<T> {
     const stateKey = makeStateKey<T>(key);
-    if (this.transferState.hasKey(stateKey)) {
+    if (this.transferState.hasKey(stateKey) && cache) {
       const state = this.transferState.get<T | undefined>(stateKey, undefined);
       return of(state!);
     } else {

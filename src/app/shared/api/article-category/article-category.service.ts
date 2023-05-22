@@ -37,7 +37,7 @@ export class ArticleCategoryService {
       this.articleCategoryMap.set(page, category$);
       return category$;
     };
-    return this.transferSrv.transfer(`categoryList-${page}`, fn);
+    return this.transferSrv.transfer(`categoryList-${page}`, fn, cache);
   }
 
   getArticleCategoryById(id: number, cache: boolean = true) {
@@ -51,7 +51,7 @@ export class ArticleCategoryService {
       this.articleCategoryByIdMap.set(id, category$);
       return category$;
     };
-    return this.transferSrv.transfer(`category-${id}`, fn);
+    return this.transferSrv.transfer(`category-${id}`, fn, cache);
   }
 
   updateArticleCategory(req: UpdateArticleCategoryRequest) {
