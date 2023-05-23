@@ -59,7 +59,7 @@ export class ArticleEditComponent {
   form = new FormGroup({
     articleId: new FormControl<undefined | number>(undefined, [Validators.required]),
     articleTitle: new FormControl('', [Validators.required]),
-    previewContent: new FormControl('', [Validators.required]),
+    previewContent: new FormControl('', [Validators.required, Validators.maxLength(500)]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<string | number>('', [Validators.required]),
     labels: new FormControl<number[]>([], [Validators.required]),

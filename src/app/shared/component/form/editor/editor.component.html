@@ -24,4 +24,9 @@
   <p *ngIf="control?.errors?.['required']" class="mt-2 text-sm text-red-600 dark:text-red-500">
     <span class="font-medium">此欄位必填</span>
   </p>
+  <p *ngIf="control?.errors?.['maxlength']" class="mt-2 text-sm text-red-600 dark:text-red-500">
+    <span class="font-medium"
+      >此欄位限制最多{{ control!.errors!['maxlength']!.requiredLength }}個字</span
+    >
+  </p>
 </ng-container>
