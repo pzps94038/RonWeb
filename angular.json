@@ -42,7 +42,8 @@
               "src/styles.scss",
               "src/assets/scss/font.scss",
               "node_modules/swiper/swiper-bundle.min.css",
-              "node_modules/animate.css/animate.min.css"
+              "node_modules/animate.css/animate.min.css",
+              "node_modules/@ng-select/ng-select/themes/default.theme.css"
             ],
             "scripts": [
               "node_modules/@ckeditor/ckeditor5-language/build/translations/zh.js"
