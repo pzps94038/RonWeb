@@ -10,17 +10,17 @@ export class ThemeService {
 
   constructor() {
     if (this.deviceSrv.isClient) {
-      // const theme = localStorage.getItem('theme');
-      // if (theme) {
-      //   this.toggleTheme(JSON.parse(theme) as boolean);
-      // } else {
-      //   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      //     this.darkMode.set(true);
-      //   } else {
-      //     this.darkMode.set(false);
-      //   }
-      //   this.toggleTheme(this.darkMode());
-      // }
+      const theme = localStorage.getItem('theme');
+      if (theme) {
+        this.toggleTheme(JSON.parse(theme) as boolean);
+      } else {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          this.darkMode.set(true);
+        } else {
+          this.darkMode.set(false);
+        }
+        this.toggleTheme(this.darkMode());
+      }
     }
   }
 
