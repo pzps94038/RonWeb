@@ -34,6 +34,7 @@ html[data-theme='business'] {
 
 .ck-content {
   pre {
+    @apply border rounded-sm m-4;
     tab-size: 4;
     white-space: pre-wrap;
   }
