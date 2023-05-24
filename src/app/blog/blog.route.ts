@@ -6,7 +6,6 @@ export const routes: Routes = [
     path: '',
     loadComponent: () => import('./home/home.component').then(m => m.HomeComponent),
     data: {
-      title: '文章總覽',
       description:
         '歡迎來到我們的文章總覽頁面！這裡收錄了我們部落格的所有文章，涵蓋了各種技術主題和學習心得。你可以瀏覽不同的文章，擴展你的知識和尋找你感興趣的內容。無論你是初學者還是有經驗的專業人士，這個文章總覽頁面將幫助你快速找到我們的所有寶貴資源，並輕鬆探索你想要了解的主題。立即開始你的探索之旅吧！',
       keywords: '文章總覽',
