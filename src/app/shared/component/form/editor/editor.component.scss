@@ -23,6 +23,9 @@
     .ck-list,
     .ck-content {
       @apply bg-base-100 text-base-content;
+      pre {
+        @apply p-4  #{!important};
+      }
     }
     .ck-insert-table-dropdown__grid,
     .ck-insert-table-dropdown__label,
