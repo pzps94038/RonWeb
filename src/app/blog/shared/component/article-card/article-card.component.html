@@ -26,5 +26,5 @@
   <div
     class="ck-content break-words"
     [innerHTML]="(highlightKeyword ? (previewContent | highlightKeyword : keyword) : previewContent) | safe : 'html'"></div>
-  <a class="link link-secondary" (click)="showMore.emit(true)">... 繼續閱讀 ...</a>
+  <span class="link link-secondary" (click)="showMore.emit(true)">... 繼續閱讀 ...</span>
 </div>
