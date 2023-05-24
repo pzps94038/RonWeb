@@ -1,1 +1,0 @@
-!function(a){const n=a.zh=a.zh||{};n.dictionary=Object.assign(n.dictionary||{},{"Choose language":"\u9078\u64c7\u8a9e\u8a00",Language:"\u8a9e\u8a00","Remove language":"\u79fb\u9664\u8a9e\u8a00"})}(window.CKEDITOR_TRANSLATIONS||(window.CKEDITOR_TRANSLATIONS={}));
