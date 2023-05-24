@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,6 +22,7 @@ import { DisqusComponent } from '../../shared/component/disqus/disqus.component'
 import { GiscusComponent } from '../../shared/component/giscus/giscus.component';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { SeoService } from 'src/app/shared/service/seo.service';
+import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-highlight.service';
 
 @Component({
   selector: 'app-article',
@@ -38,6 +46,7 @@ export class ArticleComponent {
   route = inject(ActivatedRoute);
   apiSrv = inject(ApiService);
   seoSrv = inject(SeoService);
+  codeBlockSrv = inject(CodeBlockHighlightService);
   router = inject(Router);
   articleId = signal<number | undefined>(undefined);
   article = signal<Article | undefined>(undefined);
@@ -80,6 +89,7 @@ export class ArticleComponent {
           });
           this.article.set(data);
           this.updateArticleViews(id);
+          this.codeBlockSrv.highlightAllBlock();
         } else if (res.returnCode === ReturnCode.NotFound) {
           this.router.navigate(['blog', 'notFound']);
         } else {

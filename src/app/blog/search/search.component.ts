@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,6 +14,7 @@ import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loa
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
+import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-highlight.service';
 
 @Component({
   selector: 'app-search',
@@ -34,6 +35,7 @@ export class SearchComponent implements OnInit {
   router = inject(Router);
   articleSrv = inject(ArticleService);
   apiSrv = inject(ApiService);
+  codeBlockSrv = inject(CodeBlockHighlightService);
   keyword = signal('');
   total = signal(0);
   articles = signal<Articles>([]);
@@ -85,6 +87,7 @@ export class SearchComponent implements OnInit {
           } = res;
           this.total.set(total);
           this.articles.set(articles);
+          this.codeBlockSrv.highlightAllBlock();
         } else {
           this.isError.set(true);
         }

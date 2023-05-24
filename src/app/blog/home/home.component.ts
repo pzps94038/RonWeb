@@ -1,5 +1,5 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleCardComponent } from '../shared/component/article-card/article-card.component';
 import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';
@@ -12,6 +12,7 @@ import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { LoadingCardComponent } from '../shared/component/loading-card/loading-card.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
+import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-highlight.service';
 
 @Component({
   selector: 'app-home',
@@ -31,6 +32,7 @@ export class HomeComponent implements OnInit {
   apiSrv = inject(ApiService);
   route = inject(ActivatedRoute);
   router = inject(Router);
+  codeBlockSrv = inject(CodeBlockHighlightService);
   total = signal(0);
   articles = signal<Articles>([]);
   isLoading = signal(false);
@@ -67,6 +69,7 @@ export class HomeComponent implements OnInit {
           } = res;
           this.total.set(total);
           this.articles.set(articles);
+          this.codeBlockSrv.highlightAllBlock();
         } else {
           this.isError.set(true);
         }

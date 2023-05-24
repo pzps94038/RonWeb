@@ -1,5 +1,5 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';
@@ -17,6 +17,7 @@ import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loading-keyword.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
+import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-highlight.service';
 
 @Component({
   selector: 'app-category',
@@ -37,6 +38,7 @@ export class CategoryComponent implements OnInit {
   router = inject(Router);
   searchSrv = inject(SearchService);
   apiSrv = inject(ApiService);
+  codeBlockSrv = inject(CodeBlockHighlightService);
   category = signal('');
   categoryId = signal<number | undefined>(undefined);
   total = signal(0);
@@ -90,6 +92,7 @@ export class CategoryComponent implements OnInit {
           this.total.set(total);
           this.articles.set(articles);
           this.category.set(keyword);
+          this.codeBlockSrv.highlightAllBlock();
         } else if (res.returnCode === ReturnCode.NotFound) {
           this.router.navigate(['blog', 'notFound']);
         } else {

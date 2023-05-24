@@ -1,4 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'sass:meta';
+
+html[data-theme='corporate'] {
+  @include meta.load-css('highlight.js/styles/github.css');
+}
+
+html[data-theme='business'] {
+  @include meta.load-css('highlight.js/styles/github-dark-dimmed.css');
+}
 
 @tailwind base;
 @tailwind components;
@@ -25,11 +34,7 @@
 
 .ck-content {
   pre {
-    @apply bg-base-300 text-base-content border rounded-sm p-4 text-left #{!important};
     tab-size: 4;
     white-space: pre-wrap;
-  }
-  pre[data-language]:after {
-    @apply bg-base-content text-base-300 text-xs leading-4 right-[10px] -top-[1px] #{!important};
   }
 }

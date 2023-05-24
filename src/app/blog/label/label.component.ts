@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loa
 import { ArticleCardComponent } from '../shared/component/article-card/article-card.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
+import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-highlight.service';
 
 @Component({
   selector: 'app-label',
@@ -34,6 +35,7 @@ export class LabelComponent {
   router = inject(Router);
   searchSrv = inject(SearchService);
   apiSrv = inject(ApiService);
+  codeBlockSrv = inject(CodeBlockHighlightService);
   label = signal('');
   labelId = signal<number | undefined>(undefined);
   total = signal(0);
@@ -87,6 +89,7 @@ export class LabelComponent {
           this.total.set(total);
           this.articles.set(articles);
           this.label.set(keyword);
+          this.codeBlockSrv.highlightAllBlock();
         } else if (res.returnCode === ReturnCode.NotFound) {
           this.router.navigate(['blog', 'notFound']);
         } else {
