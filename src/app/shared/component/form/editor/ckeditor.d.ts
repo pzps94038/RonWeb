@@ -46,7 +46,6 @@ import { HorizontalLine } from '@ckeditor/ckeditor5-horizontal-line';
 import { HtmlComment } from '@ckeditor/ckeditor5-html-support';
 import { SimpleUploadAdapter } from '@ckeditor/ckeditor5-upload';
 import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
-import { type Editor, EditorConfig } from '@ckeditor/ckeditor5-core';
 export default class ClassicEditor extends ClassicEditorBase {
   static builtinPlugins: (
     | typeof TextTransformation
@@ -92,6 +91,13 @@ export default class ClassicEditor extends ClassicEditorBase {
     | typeof PictureEditing
   )[];
   static defaultConfig: {
+    codeBlock: {
+      languages: {
+        language: string;
+        label: string;
+        class: string;
+      }[];
+    };
     indentBlock: {
       offset: number;
       unit: string;
@@ -131,6 +137,8 @@ export default class ClassicEditor extends ClassicEditorBase {
     language: string;
   };
 }
+
+import { type Editor, EditorConfig } from '@ckeditor/ckeditor5-core';
 export interface CustomEditor extends ClassicEditor {
   create(
     sourceElementOrData: string | HTMLElement,
