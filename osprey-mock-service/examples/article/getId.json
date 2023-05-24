@@ -1,34 +1,29 @@
 {
-  "returnCode": "00",
-  "returnMessage": "string",
   "data": {
-    "articleId": 1,
-    "articleTitle": "文章標題",
-    "previewContent": "<p>1</p><p>&nbsp;</p><pre><code>scadfasdasd</code></pre>",
-    "content": "內容",
-    "categoryId": 1,
-    "categoryName": "分類2",
+    "articleId": 11,
+    "articleTitle": "2629. Function Composition",
+    "previewContent": "<p><span style=\"font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;\">Function Composition </span><span style=\"font-family: arial, sans-serif-light, sans-serif\">複合函數</span><br>&nbsp;</p>",
+    "content": "<p style=\"margin-left: 0\">Given an array of functions&nbsp;<code>[f1, f<sub>2</sub>, f<sub>3</sub>,&nbsp;..., f<sub>n</sub>]</code>, return&nbsp;a new function&nbsp;<code>fn</code>&nbsp;that is the <strong>function&nbsp;composition</strong> of the array of functions.</p><p style=\"margin-left: 0\">The&nbsp;<strong>function&nbsp;composition</strong>&nbsp;of&nbsp;<code>[f(x), g(x), h(x)]</code>&nbsp;is&nbsp;<code>fn(x) = f(g(h(x)))</code>.</p><p style=\"margin-left: 0\">The&nbsp;<strong>function&nbsp;composition</strong>&nbsp;of an empty list of functions is the&nbsp;<strong>identity function</strong>&nbsp;<code>f(x) = x</code>.</p><p style=\"margin-left: 0\">You may assume each&nbsp;function&nbsp;in the array accepts one integer as input&nbsp;and returns one integer as output.</p><p>&nbsp;</p><p><span class=\"text-big\"><strong>Example 1:</strong></span></p><pre><code class=\"language-plaintext\">Input: functions = [x =&gt; x + 1, x =&gt; x * x, x =&gt; 2 * x], x = 4\nOutput: 65\nExplanation:\nEvaluating from right to left ...\nStarting with x = 4.\n2 * (4) = 8\n(8) * (8) = 64\n(64) + 1 = 65</code></pre><p>&nbsp;</p><p><span class=\"text-big\"><strong>Example 2:</strong></span></p><pre><code class=\"language-plaintext\">Input: functions = [x =&gt; 10 * x, x =&gt; 10 * x, x =&gt; 10 * x], x = 1\nOutput: 1000\nExplanation:\nEvaluating from right to left ...\n10 * (1) = 10\n10 * (10) = 100\n10 * (100) = 1000</code></pre><p>&nbsp;</p><p><span class=\"text-big\"><strong>Example 3:</strong></span></p><pre><code class=\"language-plaintext\">Input: functions = [], x = 42\nOutput: 42\nExplanation:\nThe composition of zero functions is the identity function</code></pre><p>&nbsp;</p><p>解法:</p><p>這是在講給一個Function的陣列，每個元素都是一個帶數字並且回傳數字的function，會傳進每個計算公式的陣列</p><p>回傳一個帶要初始值的function，計算方式是從後面的fun計算之後拿這個數字在跟前面的每個做計算</p><pre><code class=\"language-plaintext\">type F = (num: number) =&gt; number;\n\nconst compose = (functions: F[]) =&gt; num =&gt; functions.reverse().reduce((pre, cur)=&gt; cur(pre), num);</code></pre><p>&nbsp;</p><p>參考網站:<br><a href=\"https://leetcode.com/problems/function-composition/description/\"><span style=\"color: rgba(76, 153, 230, 1)\">Function Composition - LeetCode</span></a></p>",
+    "categoryId": 5,
+    "categoryName": "Leetcode",
+    "viewCount": 8,
     "labels": [
       {
-        "labelId": 1,
-        "labelName": "標籤1",
-        "createDate": "2023-05-08T13:22:00.124Z"
-      },
-      {
-        "labelId": 2,
-        "labelName": "標籤2",
-        "createDate": "2023-05-08T13:22:00.124Z"
+        "labelId": 9,
+        "labelName": "Typescript",
+        "createDate": "0001-01-01T00:00:00"
       }
     ],
-    "viewCount": 0,
-    "createDate": "2023-05-03T12:02:18.878Z",
+    "createDate": "2023-05-23T12:16:16.19448",
     "prevArticle": {
-      "articleId": 1,
-      "articleTitle": "上個文章"
+      "articleId": 10,
+      "articleTitle": "2626. Array Reduce Transformation"
     },
     "nextArticle": {
-      "articleId": 3,
-      "articleTitle": "下個文章"
+      "articleId": 13,
+      "articleTitle": "2637. Promise Time Limit"
     }
-  }
+  },
+  "returnCode": "00",
+  "returnMessage": "取得資料成功"
 }
