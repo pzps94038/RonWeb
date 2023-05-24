@@ -5,7 +5,7 @@
     <div>
       <div class="flex items-center">
         <ng-icon name="heroCalendarDays" class="mr-1" />
-        <h4>{{ date | dayJs : 'YYYY/MM/DD hh:mm' }}</h4>
+        <h4>{{ date | dayJs : 'YYYY/MM/DD' }}</h4>
       </div>
       <div class="flex items-center link link-secondary" (click)="clickCategory.emit(category)">
         <ng-icon name="heroFolder" class="mr-1" />
@@ -24,7 +24,7 @@
   </div>
   <div class="divider my-1"></div>
   <div
-    class="ck-content"
+    class="ck-content break-words"
     [innerHTML]="(highlightKeyword ? (previewContent | highlightKeyword : keyword) : previewContent) | safe : 'html'"></div>
   <a class="link link-secondary" (click)="showMore.emit(true)">... 繼續閱讀 ...</a>
 </div>
