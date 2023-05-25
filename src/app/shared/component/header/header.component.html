@@ -23,7 +23,7 @@
         </li>
         <li
           class="font-open-sans font-normal text-lg hover:ease-in-out duration-150 hover:text-primary-focus cursor-pointer mx-8">
-          <a class="w-full" href="javascript:void(0)" (click)="userSrv.logout()">登出</a>
+          <span class="w-full" href="javascript:void(0)" (click)="userSrv.logout()">登出</span>
         </li>
       </ng-template>
     </ul>
@@ -81,9 +81,7 @@
             </li>
             <li
               class="flex justify-center border border-neutral-content p-2 text-xl cursor-pointer">
-              <a href="javascript:void(0)" class="w-full text-center" (click)="userSrv.logout()"
-                >登出</a
-              >
+              <span class="w-full text-center" (click)="userSrv.logout()">登出</span>
             </li>
           </ng-container>
         </ul>
