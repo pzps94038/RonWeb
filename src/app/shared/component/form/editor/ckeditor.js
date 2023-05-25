@@ -40925,8 +40925,9 @@
             (lI.defaultConfig = {
               codeBlock: {
                 languages: [
-                  { language: 'Plaintext', label: 'Plain text', class: 'language-xml' },
-                  { language: 'HTML', label: 'HTML', class: 'language-xml' },
+                  { language: 'Plaintext', label: 'Plain text', class: 'language-plaintext' },
+                  { language: 'HTML', label: 'HTML', class: 'language-html' },
+                  { language: 'XML', label: 'XML', class: 'language-xml' },
                   { language: 'Bash', label: 'Bash', class: 'language-bash' },
                   { language: 'C#', label: 'C#', class: 'language-csharp' },
                   { language: 'CSS', label: 'CSS', class: 'language-css' },
@@ -40936,10 +40937,10 @@
                   { language: 'TypeScript', label: 'TypeScript', class: 'language-typescript' },
                   { language: 'JSON', label: 'JSON', class: 'language-json' },
                   { language: 'YAML', label: 'YAML', class: 'language-yaml' },
-                  { language: 'Shell', label: 'Shell Session', class: 'language-shell' },
+                  { language: 'Shell', label: 'Shell', class: 'language-shell' },
                   { language: 'SQL', label: 'SQL', class: 'language-sql' },
-                  { language: 'Dockerfile', label: 'Dockerfile', class: 'language-dockerfile' },
-                  { language: 'Nginx config', label: 'Nginx config', class: 'language-nginx' },
+                  { language: 'DockerFile', label: 'Dockerfile', class: 'language-dockerfile' },
+                  { language: 'NginxConfig', label: 'Nginx config', class: 'language-nginx' },
                 ],
               },
               indentBlock: { offset: 2, unit: 'em' },
