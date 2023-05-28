@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ArticleLabelComponent } from './article-label.component';
@@ -8,7 +9,7 @@ describe('ArticleLabelComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ArticleLabelComponent],
+      imports: [ArticleLabelComponent, HttpClientTestingModule],
     });
     fixture = TestBed.createComponent(ArticleLabelComponent);
     component = fixture.componentInstance;

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, NgControl, ReactiveFormsModule } from '@angular/forms';
 
 import { SelectComponent } from './select.component';
 
@@ -8,7 +9,8 @@ describe('SelectComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SelectComponent],
+      imports: [SelectComponent, FormsModule],
+      providers: [NgControl],
     });
     fixture = TestBed.createComponent(SelectComponent);
     component = fixture.componentInstance;

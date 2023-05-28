@@ -10,7 +10,7 @@ import {
 } from 'src/app/shared/api/article-category/article-category.model';
 import { SafePipe } from 'src/app/shared/pipe/safe.pipe';
 import { ArticleLabel, ArticleLabels } from 'src/app/shared/api/article-label/article-label.model';
-import { HighlightKeywordPipe } from 'src/app/shared/pipe/keyword-style.pipe';
+import { HighlightKeywordPipe } from 'src/app/shared/pipe/highlight-keyword.pipe';
 @Component({
   selector: 'app-article-card',
   standalone: true,
