@@ -13,4 +13,8 @@ describe('DeviceService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('是Client端', () => {
+    expect(service.isClient).toBe(true);
+  });
 });
