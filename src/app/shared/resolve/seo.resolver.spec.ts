@@ -4,8 +4,8 @@ import { ResolveFn } from '@angular/router';
 import { seoResolver } from './seo.resolver';
 
 describe('seoResolver', () => {
-  const executeResolver: ResolveFn<boolean> = (...resolverParameters) =>
-    TestBed.runInInjectionContext(() => seoResolver(...resolverParameters));
+  const executeResolver: ResolveFn<boolean> = (route, state) =>
+    TestBed.runInInjectionContext(() => seoResolver(route, state));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
