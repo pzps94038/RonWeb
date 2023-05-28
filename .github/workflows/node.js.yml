@@ -19,7 +19,7 @@ jobs:
                   node-version: ${{ matrix.node-version }}
                   cache: 'npm'
             - run: npm ci --force
-            - run: npm run test
+            - run: npm run test-ci
             - run: npm run prerender
             - name: Upload build artifact
               if: github.ref == 'refs/heads/main'
