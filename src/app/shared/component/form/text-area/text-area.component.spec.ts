@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, NgControl, ReactiveFormsModule } from '@angular/forms';
 
 import { TextAreaComponent } from './text-area.component';
 
@@ -8,7 +9,8 @@ describe('TextAreaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TextAreaComponent],
+      imports: [TextAreaComponent, FormsModule],
+      providers: [NgControl],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TextAreaComponent);

@@ -1,4 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { ArticleCategoryEditComponent } from './article-category-edit.component';
 
@@ -8,7 +10,7 @@ describe('ArticleCategoryEditComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ArticleCategoryEditComponent],
+      imports: [ArticleCategoryEditComponent, HttpClientTestingModule, RouterTestingModule],
     });
     fixture = TestBed.createComponent(ArticleCategoryEditComponent);
     component = fixture.componentInstance;

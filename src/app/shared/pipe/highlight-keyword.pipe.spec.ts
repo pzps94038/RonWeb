@@ -1,8 +1,8 @@
-import { KeywordStylePipe } from './keyword-style.pipe';
+import { HighlightKeywordPipe } from './highlight-keyword.pipe';
 
 describe('KeywordStylePipe', () => {
   it('create an instance', () => {
-    const pipe = new KeywordStylePipe();
+    const pipe = new HighlightKeywordPipe();
     expect(pipe).toBeTruthy();
   });
 });
