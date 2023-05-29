@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BasicComponent, CONTROL_VALUE_ACCESSOR } from '../base/base.component';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -12,6 +12,7 @@ import { Options } from '../select/select.component';
   templateUrl: './multiple-select.component.html',
   styleUrls: ['./multiple-select.component.scss'],
   providers: [CONTROL_VALUE_ACCESSOR(MultipleSelectComponent)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultipleSelectComponent extends BasicComponent {
   @Input() options: Options = [];

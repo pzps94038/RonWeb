@@ -6,6 +6,7 @@ import {
   OnDestroy,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import Lottie, { AnimationConfigWithPath, AnimationItem, RendererType } from 'lottie-web';
@@ -24,6 +25,7 @@ export type AnimationDataConfig<T extends RendererType = 'svg'> = Omit<
   imports: [CommonModule],
   templateUrl: './ng-lottie.component.html',
   styleUrls: ['./ng-lottie.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgLottieComponent implements AfterViewInit, OnDestroy {
   @Input() options!: AnimationPathConfig | AnimationDataConfig;

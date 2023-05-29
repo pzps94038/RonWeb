@@ -7,6 +7,7 @@ import {
   SimpleChanges,
   computed,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -16,6 +17,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginationComponent implements OnChanges {
   @Input('currentPage') curPage? = 1;

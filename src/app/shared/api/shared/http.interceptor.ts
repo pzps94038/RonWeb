@@ -6,19 +6,20 @@ import {
   HttpHandlerFn,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable, catchError, concatMap, retry, switchMap, tap, throwError } from 'rxjs';
+import { Observable, catchError, concatMap, retry, switchMap, throwError } from 'rxjs';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { ReturnCode } from './shared.model';
-import { SwalService } from '../../service/swal.service';
 import { UserService } from '../../service/user.service';
+import { DialogService } from '@ngneat/dialog';
+import { ExpiredLoginComponent } from '../../dialog/expired-login/expired-login.component';
 
 export const httpInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<any>> => {
   const refreshSrv = inject(RefreshTokenService);
-  const swalSrv = inject(SwalService);
   const userSrv = inject(UserService);
+  const dialog = inject(DialogService);
   const accessToken = userSrv.getToken()?.accessToken;
   if (accessToken) {
     req = req.clone({
@@ -40,13 +41,24 @@ export const httpInterceptor: HttpInterceptorFn = (
           const newReq = req.clone({ headers });
           return next(newReq);
         } else if (returnCode === ReturnCode.AuthExpired) {
-          return swalSrv
-            .alert({
-              text: returnMessage,
+          return dialog
+            .open(ExpiredLoginComponent, {
+              enableClose: false,
             })
-            .pipe(
-              tap(() => userSrv.logout()),
-              switchMap(() => throwError(() => err)),
+            .afterClosed$.pipe(
+              switchMap(isLogin => {
+                if (isLogin) {
+                  const headers = req.headers.set(
+                    'Authorization',
+                    `Bearer ${userSrv.getToken()?.accessToken}`,
+                  );
+                  const newReq = req.clone({ headers });
+                  return next(newReq);
+                } else {
+                  userSrv.logout();
+                  return throwError(() => err);
+                }
+              }),
             );
         } else {
           throw err;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { AnimationPathConfig, NgLottieComponent } from '../ng-lottie/ng-lottie.component';
 
 @Component({
@@ -7,6 +7,7 @@ import { AnimationPathConfig, NgLottieComponent } from '../ng-lottie/ng-lottie.c
   imports: [NgLottieComponent],
   templateUrl: './error.component.html',
   styleUrls: ['./error.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorComponent {
   errorOptions: AnimationPathConfig = {

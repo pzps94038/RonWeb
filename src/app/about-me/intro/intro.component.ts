@@ -1,5 +1,5 @@
 import { ScrollAnimateDirective } from '../../shared/directive/scroll-animate.directive';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgTypedComponent } from 'src/app/shared/component/ng-typed/ng-typed.component';
 import { TypedOptions } from 'typed.js';
@@ -21,6 +21,7 @@ import { HeaderComponent } from '../../shared/component/header/header.component'
   ],
   templateUrl: './intro.component.html',
   styleUrls: ['./intro.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IntroComponent {
   typedOptions: TypedOptions = {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollAnimateDirective } from 'src/app/shared/directive/scroll-animate.directive';
 
@@ -8,5 +8,6 @@ import { ScrollAnimateDirective } from 'src/app/shared/directive/scroll-animate.
   imports: [CommonModule, ScrollAnimateDirective],
   templateUrl: './experience.component.html',
   styleUrls: ['./experience.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExperienceComponent {}

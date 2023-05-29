@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollAnimateDirective } from '../shared/directive/scroll-animate.directive';
 import { InputComponent } from '../shared/component/form/input/input.component';
@@ -26,6 +26,7 @@ import { ValidService } from '../shared/service/valid.service';
     FooterComponent,
     ArticleLabelComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlogComponent {
   validSrv = inject(ValidService);

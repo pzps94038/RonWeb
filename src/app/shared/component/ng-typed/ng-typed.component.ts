@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import Typed, { TypedOptions } from 'typed.js';
 @Component({
@@ -7,6 +15,7 @@ import Typed, { TypedOptions } from 'typed.js';
   imports: [CommonModule],
   templateUrl: './ng-typed.component.html',
   styleUrls: ['./ng-typed.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgTypedComponent implements AfterViewInit, OnDestroy {
   @Input() options!: TypedOptions;

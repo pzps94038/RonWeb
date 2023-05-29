@@ -1,26 +1,25 @@
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InputComponent } from '../shared/component/form/input/input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FooterComponent } from '../shared/component/footer/footer.component';
+import { Data, Router } from '@angular/router';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { FooterComponent } from '../../component/footer/footer.component';
+import { InputComponent } from '../../component/form/input/input.component';
 import {
   AnimationPathConfig,
   NgLottieComponent,
-} from '../shared/component/ng-lottie/ng-lottie.component';
-import { LoginService } from '../shared/api/login/login.service';
+} from '../../component/ng-lottie/ng-lottie.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, finalize } from 'rxjs';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { LoginService } from '../../api/login/login.service';
+import { ApiService } from '../../service/api.service';
+import { UserService } from '../../service/user.service';
+import { DialogRef } from '@ngneat/dialog';
 import { heroXMark } from '@ng-icons/heroicons/outline';
-import { Router } from '@angular/router';
-import { ApiService } from '../shared/service/api.service';
-import { UserService } from '../shared/service/user.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-expired-login',
   standalone: true,
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
   imports: [
     CommonModule,
     InputComponent,
@@ -29,9 +28,15 @@ import { UserService } from '../shared/service/user.service';
     NgLottieComponent,
     NgIconComponent,
   ],
+  templateUrl: './expired-login.component.html',
+  styleUrls: ['./expired-login.component.scss'],
   providers: [provideIcons({ heroXMark })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class ExpiredLoginComponent {
+  ref: DialogRef<undefined, undefined | boolean> = inject(
+    DialogRef<undefined, undefined | boolean>,
+  );
   loginSrv = inject(LoginService);
   apiSrv = inject(ApiService);
   userSrv = inject(UserService);
@@ -54,8 +59,8 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  loginOptions: AnimationPathConfig = {
-    path: 'assets/lottie/login.json',
+  options: AnimationPathConfig = {
+    path: 'assets/lottie/session-expired.json',
   };
 
   submit() {
@@ -82,7 +87,7 @@ export class LoginComponent {
             this.userSrv.setToken(token);
             this.userSrv.setUserId(userId);
             this.userSrv.isLogin.set(true);
-            this.router.navigate(['setting']);
+            this.ref.close(true);
           } else {
             this.errMsg.set(returnMessage);
           }

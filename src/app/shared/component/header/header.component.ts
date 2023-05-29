@@ -10,6 +10,7 @@ import {
   ViewChild,
   inject,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { delay, filter, fromEvent } from 'rxjs';
@@ -28,6 +29,7 @@ export type Options = Option[];
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements AfterViewInit, OnDestroy {
   @ViewChild('header') header?: ElementRef<HTMLElement>;

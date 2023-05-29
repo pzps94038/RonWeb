@@ -1,4 +1,13 @@
-import { Component, DestroyRef, EventEmitter, Input, Output, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import * as editor from './ckeditor';
@@ -18,6 +27,7 @@ import { ApiService } from 'src/app/shared/service/api.service';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
   providers: [CONTROL_VALUE_ACCESSOR(EditorComponent)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorComponent extends BasicComponent {
   editor = signal<CustomEditor>(editor as unknown as CustomEditor);
