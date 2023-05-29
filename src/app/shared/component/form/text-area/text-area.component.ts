@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BasicComponent, CONTROL_VALUE_ACCESSOR } from '../base/base.component';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './text-area.component.html',
   styleUrls: ['./text-area.component.scss'],
   providers: [CONTROL_VALUE_ACCESSOR(TextAreaComponent)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextAreaComponent extends BasicComponent {
   @Input() placeholder: string = '';

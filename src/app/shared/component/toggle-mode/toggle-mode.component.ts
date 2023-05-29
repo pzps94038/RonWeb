@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroMoon, heroSun } from '@ng-icons/heroicons/outline';
@@ -11,6 +11,7 @@ import { ThemeService } from '../../service/theme.service';
   providers: [provideIcons({ heroMoon, heroSun })],
   templateUrl: './toggle-mode.component.html',
   styleUrls: ['./toggle-mode.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToggleModeComponent implements OnInit {
   themeSrv = inject(ThemeService);

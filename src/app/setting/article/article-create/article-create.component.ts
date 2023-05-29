@@ -1,4 +1,11 @@
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from 'src/app/shared/component/form/input/input.component';
 import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-area.component';

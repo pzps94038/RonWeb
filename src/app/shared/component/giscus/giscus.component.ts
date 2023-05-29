@@ -1,4 +1,12 @@
-import { Component, ElementRef, inject, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  AfterViewInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationStart, NavigationEnd, Router } from '@angular/router';
 import { Subject, filter, takeUntil } from 'rxjs';
@@ -10,6 +18,7 @@ import { ThemeService } from '../../service/theme.service';
   standalone: true,
   imports: [CommonModule],
   template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GiscusComponent implements OnInit, AfterViewInit, OnDestroy {
   deviceSrv = inject(DeviceService);

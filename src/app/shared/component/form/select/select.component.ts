@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BasicComponent, CONTROL_VALUE_ACCESSOR } from '../base/base.component';
 import { FormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ export type Options = Option[];
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
   providers: [CONTROL_VALUE_ACCESSOR(SelectComponent)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectComponent extends BasicComponent {
   @Input() options: Options = [];
