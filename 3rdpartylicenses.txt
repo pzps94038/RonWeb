@@ -68,6 +68,9 @@ MIT
 @ng-select/ng-select
 MIT
 
+@ngneat/dialog
+MIT
+
 animate.css
 MIT
 The MIT License (MIT)
