@@ -117,12 +117,21 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/404.html",
+              "src/robots.txt"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/css/all.min.css",
+              "node_modules/swiper/swiper-bundle.min.css",
+              "node_modules/animate.css/animate.min.css",
+              "node_modules/@ng-select/ng-select/themes/default.theme.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/@ckeditor/ckeditor5-language/build/translations/zh.js",
+              "src/assets/js/highlightjs-badge.min.js"
+            ],
             "karmaConfig": "karma.conf.js"
           }
         },
