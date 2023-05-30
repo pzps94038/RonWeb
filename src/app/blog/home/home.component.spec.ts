@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
-import { of } from 'rxjs';
+import { catchError, of, switchMap, throwError } from 'rxjs';
 import { GetArticleResponse } from 'src/app/shared/api/article/article.model';
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 import { ArticleComponent } from '../article/article.component';
@@ -114,7 +114,7 @@ describe('HomeComponent', () => {
     expect(component.articles()).toBe(fake.data.articles);
   }));
 
-  it('測試取得文章有錯誤', fakeAsync(() => {
+  it('測試取得文章API有錯誤', fakeAsync(() => {
     const mask = {
       returnCode: ReturnCode.Fail,
       returnMessage: 'error',
@@ -122,6 +122,16 @@ describe('HomeComponent', () => {
     spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(of(mask) as never);
     component.getArticle();
     tick();
+    expect(component.isError()).toBe(true);
+  }));
+
+  it('測試取得文章有異常錯誤', fakeAsync(() => {
+    // 模拟错误的Observable
+    const error = new Error('Test error');
+    const errorObservable = throwError(() => error);
+    // 调用要测试的方法
+    spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(errorObservable as never);
+    component.getArticle();
     expect(component.isError()).toBe(true);
   }));
 
