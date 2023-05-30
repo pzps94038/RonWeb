@@ -14,12 +14,4 @@ import { ExpiredLoginComponent } from './shared/dialog/expired-login/expired-log
   styleUrls: ['./app.component.scss'],
   imports: [CommonModule, RouterOutlet, ToggleModeComponent, HeaderComponent],
 })
-export class AppComponent {
-  userSrv = inject(UserService);
-
-  constructor() {
-    const token = this.userSrv.getToken();
-    const isLogin = !!token;
-    this.userSrv.isLogin.set(isLogin);
-  }
-}
+export class AppComponent {}
