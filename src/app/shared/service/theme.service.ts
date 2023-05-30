@@ -8,7 +8,7 @@ export class ThemeService {
   deviceSrv = inject(DeviceService);
   darkMode = signal(false);
 
-  constructor() {
+  initTheme() {
     if (this.deviceSrv.isClient) {
       const theme = localStorage.getItem('theme');
       if (theme) {

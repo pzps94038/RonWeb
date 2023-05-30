@@ -14,6 +14,40 @@ describe('ThemeService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('init System Theme', () => {
+    localStorage.removeItem('theme');
+    if (service.deviceSrv.isClient) {
+      service.initTheme();
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        expect(service.darkMode()).toBe(true);
+        expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe(
+          'business',
+        );
+      } else {
+        expect(service.darkMode()).toBe(false);
+        expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe(
+          'corporate',
+        );
+      }
+    }
+  });
+
+  it('init Dark Theme Storage', () => {
+    localStorage.setItem('theme', JSON.stringify(true));
+    service.initTheme();
+    expect(service.darkMode()).toBe(true);
+    expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('business');
+    localStorage.removeItem('theme');
+  });
+
+  it('init Light Theme Storage', () => {
+    localStorage.setItem('theme', JSON.stringify(false));
+    service.initTheme();
+    expect(service.darkMode()).toBe(false);
+    expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('corporate');
+    localStorage.removeItem('theme');
+  });
+
   it('toggle Theme Dark', () => {
     service.toggleTheme(true);
     expect(service.darkMode()).toBe(true);

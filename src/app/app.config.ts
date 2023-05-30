@@ -6,6 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpInterceptor } from './shared/api/shared/http.interceptor';
 import { EllipsisPipe } from './shared/pipe/ellipsis.pipe';
 import { UserService } from './shared/service/user.service';
+import { ThemeService } from './shared/service/theme.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,12 +23,13 @@ export const appConfig: ApplicationConfig = {
     // App初始化
     {
       provide: APP_INITIALIZER,
-      useFactory: (userSrv: UserService) => () => {
+      useFactory: (userSrv: UserService, themeSrv: ThemeService) => () => {
         const token = userSrv.getToken();
         const isLogin = !!token;
         userSrv.isLogin.set(isLogin);
+        themeSrv.initTheme();
       },
-      deps: [UserService],
+      deps: [UserService, ThemeService],
       multi: true,
     },
   ],
