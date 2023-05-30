@@ -38,4 +38,16 @@ html[data-theme='business'] {
     tab-size: 4;
     white-space: pre-wrap;
   }
+  .text-tiny {
+    @apply text-xs #{!important};
+  }
+  .text-small {
+    @apply text-sm #{!important};
+  }
+  .text-big {
+    @apply text-xl #{!important};
+  }
+  .text-huge {
+    @apply text-2xl #{!important};
+  }
 }
