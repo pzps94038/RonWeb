@@ -55,24 +55,26 @@ export class HomeComponent implements OnInit {
     this.articleSrv
       .getArticle(page)
       .pipe(
-        catchError(err => {
-          this.isError.set(true);
-          throw err;
-        }),
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(res => {
-        if (this.apiSrv.ifSuccess(res, false)) {
-          const {
-            data: { total, articles },
-          } = res;
-          this.total.set(total);
-          this.articles.set(articles);
-          this.codeBlockSrv.highlightAllBlock();
-        } else {
+      .subscribe({
+        next: res => {
+          if (this.apiSrv.ifSuccess(res, false)) {
+            const {
+              data: { total, articles },
+            } = res;
+            this.total.set(total);
+            this.articles.set(articles);
+            this.codeBlockSrv.highlightAllBlock();
+          } else {
+            this.isError.set(true);
+          }
+        },
+        error: err => {
           this.isError.set(true);
-        }
+          console.error(err);
+        },
       });
   }
 
