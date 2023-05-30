@@ -9,13 +9,17 @@ import { UserService } from './shared/service/user.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // httpcline
+    // httpclient && 攔截器
     provideHttpClient(withInterceptors([httpInterceptor])),
     // 路由
     provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'top' })),
+    // 伺服器模式優化，切換Dom不在全部淸除，而是逐步漸進
     provideClientHydration(),
+    // 匯入ngModule等等...
     importProvidersFrom([]),
+    // 字串截斷... 提供給seo Srv
     EllipsisPipe,
+    // App初始化
     {
       provide: APP_INITIALIZER,
       useFactory: (userSrv: UserService) => () => {
