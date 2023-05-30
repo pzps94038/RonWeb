@@ -3,17 +3,22 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
-import { catchError, of, switchMap, throwError } from 'rxjs';
+import { catchError, of, switchMap, throwError, Observable } from 'rxjs';
 import { GetArticleResponse } from 'src/app/shared/api/article/article.model';
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 import { ArticleComponent } from '../article/article.component';
 import { CategoryComponent } from '../category/category.component';
 import { LabelComponent } from '../label/label.component';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  ParamMap,
+  convertToParamMap,
+} from '@angular/router';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -169,4 +174,88 @@ describe('HomeComponent', () => {
       },
     });
   });
+});
+
+describe('測試初始化可選頁面網址', () => {
+  let component: HomeComponent;
+  let fixture: ComponentFixture<HomeComponent>;
+  const fakePage = '13';
+  const queryParamMap = of({
+    get: (key: string) => fakePage,
+  }) as Observable<ParamMap>;
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HomeComponent, HttpClientTestingModule],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParamMap,
+          } as ActivatedRoute,
+        },
+      ],
+    });
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('測試初始化可選頁面網址', fakeAsync(() => {
+    const fake = {
+      returnCode: '00',
+      returnMessage: 'success',
+      data: {
+        total: 0,
+        articles: [],
+      },
+    } as GetArticleResponse;
+    spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(of(fake) as never);
+    component.ngOnInit();
+    tick();
+    expect(component.total()).toBe(fake.data.total);
+    expect(component.articles()).toBe(fake.data.articles);
+    expect(component.page()).toBe(parseInt(fakePage));
+  }));
+});
+
+describe('測試初始化可選頁面轉型失敗網址', () => {
+  let component: HomeComponent;
+  let fixture: ComponentFixture<HomeComponent>;
+  const fakePage = 'NAN';
+  const queryParamMap = of({
+    get: (key: string) => fakePage,
+  }) as Observable<ParamMap>;
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HomeComponent, HttpClientTestingModule],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParamMap,
+          } as ActivatedRoute,
+        },
+      ],
+    });
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('測試初始化可選頁面轉型失敗網址', fakeAsync(() => {
+    const fake = {
+      returnCode: '00',
+      returnMessage: 'success',
+      data: {
+        total: 0,
+        articles: [],
+      },
+    } as GetArticleResponse;
+    spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(of(fake) as never);
+    component.ngOnInit();
+    tick();
+    expect(component.total()).toBe(fake.data.total);
+    expect(component.articles()).toBe(fake.data.articles);
+    expect(component.page()).toBe(1);
+  }));
 });
