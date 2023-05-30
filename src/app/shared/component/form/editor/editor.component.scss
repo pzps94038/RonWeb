@@ -24,7 +24,7 @@
     .ck-content {
       @apply bg-base-100 text-base-content;
       pre {
-        @apply p-4  #{!important};
+        @apply p-4 bg-base-200 text-base-content #{!important};
       }
     }
     .ck-insert-table-dropdown__grid,
