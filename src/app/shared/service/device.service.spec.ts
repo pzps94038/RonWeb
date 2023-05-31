@@ -16,5 +16,6 @@ describe('DeviceService', () => {
 
   it('是Client端', () => {
     expect(service.isClient).toBe(true);
+    expect(service.isServer).toBe(false);
   });
 });

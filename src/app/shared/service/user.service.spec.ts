@@ -1,12 +1,25 @@
 import { TestBed } from '@angular/core/testing';
 
 import { UserService } from './user.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HomeComponent } from 'src/app/blog/home/home.component';
+import { DeviceService } from './device.service';
+import { Injectable } from '@angular/core';
 
 describe('UserService', () => {
   let service: UserService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule.withRoutes([
+          {
+            path: 'blog',
+            component: HomeComponent,
+          },
+        ]),
+      ],
+    });
     service = TestBed.inject(UserService);
   });
 
@@ -24,14 +37,16 @@ describe('UserService', () => {
     expect(service.getToken()?.refreshToken).toBe(token.refreshToken);
   });
 
-  it('測試Token', () => {
+  it('測試只有單個Token', () => {
     const token = {
       accessToken: 'accessToken',
-      refreshToken: 'refreshToken',
     };
-    service.setToken(token);
-    expect(service.getToken()?.accessToken).toBe(token.accessToken);
-    expect(service.getToken()?.refreshToken).toBe(token.refreshToken);
+    service.removeToken();
+    localStorage.setItem('token', JSON.stringify(token));
+    expect(service.getToken()).toBe(undefined);
+  });
+
+  it('測試沒有Token', () => {
     service.removeToken();
     expect(service.getToken()).toBe(undefined);
   });
@@ -40,6 +55,59 @@ describe('UserService', () => {
     service.setUserId(1);
     expect(service.getUserId()).toBe(1);
     service.removeUserId();
+    expect(service.getUserId()).toBe(undefined);
+  });
+
+  it('測試無法解析的User Id', () => {
+    localStorage.setItem('userId', 'NaN');
+    expect(service.getUserId()).toBe(undefined);
+    service.removeUserId();
+  });
+
+  it('測試登出', () => {
+    service.logout();
+    expect(service.getToken()).toBe(undefined);
+    expect(service.getUserId()).toBe(undefined);
+  });
+});
+
+@Injectable()
+class HostDeviceService {
+  get isClient() {
+    return false;
+  }
+
+  get isServer() {
+    return true;
+  }
+}
+
+describe('UserService ServerMode', () => {
+  let service: UserService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule.withRoutes([
+          {
+            path: 'blog',
+            component: HomeComponent,
+          },
+        ]),
+      ],
+      providers: [
+        HostDeviceService,
+        {
+          provide: DeviceService,
+          useClass: HostDeviceService,
+        },
+      ],
+    });
+    service = TestBed.inject(UserService);
+  });
+
+  it('測試Server 模式取資料', () => {
+    expect(service.getToken()).toBe(undefined);
     expect(service.getUserId()).toBe(undefined);
   });
 });

@@ -31,4 +31,13 @@ describe('SeoService', () => {
       '測試關鍵字',
     );
   });
+
+  it('設置SEO全空', () => {
+    service.setSeo({});
+    expect(document.title).toBe('Ron Web - 探索學習的無限可能，分享技術的無盡價值');
+    expect((document.querySelector('meta[name="description"]')! as HTMLMetaElement).content).toBe(
+      '',
+    );
+    expect((document.querySelector('meta[name="keywords"]')! as HTMLMetaElement).content).toBe('');
+  });
 });
