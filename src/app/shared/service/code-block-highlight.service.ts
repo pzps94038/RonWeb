@@ -15,9 +15,6 @@ export class CodeBlockHighlightService {
         copyIconClass: 'fa-solid fa-copy',
         // // CSS class(es) used to render the done icon.
         checkIconClass: 'fa fa-check text-success',
-        onBeforeTextCopied: function (text: any, codeElement: any) {
-          return text;
-        },
       };
       window.highlightJsBadge(options);
     });

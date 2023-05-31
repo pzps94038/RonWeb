@@ -71,17 +71,6 @@ describe('UserService', () => {
   });
 });
 
-@Injectable()
-class HostDeviceService {
-  get isClient() {
-    return false;
-  }
-
-  get isServer() {
-    return true;
-  }
-}
-
 describe('UserService ServerMode', () => {
   let service: UserService;
 
@@ -95,19 +84,20 @@ describe('UserService ServerMode', () => {
           },
         ]),
       ],
-      providers: [
-        HostDeviceService,
-        {
-          provide: DeviceService,
-          useClass: HostDeviceService,
-        },
-      ],
     });
     service = TestBed.inject(UserService);
   });
 
   it('測試Server 模式取資料', () => {
+    const token = {
+      accessToken: 'accessToken',
+      refreshToken: 'refreshToken',
+    };
+    service.setToken(token);
+    service.setUserId(1);
+    spyOnProperty(service.deviceSrv, 'isClient', 'get').and.returnValue(false);
     expect(service.getToken()).toBe(undefined);
     expect(service.getUserId()).toBe(undefined);
+    service.logout();
   });
 });
