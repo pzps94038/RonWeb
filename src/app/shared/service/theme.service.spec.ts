@@ -14,24 +14,6 @@ describe('ThemeService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('init System Theme', () => {
-    localStorage.removeItem('theme');
-    if (service.deviceSrv.isClient) {
-      service.initTheme();
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        expect(service.darkMode()).toBe(true);
-        expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe(
-          'business',
-        );
-      } else {
-        expect(service.darkMode()).toBe(false);
-        expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe(
-          'corporate',
-        );
-      }
-    }
-  });
-
   it('init Dark Theme Storage', () => {
     localStorage.setItem('theme', JSON.stringify(true));
     service.initTheme();
@@ -113,7 +95,7 @@ describe('Window LightTheme Test', () => {
     spyOn(window, 'matchMedia').and.callFake(matchMediaMock);
   });
 
-  it('init System Dark Theme', () => {
+  it('init System Light Theme', () => {
     localStorage.removeItem('theme');
     if (service.deviceSrv.isClient) {
       service.initTheme();
