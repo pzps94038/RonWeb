@@ -35,16 +35,16 @@ export class SeoService {
     description = description.replace(/<[^>]+>/g, '');
     const tags: MetaDefinition[] = [
       { name: 'keywords', content: keywords ?? '' },
-      { name: 'description', content: this.ellipsisPipe.transform(description ?? '') },
+      { name: 'description', content: this.ellipsisPipe.transform(description) },
       { property: 'og:type', content: 'website' },
       { property: 'og:title', content: title },
       { property: 'og:site_name', content: siteName },
-      { property: 'og:description', content: this.ellipsisPipe.transform(description ?? '') },
+      { property: 'og:description', content: this.ellipsisPipe.transform(description) },
       { property: 'og:locale', content: 'zh-tw' },
       { name: 'og:image', content: 'assets/images/logo.jpg' },
       { name: 'twitter:card', content: 'summary' },
       { name: 'twitter:title', content: title },
-      { name: 'twitter:description', content: this.ellipsisPipe.transform(description ?? '') },
+      { name: 'twitter:description', content: this.ellipsisPipe.transform(description) },
     ];
     if (this.deviceSrv.isClient) {
       tags.push({

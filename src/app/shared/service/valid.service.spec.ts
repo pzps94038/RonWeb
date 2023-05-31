@@ -22,4 +22,8 @@ describe('ValidService', () => {
   it('有正常輸入文字', () => {
     expect(new FormControl('Search', [service.emptyValidator()]).valid).toBe(true);
   });
+
+  it('undefined 測試', () => {
+    expect(new FormControl(undefined, [service.emptyValidator()]).valid).toBe(false);
+  });
 });
