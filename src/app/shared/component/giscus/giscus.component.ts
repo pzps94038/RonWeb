@@ -61,15 +61,10 @@ export class GiscusComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.deviceSrv.isClient) {
       return;
     }
-    let scriptTag: HTMLScriptElement | undefined = undefined;
     const element = this.elementRef.nativeElement;
     this.darkMode$.pipe(takeUntil(this._destroy$)).subscribe(darkMode => {
-      if (scriptTag) {
-        this.elementRef.nativeElement.innerHTML = '';
-        scriptTag = document.createElement('script');
-      } else {
-        scriptTag = document.createElement('script');
-      }
+      this.elementRef.nativeElement.innerHTML = '';
+      const scriptTag = document.createElement('script');
       scriptTag.setAttribute('src', 'https://giscus.app/client.js');
       scriptTag.setAttribute('data-repo', 'pzps94038/RonWeb');
       scriptTag.setAttribute('data-repo-id', 'R_kgDOJU7i_Q');

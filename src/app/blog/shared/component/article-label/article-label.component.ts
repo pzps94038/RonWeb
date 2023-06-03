@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroHashtag } from '@ng-icons/heroicons/outline';
+import { heroHashtag, heroMinus, heroPlus } from '@ng-icons/heroicons/outline';
 import { catchError, finalize } from 'rxjs';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
@@ -14,11 +14,12 @@ import { ApiService } from 'src/app/shared/service/api.service';
   selector: 'app-article-label',
   standalone: true,
   imports: [CommonModule, ErrorComponent, RouterLink, NgIconComponent],
-  providers: [provideIcons({ heroHashtag })],
+  providers: [provideIcons({ heroHashtag, heroPlus, heroMinus })],
   templateUrl: './article-label.component.html',
   styleUrls: ['./article-label.component.scss'],
 })
 export class ArticleLabelComponent {
+  open = signal(true);
   articleLabelSrv = inject(ArticleLabelService);
   apiSrv = inject(ApiService);
   labels = signal<ArticleLabels>([]);
