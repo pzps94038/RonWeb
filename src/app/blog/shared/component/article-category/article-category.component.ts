@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -7,18 +7,20 @@ import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
 import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroFolder } from '@ng-icons/heroicons/outline';
+import { heroFolder, heroMinus, heroPlus } from '@ng-icons/heroicons/outline';
 import { ApiService } from 'src/app/shared/service/api.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-article-category',
   standalone: true,
-  imports: [CommonModule, ErrorComponent, RouterLink, NgIconComponent],
-  providers: [provideIcons({ heroFolder })],
+  imports: [CommonModule, ErrorComponent, RouterLink, NgIconComponent, FormsModule],
+  providers: [provideIcons({ heroFolder, heroPlus, heroMinus })],
   templateUrl: './article-category.component.html',
   styleUrls: ['./article-category.component.scss'],
 })
 export class ArticleCategoryComponent {
+  open = signal(true);
   articleCategorySrv = inject(ArticleCategoryService);
   apiSrv = inject(ApiService);
   categorys = signal<ArticleCategorys>([]);
