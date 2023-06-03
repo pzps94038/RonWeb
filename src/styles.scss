@@ -37,6 +37,10 @@ html[data-theme='business'] {
     @apply border rounded-sm m-4 p-0  #{!important};
     tab-size: 4;
     white-space: pre-wrap;
+    code {
+      @apply overflow-x-auto;
+      white-space: pre-wrap;
+    }
   }
   .text-tiny {
     @apply text-xs #{!important};
