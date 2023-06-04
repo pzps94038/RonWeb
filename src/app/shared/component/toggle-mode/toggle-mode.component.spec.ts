@@ -18,4 +18,12 @@ describe('ToggleModeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('測試切換dark模式', () => {
+    const spy = spyOn(component.themeSrv, 'toggleTheme');
+    const initDark = component.dark();
+    component.toggleTheme();
+    expect(component.dark()).toBe(!initDark);
+    expect(spy).toHaveBeenCalledWith(!initDark);
+  });
 });

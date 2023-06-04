@@ -19,20 +19,20 @@ describe('SwalService', () => {
   });
 
   it('Test alert', () => {
+    const spy = spyOn(Swal, 'fire').and.returnValue(new Promise<any>(resolve => resolve(null)));
     service.alert({
       title: 'test',
       text: 'text',
     });
-    expect(Swal.isVisible()).toBe(true);
-    Swal.close();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('Test confirm', () => {
+    const spy = spyOn(Swal, 'fire').and.returnValue(new Promise<any>(resolve => resolve(null)));
     service.confirm({
       title: 'test',
       text: 'text',
     });
-    expect(Swal.isVisible()).toBe(true);
-    Swal.close();
+    expect(spy).toHaveBeenCalled();
   });
 });

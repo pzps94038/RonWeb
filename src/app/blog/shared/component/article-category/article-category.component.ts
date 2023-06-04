@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './article-category.component.html',
   styleUrls: ['./article-category.component.scss'],
 })
-export class ArticleCategoryComponent {
+export class ArticleCategoryComponent implements OnInit {
   open = signal(true);
   articleCategorySrv = inject(ArticleCategoryService);
   apiSrv = inject(ApiService);
@@ -27,7 +27,8 @@ export class ArticleCategoryComponent {
   isLoading = signal(false);
   isError = signal(false);
   private _destroyRef = inject(DestroyRef);
-  constructor() {
+
+  ngOnInit() {
     this.getArticleCategory();
   }
 
@@ -37,22 +38,23 @@ export class ArticleCategoryComponent {
     this.articleCategorySrv
       .getArticleCategory(undefined, cache)
       .pipe(
-        catchError(err => {
-          this.isError.set(true);
-          throw err;
-        }),
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(res => {
-        if (this.apiSrv.ifSuccess(res, false)) {
-          const {
-            data: { categorys },
-          } = res;
-          this.categorys.set(categorys);
-        } else {
+      .subscribe({
+        next: res => {
+          if (this.apiSrv.ifSuccess(res, false)) {
+            const {
+              data: { categorys },
+            } = res;
+            this.categorys.set(categorys);
+          } else {
+            this.isError.set(true);
+          }
+        },
+        error: () => {
           this.isError.set(true);
-        }
+        },
       });
   }
 }

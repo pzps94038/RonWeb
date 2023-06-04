@@ -13,7 +13,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { delay, filter, fromEvent } from 'rxjs';
+import { delay, filter, fromEvent, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -31,7 +31,7 @@ export type Options = Option[];
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements AfterViewInit, OnDestroy {
+export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('header') header?: ElementRef<HTMLElement>;
   @ViewChild('mobile') mobile?: ElementRef<HTMLElement>;
   render = inject(Renderer2);
@@ -54,11 +54,11 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   private _observers: IntersectionObserver[] = [];
   private _destroyRef = inject(DestroyRef);
 
-  constructor() {
+  ngOnInit() {
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationStart),
-        takeUntilDestroyed(),
+        takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(() => {
         this.progressLoading.set(true);
@@ -66,7 +66,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
-        takeUntilDestroyed(),
+        takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(() => {
         this.progressLoading.set(false);

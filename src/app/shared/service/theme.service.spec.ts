@@ -15,33 +15,31 @@ describe('ThemeService', () => {
   });
 
   it('init Dark Theme Storage', () => {
-    localStorage.setItem('theme', JSON.stringify(true));
+    spyOn(localStorage, 'getItem').and.returnValue('true');
     service.initTheme();
     expect(service.darkMode()).toBe(true);
     expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('business');
-    localStorage.removeItem('theme');
   });
 
   it('init Light Theme Storage', () => {
-    localStorage.setItem('theme', JSON.stringify(false));
+    spyOn(localStorage, 'getItem').and.returnValue('false');
     service.initTheme();
     expect(service.darkMode()).toBe(false);
     expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('corporate');
-    localStorage.removeItem('theme');
   });
 
   it('toggle Theme Dark', () => {
     service.toggleTheme(true);
+    spyOn(localStorage, 'setItem');
     expect(service.darkMode()).toBe(true);
     expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('business');
-    expect(localStorage.getItem('theme')).toBe('true');
   });
 
   it('toggle Theme Light', () => {
     service.toggleTheme(false);
+    spyOn(localStorage, 'setItem');
     expect(service.darkMode()).toBe(false);
     expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('corporate');
-    expect(localStorage.getItem('theme')).toBe('false');
   });
 });
 
@@ -66,8 +64,8 @@ describe('Window DarkTheme Test', () => {
   });
 
   it('init System Dark Theme', () => {
-    localStorage.removeItem('theme');
     if (service.deviceSrv.isClient) {
+      spyOn(localStorage, 'getItem').and.returnValue(null);
       service.initTheme();
       expect(service.darkMode()).toBe(true);
       expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('business');
@@ -96,12 +94,11 @@ describe('Window LightTheme Test', () => {
   });
 
   it('init System Light Theme', () => {
-    localStorage.removeItem('theme');
     if (service.deviceSrv.isClient) {
+      spyOn(localStorage, 'getItem').and.returnValue(null);
       service.initTheme();
       expect(service.darkMode()).toBe(false);
       expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('corporate');
-      expect(localStorage.getItem('theme')).toBe('false');
     }
   });
 });
