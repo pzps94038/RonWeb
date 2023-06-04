@@ -19,4 +19,11 @@ describe('BlogComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('驗證送出表單', () => {
+    const spy = spyOn(component.router, 'navigate');
+    component.form.controls['keyword'].setValue('keyword');
+    component.submit();
+    expect(spy).toHaveBeenCalled();
+  });
 });

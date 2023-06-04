@@ -67,23 +67,24 @@ export class ArticleDetailComponent {
     this.articleSrv
       .getArticle(page, keyword)
       .pipe(
-        catchError(err => {
-          this.isError.set(true);
-          throw err;
-        }),
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(res => {
-        if (this.apiSrv.ifSuccess(res, false)) {
-          const {
-            data: { total, articles },
-          } = res;
-          this.total.set(total);
-          this.articles.set(articles);
-        } else {
+      .subscribe({
+        next: res => {
+          if (this.apiSrv.ifSuccess(res, false)) {
+            const {
+              data: { total, articles },
+            } = res;
+            this.total.set(total);
+            this.articles.set(articles);
+          } else {
+            this.isError.set(true);
+          }
+        },
+        error: () => {
           this.isError.set(true);
-        }
+        },
       });
   }
 
