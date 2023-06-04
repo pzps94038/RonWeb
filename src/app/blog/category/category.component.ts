@@ -77,27 +77,28 @@ export class CategoryComponent implements OnInit {
     this.searchSrv
       .category(id, page)
       .pipe(
-        catchError(err => {
-          this.isError.set(true);
-          throw err;
-        }),
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(res => {
-        if (this.apiSrv.ifSuccess(res, false)) {
-          const {
-            data: { total, articles, keyword },
-          } = res;
-          this.total.set(total);
-          this.articles.set(articles);
-          this.category.set(keyword);
-          this.codeBlockSrv.highlightAllBlock();
-        } else if (res.returnCode === ReturnCode.NotFound) {
-          this.router.navigate(['blog', 'notFound']);
-        } else {
+      .subscribe({
+        next: res => {
+          if (this.apiSrv.ifSuccess(res, false)) {
+            const {
+              data: { total, articles, keyword },
+            } = res;
+            this.total.set(total);
+            this.articles.set(articles);
+            this.category.set(keyword);
+            this.codeBlockSrv.highlightAllBlock();
+          } else if (res.returnCode === ReturnCode.NotFound) {
+            this.router.navigate(['blog', 'notFound']);
+          } else {
+            this.isError.set(true);
+          }
+        },
+        error: () => {
           this.isError.set(true);
-        }
+        },
       });
   }
 
