@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
@@ -18,7 +18,7 @@ import { ApiService } from 'src/app/shared/service/api.service';
   templateUrl: './article-label.component.html',
   styleUrls: ['./article-label.component.scss'],
 })
-export class ArticleLabelComponent {
+export class ArticleLabelComponent implements OnInit {
   open = signal(true);
   articleLabelSrv = inject(ArticleLabelService);
   apiSrv = inject(ApiService);
@@ -26,7 +26,8 @@ export class ArticleLabelComponent {
   isLoading = signal(false);
   isError = signal(false);
   private _destroyRef = inject(DestroyRef);
-  constructor() {
+
+  ngOnInit() {
     this.getArticleLabel();
   }
 
@@ -36,22 +37,23 @@ export class ArticleLabelComponent {
     this.articleLabelSrv
       .getArticleLabel(undefined, cache)
       .pipe(
-        catchError(err => {
-          this.isError.set(true);
-          throw err;
-        }),
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(res => {
-        if (this.apiSrv.ifSuccess(res, false)) {
-          const {
-            data: { labels },
-          } = res;
-          this.labels.set(labels);
-        } else {
+      .subscribe({
+        next: res => {
+          if (this.apiSrv.ifSuccess(res, false)) {
+            const {
+              data: { labels },
+            } = res;
+            this.labels.set(labels);
+          } else {
+            this.isError.set(true);
+          }
+        },
+        error: err => {
           this.isError.set(true);
-        }
+        },
       });
   }
 }
