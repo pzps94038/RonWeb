@@ -43,3 +43,7 @@ jobs:
                 branch: gh-pages
                 folder: dist/RonWeb/browser
                 token: ${{ secrets.TOKEN }}
+            - name: Docker Login
+              run: |
+                  docker build -t RonWeb:$(date +%s) . --no-cache
+                  docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PWD }}
