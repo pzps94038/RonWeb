@@ -26,14 +26,6 @@ jobs:
                   name: TestCoverage
                   path: coverage
                   retention-days: 1
-            - run: npm run prerender
-            - name: Upload build artifact
-              if: github.ref == 'refs/heads/main'
-              uses: actions/upload-artifact@v2
-              with:
-                  name: Prerender
-                  path: dist
-                  retention-days: 1
             - run: npm run build:gitHubPage
               if: github.ref == 'refs/heads/main'
             - name: Deploy to GitHub Pages
@@ -43,7 +35,12 @@ jobs:
                 branch: gh-pages
                 folder: dist/RonWeb/browser
                 token: ${{ secrets.TOKEN }}
-            - name: Docker Login
+            - name: Docker Build
+              if: github.ref == 'refs/heads/main'
               run: |
                   docker build -t ron-web:$(date +%s) . --no-cache
                   docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PWD }}
+            - name: Docker Push
+              if: github.ref == 'refs/heads/main'
+              run: |
+                  docker push your-image-name
