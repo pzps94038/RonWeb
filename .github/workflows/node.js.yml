@@ -38,9 +38,9 @@ jobs:
             - name: Docker Build
               if: github.ref == 'refs/heads/main'
               run: |
-                  docker build -t ron-web:$(date +%s) . --no-cache
+                  docker build -t ${{ secrets.DOCKER_USER }}/ron-web . --no-cache
                   docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PWD }}
             - name: Docker Push
               if: github.ref == 'refs/heads/main'
               run: |
-                  docker push your-image-name
+                  docker push ${{ secrets.DOCKER_USER }}/ron-web
