@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://ronweb-api.zeabur.app/api',
+  baseUrl: 'http://ronwebs.com:8081/api',
   grecaptchaToken: '6Le5DuklAAAAAPCXaSYX2vGmnTaDduUNWPZcq86u',
   shortname: 'ronweb',
 };
