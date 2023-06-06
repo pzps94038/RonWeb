@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseUrl: 'http://ronwebs.com:8081/api',
+  baseUrl: 'https://blog-api.ronwebs.com/api',
   grecaptchaToken: '6Le5DuklAAAAAPCXaSYX2vGmnTaDduUNWPZcq86u',
   shortname: 'ronweb',
 };
