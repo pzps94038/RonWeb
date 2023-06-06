@@ -15,7 +15,7 @@ let urls = [
 
 (async () => {
   const [articles, categorys, labels] = await Promise.all([
-    axios('https://ronweb-api.zeabur.app/api/siteMap/article')
+    axios('https://blog-api.ronwebs.com/api/siteMap/article')
       .then(({ data }) => data)
       .then(({ data }) => data ?? [])
       .then(array => {
@@ -43,7 +43,7 @@ let urls = [
         console.error(error);
         return [];
       }),
-    axios('https://ronweb-api.zeabur.app/api/siteMap/category')
+    axios('https:/blog-api.ronwebs.com/api/siteMap/category')
       .then(({ data }) => data)
       .then(({ data }) => data ?? [])
       .then(array =>
@@ -59,7 +59,7 @@ let urls = [
         console.error(error);
         return [];
       }),
-    axios('https://ronweb-api.zeabur.app/api/siteMap/label')
+    axios('https://blog-api.ronwebs.com/api/siteMap/label')
       .then(({ data }) => data)
       .then(({ data }) => data ?? [])
       .then(array =>
@@ -86,14 +86,14 @@ let urls = [
   const sms = new SitemapAndIndexStream({
     limit: urlsPerSitemap,
     getSitemapStream: i => {
-      const sitemapStream = new SitemapStream({ hostname: 'https://ronweb.zeabur.app' });
+      const sitemapStream = new SitemapStream({ hostname: 'https://blog.ronwebs.com' });
       const path = `./dist/RonWeb/browser/sitemap-${i + 1}.xml`;
       // 每次產生新的 sitemap 檔案時增加計數
       sitemapCount = sitemapCount + 1;
       const ws = sitemapStream.pipe(createWriteStream(resolve(path)));
 
       return [
-        new URL(`sitemap-${i + 1}.xml`, 'https://ronweb.zeabur.app/').toString(),
+        new URL(`sitemap-${i + 1}.xml`, 'https://blog.ronwebs.com/').toString(),
         sitemapStream,
         ws,
       ];
