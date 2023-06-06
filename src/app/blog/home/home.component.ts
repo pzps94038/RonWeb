@@ -73,7 +73,6 @@ export class HomeComponent implements OnInit {
         },
         error: err => {
           this.isError.set(true);
-          console.error(err);
         },
       });
   }

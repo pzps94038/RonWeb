@@ -88,7 +88,7 @@ describe('HomeComponent', () => {
 
   it('測試取得文章', fakeAsync(() => {
     const fake = {
-      returnCode: '00',
+      returnCode: ReturnCode.Success,
       returnMessage: 'success',
       data: {
         total: 10,
@@ -131,10 +131,8 @@ describe('HomeComponent', () => {
   }));
 
   it('測試取得文章有異常錯誤', fakeAsync(() => {
-    // 模拟错误的Observable
     const error = new Error('Test error');
     const errorObservable = throwError(() => error);
-    // 调用要测试的方法
     spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(errorObservable as never);
     component.getArticle();
     expect(component.isError()).toBe(true);
