@@ -1,3 +1,4 @@
+import { DeviceService } from './shared/service/device.service';
 import { ApplicationConfig, APP_INITIALIZER, importProvidersFrom, isDevMode } from '@angular/core';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
@@ -24,13 +25,21 @@ export const appConfig: ApplicationConfig = {
     // App初始化
     {
       provide: APP_INITIALIZER,
-      useFactory: (userSrv: UserService, themeSrv: ThemeService) => () => {
-        const token = userSrv.getToken();
-        const isLogin = !!token;
-        userSrv.isLogin.set(isLogin);
-        themeSrv.initTheme();
-      },
-      deps: [UserService, ThemeService],
+      useFactory:
+        (userSrv: UserService, themeSrv: ThemeService, deviceSrv: DeviceService) => () => {
+          if (deviceSrv.isClient) {
+            window.addEventListener('beforeinstallprompt', event => {
+              // PWA安裝成功
+              event.preventDefault();
+              console.log('👍', 'beforeinstallprompt', event);
+            });
+            const token = userSrv.getToken();
+            const isLogin = !!token;
+            userSrv.isLogin.set(isLogin);
+            themeSrv.initTheme();
+          }
+        },
+      deps: [UserService, ThemeService, DeviceService],
       multi: true,
     },
     provideServiceWorker('ngsw-worker.js', {
