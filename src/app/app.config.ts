@@ -1,4 +1,4 @@
-import { ApplicationConfig, APP_INITIALIZER, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, APP_INITIALIZER, importProvidersFrom, isDevMode } from '@angular/core';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.route';
@@ -7,6 +7,7 @@ import { httpInterceptor } from './shared/api/shared/http.interceptor';
 import { EllipsisPipe } from './shared/pipe/ellipsis.pipe';
 import { UserService } from './shared/service/user.service';
 import { ThemeService } from './shared/service/theme.service';
+import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -32,5 +33,9 @@ export const appConfig: ApplicationConfig = {
       deps: [UserService, ThemeService],
       multi: true,
     },
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
 };

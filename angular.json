@@ -37,7 +37,8 @@
               "src/assets",
               "src/404.html",
               "src/robots.txt",
-              "src/googlee95fc3a69f077c05.html"
+              "src/googlee95fc3a69f077c05.html",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles.scss",
@@ -54,7 +55,9 @@
               "lottie-web",
               "sweetalert2",
               "dayjs"
-            ]
+            ],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -120,7 +123,8 @@
               "src/favicon.ico",
               "src/assets",
               "src/404.html",
-              "src/robots.txt"
+              "src/robots.txt",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles.scss",
