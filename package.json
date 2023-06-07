@@ -30,7 +30,8 @@
     "cypress:open:local": "cypress open --config-file cypress/cypress.dev.ts",
     "cypress:run:local": "cypress run --config-file cypress/cypress.dev.ts",
     "cypress:open:prod": "cypress open --config-file cypress/cypress.prod.ts",
-    "cypress:run:prod": "cypress run --config-file cypress/cypress.prod.ts"
+    "cypress:run:prod": "cypress run --config-file cypress/cypress.prod.ts",
+    "browserslist": "npx browserslist"
   },
   "private": true,
   "dependencies": {
