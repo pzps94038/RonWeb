@@ -28,11 +28,6 @@ export const appConfig: ApplicationConfig = {
       useFactory:
         (userSrv: UserService, themeSrv: ThemeService, deviceSrv: DeviceService) => () => {
           if (deviceSrv.isClient) {
-            window.addEventListener('beforeinstallprompt', event => {
-              // PWA安裝成功
-              event.preventDefault();
-              console.log('👍', 'beforeinstallprompt', event);
-            });
             const token = userSrv.getToken();
             const isLogin = !!token;
             userSrv.isLogin.set(isLogin);

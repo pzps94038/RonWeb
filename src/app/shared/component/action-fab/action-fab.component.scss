@@ -1,0 +1,33 @@
+.floatingButton {
+  .fa {
+    @apply transition-transform duration-500;
+    transform: rotate(0deg);
+  }
+  &.open .fa {
+    transform: rotate(270deg);
+  }
+}
+
+.floatingMenu {
+  @apply absolute bottom-16 right-0 hidden;
+  &.open {
+    animation-name: open;
+    animation-duration: 500ms;
+    @apply block duration-500;
+  }
+  &.close {
+    @apply hidden;
+  }
+  li {
+    @apply w-full list-none my-3;
+  }
+}
+
+@keyframes open {
+  0% {
+    transform: translateY(5%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
