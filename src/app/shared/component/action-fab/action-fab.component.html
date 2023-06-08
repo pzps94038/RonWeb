@@ -1,11 +1,11 @@
 <div class="fixed right-10 bottom-10">
   <span
     class="floatingButton block w-14 h-14 text-center leading-[50px] absolute bottom-0 right-0 border-2 border-solid border-base-content text-base-100 text-base opacity-100 cursor-pointer overflow-hidden bg-base-content rounded-full"
-    [class.open]="open"
-    (click)="toggleMenu()">
-    <i [class.fa-plus]="!open" [class.fa-close]="open" class="fa fa-plus icon-default"></i>
+    [class.open]="open()"
+    (click)="toggleMenu(!open())">
+    <i [class.fa-plus]="!open()" [class.fa-close]="open()" class="fa fa-plus icon-default"></i>
   </span>
-  <ul [class.open]="open" [class.close]="!open" class="floatingMenu">
+  <ul [class.open]="open()" [class.close]="!open()" class="floatingMenu">
     <li>
       <app-toggle-mode />
     </li>
