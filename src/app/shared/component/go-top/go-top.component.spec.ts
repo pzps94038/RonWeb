@@ -18,4 +18,10 @@ describe('GoTopComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('滾動呼叫', () => {
+    const spy = spyOn(window, 'scrollTo');
+    component.goTop();
+    expect(spy).toHaveBeenCalled();
+  });
 });

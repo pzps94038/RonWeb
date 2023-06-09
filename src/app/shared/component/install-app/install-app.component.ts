@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DeviceService } from '../../service/device.service';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
@@ -13,7 +13,7 @@ import { heroArrowDownTray } from '@ng-icons/heroicons/outline';
   styleUrls: ['./install-app.component.scss'],
 })
 export class InstallAppComponent implements OnInit {
-  show = false;
+  show = signal<boolean>(false);
   deferredPrompt?: any;
   deviceSrv = inject(DeviceService);
 
@@ -28,7 +28,7 @@ export class InstallAppComponent implements OnInit {
           window.addEventListener('beforeinstallprompt', event => {
             event.preventDefault();
             this.deferredPrompt = event;
-            this.show = true;
+            this.show.set(true);
           });
         } else {
           // 不支持安装 PWA
@@ -47,9 +47,7 @@ export class InstallAppComponent implements OnInit {
         if (outcome === 'accepted') {
           // 用户已接受安装
           this.deferredPrompt = null;
-          this.show = false;
-        } else {
-          // 用户拒绝安装
+          this.show.set(false);
         }
       }
     }
