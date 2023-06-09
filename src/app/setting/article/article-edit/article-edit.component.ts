@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EditorComponent } from 'src/app/shared/component/form/editor/editor.component';
@@ -11,18 +11,18 @@ import {
 import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-area.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, finalize, forkJoin, map, switchMap, tap } from 'rxjs';
-import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
-import { UpdateArticleRequest } from 'src/app/shared/api/article/article.model';
-import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
 import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model';
-import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
 import { MultipleSelectComponent } from 'src/app/shared/component/form/multiple-select/multiple-select.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { UserService } from 'src/app/shared/service/user.service';
+import { AdminArticleService } from 'src/app/shared/api/admin-article/admin-article.service';
+import { UpdateArticleRequest } from 'src/app/shared/api/admin-article/admin-article.model';
+import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
+import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
 
 @Component({
   selector: 'app-article-edit',
@@ -44,9 +44,9 @@ export class ArticleEditComponent {
   apiSrv = inject(ApiService);
   userSrv = inject(UserService);
   swalSrv = inject(SwalService);
-  articleCategorySrv = inject(ArticleCategoryService);
-  articleLabelSrv = inject(ArticleLabelService);
-  articleSrv = inject(ArticleService);
+  articleCategorySrv = inject(AdminArticleCategoryService);
+  articleLabelSrv = inject(AdminArticleLabelService);
+  articleSrv = inject(AdminArticleService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   isLoading = signal(false);
@@ -67,7 +67,7 @@ export class ArticleEditComponent {
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
-    const category$ = this.articleCategorySrv.getArticleCategory(undefined, false).pipe(
+    const category$ = this.articleCategorySrv.getArticleCategory(undefined).pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { categorys } }) => categorys),
       map(array =>
@@ -90,7 +90,7 @@ export class ArticleEditComponent {
         this.categoryOptions.set(options);
       }),
     );
-    const label$ = this.articleLabelSrv.getArticleLabel(undefined, false).pipe(
+    const label$ = this.articleLabelSrv.getArticleLabel(undefined).pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { labels } }) => labels),
       map(array =>
@@ -108,7 +108,7 @@ export class ArticleEditComponent {
         tap(() => this.isLoading.set(true)),
         filter(param => !!param.get('id')),
         map(param => param.get('id')!),
-        switchMap(id => this.articleSrv.getArticleById(parseInt(id), false)),
+        switchMap(id => this.articleSrv.getArticleById(parseInt(id))),
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(data => {

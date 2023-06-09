@@ -1,11 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  OnInit,
-  inject,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from 'src/app/shared/component/form/input/input.component';
 import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-area.component';
@@ -20,8 +13,6 @@ import {
 } from 'src/app/shared/component/form/select/select.component';
 import { filter, finalize, forkJoin, map, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ArticleService } from 'src/app/shared/api/article/article.service';
-import { CreateArticleRequest } from 'src/app/shared/api/article/article.model';
 import { Router } from '@angular/router';
 import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
 import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model';
@@ -30,6 +21,10 @@ import { MultipleSelectComponent } from 'src/app/shared/component/form/multiple-
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { UserService } from 'src/app/shared/service/user.service';
+import { AdminArticleService } from 'src/app/shared/api/admin-article/admin-article.service';
+import { CreateArticleRequest } from 'src/app/shared/api/admin-article/admin-article.model';
+import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
+import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
 
 @Component({
   selector: 'app-article-create',
@@ -51,9 +46,9 @@ export class ArticleCreateComponent implements OnInit {
   apiSrv = inject(ApiService);
   userSrv = inject(UserService);
   swalSrv = inject(SwalService);
-  articleCategorySrv = inject(ArticleCategoryService);
-  articleLabelSrv = inject(ArticleLabelService);
-  articleSrv = inject(ArticleService);
+  articleCategorySrv = inject(AdminArticleCategoryService);
+  articleLabelSrv = inject(AdminArticleLabelService);
+  articleSrv = inject(AdminArticleService);
   router = inject(Router);
   isLoading = signal(false);
   createIsLoading = signal(false);
@@ -72,7 +67,7 @@ export class ArticleCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading.set(true);
-    const category$ = this.articleCategorySrv.getArticleCategory(undefined, false).pipe(
+    const category$ = this.articleCategorySrv.getArticleCategory(undefined).pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { categorys } }) => categorys),
       map(array =>
@@ -95,7 +90,7 @@ export class ArticleCreateComponent implements OnInit {
         this.categoryOptions.set(options);
       }),
     );
-    const label$ = this.articleLabelSrv.getArticleLabel(undefined, false).pipe(
+    const label$ = this.articleLabelSrv.getArticleLabel(undefined).pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { labels } }) => labels),
       map(array =>

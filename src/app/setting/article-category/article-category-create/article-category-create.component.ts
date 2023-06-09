@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { filter, finalize, switchMap } from 'rxjs';
-import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { Router } from '@angular/router';
 import { InputComponent } from '../../../shared/component/form/input/input.component';
-import { CreateArticleCategoryRequest } from 'src/app/shared/api/article-category/article-category.model';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { UserService } from 'src/app/shared/service/user.service';
+import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
+import { CreateArticleCategoryRequest } from 'src/app/shared/api/admin-category/admin-article-category.model';
 
 @Component({
   selector: 'app-article-category-create',
@@ -22,7 +22,7 @@ export class ArticleCategoryCreateComponent {
   apiSrv = inject(ApiService);
   userSrv = inject(UserService);
   swalSrv = inject(SwalService);
-  articleCategorySrv = inject(ArticleCategoryService);
+  articleCategorySrv = inject(AdminArticleCategoryService);
   router = inject(Router);
   isLoading = signal(false);
   private _destroyRef = inject(DestroyRef);

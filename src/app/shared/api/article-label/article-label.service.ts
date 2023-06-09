@@ -36,33 +36,4 @@ export class ArticleLabelService {
     };
     return this.transferSrv.transfer(`labelList-${page}`, fn, cache);
   }
-
-  getArticleLabelById(id: number, cache: boolean = true) {
-    const fn = () => {
-      if (cache && this.articleLabelByIdMap.has(id)) {
-        return this.articleLabelByIdMap.get(id)!;
-      }
-      const label$ = this.http
-        .get<GetArticleLabelByIdResponse>(`${environment.baseUrl}/articleLabel/${id}`)
-        .pipe(shareReplay());
-      this.articleLabelByIdMap.set(id, label$);
-      return label$;
-    };
-    return this.transferSrv.transfer(`label-${id}`, fn, cache);
-  }
-
-  updateArticleLabel(req: UpdateArticleLabelRequest) {
-    return this.http.patch<BaseMessageResponse>(
-      `${environment.baseUrl}/articleLabel/${req.labelId}`,
-      req,
-    );
-  }
-
-  createArticleLabel(req: CreateArticleLabelRequest) {
-    return this.http.post<BaseMessageResponse>(`${environment.baseUrl}/articleLabel`, req);
-  }
-
-  deleteArticleLabel(id: number) {
-    return this.http.delete<BaseMessageResponse>(`${environment.baseUrl}/articleLabel/${id}`);
-  }
 }

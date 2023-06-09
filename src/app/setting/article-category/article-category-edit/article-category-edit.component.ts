@@ -4,15 +4,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { tap, filter, map, switchMap, finalize } from 'rxjs';
-import {
-  ArticleCategory,
-  UpdateArticleCategoryRequest,
-} from 'src/app/shared/api/article-category/article-category.model';
+import { ArticleCategory } from 'src/app/shared/api/article-category/article-category.model';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { InputComponent } from '../../../shared/component/form/input/input.component';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { UserService } from 'src/app/shared/service/user.service';
+import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
+import { UpdateArticleCategoryRequest } from 'src/app/shared/api/admin-category/admin-article-category.model';
 
 @Component({
   selector: 'app-article-category-edit',
@@ -25,7 +24,7 @@ export class ArticleCategoryEditComponent {
   apiSrv = inject(ApiService);
   userSrv = inject(UserService);
   swalSrv = inject(SwalService);
-  articleCategorySrv = inject(ArticleCategoryService);
+  articleCategorySrv = inject(AdminArticleCategoryService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   isLoading = signal(false);
@@ -45,7 +44,7 @@ export class ArticleCategoryEditComponent {
         map(param => param.get('id')!),
         filter(id => !isNaN(parseInt(id))),
         map(id => parseInt(id)),
-        switchMap(id => this.articleCategorySrv.getArticleCategoryById(id, false)),
+        switchMap(id => this.articleCategorySrv.getArticleCategoryById(id)),
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(({ categoryId, categoryName }) => {

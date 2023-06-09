@@ -10,6 +10,7 @@ import { ArticleLabelService } from 'src/app/shared/api/article-label/article-la
 import { CreateArticleLabelRequest } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { UserService } from 'src/app/shared/service/user.service';
+import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
 
 @Component({
   selector: 'app-article-label-create',
@@ -22,7 +23,7 @@ export class ArticleLabelCreateComponent {
   apiSrv = inject(ApiService);
   userSrv = inject(UserService);
   swalSrv = inject(SwalService);
-  articleLabelSrv = inject(ArticleLabelService);
+  articleLabelSrv = inject(AdminArticleLabelService);
   router = inject(Router);
   isLoading = signal(false);
   private _destroyRef = inject(DestroyRef);
