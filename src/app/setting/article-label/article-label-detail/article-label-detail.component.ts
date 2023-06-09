@@ -2,16 +2,16 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { catchError, finalize, filter, switchMap } from 'rxjs';
+import { finalize, filter, switchMap } from 'rxjs';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
 import { heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';
 import { DayJsPipe } from 'src/app/shared/pipe/day-js.pipe';
-import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
 import { ArticleLabels } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
+import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
 
 @Component({
   selector: 'app-article-label-detail',
@@ -29,7 +29,7 @@ import { ApiService } from 'src/app/shared/service/api.service';
   styleUrls: ['./article-label-detail.component.scss'],
 })
 export class ArticleLabelDetailComponent {
-  articleLabelSrv = inject(ArticleLabelService);
+  articleLabelSrv = inject(AdminArticleLabelService);
   apiSrv = inject(ApiService);
   swalSrv = inject(SwalService);
   route = inject(ActivatedRoute);
@@ -54,7 +54,7 @@ export class ArticleLabelDetailComponent {
     this.isError.set(false);
     this.isLoading.set(true);
     this.articleLabelSrv
-      .getArticleLabel(page, false)
+      .getArticleLabel(page)
       .pipe(
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),

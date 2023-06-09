@@ -1,7 +1,12 @@
 import { Observable, shareReplay } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { GetArticleByIdResponse, GetArticleResponse } from './article.model';
+import {
+  CreateArticleRequest,
+  GetArticleByIdResponse,
+  GetArticleResponse,
+  UpdateArticleRequest,
+} from './admin-article.model';
 import { environment } from 'src/environments/environment';
 import { BaseMessageResponse } from '../shared/shared.model';
 import { TransferService } from '../../service/transfer.service';
@@ -9,10 +14,9 @@ import { TransferService } from '../../service/transfer.service';
 @Injectable({
   providedIn: 'root',
 })
-export class ArticleService {
+export class AdminArticleService {
   http = inject(HttpClient);
   transferSrv = inject(TransferService);
-  articleByIdMap = new Map<undefined | number, Observable<GetArticleByIdResponse>>();
 
   /**
    * 取得文章列表
@@ -27,7 +31,7 @@ export class ArticleService {
     if (keyword) {
       params = params.append('keyword', keyword);
     }
-    return this.http.get<GetArticleResponse>(`${environment.baseUrl}/article`, {
+    return this.http.get<GetArticleResponse>(`${environment.baseUrl}/adminArticle`, {
       params,
     });
   }
@@ -37,29 +41,37 @@ export class ArticleService {
    * @param id
    * @returns
    */
-  getArticleById(id: number, cache: boolean = true) {
-    const fn = () => {
-      if (cache && this.articleByIdMap.has(id)) {
-        return this.articleByIdMap.get(id)!;
-      }
-      const article$ = this.http
-        .get<GetArticleByIdResponse>(`${environment.baseUrl}/article/${id}`)
-        .pipe(shareReplay());
-      this.articleByIdMap.set(id, article$);
-      return article$;
-    };
-    return this.transferSrv.transfer(`article-${id}`, fn, cache);
+  getArticleById(id: number) {
+    return this.http.get<GetArticleByIdResponse>(`${environment.baseUrl}/adminArticle/${id}`);
   }
 
   /**
-   * 更新文章瀏覽次數
+   * 創建文章
+   * @param data
+   * @returns
+   */
+  createArticle(data: CreateArticleRequest) {
+    return this.http.post<BaseMessageResponse>(`${environment.baseUrl}/adminArticle`, data);
+  }
+
+  /**
+   * 更新文章
+   * @param data
+   * @returns
+   */
+  updateArticle(data: UpdateArticleRequest) {
+    return this.http.patch<BaseMessageResponse>(
+      `${environment.baseUrl}/adminArticle/${data.articleId}`,
+      data,
+    );
+  }
+
+  /**
+   * 刪除文章
    * @param id
    * @returns
    */
-  updateArticleViews(id: number) {
-    return this.http.patch<BaseMessageResponse>(
-      `${environment.baseUrl}/article/updateArticleViews/${id}`,
-      {},
-    );
+  deleteArticle(id: number) {
+    return this.http.delete<BaseMessageResponse>(`${environment.baseUrl}/adminArticle/${id}`);
   }
 }

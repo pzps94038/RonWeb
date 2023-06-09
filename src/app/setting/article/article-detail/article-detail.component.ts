@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
@@ -8,12 +8,12 @@ import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';
 import { DayJsPipe } from 'src/app/shared/pipe/day-js.pipe';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, finalize, filter, switchMap } from 'rxjs';
+import { finalize, filter, switchMap } from 'rxjs';
 import { Articles } from 'src/app/shared/api/article/article.model';
-import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { InputComponent } from 'src/app/shared/component/form/input/input.component';
+import { AdminArticleService } from 'src/app/shared/api/admin-article/admin-article.service';
 
 @Component({
   selector: 'app-article-detail',
@@ -34,7 +34,7 @@ import { InputComponent } from 'src/app/shared/component/form/input/input.compon
   styleUrls: ['./article-detail.component.scss'],
 })
 export class ArticleDetailComponent {
-  articleSrv = inject(ArticleService);
+  articleSrv = inject(AdminArticleService);
   apiSrv = inject(ApiService);
   swalSrv = inject(SwalService);
   route = inject(ActivatedRoute);

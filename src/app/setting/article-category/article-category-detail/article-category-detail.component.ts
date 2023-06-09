@@ -12,6 +12,7 @@ import { heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { DayJsPipe } from '../../../shared/pipe/day-js.pipe';
 import { ErrorComponent } from '../../../shared/component/error/error.component';
 import { ApiService } from 'src/app/shared/service/api.service';
+import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
 
 @Component({
   selector: 'app-article-category-detail',
@@ -29,7 +30,7 @@ import { ApiService } from 'src/app/shared/service/api.service';
   ],
 })
 export class ArticleCategoryDetailComponent {
-  articleCategorySrv = inject(ArticleCategoryService);
+  articleCategorySrv = inject(AdminArticleCategoryService);
   apiSrv = inject(ApiService);
   swalSrv = inject(SwalService);
   route = inject(ActivatedRoute);
@@ -54,7 +55,7 @@ export class ArticleCategoryDetailComponent {
     this.isError.set(false);
     this.isLoading.set(true);
     this.articleCategorySrv
-      .getArticleCategory(page, false)
+      .getArticleCategory(page)
       .pipe(
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),

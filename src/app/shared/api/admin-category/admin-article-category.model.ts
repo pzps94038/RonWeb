@@ -13,8 +13,21 @@ export type ArticleCategory = {
   createDate: string;
 };
 
+export type GetArticleCategoryByIdResponse = BaseResponse<ArticleCategory>;
+
 export type ArticleCategorys = ArticleCategory[];
 
 export type Category = Omit<ArticleCategory, 'createDate'>;
 
 export type Categorys = Category[];
+
+export type CreateArticleCategoryRequest = {
+  categoryName: string;
+  userId: number;
+};
+
+export type UpdateArticleCategoryRequest = {
+  categoryId: number;
+  categoryName: string;
+  userId: number;
+};
