@@ -28,33 +28,30 @@ export class GiscusComponent implements OnInit, AfterViewInit, OnDestroy {
   darkMode$ = toObservable(this.themeSrv.darkMode);
   private _destroy$ = new Subject<any>();
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationStart),
         takeUntil(this._destroy$),
       )
-      .subscribe(() => {
-        this.elementRef.nativeElement.innerHTML = '';
-      });
+      .subscribe(() => (this.elementRef.nativeElement.innerHTML = ''));
 
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
         takeUntil(this._destroy$),
       )
-      .subscribe(() => {
-        this.generateComment();
-      });
+      .subscribe(() => this.generateComment());
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     this.generateComment();
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this._destroy$.next(null);
     this._destroy$.complete();
+    this.elementRef.nativeElement.innerHTML = '';
   }
 
   generateComment() {
