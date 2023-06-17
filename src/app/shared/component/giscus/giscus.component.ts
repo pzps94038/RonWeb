@@ -62,7 +62,8 @@ export class GiscusComponent implements OnInit, AfterViewInit, OnDestroy {
     this.darkMode$.pipe(takeUntil(this._destroy$)).subscribe(darkMode => {
       this.elementRef.nativeElement.innerHTML = '';
       const scriptTag = document.createElement('script');
-      scriptTag.setAttribute('src', 'https://giscus.app/client.js');
+      const time = new Date().getTime();
+      scriptTag.setAttribute('src', `https://giscus.app/client.js?t=${time}`);
       scriptTag.setAttribute('data-repo', 'pzps94038/RonWeb');
       scriptTag.setAttribute('data-repo-id', 'R_kgDOJU7i_Q');
       scriptTag.setAttribute('data-category', 'Announcements');
