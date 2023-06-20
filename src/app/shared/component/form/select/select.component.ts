@@ -15,7 +15,6 @@ export type Options = Option[];
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
   providers: [CONTROL_VALUE_ACCESSOR(SelectComponent)],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectComponent extends BasicComponent {
   @Input() options: Options = [];

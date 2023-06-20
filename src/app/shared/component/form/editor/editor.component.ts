@@ -27,7 +27,6 @@ import { ApiService } from 'src/app/shared/service/api.service';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
   providers: [CONTROL_VALUE_ACCESSOR(EditorComponent)],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorComponent extends BasicComponent {
   editor = signal<CustomEditor>(editor as unknown as CustomEditor);

@@ -10,7 +10,6 @@ import { BasicComponent, CONTROL_VALUE_ACCESSOR } from '../base/base.component';
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
   providers: [CONTROL_VALUE_ACCESSOR(InputComponent)],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent extends BasicComponent {
   @Input() type: string = 'text';
