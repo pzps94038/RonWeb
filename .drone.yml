@@ -8,7 +8,7 @@ steps:
   image: node
   commands:
   - apt-get update
-  - apt-get install -y chromium-browser
+  - apt-get -y install google-chrome-stable
   - npm ci
   - npm run test-ci
 trigger:
