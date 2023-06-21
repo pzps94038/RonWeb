@@ -43,7 +43,12 @@ steps:
     port: 22
     command_timeout: 2m
     script:
-      - echo "Hello World"
+      - docker stop ron-web || true && \
+        docker rm ron-web || true && \
+        docker pull pzps94038/ron-web:latest && \
+        docker run -d -p 83:80 --name ron-web --restart=always \
+        -e PORT=80 \
+        pzps94038/ron-web:latest
   # when:
   #   branch:
   #   - main
