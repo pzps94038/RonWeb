@@ -20,17 +20,30 @@ steps:
 #   commands:
 #     - echo build
 #     - npm run build
-- name: docker
-  image: plugins/docker
+# - name: docker
+#   image: plugins/docker
+#   settings:
+#     repo: pzps94038/ron-web
+#     username: pzps94038
+#     password: 
+#       from_secret: DOCKER_PWD
+#     debug: true
+#     tags:
+#     - latest
+#     - main
+- name: ssh
+  image: appleboy/drone-ssh
   settings:
-    repo: pzps94038/ron-web
-    username: pzps94038
+    host: 
+      from_secret: SCP_HOST
+    username: 
+      from_secret: SCP_USER
     password: 
-      from_secret: DOCKER_PWD
-    debug: true
-    tags:
-    - latest
-    - main
+      from_secret: SCP_PWD
+    port: 22
+    command_timeout: 2m
+    script:
+      - echo "Hello World"
   # when:
   #   branch:
   #   - main
