@@ -2,13 +2,10 @@ kind: pipeline
 name: default
 
 steps:
-- name: install
-  image: node
+- name: test
+  image: weboaks/node-karma-protractor-chrome:alpine-root
   commands:
     - npm ci
-- name: unit-test
-  image: node
-  commands:
     - npm run test-ci
     
 trigger:
