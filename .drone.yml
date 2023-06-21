@@ -20,18 +20,15 @@ steps:
   commands:
     - echo build
     - npm run build
-- name: deploy
-  image: appleboy/drone-ssh
+- name: docker
+  image: plugins/docker
   settings:
-    host:
-      - ${SCP_HOST}
-    username: ${SCP_USER}
-    password:
-      from_secret: ${SCP_PWD}
-    port: 22
-    command_timeout: 2m
-    script:
-      - echo "Hello World"
+    username: pzps94038
+    password: 
+      from_secret: DOCKER_PWD
+    tags:
+    - latest
+    - main
   when:
     branch:
     - main
