@@ -30,7 +30,7 @@ steps:
     username: pzps94038
     password: 
       from_secret: DOCKER_PWD
-    debug: true
+    no_cache: true
     tags:
     - latest
     - main
