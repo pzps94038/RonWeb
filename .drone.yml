@@ -9,28 +9,27 @@ steps:
   - apt list --installed | grep google-chrome-stable
   when:
     status: failure
-  failure:
     steps:
-    - name: install-chrome
-      environment:
-        CHROME_BIN: /usr/bin/google-chrome-stable
-      image: node
-      commands:
-      - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-      - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-      - apt-get update && apt-get install -yq google-chrome-stable
+      - name: install-chrome
+        environment:
+          CHROME_BIN: /usr/bin/google-chrome-stable
+        image: node
+        commands:
+          - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+          - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+          - apt-get update && apt-get install -yq google-chrome-stable
 - name: test
   environment:
     CHROME_BIN: /usr/bin/google-chrome-stable
   image: node
   commands:
-  - npm ci
-  - npm run test-ci
+    - npm ci
+    - npm run test-ci
 trigger:
   branch:
-  - main
-  - develop
+    - main
+    - develop
   event:
-  - push
-  - pull_request
-  - tag
+    - push
+    - pull_request
+    - tag
