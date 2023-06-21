@@ -7,8 +7,9 @@ steps:
     CHROME_BIN: /usr/bin/google-chrome-stable
   image: node
   commands:
-  - apt-get update
-  - apt-get -y install google-chrome-stable
+  - apt-get install -y wget
+  - wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - apt-get install ./google-chrome-stable_current_amd64.deb
   - npm ci
   - npm run test-ci
 trigger:
