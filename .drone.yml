@@ -3,6 +3,7 @@ name: default
 
 steps:
   - name: check-chrome
+    image: node
     commands:
       - apt list --installed | grep google-chrome-stable
     when:
@@ -10,7 +11,7 @@ steps:
         - success
         - failure
   - name: install-chrome
-    image: drone/drone-runner-exec
+    image: node
     commands:
       - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
       - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
@@ -20,7 +21,7 @@ steps:
       status:
         - failure
   - name: set-chrome-env
-    image: drone/drone-runner-exec
+    image: node
     commands:
       - export CHROME_BIN=/usr/bin/google-chrome-stable
     when:
