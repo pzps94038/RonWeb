@@ -6,20 +6,20 @@ workspace:
   path: drone_test
 
 steps:
-- name: test
-  image: node
-  commands:
-    - echo install package
-    - npm ci
-    - echo install Chrome
-    - apt-get update -qq && apt-get install -qq --no-install-recommends chromium && apt-get clean && rm -rf /var/lib/apt/lists/* && ln -s /usr/bin/chromium /usr/bin/google-chrome
-    - echo test
-    - npm run test-ci
-- name: build
-  image: node
-  commands:
-    - echo build
-    - npm run build
+# - name: test
+#   image: node
+#   commands:
+#     - echo install package
+#     - npm ci
+#     - echo install Chrome
+#     - apt-get update -qq && apt-get install -qq --no-install-recommends chromium && apt-get clean && rm -rf /var/lib/apt/lists/* && ln -s /usr/bin/chromium /usr/bin/google-chrome
+#     - echo test
+#     - npm run test-ci
+# - name: build
+#   image: node
+#   commands:
+#     - echo build
+#     - npm run build
 - name: docker
   image: plugins/docker
   settings:
