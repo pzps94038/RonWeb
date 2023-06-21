@@ -7,7 +7,7 @@ steps:
   commands:
   - npm ci
 trigger:
- branch:
+  branch:
   - main
   - develop
   event:
