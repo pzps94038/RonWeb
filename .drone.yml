@@ -23,6 +23,7 @@ steps:
 - name: docker
   image: plugins/docker
   settings:
+    repo: pzps94038/ron-web
     username: pzps94038
     password: 
       from_secret: DOCKER_PWD
