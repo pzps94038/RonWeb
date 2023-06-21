@@ -2,34 +2,31 @@ kind: pipeline
 name: default
 
 steps:
-  - name: check-chrome
-    image: node
-    commands:
-      - apt list --installed | grep google-chrome-stable
-    when:
-      status:
-        - success
-        - failure
-    success:
-      steps:
-        - name: set-chrome-env
-          image: node
-          commands:
-            - export CHROME_BIN=/usr/bin/google-chrome-stable
-    failure:
-      steps:
-        - name: install-chrome
-          image: node
-          commands:
-            - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-            - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-            - apt-get update && apt-get install -yq google-chrome-stable
-            - export CHROME_BIN=/usr/bin/google-chrome-stable
-  - name: test
-    image: node
-    commands:
-      - npm ci
-      - npm run test-ci
+- name: check-chrome
+  environment:
+    CHROME_BIN: /usr/bin/google-chrome-stable
+  commands:
+  - apt list --installed | grep google-chrome-stable
+  when:
+    status: failure
+    steps:
+      - name: install-chrome
+        environment:
+          CHROME_BIN: /usr/bin/google-chrome-stable
+        image: node
+        commands:
+          - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+          - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+          - apt-get update && apt-get install -yq google-chrome-stable
+- name: set-chrome-env
+  image: node
+  commands:
+    - export CHROME_BIN=/usr/bin/google-chrome-stable
+- name: test
+  image: node
+  commands:
+    - npm ci
+    - npm run test-ci
 trigger:
   branch:
     - main
