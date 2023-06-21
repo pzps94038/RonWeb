@@ -1,6 +1,10 @@
 kind: pipeline
 name: unit-test
 
+workspace:
+  base: /src
+  path: drone_test
+
 steps:
 - name: test
   image: node
