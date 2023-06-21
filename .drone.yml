@@ -6,11 +6,11 @@ steps:
   image: node
   commands:
   - npm ci
-trigger:
-  branch:
-  - main
-  - develop
-  event:
-  - push
-  - pull_request
-  - tag
+# trigger:
+#   branch:
+#   - main
+#   - develop
+#   event:
+#   - push
+#   - pull_request
+#   - tag
