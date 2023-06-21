@@ -1,3 +1,4 @@
+---
 kind: pipeline
 name: default
 
@@ -46,3 +47,53 @@ trigger:
     - push
     - pull_request
     - tag
+---
+kind: pipeline
+name: Test
+
+workspace:
+  base: /src
+  path: drone_test
+
+steps:
+- name: test
+  image: node
+  commands:
+    - echo install package
+    - npm ci
+    - echo install Chrome
+    - apt-get update -qq && apt-get install -qq --no-install-recommends chromium && apt-get clean && rm -rf /var/lib/apt/lists/* && ln -s /usr/bin/chromium /usr/bin/google-chrome
+    - echo test
+    - npm run test-ci
+- name: build
+  image: node
+  commands:
+    - echo build
+    - npm run build
+- name: deploy
+  image: appleboy/drone-ssh
+  settings:
+    host:
+      - ${SCP_HOST}
+    username: ${SCP_USER}
+    password:
+      from_secret: ${SCP_PWD}
+    port: 22
+    command_timeout: 2m
+    script:
+      - echo "Hello World"
+  when:
+    branch:
+    - main
+    event:
+    - push
+    
+trigger:
+  branch:
+    - main
+    - develop
+  event:
+    - push
+    - pull_request
+    - tag
+---
