@@ -29,11 +29,11 @@ steps:
     tags:
     - latest
     - main
-  when:
-    branch:
-    - main
-    event:
-    - push
+  # when:
+  #   branch:
+  #   - main
+  #   event:
+  #   - push
     
 trigger:
   branch:
