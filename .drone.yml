@@ -26,6 +26,7 @@ steps:
     username: pzps94038
     password: 
       from_secret: DOCKER_PWD
+    debug: true
     tags:
     - latest
     - main
