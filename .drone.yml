@@ -3,6 +3,8 @@ name: default
 
 steps:
 - name: test
+  environment:
+    CHROME_BIN: /usr/bin/google-chrome-stable
   image: node
   commands:
   - npm ci
