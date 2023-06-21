@@ -29,3 +29,24 @@ trigger:
     - push
     - pull_request
     - tag
+
+# deploy
+kind: pipeline
+name: deploy
+
+workspace:
+  base: /src
+  path: drone_test
+
+steps:
+- name: devploy
+  image: node
+  commands:
+    - echo devploy
+    
+trigger:
+  branch:
+    - main
+  event:
+    - push
+
