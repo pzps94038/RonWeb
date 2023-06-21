@@ -6,32 +6,40 @@ workspace:
   path: drone_test
 
 steps:
-# - name: test
-#   image: node
-#   commands:
-#     - echo install package
-#     - npm ci
-#     - echo install Chrome
-#     - apt-get update -qq && apt-get install -qq --no-install-recommends chromium && apt-get clean && rm -rf /var/lib/apt/lists/* && ln -s /usr/bin/chromium /usr/bin/google-chrome
-#     - echo test
-#     - npm run test-ci
-# - name: build
-#   image: node
-#   commands:
-#     - echo build
-#     - npm run build
-# - name: docker
-#   image: plugins/docker
-#   settings:
-#     repo: pzps94038/ron-web
-#     username: pzps94038
-#     password: 
-#       from_secret: DOCKER_PWD
-#     debug: true
-#     tags:
-#     - latest
-#     - main
-- name: ssh
+- name: install-package
+  image: node:16
+  commands:
+    - echo install package
+    - npm ci
+- name: test
+  image: node:16
+  commands:
+    - echo install Chrome
+    - apt-get update -qq && apt-get install -qq --no-install-recommends chromium && apt-get clean && rm -rf /var/lib/apt/lists/* && ln -s /usr/bin/chromium /usr/bin/google-chrome
+    - echo test
+    - npm run test-ci
+- name: build
+  image: node
+  commands:
+    - echo build
+    - npm run build
+- name: docker build && push
+  image: plugins/docker
+  settings:
+    repo: pzps94038/ron-web
+    username: pzps94038
+    password: 
+      from_secret: DOCKER_PWD
+    debug: true
+    tags:
+    - latest
+    - main
+  when:
+    branch:
+    - main
+    event:
+    - push
+- name: deploy
   image: appleboy/drone-ssh
   settings:
     host: 
@@ -44,11 +52,11 @@ steps:
     command_timeout: 2m
     script:
       - docker stop ron-web || true && docker rm ron-web || true && docker pull pzps94038/ron-web:latest && docker run -d -p 83:80 --name ron-web --restart=always -e PORT=80 pzps94038/ron-web:latest
-  # when:
-  #   branch:
-  #   - main
-  #   event:
-  #   - push
+  when:
+    branch:
+    - main
+    event:
+    - push
     
 trigger:
   branch:
