@@ -14,7 +14,7 @@ steps:
 - name: build
   image: node
   commands:
-    - build
+    - echo build
     - npm run build
     
 trigger:
