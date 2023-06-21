@@ -15,7 +15,7 @@ steps:
         - name: set-chrome-env
           image: drone/drone-runner-exec
           commands:
-            - export CHROME_BIN=usr/bin/google-chrome-stable
+            - export CHROME_BIN=/usr/bin/google-chrome-stable
     failure:
       steps:
         - name: install-chrome
@@ -24,7 +24,7 @@ steps:
             - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
             - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
             - apt-get update && apt-get install -yq google-chrome-stable
-            - export CHROME_BIN=usr/bin/google-chrome-stable
+            - export CHROME_BIN=/usr/bin/google-chrome-stable
   - name: test
     image: node
     commands:
