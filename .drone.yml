@@ -3,7 +3,6 @@ name: default
 
 steps:
   - name: check-chrome
-    image: drone/drone-runner-exec
     commands:
       - apt list --installed | grep google-chrome-stable
     when:
