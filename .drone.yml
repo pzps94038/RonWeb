@@ -2,16 +2,13 @@ kind: pipeline
 name: default
 
 steps:
-- name: install-chrome
-  image: ubuntu
-  commands:
-  - apt-get update
-  - apt-get install -y google-chrome-stable
 - name: test
   environment:
     CHROME_BIN: /usr/bin/google-chrome-stable
   image: node
   commands:
+  - apt-get update
+  - apt-get install -y chromium-browser
   - npm ci
   - npm run test-ci
 trigger:
