@@ -10,7 +10,6 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './text-area.component.html',
   styleUrls: ['./text-area.component.scss'],
   providers: [CONTROL_VALUE_ACCESSOR(TextAreaComponent)],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextAreaComponent extends BasicComponent {
   @Input() placeholder: string = '';
