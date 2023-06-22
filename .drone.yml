@@ -6,58 +6,127 @@ workspace:
   path: drone_test
 
 steps:
-- name: install-package
-  image: node:16
-  commands:
-    - echo install package
-    - npm ci
-- name: test
-  image: node:16
-  commands:
-    - echo install Chrome
-    - apt-get update -qq && apt-get install -qq --no-install-recommends chromium && apt-get clean && rm -rf /var/lib/apt/lists/* && ln -s /usr/bin/chromium /usr/bin/google-chrome
-    - echo test
-    - npm run test-ci
-- name: build
-  image: node
-  commands:
-    - echo build
-    - npm run build
-- name: docker build && push
-  image: plugins/docker
-  settings:
-    repo: pzps94038/ron-web
-    username: pzps94038
-    password: 
-      from_secret: DOCKER_PWD
-    no_cache: true
-    tags:
-    - latest
-    - main
-  when:
-    branch:
-    - main
-    event:
-    - push
-- name: deploy
-  image: appleboy/drone-ssh
-  settings:
-    host: 
-      from_secret: SCP_HOST
-    username: 
-      from_secret: SCP_USER
-    password: 
-      from_secret: SCP_PWD
-    port: 22
-    command_timeout: 2m
-    script:
-      - docker stop ron-web || true && docker rm ron-web || true && docker pull pzps94038/ron-web:latest && docker run -d -p 83:80 --name ron-web --restart=always -e PORT=80 pzps94038/ron-web:latest
-  when:
-    branch:
-    - main
-    event:
-    - push
-    
+  - name: install-package
+    image: node:16
+    commands:
+      - echo install package
+      - npm ci
+  - name: test
+    image: node:16
+    commands:
+      - echo install Chrome
+      - apt-get update -qq && apt-get install -qq --no-install-recommends chromium && apt-get clean && rm -rf /var/lib/apt/lists/* && ln -s /usr/bin/chromium /usr/bin/google-chrome
+      - echo test
+      - npm run test-ci
+  - name: build
+    image: node
+    commands:
+      - echo build
+      - npm run build
+  - name: zip
+    image: node:16
+    commands:
+      - apt-get update && apt-get -y install zip
+      - zip -r RonWeb.zip dist coverage
+    when:
+      branch:
+        - main
+      event:
+        - push
+  - name: artifact
+    image: appleboy/drone-scp
+    settings:
+      host:
+        from_secret: SCP_HOST
+      username:
+        from_secret: SCP_USER
+      password:
+        from_secret: SCP_PWD
+      port: 22
+      overwrite: true
+      rm: true
+      target: /file-server/RonWeb
+      source: RonWeb.zip
+    when:
+      branch:
+        - main
+      event:
+        - push
+  - name: artifact upload finish
+    image: node:16
+    commands:
+      - echo -e "\n
+        ====================================================================\n
+        ✅ fileUpload artifact in https://file-server.ronwebs.com/RonWeb\n
+        ===================================================================="
+    when:
+      branch:
+        - main
+      event:
+        - push
+  - name: docker build && push
+    image: plugins/docker
+    settings:
+      repo: pzps94038/ron-web
+      username: pzps94038
+      password:
+        from_secret: DOCKER_PWD
+      no_cache: true
+      tags:
+        - latest
+        - main
+    when:
+      branch:
+        - main
+      event:
+        - push
+  - name: deploy
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: SCP_HOST
+      username:
+        from_secret: SCP_USER
+      password:
+        from_secret: SCP_PWD
+      port: 22
+      command_timeout: 2m
+      script:
+        - echo ======開始部署=======
+        - docker stop ron-web || true &&
+          docker rm ron-web || true &&
+          docker pull pzps94038/ron-web:latest &&
+          docker run -d -p 83:80 --name ron-web --restart=always
+          -e PORT=80
+          pzps94038/ron-web:latest
+        - echo ======部署完成=======
+    when:
+      branch:
+        - main
+      event:
+        - push
+  - name: notify
+    image: drillster/drone-email
+    settings:
+      host: smtp.gmail.com
+      username:
+        from_secret: GMAIL_SENDER_EMAIL
+      password:
+        from_secret: GMAIL_PWD
+      from:
+        from_secret: GMAIL_SENDER_EMAIL
+      recipients_only: true
+      recipients:
+        - pzps94038@yahoo.com.tw
+    when:
+      branch:
+        - main
+      event:
+        - push
+      status:
+        - success
+        - failure
+
 trigger:
   branch:
     - main
