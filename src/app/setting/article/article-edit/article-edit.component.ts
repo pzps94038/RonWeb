@@ -23,6 +23,7 @@ import { AdminArticleService } from 'src/app/shared/api/admin-article/admin-arti
 import { UpdateArticleRequest } from 'src/app/shared/api/admin-article/admin-article.model';
 import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
 import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
+import { ToggleComponent } from 'src/app/shared/component/form/toggle/toggle.component';
 
 @Component({
   selector: 'app-article-edit',
@@ -38,6 +39,7 @@ import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/a
     SelectComponent,
     LoadArticleComponent,
     MultipleSelectComponent,
+    ToggleComponent,
   ],
 })
 export class ArticleEditComponent {
