@@ -24,6 +24,7 @@ export type Article = {
   previewContent: string;
   labels: ArticleLabels;
   content: string;
+  flag: string;
   viewCount: number;
   createDate: string;
   nextArticle?: BlogPagination;
@@ -38,6 +39,7 @@ export type CreateArticleRequest = {
   content: string;
   categoryId: number;
   userId: number;
+  flag: string;
   prevFiles: UploadFiles;
   contentFiles: UploadFiles;
   labels: ArticleLabels;
@@ -49,6 +51,7 @@ export type UpdateArticleRequest = {
   previewContent: string;
   content: string;
   categoryId: number;
+  flag: string;
   userId: number;
   prevFiles: UploadFiles;
   contentFiles: UploadFiles;

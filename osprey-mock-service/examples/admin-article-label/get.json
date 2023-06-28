@@ -1,0 +1,24 @@
+{
+  "returnCode": "00",
+  "returnMessage": "string",
+  "data": {
+    "total": 23,
+    "labels": [
+      {
+        "labelId": 1,
+        "labelName": "標籤",
+        "createDate": "2023-05-08T13:22:00.124Z"
+      },
+      {
+        "labelId": 2,
+        "labelName": "標籤2",
+        "createDate": "2023-05-08T13:22:00.124Z"
+      },
+      {
+        "labelId": 3,
+        "labelName": "標籤3",
+        "createDate": "2023-05-08T13:22:00.124Z"
+      }
+    ]
+  }
+}

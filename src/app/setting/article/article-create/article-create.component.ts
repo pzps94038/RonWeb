@@ -25,6 +25,7 @@ import { AdminArticleService } from 'src/app/shared/api/admin-article/admin-arti
 import { CreateArticleRequest } from 'src/app/shared/api/admin-article/admin-article.model';
 import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
 import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
+import { ToggleComponent } from 'src/app/shared/component/form/toggle/toggle.component';
 
 @Component({
   selector: 'app-article-create',
@@ -40,6 +41,7 @@ import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label
     SelectComponent,
     MultipleSelectComponent,
     LoadArticleComponent,
+    ToggleComponent,
   ],
 })
 export class ArticleCreateComponent implements OnInit {
@@ -58,8 +60,9 @@ export class ArticleCreateComponent implements OnInit {
   contentFiles = signal<UploadFiles>([]);
   form = new FormGroup({
     articleTitle: new FormControl('', [Validators.required]),
-    previewContent: new FormControl('', [Validators.required, Validators.maxLength(500)]),
     labels: new FormControl([], [Validators.required]),
+    flag: new FormControl('Y', [Validators.required]),
+    previewContent: new FormControl('', [Validators.required, Validators.maxLength(500)]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<number | string>('', [Validators.required]),
   });
@@ -131,6 +134,7 @@ export class ArticleCreateComponent implements OnInit {
       previewContent: this.form.get('previewContent')!.value,
       content: this.form.get('content')!.value,
       categoryId: this.form.get('categoryId')!.value,
+      flag: this.form.get('flag')!.value,
       userId: this.userSrv.getUserId(),
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),

@@ -28,12 +28,14 @@ export const CONTROL_VALUE_ACCESSOR = (component: Type<any>) => {
   selector: 'app-basic-input',
   template: '',
 })
-export abstract class BasicComponent implements ControlValueAccessor, OnInit, AfterViewInit {
+export abstract class BasicComponent<T = string>
+  implements ControlValueAccessor, OnInit, AfterViewInit
+{
   @Input() labelName?: string;
   @Input() labelClass: string = '';
   @Input() class: string = '';
   @Input() showErrorMsg: boolean = true;
-  protected val = '';
+  protected val?: T;
   // 用來接收 setDisabledState 的狀態
   protected disabled = false;
 

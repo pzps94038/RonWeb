@@ -194,3 +194,135 @@ version: 0.1
         body:
           application/json:
             example: !include examples/upload/upload.json
+/api/adminArticle/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the article
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article/getId.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the article
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the article
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article/delete.json
+/api/adminArticle:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article/create.json
+/api/adminArticleCategory:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article-category/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article-category/create.json
+/api/adminArticleCategory/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the article-category
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article-category/getId.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the article
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article-category/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the article
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article-category/delete.json
+/api/adminArticleLabel:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article-label/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article-label/create.json
+/api/adminArticleLabel/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the article-label
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article-label/getId.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the article-label
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article-label/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the article-label
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-article-label/delete.json

@@ -1,0 +1,26 @@
+<label
+  *ngIf="labelName"
+  [id]="ngControl?.name"
+  [class]="labelClass"
+  [ngClass]="{
+      'text-success': control?.touched && !control?.errors,
+      'text-error': control?.touched && control?.errors
+    }"
+  class="block"
+  >{{ labelName }}</label
+>
+<input
+  type="checkbox"
+  class="toggle"
+  [class]="class"
+  [class.toggle-xs]="size === 'xs'"
+  [class.toggle-sm]="size === 'sm'"
+  [class.toggle-md]="size === 'md'"
+  [class.toggle-lg]="size === 'lg'"
+  [ngClass]="{
+    'toggle-error': control?.touched && control?.errors,
+    'toggle-success': control?.touched && !control?.errors
+  }"
+  [disabled]="disabled"
+  [(ngModel)]="val"
+  (ngModelChange)="change()" />

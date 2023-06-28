@@ -21,6 +21,7 @@ export type Article = {
   categoryId: number;
   categoryName: string;
   previewContent: string;
+  flag: string;
   labels: ArticleLabels;
   content: string;
   viewCount: number;
