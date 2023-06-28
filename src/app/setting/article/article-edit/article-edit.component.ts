@@ -59,6 +59,7 @@ export class ArticleEditComponent {
   form = new FormGroup({
     articleId: new FormControl<undefined | number>(undefined, [Validators.required]),
     articleTitle: new FormControl('', [Validators.required]),
+    flag: new FormControl('', [Validators.required]),
     previewContent: new FormControl('', [Validators.required, Validators.maxLength(500)]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<string | number>('', [Validators.required]),
@@ -112,12 +113,14 @@ export class ArticleEditComponent {
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(data => {
-          const { articleId, articleTitle, previewContent, content, categoryId, labels } = data;
+          const { articleId, articleTitle, previewContent, content, categoryId, labels, flag } =
+            data;
           this.form.get('articleId')?.setValue(articleId);
           this.form.get('articleTitle')?.setValue(articleTitle);
           this.form.get('content')?.setValue(content);
           this.form.get('categoryId')?.setValue(categoryId);
           this.form.get('previewContent')?.setValue(previewContent);
+          this.form.get('flag')?.setValue(flag);
           const labelVal = labels.map(({ labelId }) => labelId);
           this.form.get('labels')?.setValue(labelVal);
         }),
@@ -148,6 +151,7 @@ export class ArticleEditComponent {
       previewContent: this.form.get('previewContent')!.value,
       content: this.form.get('content')!.value,
       categoryId: this.form.get('categoryId')!.value,
+      flag: this.form.get('flag')!.value,
       userId: this.userSrv.getUserId(),
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),

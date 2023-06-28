@@ -26,6 +26,12 @@
         [options]="labelOptions()" />
     </div>
     <div class="my-5">
+      <app-toggle
+        labelName="啟用文章"
+        labelClass="text-lg my-2 text-center md:text-left"
+        formControlName="flag" />
+    </div>
+    <div class="my-5">
       <app-editor
         (upload)="previewUpload($event)"
         labelName="預覽內容"

@@ -23,6 +23,7 @@
             <th></th>
             <th class="text-lg">文章標題</th>
             <th class="text-lg">分類</th>
+            <th class="text-lg">啟用</th>
             <th class="text-lg">瀏覽次數</th>
             <th class="text-lg">建立日期</th>
           </tr>
@@ -44,6 +45,7 @@
             </th>
             <td>{{ article.articleTitle }}</td>
             <td>{{ article.categoryName }}</td>
+            <td>{{ article.flag }}</td>
             <td>{{ article.viewCount }}</td>
             <td>{{ article.createDate | dayJs : 'YYYY/MM/DD' }}</td>
           </tr>
@@ -61,10 +63,15 @@
           <td></td>
           <td class="text-lg">文章標題</td>
           <td class="text-lg">分類</td>
+          <td class="text-lg">啟用</td>
           <td class="text-lg">瀏覽次數</td>
           <td class="text-lg">建立日期</td>
         </tr>
         <tr *ngFor="let i of [1,2,3,4,5]">
+          <td>
+            <div
+              class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+          </td>
           <td>
             <div
               class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
