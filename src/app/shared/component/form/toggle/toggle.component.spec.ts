@@ -4,19 +4,18 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { ToggleComponent } from './toggle.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgControl } from '@angular/forms';
 
 describe('ToggleComponent', () => {
   let component: ToggleComponent;
   let fixture: ComponentFixture<ToggleComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ToggleComponent, FormsModule],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ToggleComponent, FormsModule],
+      providers: [NgControl],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ToggleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
