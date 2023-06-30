@@ -34,7 +34,7 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
-        flags: ['--disable-gpu', '--no-sandbox'],
+        flags: ['--no-sandbox'],
       },
     },
     captureTimeout: 60000, // it was already there
