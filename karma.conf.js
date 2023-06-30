@@ -37,10 +37,10 @@ module.exports = function (config) {
         flags: ['--no-sandbox'],
       },
     },
-    captureTimeout: 60000, // it was already there
-    browserDisconnectTimeout: 10000,
+    captureTimeout: 600000,
+    browserDisconnectTimeout: 600000,
     browserDisconnectTolerance: 1,
-    browserNoActivityTimeout: 60000, //by default 10000
+    browserNoActivityTimeout: 600000,
     restartOnFileChange: true,
   });
 };
