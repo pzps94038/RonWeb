@@ -22,7 +22,6 @@
     "build:ssr": "ng build && ng run RonWeb:server && npm run sitemap",
     "prerender": "ng run RonWeb:prerender && npm run sitemap",
     "prepare": "husky install",
-    "heroku-postbuild": "npm run prerender",
     "build:docker": "docker build -t ronweb . --no-cache",
     "killport": "npx kill-port --port 4200,3000",
     "sitemap": "node sitemap.js",
