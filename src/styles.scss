@@ -34,11 +34,16 @@ html[data-theme='business'] {
 
 .ck-content {
   pre {
-    @apply border rounded-sm m-4 p-0  #{!important};
+    @apply border rounded-sm m-4 p-0 whitespace-pre #{!important};
     tab-size: 4;
-    white-space: pre;
     code {
       @apply overflow-x-auto;
+    }
+  }
+  .table {
+    table th,
+    table td {
+      @apply border-2 border-base-content whitespace-pre-wrap p-2 #{!important};
     }
   }
   .text-tiny {
