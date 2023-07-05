@@ -1,6 +1,7 @@
 [![Build Status](https://drone.ronwebs.com/api/badges/pzps94038/RonWeb/status.svg)](https://drone.ronwebs.com/pzps94038/RonWeb)
 
 # RonWeb 個人部落格
+<img width="556" alt="image" src="https://github.com/pzps94038/RonWeb/assets/80943379/f861afae-beac-40bf-841a-a446448d305a">
 
 ## 如何開始
 
