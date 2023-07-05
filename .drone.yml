@@ -10,19 +10,19 @@ steps:
   - name: install-package
     image: node:16
     commands:
-      - echo install package
       - npm ci
-  - name: test
+  - name: prettier-check
     image: node:16
     commands:
-      - echo install Chrome
+      - npm run prettier-check
+  - name: install-chrome && test
+    image: node:16
+    commands:
       - apt-get update -qq && apt-get install -qq --no-install-recommends chromium && apt-get clean && rm -rf /var/lib/apt/lists/* && ln -s /usr/bin/chromium /usr/bin/google-chrome
-      - echo test
       - npm run test-ci
   - name: build
     image: node
     commands:
-      - echo build
       - npm run build
   - name: zip
     image: node:16
