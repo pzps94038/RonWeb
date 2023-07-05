@@ -98,6 +98,18 @@ npm run cypress:open:prod
 npm run browserslist
 ```
 
+### 進行程式碼排版
+
+```
+npm run prettier
+```
+
+### 程式碼排版檢查
+
+```
+npm run prettier-check
+```
+
 ## 專案版本及套件相關
 
 在此列出專案使用的主要技術和相關套件。
