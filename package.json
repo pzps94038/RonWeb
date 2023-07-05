@@ -30,7 +30,9 @@
     "cypress:run:local": "cypress run --config-file cypress/cypress.dev.ts",
     "cypress:open:prod": "cypress open --config-file cypress/cypress.prod.ts",
     "cypress:run:prod": "cypress run --config-file cypress/cypress.prod.ts",
-    "browserslist": "npx browserslist"
+    "browserslist": "npx browserslist",
+    "prettier": "npx prettier --write .",
+    "prettier-check": "npx pretty-quick --check"
   },
   "private": true,
   "dependencies": {
