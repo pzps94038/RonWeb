@@ -12,7 +12,7 @@ import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // httpclient && 攔截器
+    // httpClient && 攔截器
     provideHttpClient(withInterceptors([httpInterceptor])),
     // 路由
     provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'top' })),
