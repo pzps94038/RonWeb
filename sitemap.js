@@ -1,4 +1,4 @@
-const { createWriteStream } = require('fs');
+const { createWriteStream, writeFile } = require('fs');
 const { resolve } = require('path');
 const axios = require('axios');
 const { createGzip } = require('zlib');
@@ -81,7 +81,6 @@ let urls = [
   const urlsPerSitemap = 20000;
   // 計算 sitemap 檔案數量
   let sitemapCount = 0;
-
   // 建立 SitemapAndIndexStream
   const sms = new SitemapAndIndexStream({
     limit: urlsPerSitemap,
@@ -101,7 +100,19 @@ let urls = [
   });
 
   // 添加網址資訊到 SitemapAndIndexStream
-  urls.forEach(url => sms.write(url));
+  urls.forEach(url => {
+    sms.write(url);
+  });
+  // 產生prerender route map
+  const routes = urls
+    .map(({ url }) => url)
+    .filter(url => !url.includes('?'))
+    .join('\r\n');
+  writeFile('routes.txt', '\r\n' + routes, err => {
+    if (err) {
+      console.error(err);
+    }
+  });
 
   // 結束 SitemapAndIndexStream 並建立 sitemap-index 檔案
   sms.end();

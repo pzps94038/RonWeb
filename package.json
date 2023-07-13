@@ -20,7 +20,7 @@
     "dev:ssr": "ng run RonWeb:serve-ssr",
     "serve:ssr": "node dist/RonWeb/server/main.js",
     "build:ssr": "ng build && ng run RonWeb:server && npm run sitemap",
-    "prerender": "ng run RonWeb:prerender && npm run sitemap",
+    "prerender": "npm run sitemap && ng run RonWeb:prerender --routes-file routes.txt",
     "prepare": "husky install",
     "build:docker": "docker build -t ronweb . --no-cache",
     "killport": "npx kill-port --port 4200,3000",
