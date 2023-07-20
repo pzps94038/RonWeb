@@ -3,6 +3,7 @@
 # RonWeb 個人部落格
 
 https://blog.ronwebs.com
+<br>
 <img width="556" alt="image" src="https://github.com/pzps94038/RonWeb/assets/80943379/f861afae-beac-40bf-841a-a446448d305a">
 
 ## 如何開始
@@ -113,6 +114,12 @@ npm run prettier
 npm run prettier-check
 ```
 
+### 程式碼文件產生
+
+```
+npm run compodoc
+```
+
 ## 專案版本及套件相關
 
 在此列出專案使用的主要技術和相關套件。
@@ -139,3 +146,4 @@ npm run prettier-check
   - husky 版本: 8.0.3
   - sitemap 版本: 7.1.1
   - tailwindcss 版本: 3.3.2
+  - compodoc 版本: 1.1.21

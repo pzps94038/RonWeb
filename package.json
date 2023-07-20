@@ -23,7 +23,7 @@
     "prerender": "npm run sitemap && ng run RonWeb:prerender --routes-file routes.txt",
     "prepare": "husky install",
     "build:docker": "docker build -t ronweb . --no-cache",
-    "killport": "npx kill-port --port 4200,3000",
+    "killport": "npx kill-port --port 4200,3000,9000",
     "sitemap": "node sitemap.js",
     "e2e": "ng e2e",
     "cypress:open:local": "cypress open --config-file cypress/cypress.dev.ts",
@@ -32,7 +32,8 @@
     "cypress:run:prod": "cypress run --config-file cypress/cypress.prod.ts",
     "browserslist": "npx browserslist",
     "prettier": "npx prettier --write .",
-    "prettier-check": "npx pretty-quick --check"
+    "prettier-check": "npx pretty-quick --check",
+    "compodoc": "npx compodoc -p tsconfig.doc.json -s -r 9000 -o -w --language zh-CN"
   },
   "private": true,
   "dependencies": {
@@ -78,6 +79,7 @@
     "@angular-devkit/build-angular": "^16.0.5",
     "@angular/cli": "~16.0.5",
     "@angular/compiler-cli": "^16.0.4",
+    "@compodoc/compodoc": "^1.1.21",
     "@cypress/schematic": "^2.5.0",
     "@nguniversal/builders": "^16.0.0",
     "@types/express": "^4.17.0",
