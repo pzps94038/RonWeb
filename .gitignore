@@ -44,3 +44,6 @@ Thumbs.db
 
 # cypress
 cypress/videos/*
+
+# doc
+/documentation
