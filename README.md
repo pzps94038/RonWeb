@@ -10,7 +10,7 @@ https://blog.ronwebs.com
 
 以下是在本地開發環境中啟動專案的步驟：
 
-1. 確保已安裝 Node.js（建議使用 v16.x.x）：[https://nodejs.org](https://nodejs.org)
+1. 確保已安裝 Node.js（建議使用 v16.x.x）
 2. 複製專案程式碼到本地
 3. 在專案目錄中，執行以下命令以安裝相依套件：
 
