@@ -1,5 +1,5 @@
-const { createWriteStream, writeFile } = require('fs');
-const { resolve } = require('path');
+const { createWriteStream, writeFile, mkdirSync, existsSync } = require('fs');
+const { resolve, dirname } = require('path');
 const axios = require('axios');
 const { createGzip } = require('zlib');
 const { SitemapAndIndexStream, SitemapStream } = require('sitemap');
@@ -87,6 +87,7 @@ let urls = [
     getSitemapStream: i => {
       const sitemapStream = new SitemapStream({ hostname: 'https://blog.ronwebs.com' });
       const path = `./dist/RonWeb/browser/sitemap-${i + 1}.xml`;
+      checkDir(path);
       // 每次產生新的 sitemap 檔案時增加計數
       sitemapCount = sitemapCount + 1;
       const ws = sitemapStream.pipe(createWriteStream(resolve(path)));
@@ -116,10 +117,25 @@ let urls = [
 
   // 結束 SitemapAndIndexStream 並建立 sitemap-index 檔案
   sms.end();
-
-  sms.pipe(createWriteStream(resolve('./dist/RonWeb/browser/sitemap-index.xml')));
+  const path = './dist/RonWeb/browser/sitemap-index.xml';
+  checkDir(path);
+  sms.pipe(createWriteStream(resolve(path)));
   // 等待 SitemapAndIndexStream 結束事件
   sms.on('end', () => {
     console.log(`產生了 ${sitemapCount} 個 sitemap 檔案。`);
   });
 })();
+
+const checkDir = targetPath => {
+  const targetDir = dirname(targetPath);
+  // 使用 fs.existsSync() 檢查目標路徑的資料夾是否存在
+  if (!existsSync(targetDir)) {
+    try {
+      // 使用 fs.mkdirSync() 建立資料夾
+      mkdirSync(targetDir, { recursive: true });
+      console.log('資料夾已建立:', targetDir);
+    } catch (err) {
+      console.error('無法建立資料夾:', err);
+    }
+  }
+};
