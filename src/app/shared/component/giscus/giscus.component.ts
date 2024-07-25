@@ -68,7 +68,8 @@ export class GiscusComponent implements OnInit, AfterViewInit, OnDestroy {
       scriptTag.setAttribute('data-repo-id', 'R_kgDOJU7i_Q');
       scriptTag.setAttribute('data-category', 'Announcements');
       scriptTag.setAttribute('data-category-id', 'DIC_kwDOJU7i_c4CWkJZ');
-      scriptTag.setAttribute('data-mapping', 'title');
+      scriptTag.setAttribute(' data-strict', '1');
+      scriptTag.setAttribute('data-mapping', 'pathname');
       scriptTag.setAttribute('data-reactions-enabled', '1');
       scriptTag.setAttribute('data-emit-metadata', '0');
       scriptTag.setAttribute('data-theme', darkMode ? 'dark_tritanopia' : 'light_tritanopia');
