@@ -35,26 +35,26 @@ jobs:
           branch: gh-pages
           folder: dist/RonWeb/browser
           token: ${{ secrets.TOKEN }}
-      - name: Docker Build
-        if: github.ref == 'refs/heads/main'
-        run: |
-          docker build -t ${{ secrets.DOCKER_USER }}/ron-web . --no-cache
-          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PWD }}
-      - name: Docker Push
-        if: github.ref == 'refs/heads/main'
-        run: |
-          docker push ${{ secrets.DOCKER_USER }}/ron-web
-      - name: SSH into server and deploy
-        if: github.ref == 'refs/heads/main'
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.SCP_HOST }}
-          username: ${{  secrets.SCP_USER }}
-          password: ${{ secrets.SCP_PWD }}
-          script: |
-            docker stop ron-web || true && \
-            docker rm ron-web || true && \
-            docker pull ${{ secrets.DOCKER_USER }}/ron-web:latest && \
-            docker run -d -p 83:80 --name ron-web --restart=always \
-              -e PORT=80 \
-              ${{ secrets.DOCKER_USER }}/ron-web:latest
+      # - name: Docker Build
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     docker build -t ${{ secrets.DOCKER_USER }}/ron-web . --no-cache
+      #     docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PWD }}
+      # - name: Docker Push
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     docker push ${{ secrets.DOCKER_USER }}/ron-web
+      # - name: SSH into server and deploy
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: appleboy/ssh-action@v0.1.10
+      #   with:
+      #     host: ${{ secrets.SCP_HOST }}
+      #     username: ${{  secrets.SCP_USER }}
+      #     password: ${{ secrets.SCP_PWD }}
+      #     script: |
+      #       docker stop ron-web || true && \
+      #       docker rm ron-web || true && \
+      #       docker pull ${{ secrets.DOCKER_USER }}/ron-web:latest && \
+      #       docker run -d -p 83:80 --name ron-web --restart=always \
+      #         -e PORT=80 \
+      #         ${{ secrets.DOCKER_USER }}/ron-web:latest
