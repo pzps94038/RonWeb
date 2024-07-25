@@ -13,9 +13,9 @@ let urls = [
   { url: '/notFound', changefreq: 'monthly', priority: 0.5, lastmod },
 ];
 
-const hostName = 'https://ron-web-api.zeabur.app';
+const hostName = 'https://ron-web.zeabur.app';
 
-const apiPath = `${hostName}/api`;
+const apiPath = 'https://ron-web-api.zeabur.app/api';
 
 (async () => {
   const [articles, categorys, labels] = await Promise.all([
