@@ -13,9 +13,13 @@ let urls = [
   { url: '/notFound', changefreq: 'monthly', priority: 0.5, lastmod },
 ];
 
+const hostName = 'https://ron-web-api.zeabur.app';
+
+const apiPath = `${hostName}/api`;
+
 (async () => {
   const [articles, categorys, labels] = await Promise.all([
-    axios('https://blog-api.ronwebs.com/api/siteMap/article')
+    axios(`${apiPath}/siteMap/article`)
       .then(({ data }) => data)
       .then(({ data }) => data ?? [])
       .then(array => {
@@ -43,7 +47,7 @@ let urls = [
         console.error(error);
         return [];
       }),
-    axios('https:/blog-api.ronwebs.com/api/siteMap/category')
+    axios(`${apiPath}/siteMap/category`)
       .then(({ data }) => data)
       .then(({ data }) => data ?? [])
       .then(array =>
@@ -59,7 +63,7 @@ let urls = [
         console.error(error);
         return [];
       }),
-    axios('https://blog-api.ronwebs.com/api/siteMap/label')
+    axios(`${apiPath}/siteMap/label`)
       .then(({ data }) => data)
       .then(({ data }) => data ?? [])
       .then(array =>
@@ -85,18 +89,14 @@ let urls = [
   const sms = new SitemapAndIndexStream({
     limit: urlsPerSitemap,
     getSitemapStream: i => {
-      const sitemapStream = new SitemapStream({ hostname: 'https://blog.ronwebs.com' });
+      const sitemapStream = new SitemapStream({ hostname: hostName });
       const path = `./dist/RonWeb/browser/sitemap-${i + 1}.xml`;
       checkDir(path);
       // 每次產生新的 sitemap 檔案時增加計數
       sitemapCount = sitemapCount + 1;
       const ws = sitemapStream.pipe(createWriteStream(resolve(path)));
 
-      return [
-        new URL(`sitemap-${i + 1}.xml`, 'https://blog.ronwebs.com/').toString(),
-        sitemapStream,
-        ws,
-      ];
+      return [new URL(`sitemap-${i + 1}.xml`, `${hostName}/`).toString(), sitemapStream, ws];
     },
   });
 
