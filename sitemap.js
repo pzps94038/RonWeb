@@ -104,16 +104,16 @@ const apiPath = `${hostName}/api`;
   urls.forEach(url => {
     sms.write(url);
   });
-  // 產生prerender route map
-  const routes = urls
-    .map(({ url }) => url)
-    .filter(url => !url.includes('?'))
-    .join('\r\n');
-  writeFile('routes.txt', '\r\n' + routes, err => {
-    if (err) {
-      console.error(err);
-    }
-  });
+  // // 產生prerender route map
+  // const routes = urls
+  //   .map(({ url }) => url)
+  //   .filter(url => !url.includes('?'))
+  //   .join('\r\n');
+  // writeFile('routes.txt', '\r\n' + routes, err => {
+  //   if (err) {
+  //     console.error(err);
+  //   }
+  // });
 
   // 結束 SitemapAndIndexStream 並建立 sitemap-index 檔案
   sms.end();
