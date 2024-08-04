@@ -15,7 +15,7 @@ let urls = [
 
 const hostName = 'https://ron-web.zeabur.app';
 
-const apiPath = 'https://ron-web-api.zeabur.app/api';
+const apiPath = 'https://ronweb-api.zeabur.internal:8080/api';
 
 (async () => {
   const [articles, categorys, labels] = await Promise.all([
