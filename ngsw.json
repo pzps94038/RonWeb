@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1721927963104,
+  "timestamp": 1722814012083,
   "index": "/RonWeb/index.html",
   "assetGroups": [
     {
@@ -44,7 +44,7 @@
         "/RonWeb/common.96f63229fee14b0c.js",
         "/RonWeb/favicon.ico",
         "/RonWeb/index.html",
-        "/RonWeb/main.6821a1caaf08e90b.js",
+        "/RonWeb/main.a9e36e3eafcccbd0.js",
         "/RonWeb/manifest.webmanifest",
         "/RonWeb/polyfills.3e495ea95c14e078.js",
         "/RonWeb/runtime.61d8c5ba8c20f508.js",
@@ -347,8 +347,8 @@
     "/RonWeb/fa-v4compatibility.6209cf0172d95b0e.woff2": "8f80d0bbe995f7fe92320fdaec10cd5ccd710a51",
     "/RonWeb/fa-v4compatibility.92dce52f885fd838.ttf": "a9d072aca9e0fadc2a7167671ce3d6b18d9cd2cc",
     "/RonWeb/favicon.ico": "04c278dba3e54393c4c980f7fd4dcd43796ef813",
-    "/RonWeb/index.html": "1a41abfd67c75641903085d062c4c71fa43a13a9",
-    "/RonWeb/main.6821a1caaf08e90b.js": "74b9715629f258b33478e2ae645926c5c32a54e0",
+    "/RonWeb/index.html": "c7b99a796552e949307b735a956ddf8eb51eef2f",
+    "/RonWeb/main.a9e36e3eafcccbd0.js": "e4cc1b008cc9eb1d5b5e4b5d880fed96d9bb987a",
     "/RonWeb/manifest.webmanifest": "7b0b315f57ceb941dcc2b603c8af6c7c46317e66",
     "/RonWeb/polyfills.3e495ea95c14e078.js": "450683ba508c8c271366a46c25e6777af5ef6b9f",
     "/RonWeb/runtime.61d8c5ba8c20f508.js": "8a29e4d969a9c8adc18eef5137dd9a8c55a7df9a",
