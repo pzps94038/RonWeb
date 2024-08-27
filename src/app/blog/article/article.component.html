@@ -39,10 +39,10 @@
             <a
               [routerLink]="['/blog','article',article()!.prevArticle?.articleId]"
               *ngIf="article()?.prevArticle">
-              <div class="w-full flex justify-start items-center">
+              <div class="w-full flex justify-start items-center text-left">
                 <span class="text-xl">←</span> 上一篇文章
               </div>
-              <div class="w-full py-1 flex justify-start items-center link link-info">
+              <div class="w-full py-1 flex justify-start items-center link link-info text-left">
                 {{ article()!.prevArticle!.articleTitle }}
               </div>
             </a>
@@ -51,10 +51,10 @@
             <a
               [routerLink]="['/blog','article',article()!.nextArticle!.articleId]"
               *ngIf="article()?.nextArticle">
-              <div class="w-full flex justify-end items-cente">
+              <div class="w-full flex justify-end items-center text-right">
                 下一篇文章 <span class="text-xl">→</span>
               </div>
-              <div class="w-full py-1 flex justify-end items-center link link-info">
+              <div class="w-full py-1 flex justify-end items-center link link-info text-right">
                 {{ article()!.nextArticle!.articleTitle }}
               </div>
             </a>
