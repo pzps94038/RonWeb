@@ -5,6 +5,7 @@ import {
   signal,
   ChangeDetectorRef,
   AfterViewInit,
+  ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
@@ -23,13 +24,22 @@ import { GiscusComponent } from '../../shared/component/giscus/giscus.component'
 import { ApiService } from 'src/app/shared/service/api.service';
 import { SeoService } from 'src/app/shared/service/seo.service';
 import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-highlight.service';
-
+import { featherMaximize2, featherMaximize } from '@ng-icons/feather-icons';
 @Component({
   selector: 'app-article',
   standalone: true,
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.scss'],
-  providers: [provideIcons({ heroCalendarDays, heroHashtag, heroTag, heroFolder })],
+  providers: [
+    provideIcons({
+      heroCalendarDays,
+      heroHashtag,
+      heroTag,
+      heroFolder,
+      featherMaximize2,
+      featherMaximize,
+    }),
+  ],
   imports: [
     CommonModule,
     ErrorComponent,
@@ -47,6 +57,7 @@ export class ArticleComponent {
   apiSrv = inject(ApiService);
   seoSrv = inject(SeoService);
   codeBlockSrv = inject(CodeBlockHighlightService);
+  el = inject(ElementRef);
   router = inject(Router);
   articleId = signal<number | undefined>(undefined);
   article = signal<Article | undefined>(undefined);
@@ -100,5 +111,17 @@ export class ArticleComponent {
 
   updateArticleViews(id: number) {
     this.articleSrv.updateArticleViews(id).pipe(takeUntilDestroyed(this._destroyRef)).subscribe();
+  }
+
+  toggleFullscreenMode() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+      this.el.nativeElement?.style?.removeProperty('overflow');
+    } else {
+      this.el.nativeElement?.requestFullscreen();
+      if (this.el.nativeElement?.style) {
+        this.el.nativeElement.style.overflow = 'auto';
+      }
+    }
   }
 }

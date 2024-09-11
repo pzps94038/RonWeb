@@ -58,6 +58,7 @@
     "@ckeditor/ckeditor5-language": "^37.1.0",
     "@ckeditor/ckeditor5-source-editing": "^37.1.0",
     "@ng-icons/core": "^23.3.0",
+    "@ng-icons/feather-icons": "^29.5.0",
     "@ng-icons/heroicons": "^23.3.0",
     "@ng-select/ng-select": "^11.0.0",
     "@ngneat/dialog": "^4.0.0",
