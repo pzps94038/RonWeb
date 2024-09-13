@@ -38,7 +38,9 @@
         class="ck-content break-words overflow-x-auto py-3"
         [innerHTML]="article()!.previewContent | safe: 'html'"></div>
       <div class="py-5"></div>
-      <div class="ck-content break-words" [innerHTML]="article()!.content| safe: 'html'"></div>
+      <div
+        class="ck-content break-words overflow-x-auto py-3"
+        [innerHTML]="article()!.content| safe: 'html'"></div>
       <ng-container *ngIf="article()?.prevArticle || article()?.nextArticle">
         <div class="divider my-5"></div>
         <div class="flex justify-between">
