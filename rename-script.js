@@ -16,7 +16,7 @@ const replaceFileNames = [
     },
     newFile: {
       name: 'main',
-      extension: 'securejs',
+      extension: 'js',
     },
     include,
     timeSpan,
@@ -28,7 +28,7 @@ const replaceFileNames = [
     },
     newFile: {
       name: 'polyfills',
-      extension: 'securejs',
+      extension: 'js',
     },
     include,
     timeSpan,
@@ -40,7 +40,7 @@ const replaceFileNames = [
     },
     newFile: {
       name: 'runtime',
-      extension: 'securejs',
+      extension: 'js',
     },
     include,
     timeSpan,
@@ -52,7 +52,7 @@ const replaceFileNames = [
     },
     newFile: {
       name: 'scripts',
-      extension: 'securejs',
+      extension: 'js',
     },
     include,
     timeSpan,
