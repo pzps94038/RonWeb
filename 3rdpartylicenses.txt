@@ -91,6 +91,9 @@ Trademarks
 @ng-icons/core
 MIT
 
+@ng-icons/feather-icons
+MIT
+
 @ng-icons/heroicons
 MIT
 
