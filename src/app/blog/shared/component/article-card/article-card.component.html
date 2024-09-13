@@ -24,7 +24,7 @@
   </div>
   <div class="divider my-1"></div>
   <div
-    class="ck-content break-words"
+    class="ck-content break-words overflow-x-auto py-3"
     [innerHTML]="(highlightKeyword ? (previewContent | highlightKeyword : keyword) : previewContent) | safe : 'html'"></div>
   <span class="link link-secondary" (click)="showMore.emit(true)">... 繼續閱讀 ...</span>
 </div>
