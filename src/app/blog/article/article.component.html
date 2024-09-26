@@ -46,7 +46,7 @@
         <a
           *ngFor="let references of article()!.references"
           [href]="references | safe : 'url'"
-          class="link text-[#4C99E6] block"
+          class="link text-[#4C99E6] block overflow-hidden text-ellipsis"
           target="_blank"
           >{{ references }}</a
         >
