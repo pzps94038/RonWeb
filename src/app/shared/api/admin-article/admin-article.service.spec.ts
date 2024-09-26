@@ -58,6 +58,7 @@ describe('AdminArticleService', () => {
       prevFiles: [],
       contentFiles: [],
       labels: [],
+      references: [],
     });
     tick();
     expect(spy).toHaveBeenCalled();
@@ -75,6 +76,7 @@ describe('AdminArticleService', () => {
       prevFiles: [],
       contentFiles: [],
       labels: [],
+      references: [],
     });
     tick();
     expect(spy).toHaveBeenCalled();
