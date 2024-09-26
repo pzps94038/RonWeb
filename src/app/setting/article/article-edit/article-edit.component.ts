@@ -24,6 +24,7 @@ import { UpdateArticleRequest } from 'src/app/shared/api/admin-article/admin-art
 import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
 import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
 import { ToggleComponent } from 'src/app/shared/component/form/toggle/toggle.component';
+import { DynamicInputComponent } from 'src/app/shared/component/form/dynamic-input/dynamic-input.component';
 
 @Component({
   selector: 'app-article-edit',
@@ -40,6 +41,7 @@ import { ToggleComponent } from 'src/app/shared/component/form/toggle/toggle.com
     LoadArticleComponent,
     MultipleSelectComponent,
     ToggleComponent,
+    DynamicInputComponent,
   ],
 })
 export class ArticleEditComponent {
@@ -66,6 +68,7 @@ export class ArticleEditComponent {
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<string | number>('', [Validators.required]),
     labels: new FormControl<number[]>([], [Validators.required]),
+    references: new FormControl<string[]>([]),
   });
   private _destroyRef = inject(DestroyRef);
 
@@ -115,8 +118,16 @@ export class ArticleEditComponent {
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
         tap(data => {
-          const { articleId, articleTitle, previewContent, content, categoryId, labels, flag } =
-            data;
+          const {
+            articleId,
+            articleTitle,
+            previewContent,
+            content,
+            categoryId,
+            labels,
+            flag,
+            references,
+          } = data;
           this.form.get('articleId')?.setValue(articleId);
           this.form.get('articleTitle')?.setValue(articleTitle);
           this.form.get('content')?.setValue(content);
@@ -125,6 +136,7 @@ export class ArticleEditComponent {
           this.form.get('flag')?.setValue(flag);
           const labelVal = labels.map(({ labelId }) => labelId);
           this.form.get('labels')?.setValue(labelVal);
+          this.form.get('references')?.setValue(references);
         }),
         switchMap(() => forkJoin([category$, label$])),
         takeUntilDestroyed(this._destroyRef),
@@ -157,6 +169,7 @@ export class ArticleEditComponent {
       userId: this.userSrv.getUserId(),
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),
+      references: this.form.get('references')!.value,
       labels,
     } as UpdateArticleRequest;
     this.editIsLoading.set(true);

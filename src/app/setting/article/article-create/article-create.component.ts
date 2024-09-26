@@ -26,6 +26,7 @@ import { CreateArticleRequest } from 'src/app/shared/api/admin-article/admin-art
 import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
 import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
 import { ToggleComponent } from 'src/app/shared/component/form/toggle/toggle.component';
+import { DynamicInputComponent } from 'src/app/shared/component/form/dynamic-input/dynamic-input.component';
 
 @Component({
   selector: 'app-article-create',
@@ -42,6 +43,7 @@ import { ToggleComponent } from 'src/app/shared/component/form/toggle/toggle.com
     MultipleSelectComponent,
     LoadArticleComponent,
     ToggleComponent,
+    DynamicInputComponent,
   ],
 })
 export class ArticleCreateComponent implements OnInit {
@@ -65,6 +67,7 @@ export class ArticleCreateComponent implements OnInit {
     previewContent: new FormControl('', [Validators.required, Validators.maxLength(500)]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<number | string>('', [Validators.required]),
+    references: new FormControl<string[]>([]),
   });
   private _destroyRef = inject(DestroyRef);
 
@@ -139,6 +142,7 @@ export class ArticleCreateComponent implements OnInit {
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),
       labels,
+      references: this.form.get('references')!.value,
     } as CreateArticleRequest;
     this.createIsLoading.set(true);
     this.articleSrv

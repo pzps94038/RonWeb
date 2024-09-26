@@ -41,6 +41,16 @@
       <div
         class="ck-content break-words overflow-x-auto py-3"
         [innerHTML]="article()!.content| safe: 'html'"></div>
+      <div *ngIf="article()!.references?.length">
+        參考文章:
+        <a
+          *ngFor="let references of article()!.references"
+          [href]="references | safe : 'url'"
+          class="link text-[#4C99E6] block"
+          target="_blank"
+          >{{ references }}</a
+        >
+      </div>
       <ng-container *ngIf="article()?.prevArticle || article()?.nextArticle">
         <div class="divider my-5"></div>
         <div class="flex justify-between">

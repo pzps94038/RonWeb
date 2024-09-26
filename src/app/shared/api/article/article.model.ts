@@ -24,6 +24,7 @@ export type Article = {
   flag: string;
   labels: ArticleLabels;
   content: string;
+  references: string[];
   viewCount: number;
   createDate: string;
   nextArticle?: BlogPagination;

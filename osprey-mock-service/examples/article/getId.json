@@ -22,7 +22,11 @@
     "nextArticle": {
       "articleId": 13,
       "articleTitle": "2637. Promise Time Limit"
-    }
+    },
+    "references": [
+      "https://yahoo.com/",
+      "https://github.com/"
+    ]
   },
   "returnCode": "00",
   "returnMessage": "取得資料成功"

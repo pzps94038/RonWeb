@@ -40,11 +40,11 @@ export abstract class BasicComponent<T = string>
   protected disabled = false;
 
   // 用來接收 registerOnChange 和 onTouched 傳入的方法
-  protected onChange?: (value: any) => {};
-  protected onTouched?: () => {};
+  protected onChange?: (value: any) => any;
+  protected onTouched?: () => any;
   ngControl: NgControl | undefined;
   control: AbstractControl | null | undefined;
-  constructor(@Inject(Injector) public injector: Injector, private cdr: ChangeDetectorRef) {}
+  constructor(@Inject(Injector) public injector: Injector, protected cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.ngControl = this.injector.get(NgControl);
