@@ -7,8 +7,11 @@ import {
   FormControl,
   FormGroup,
   FormsModule,
+  NG_VALIDATORS,
   NgControl,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
   Validators,
 } from '@angular/forms';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
@@ -20,15 +23,27 @@ import { AbstractControlPipe } from 'src/app/shared/pipe/abstract-control.pipe';
   selector: 'app-dynamic-input',
   standalone: true,
   imports: [CommonModule, FormsModule, NgIconComponent, ReactiveFormsModule, AbstractControlPipe],
-  providers: [CONTROL_VALUE_ACCESSOR(DynamicInputComponent), provideIcons({ heroPlus, heroMinus })],
+  providers: [
+    CONTROL_VALUE_ACCESSOR(DynamicInputComponent),
+    provideIcons({ heroPlus, heroMinus }),
+    {
+      provide: NG_VALIDATORS,
+      multi: true,
+      useExisting: DynamicInputComponent,
+    },
+  ],
   templateUrl: './dynamic-input.component.html',
   styleUrls: ['./dynamic-input.component.scss'],
 })
-export class DynamicInputComponent extends BasicComponent<string[]> implements OnDestroy {
+export class DynamicInputComponent
+  extends BasicComponent<string[]>
+  implements Validator, OnDestroy
+{
   @Input() type: string = 'text';
   @Input() placeholder: string = '';
   @Input() size: 'xs' | 'sm' | 'md' | 'lg' = 'md';
   @Input() inputmode: string = 'text';
+  onValidatorChange?: () => void;
   protected form = new FormGroup({
     array: new FormArray([]),
   });
@@ -105,5 +120,14 @@ export class DynamicInputComponent extends BasicComponent<string[]> implements O
    */
   removeRow(idx: number) {
     this.array.removeAt(idx);
+  }
+
+  validate(control: AbstractControl<any, any>): ValidationErrors | null {
+    return this.array.valid ? null : { valid: false };
+  }
+
+  registerOnValidatorChange?(fn: () => void): void {
+    console.log(fn);
+    this.onValidatorChange = fn;
   }
 }
