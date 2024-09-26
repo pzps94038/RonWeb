@@ -64,7 +64,7 @@ export class ArticleCreateComponent implements OnInit {
     articleTitle: new FormControl('', [Validators.required]),
     labels: new FormControl([], [Validators.required]),
     flag: new FormControl('Y', [Validators.required]),
-    previewContent: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+    previewContent: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<number | string>('', [Validators.required]),
     references: new FormControl<string[]>([]),

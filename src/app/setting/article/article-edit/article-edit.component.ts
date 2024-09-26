@@ -64,7 +64,7 @@ export class ArticleEditComponent {
     articleId: new FormControl<undefined | number>(undefined, [Validators.required]),
     articleTitle: new FormControl('', [Validators.required]),
     flag: new FormControl('', [Validators.required]),
-    previewContent: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+    previewContent: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<string | number>('', [Validators.required]),
     labels: new FormControl<number[]>([], [Validators.required]),
