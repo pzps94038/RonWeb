@@ -8,7 +8,7 @@
           <ng-icon name="heroEllipsisVertical" size="24" />
         </div>
         <ul tabindex="0" class="dropdown-content menu z-[1] w-40 shadow border bg-base-100">
-          <li *ngIf="isLogin" class="cursor-pointer w-full flex">
+          <li *ngIf="isLogin()" class="cursor-pointer w-full flex">
             <a class="w-full flex" [routerLink]="['/setting', 'article', 'edit', articleId]">
               <div class="flex justify-center items-center">
                 <ng-icon name="heroPencilSquare" />
