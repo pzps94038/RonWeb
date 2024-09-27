@@ -22,7 +22,7 @@ export class AdminArticleLabelService {
     });
   }
 
-  getArticleLabelById(id: number, cache: boolean = true) {
+  getArticleLabelById(id: number) {
     return this.http.get<GetArticleLabelByIdResponse>(
       `${environment.baseUrl}/adminArticleLabel/${id}`,
     );

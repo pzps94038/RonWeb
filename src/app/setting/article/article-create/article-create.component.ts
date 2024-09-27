@@ -118,7 +118,7 @@ export class ArticleCreateComponent implements OnInit {
 
   submit() {
     this.form.markAllAsTouched();
-    if (!this.form.valid) {
+    if (this.form.invalid) {
       return;
     }
     const labelIds = (this.form.get('labels')?.value ?? []) as number[];

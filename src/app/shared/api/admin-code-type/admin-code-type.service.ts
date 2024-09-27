@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { CreateAdminCodeRequest } from '../admin-code/admin-code.model';
 import { BaseMessageResponse } from '../shared/shared.model';
 import {
+  CreateAdminCodeTypeRequest,
   GetAdminCodeTypeByIdResponse,
   GetAdminCodeTypeResponse,
   UpdateAdminCodeTypeRequest,
@@ -32,7 +33,7 @@ export class AdminCodeTypeService {
     return this.http.patch<BaseMessageResponse>(`${environment.baseUrl}/adminCodeType/${id}`, req);
   }
 
-  createAdminCodeType(req: CreateAdminCodeRequest) {
+  createAdminCodeType(req: CreateAdminCodeTypeRequest) {
     return this.http.post<BaseMessageResponse>(`${environment.baseUrl}/adminCodeType`, req);
   }
 

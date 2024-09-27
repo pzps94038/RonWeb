@@ -32,7 +32,7 @@ export class ArticleCategoryCreateComponent {
 
   submit() {
     this.form.markAllAsTouched();
-    if (!this.form.valid) {
+    if (this.form.invalid) {
       return;
     }
     const req = {
@@ -53,8 +53,6 @@ export class ArticleCategoryCreateComponent {
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() => {
-        this.router.navigate(['/setting/article-category']);
-      });
+      .subscribe(() => this.router.navigate(['/setting/article-category/detail']));
   }
 }

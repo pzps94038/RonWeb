@@ -47,10 +47,6 @@ export class ArticleCategoryEditComponent {
         switchMap(id => this.articleCategorySrv.getArticleCategoryById(id)),
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
-        tap(({ categoryId, categoryName }) => {
-          this.form.get('categoryId')?.setValue(categoryId);
-          this.form.get('categoryName')?.setValue(categoryName);
-        }),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
@@ -63,7 +59,7 @@ export class ArticleCategoryEditComponent {
 
   submit() {
     this.form.markAllAsTouched();
-    if (!this.form.valid) {
+    if (this.form.invalid) {
       return;
     }
     const req = {
@@ -85,8 +81,6 @@ export class ArticleCategoryEditComponent {
         finalize(() => this.editIsLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() => {
-        this.router.navigate(['/setting/article-category']);
-      });
+      .subscribe(() => this.router.navigate(['/setting/article-category/detail']));
   }
 }

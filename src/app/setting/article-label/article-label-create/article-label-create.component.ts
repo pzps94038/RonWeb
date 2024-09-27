@@ -33,7 +33,7 @@ export class ArticleLabelCreateComponent {
 
   submit() {
     this.form.markAllAsTouched();
-    if (!this.form.valid) {
+    if (this.form.invalid) {
       return;
     }
     const req = {
@@ -54,8 +54,6 @@ export class ArticleLabelCreateComponent {
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() => {
-        this.router.navigate(['/setting/article-label']);
-      });
+      .subscribe(() => this.router.navigate(['/setting/article-label']));
   }
 }

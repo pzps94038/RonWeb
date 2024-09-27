@@ -1,4 +1,4 @@
-import { UpdateArticleLabelRequest } from './../../../shared/api/article-label/article-label.model';
+import { UpdateArticleLabelRequest } from '../../../shared/api/article-label/article-label.model';
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,19 +12,24 @@ import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.mod
 import { ApiService } from 'src/app/shared/service/api.service';
 import { UserService } from 'src/app/shared/service/user.service';
 import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
+import { AdminCodeTypeService } from 'src/app/shared/api/admin-code-type/admin-code-type.service';
+import {
+  CodeType,
+  UpdateAdminCodeTypeRequest,
+} from 'src/app/shared/api/admin-code-type/admin-code-type.model';
 
 @Component({
-  selector: 'app-article-label-edit',
+  selector: 'app-code-type-edit',
   standalone: true,
   imports: [CommonModule, InputComponent, ReactiveFormsModule],
-  templateUrl: './article-label-edit.component.html',
-  styleUrls: ['./article-label-edit.component.scss'],
+  templateUrl: './code-type-edit.component.html',
+  styleUrls: ['./code-type-edit.component.scss'],
 })
-export class ArticleLabelEditComponent implements OnInit {
+export class CodeTypeEditComponent implements OnInit {
   apiSrv = inject(ApiService);
   userSrv = inject(UserService);
   swalSrv = inject(SwalService);
-  articleLabelSrv = inject(AdminArticleLabelService);
+  adminCodeTypeSrv = inject(AdminCodeTypeService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   isLoading = signal(false);
@@ -32,8 +37,9 @@ export class ArticleLabelEditComponent implements OnInit {
   isError = signal(false);
   private _destroyRef = inject(DestroyRef);
   form = new FormGroup({
-    labelId: new FormControl<undefined | number>(undefined, [Validators.required]),
-    labelName: new FormControl('', [Validators.required]),
+    id: new FormControl<undefined | number>(undefined, [Validators.required]),
+    codeTypeId: new FormControl('', [Validators.required]),
+    codeTypeName: new FormControl('', [Validators.required]),
   });
 
   ngOnInit(): void {
@@ -44,15 +50,20 @@ export class ArticleLabelEditComponent implements OnInit {
         map(param => param.get('id')!),
         filter(id => !isNaN(parseInt(id))),
         map(id => parseInt(id)),
-        switchMap(id => this.articleLabelSrv.getArticleLabelById(id)),
+        switchMap(id => this.adminCodeTypeSrv.getAdminCodeTypeById(id)),
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
+        tap(({ codeTypeId, codeTypeName }) => {
+          this.form.get('codeTypeId')?.setValue(codeTypeId);
+          this.form.get('codeTypeName')?.setValue(codeTypeName);
+        }),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
-        const { labelId, labelName } = res as ArticleLabel;
-        this.form.get('labelId')?.setValue(labelId);
-        this.form.get('labelName')?.setValue(labelName);
+        const { id, codeTypeId, codeTypeName } = res as CodeType;
+        this.form.get('id')?.setValue(id);
+        this.form.get('codeTypeId')?.setValue(codeTypeId);
+        this.form.get('codeTypeName')?.setValue(codeTypeName);
         this.isLoading.set(false);
       });
   }
@@ -63,13 +74,13 @@ export class ArticleLabelEditComponent implements OnInit {
       return;
     }
     const req = {
-      labelId: this.form.get('labelId')!.value,
-      labelName: this.form.get('labelName')!.value,
+      codeTypeId: this.form.get('codeTypeId')!.value,
+      codeTypeName: this.form.get('codeTypeName')!.value,
       userId: this.userSrv.getUserId(),
-    } as UpdateArticleLabelRequest;
+    } as UpdateAdminCodeTypeRequest;
     this.editIsLoading.set(true);
-    this.articleLabelSrv
-      .updateArticleLabel(req)
+    this.adminCodeTypeSrv
+      .updateAdminCodeType(this.form.get('id')!.value!, req)
       .pipe(
         filter(res => this.apiSrv.ifSuccess(res, true)),
         switchMap(({ returnMessage }) =>
@@ -81,6 +92,6 @@ export class ArticleLabelEditComponent implements OnInit {
         finalize(() => this.editIsLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() => this.router.navigate(['/setting/article-label']));
+      .subscribe(() => this.router.navigate(['/setting/code-type']));
   }
 }

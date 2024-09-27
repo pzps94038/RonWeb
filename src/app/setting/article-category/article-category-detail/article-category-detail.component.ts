@@ -79,7 +79,7 @@ export class ArticleCategoryDetailComponent {
   }
 
   paginationChange(page: number) {
-    this.router.navigate(['/setting/article-category'], {
+    this.router.navigate(['/setting/article-category/detail'], {
       queryParams: {
         page,
       },
