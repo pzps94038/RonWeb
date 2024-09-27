@@ -127,7 +127,6 @@ export class DynamicInputComponent
   }
 
   registerOnValidatorChange?(fn: () => void): void {
-    console.log(fn);
     this.onValidatorChange = fn;
   }
 }

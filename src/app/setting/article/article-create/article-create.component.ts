@@ -1,11 +1,10 @@
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { InputComponent } from 'src/app/shared/component/form/input/input.component';
 import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-area.component';
 import { EditorComponent } from 'src/app/shared/component/form/editor/editor.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SwalIcon, SwalService } from 'src/app/shared/service/swal.service';
-import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import {
   Option,
   Options,
@@ -16,7 +15,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
 import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model';
-import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
 import { MultipleSelectComponent } from 'src/app/shared/component/form/multiple-select/multiple-select.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
@@ -54,6 +52,7 @@ export class ArticleCreateComponent implements OnInit {
   articleLabelSrv = inject(AdminArticleLabelService);
   articleSrv = inject(AdminArticleService);
   router = inject(Router);
+  location = inject(Location);
   isLoading = signal(false);
   createIsLoading = signal(false);
   categoryOptions = signal<Options>([]);
@@ -158,9 +157,7 @@ export class ArticleCreateComponent implements OnInit {
         finalize(() => this.createIsLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() => {
-        this.router.navigate(['/setting/article']);
-      });
+      .subscribe(() => this.location.back());
   }
 
   previewUpload(file: UploadFile) {

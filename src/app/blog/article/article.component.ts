@@ -10,13 +10,20 @@ import {
 import { CommonModule } from '@angular/common';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { tap, filter, map, catchError, finalize } from 'rxjs';
+import { tap, filter, map, catchError, finalize, fromEvent } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 import { Article } from 'src/app/shared/api/article/article.model';
 import { ErrorComponent } from '../../shared/component/error/error.component';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroCalendarDays, heroFolder, heroHashtag, heroTag } from '@ng-icons/heroicons/outline';
+import {
+  heroCalendarDays,
+  heroEllipsisVertical,
+  heroFolder,
+  heroHashtag,
+  heroPencilSquare,
+  heroTag,
+} from '@ng-icons/heroicons/outline';
 import { DayJsPipe } from '../../shared/pipe/day-js.pipe';
 import { SafePipe } from '../../shared/pipe/safe.pipe';
 import { DisqusComponent } from '../../shared/component/disqus/disqus.component';
@@ -25,6 +32,7 @@ import { ApiService } from 'src/app/shared/service/api.service';
 import { SeoService } from 'src/app/shared/service/seo.service';
 import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-highlight.service';
 import { featherMaximize2, featherMaximize } from '@ng-icons/feather-icons';
+import { UserService } from 'src/app/shared/service/user.service';
 @Component({
   selector: 'app-article',
   standalone: true,
@@ -38,6 +46,8 @@ import { featherMaximize2, featherMaximize } from '@ng-icons/feather-icons';
       heroFolder,
       featherMaximize2,
       featherMaximize,
+      heroPencilSquare,
+      heroEllipsisVertical,
     }),
   ],
   imports: [
@@ -59,10 +69,13 @@ export class ArticleComponent {
   codeBlockSrv = inject(CodeBlockHighlightService);
   el = inject(ElementRef);
   router = inject(Router);
+  userSrv = inject(UserService);
+  isLogin = this.userSrv.isLogin;
   articleId = signal<number | undefined>(undefined);
   article = signal<Article | undefined>(undefined);
   isLoading = signal(false);
   isError = signal(false);
+  isFullscreen = signal(false);
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
@@ -75,6 +88,9 @@ export class ArticleComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(id => this.getArticleById(id));
+    fromEvent(document, 'fullscreenchange')
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => this.isFullscreen.set(!!document.fullscreenElement));
   }
 
   getArticleById(id: number, cache: boolean = true) {

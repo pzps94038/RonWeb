@@ -5,11 +5,29 @@
       <div>
         <div class="flex justify-between">
           <h3 class="text-xl font-semibold">{{ article()!.articleTitle }}</h3>
-          <ng-icon
-            name="featherMaximize"
-            class="cursor-pointer"
-            size="24"
-            (click)="toggleFullscreenMode()" />
+          <div [class.dropdown-left]="isFullscreen()" class="dropdown dropdown-hover bg-base-100">
+            <div tabindex="0" role="button" class="m-1">
+              <ng-icon name="heroEllipsisVertical" size="24" />
+            </div>
+            <ul tabindex="0" class="dropdown-content menu z-[1] w-44 shadow border bg-base-100">
+              <li class="cursor-pointer w-full flex" (click)="toggleFullscreenMode()">
+                <a class="w-full flex">
+                  <div class="flex justify-center items-center">
+                    <ng-icon name="featherMaximize" />
+                  </div>
+                  {{ isFullscreen() ? '關閉全螢幕模式' : '全螢幕模式' }}
+                </a>
+              </li>
+              <li *ngIf="isLogin" class="cursor-pointer w-full flex">
+                <a class="w-full flex" [routerLink]="['/setting', 'article', 'edit', articleId]">
+                  <div class="flex justify-center items-center">
+                    <ng-icon name="heroPencilSquare" />
+                  </div>
+                  修改文章
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
         <div>
           <div class="flex items-center">

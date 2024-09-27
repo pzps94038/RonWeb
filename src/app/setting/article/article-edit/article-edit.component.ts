@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EditorComponent } from 'src/app/shared/component/form/editor/editor.component';
 import { InputComponent } from 'src/app/shared/component/form/input/input.component';
@@ -53,6 +53,7 @@ export class ArticleEditComponent {
   articleSrv = inject(AdminArticleService);
   route = inject(ActivatedRoute);
   router = inject(Router);
+  location = inject(Location);
   isLoading = signal(false);
   editIsLoading = signal(false);
   files = signal<UploadFiles>([]);
@@ -186,9 +187,7 @@ export class ArticleEditComponent {
         finalize(() => this.editIsLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() => {
-        this.router.navigate(['/setting/article']);
-      });
+      .subscribe(() => this.location.back());
   }
 
   previewUpload(file: UploadFile) {

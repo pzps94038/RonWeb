@@ -2,6 +2,7 @@
   <ng-container *ngIf="!isLoading(); else loading">
     <app-article-card
       *ngFor="let article of articles()"
+      [articleId]="article.articleId"
       [title]="article.articleTitle"
       [date]="article.createDate"
       [category]="{

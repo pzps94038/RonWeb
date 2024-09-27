@@ -32,7 +32,7 @@ export function app(): express.Express {
   server.get(
     '*.*',
     express.static(distFolder, {
-      maxAge: '1y',
+      maxAge: '1d',
     }),
   );
 
