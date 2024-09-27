@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'app-footer',
@@ -9,4 +10,6 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./footer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FooterComponent {}
+export class FooterComponent {
+  year = signal<string>(dayjs().format('YYYY'));
+}
