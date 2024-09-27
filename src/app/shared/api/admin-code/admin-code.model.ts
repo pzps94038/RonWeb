@@ -5,6 +5,8 @@ export type GetAdminCodeResponse = BaseResponse<AdminCodeResponse>;
 export type AdminCodeResponse = {
   total: number;
   codes: Codes;
+  codeTypeId: string;
+  codeTypeName: string;
 };
 
 export type GetAdminCodeByIdResponse = BaseResponse<Code>;
@@ -14,6 +16,7 @@ export type Code = {
   codeTypeId: string;
   codeId: string;
   codeName: string;
+  codeTypeName: string;
   createDate: string;
   createBy: number;
   updateDate?: string;

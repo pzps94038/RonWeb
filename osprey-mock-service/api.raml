@@ -370,3 +370,47 @@ version: 0.1
         body:
           application/json:
             example: !include examples/admin-code-type/delete.json
+/api/adminCode:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code/create.json
+/api/adminCode/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the article-code
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code/getId.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the article-code
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the article-code
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code/delete.json

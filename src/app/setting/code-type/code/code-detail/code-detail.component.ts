@@ -2,19 +2,19 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { finalize, filter, switchMap } from 'rxjs';
+import { finalize, filter, switchMap, combineLatest } from 'rxjs';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
-import { heroListBullet, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
+import { heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';
 import { DayJsPipe } from 'src/app/shared/pipe/day-js.pipe';
 import { ApiService } from 'src/app/shared/service/api.service';
-import { AdminCodeTypeService } from 'src/app/shared/api/admin-code-type/admin-code-type.service';
-import { CodeTypes } from 'src/app/shared/api/admin-code-type/admin-code-type.model';
+import { AdminCodeService } from 'src/app/shared/api/admin-code/admin-code.service';
+import { Codes } from 'src/app/shared/api/admin-code/admin-code.model';
 
 @Component({
-  selector: 'app-code-type-detail',
+  selector: 'app-code-detail',
   standalone: true,
   imports: [
     CommonModule,
@@ -24,37 +24,43 @@ import { CodeTypes } from 'src/app/shared/api/admin-code-type/admin-code-type.mo
     DayJsPipe,
     ErrorComponent,
   ],
-  providers: [provideIcons({ heroPencilSquare, heroTrash, heroListBullet })],
-  templateUrl: './code-type-detail.component.html',
-  styleUrls: ['./code-type-detail.component.scss'],
+  providers: [provideIcons({ heroPencilSquare, heroTrash })],
+  templateUrl: './code-detail.component.html',
+  styleUrls: ['./code-detail.component.scss'],
 })
-export class CodeTypeDetailComponent {
-  adminCodeTypeSrv = inject(AdminCodeTypeService);
+export class CodeDetailComponent {
+  adminCodeSrv = inject(AdminCodeService);
   apiSrv = inject(ApiService);
   swalSrv = inject(SwalService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   total = signal(0);
-  codeTypes = signal<CodeTypes>([]);
+  codes = signal<Codes>([]);
+  codeTypeId = signal<string | null>(null);
+  codeTypeName = signal<string | null>(null);
   isLoading = signal(false);
   isError = signal(false);
   page = signal(1);
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit() {
-    this.route.queryParamMap.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(params => {
-      const page = params.get('page');
-      const num = page ? parseInt(page) : 1;
-      this.page.set(isNaN(num) ? 1 : num);
-      this.getAdminCodeType(this.page());
-    });
+    combineLatest([this.route.paramMap, this.route.queryParamMap])
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(([params, queryParam]) => {
+        const codeTypeId = params.get('code-type-id');
+        this.codeTypeId.set(codeTypeId);
+        const page = queryParam.get('page');
+        const num = page ? parseInt(page) : 1;
+        this.page.set(isNaN(num) ? 1 : num);
+        this.getAdminCode(codeTypeId!, this.page());
+      });
   }
 
-  getAdminCodeType(page?: number) {
+  getAdminCode(codeTypeId: string, page?: number) {
     this.isError.set(false);
     this.isLoading.set(true);
-    this.adminCodeTypeSrv
-      .getAdminCodeType(page)
+    this.adminCodeSrv
+      .getAdminCode(codeTypeId, page)
       .pipe(
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
@@ -63,10 +69,12 @@ export class CodeTypeDetailComponent {
         next: res => {
           if (this.apiSrv.ifSuccess(res, false)) {
             const {
-              data: { total, codeTypes },
+              data: { total, codes, codeTypeId, codeTypeName },
             } = res;
             this.total.set(total);
-            this.codeTypes.set(codeTypes);
+            this.codes.set(codes);
+            this.codeTypeId.set(codeTypeId);
+            this.codeTypeName.set(codeTypeName);
           } else {
             this.isError.set(true);
           }
@@ -78,34 +86,34 @@ export class CodeTypeDetailComponent {
   }
 
   paginationChange(page: number) {
-    this.router.navigate(['/setting/code-type/detail'], {
+    this.router.navigate([`/setting/code-type/${this.codeTypeId()}/detail`], {
       queryParams: {
         page,
       },
     });
   }
 
-  deleteCodeType(id: number) {
+  deleteCode(id: number) {
     this.swalSrv
       .confirm({
-        title: '確定要刪除代碼類型嗎?',
-        text: '這個操作將永久刪除該代碼類型及相關的代碼。請確認您的決定，因為這些內容將無法恢復。',
+        title: '確定要刪除代碼嗎?',
+        text: '這個操作將永久刪除該代碼。請確認您的決定，因為這些內容將無法恢復。',
       })
       .pipe(
         filter(({ isConfirmed }) => isConfirmed),
-        switchMap(() => this.adminCodeTypeSrv.deleteAdminCodeType(id)),
+        switchMap(() => this.adminCodeSrv.deleteAdminCode(id)),
         filter(res => this.apiSrv.ifSuccess(res)),
         switchMap(res => this.swalSrv.alert({ icon: SwalIcon.Success, text: res.returnMessage })),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(() => {
         this.page.set(1);
-        this.getAdminCodeType(this.page());
+        this.getAdminCode(this.codeTypeId()!, this.page());
       });
   }
 
-  refreshCodeType() {
+  refreshCode() {
     this.page.set(1);
-    this.getAdminCodeType(this.page());
+    this.getAdminCode(this.codeTypeId()!, this.page());
   }
 }

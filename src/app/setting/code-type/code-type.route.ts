@@ -40,4 +40,8 @@ export const routes: Routes = [
       seoResolver,
     },
   },
+  {
+    path: ':code-type-id',
+    loadChildren: () => import('./code/code.route').then(m => m.routes),
+  },
 ];

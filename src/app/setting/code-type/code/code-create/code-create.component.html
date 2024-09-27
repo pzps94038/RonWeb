@@ -1,0 +1,43 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="my-5">
+    <app-input
+      labelName="代碼類型ID"
+      labelClass="text-lg my-2 text-center md:text-left"
+      class="w-full"
+      placeholder="請輸入代碼類型ID"
+      formControlName="codeTypeId" />
+  </div>
+  <div class="my-5">
+    <app-input
+      labelName="代碼類型名稱"
+      labelClass="text-lg my-2 text-center md:text-left"
+      class="w-full"
+      placeholder="請輸入代碼類型名稱"
+      formControlName="codeTypeName" />
+  </div>
+  <div class="my-5">
+    <app-input
+      labelName="代碼ID"
+      labelClass="text-lg my-2 text-center md:text-left"
+      class="w-full"
+      placeholder="請輸入代碼ID"
+      formControlName="codeId" />
+  </div>
+  <div class="my-5">
+    <app-input
+      labelName="代碼名稱"
+      labelClass="text-lg my-2 text-center md:text-left"
+      class="w-full"
+      placeholder="請輸入代碼名稱"
+      formControlName="codeName" />
+  </div>
+  <div class="flex justify-end items-center">
+    <button
+      type="submit"
+      [disabled]="isLoading()"
+      [class.loading]="isLoading()"
+      class="btn btn-primary">
+      新增代碼
+    </button>
+  </div>
+</form>

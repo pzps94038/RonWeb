@@ -1,0 +1,13 @@
+{
+  "returnCode": "00",
+  "returnMessage": "string",
+  "data": {
+    "codeTypeId": "類型Id1",
+    "codeTypeName": "類型名稱1",
+    "codeId": "代碼Id1",
+    "codeName": "代碼名稱1",
+    "createDate": "2023-05-08T13:22:00.124Z",
+    "createBy": 1,
+    "id": 1
+  }
+}
