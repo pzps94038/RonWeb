@@ -3,12 +3,12 @@
   <div>
     <div class="flex items-center justify-between">
       <h3 class="text-xl font-semibold">{{ title }}</h3>
-      <div class="dropdown dropdown-hover bg-base-100">
+      <div *ngIf="isLogin()" class="dropdown dropdown-hover bg-base-100">
         <div tabindex="0" role="button" class="m-1">
           <ng-icon name="heroEllipsisVertical" size="24" />
         </div>
         <ul tabindex="0" class="dropdown-content menu z-[1] w-40 shadow border bg-base-100">
-          <li *ngIf="isLogin()" class="cursor-pointer w-full flex">
+          <li class="cursor-pointer w-full flex">
             <a class="w-full flex" [routerLink]="['/setting', 'article', 'edit', articleId]">
               <div class="flex justify-center items-center">
                 <ng-icon name="heroPencilSquare" />
