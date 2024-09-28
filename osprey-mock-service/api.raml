@@ -187,7 +187,14 @@ version: 0.1
         body:
           application/json:
             example: !include examples/search/label.json
-/api/upload:
+/api/upload/uploadArticleFile:
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/upload/upload.json
+/api/upload/uploadProjectExperienceFile:
   post:
     responses:
       200:
@@ -414,3 +421,47 @@ version: 0.1
         body:
           application/json:
             example: !include examples/admin-code/delete.json
+/api/adminProjectExperience/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the project-experience
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-project-experience/getId.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the project-experience
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-project-experience/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the project-experience
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-project-experience/delete.json
+/api/adminProjectExperience:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-project-experience/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-project-experience/create.json

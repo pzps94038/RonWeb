@@ -51,8 +51,8 @@ export class ArticleLabelEditComponent implements OnInit {
       )
       .subscribe(res => {
         const { labelId, labelName } = res as ArticleLabel;
-        this.form.get('labelId')?.setValue(labelId);
-        this.form.get('labelName')?.setValue(labelName);
+        this.form.controls.labelId.setValue(labelId);
+        this.form.controls.labelName.setValue(labelName);
         this.isLoading.set(false);
       });
   }
@@ -63,8 +63,8 @@ export class ArticleLabelEditComponent implements OnInit {
       return;
     }
     const req = {
-      labelId: this.form.get('labelId')!.value,
-      labelName: this.form.get('labelName')!.value,
+      labelId: this.form.controls.labelId.value,
+      labelName: this.form.controls.labelName.value,
       userId: this.userSrv.getUserId(),
     } as UpdateArticleLabelRequest;
     this.editIsLoading.set(true);

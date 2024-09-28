@@ -32,11 +32,11 @@ export class ArticleCategoryComponent implements OnInit {
     this.getArticleCategory();
   }
 
-  getArticleCategory(cache: boolean = true) {
+  getArticleCategory() {
     this.isLoading.set(true);
     this.isError.set(false);
     this.articleCategorySrv
-      .getArticleCategory(undefined, cache)
+      .getArticleCategory()
       .pipe(
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),

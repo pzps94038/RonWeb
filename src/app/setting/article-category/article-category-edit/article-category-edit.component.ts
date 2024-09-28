@@ -51,8 +51,8 @@ export class ArticleCategoryEditComponent {
       )
       .subscribe(res => {
         const { categoryId, categoryName } = res as ArticleCategory;
-        this.form.get('categoryId')?.setValue(categoryId);
-        this.form.get('categoryName')?.setValue(categoryName);
+        this.form.controls.categoryId.setValue(categoryId);
+        this.form.controls.categoryName.setValue(categoryName);
         this.isLoading.set(false);
       });
   }
@@ -63,8 +63,8 @@ export class ArticleCategoryEditComponent {
       return;
     }
     const req = {
-      categoryId: this.form.get('categoryId')!.value,
-      categoryName: this.form.get('categoryName')!.value,
+      categoryId: this.form.controls.categoryId.value,
+      categoryName: this.form.controls.categoryName.value,
       userId: this.userSrv.getUserId(),
     } as UpdateArticleCategoryRequest;
     this.editIsLoading.set(true);

@@ -37,7 +37,7 @@ export class ArticleLabelCreateComponent {
       return;
     }
     const req = {
-      labelName: this.form.get('labelName')!.value,
+      labelName: this.form.controls.labelName!.value,
       userId: this.userSrv.getUserId(),
     } as CreateArticleLabelRequest;
     this.isLoading.set(true);

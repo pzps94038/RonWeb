@@ -33,6 +33,8 @@
     </div>
     <div class="my-5">
       <app-editor
+        [adapter]="uploadAdapter"
+        (upload)="previewUpload($event)"
         labelName="預覽內容"
         labelClass="text-lg my-2 text-center md:text-left"
         placeholder="請輸入預覽內容"
@@ -40,6 +42,8 @@
     </div>
     <div class="my-5">
       <app-editor
+        [adapter]="uploadAdapter"
+        (upload)="contentUpload($event)"
         labelName="文章內容"
         labelClass="text-lg my-2 text-center md:text-left"
         formControlName="content" />

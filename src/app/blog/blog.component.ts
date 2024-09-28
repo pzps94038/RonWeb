@@ -38,9 +38,10 @@ export class BlogComponent {
 
   submit() {
     this.form.markAllAsTouched();
-    if (this.form.valid) {
-      const keyword = this.form.get('keyword')!.value;
-      this.router.navigate(['blog', 'search', keyword]);
+    if (this.form.invalid) {
+      return;
     }
+    const keyword = this.form.controls.keyword.value;
+    this.router.navigate(['blog', 'search', keyword]);
   }
 }

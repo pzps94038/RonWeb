@@ -53,9 +53,9 @@ export class CodeTypeEditComponent implements OnInit {
       )
       .subscribe(res => {
         const { id, codeTypeId, codeTypeName } = res as CodeType;
-        this.form.get('id')?.setValue(id);
-        this.form.get('codeTypeId')?.setValue(codeTypeId);
-        this.form.get('codeTypeName')?.setValue(codeTypeName);
+        this.form.controls.id.setValue(id);
+        this.form.controls.codeTypeId.setValue(codeTypeId);
+        this.form.controls.codeTypeName.setValue(codeTypeName);
         this.isLoading.set(false);
       });
   }
@@ -66,13 +66,13 @@ export class CodeTypeEditComponent implements OnInit {
       return;
     }
     const req = {
-      codeTypeId: this.form.get('codeTypeId')!.value,
-      codeTypeName: this.form.get('codeTypeName')!.value,
+      codeTypeId: this.form.controls.codeTypeId.value,
+      codeTypeName: this.form.controls.codeTypeName.value,
       userId: this.userSrv.getUserId(),
     } as UpdateAdminCodeTypeRequest;
     this.editIsLoading.set(true);
     this.adminCodeTypeSrv
-      .updateAdminCodeType(this.form.get('id')!.value!, req)
+      .updateAdminCodeType(this.form.controls.id.value!, req)
       .pipe(
         filter(res => this.apiSrv.ifSuccess(res, true)),
         switchMap(({ returnMessage }) =>

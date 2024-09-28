@@ -10,23 +10,8 @@ import { TransferService } from '../../service/transfer.service';
 })
 export class ArticleCategoryService {
   private http = inject(HttpClient);
-  transferSrv = inject(TransferService);
-  articleCategoryMap = new Map<undefined | number, Observable<GetArticleCategoryResponse>>();
 
-  getArticleCategory(page?: number, cache: boolean = true) {
-    const fn = () => {
-      if (cache && this.articleCategoryMap.has(page)) {
-        return this.articleCategoryMap.get(page)!;
-      }
-      const params = page ? new HttpParams().append('page', page) : undefined;
-      const category$ = this.http
-        .get<GetArticleCategoryResponse>(`${environment.baseUrl}/articleCategory`, {
-          params,
-        })
-        .pipe(shareReplay());
-      this.articleCategoryMap.set(page, category$);
-      return category$;
-    };
-    return this.transferSrv.transfer(`categoryList-${page}`, fn, cache);
+  getArticleCategory() {
+    return this.http.get<GetArticleCategoryResponse>(`${environment.baseUrl}/articleCategory`);
   }
 }

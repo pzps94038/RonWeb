@@ -46,14 +46,6 @@ export class ExpiredLoginComponent {
   errMsg = signal<string | undefined>(undefined);
   private _destroyRef = inject(DestroyRef);
 
-  get account() {
-    return this.form.get('account') as FormControl;
-  }
-
-  get password() {
-    return this.form.get('password') as FormControl;
-  }
-
   form = new FormGroup({
     account: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
@@ -65,33 +57,34 @@ export class ExpiredLoginComponent {
 
   submit() {
     this.form.markAllAsTouched();
-    if (this.form.valid) {
-      this.loading.set(true);
-      this.loginSrv
-        .login({
-          account: this.account.value,
-          password: this.password.value,
-        })
-        .pipe(
-          catchError(err => {
-            this.errMsg.set('系統發生錯誤');
-            throw err;
-          }),
-          finalize(() => this.loading.set(false)),
-          takeUntilDestroyed(this._destroyRef),
-        )
-        .subscribe(res => {
-          const { returnMessage, data } = res;
-          if (this.apiSrv.ifSuccess(res, false)) {
-            const { token, userId } = data;
-            this.userSrv.setToken(token);
-            this.userSrv.setUserId(userId);
-            this.userSrv.isLogin.set(true);
-            this.ref.close(true);
-          } else {
-            this.errMsg.set(returnMessage);
-          }
-        });
+    if (this.form.invalid) {
+      return;
     }
+    this.loading.set(true);
+    this.loginSrv
+      .login({
+        account: this.form.controls.account.value!,
+        password: this.form.controls.password.value!,
+      })
+      .pipe(
+        catchError(err => {
+          this.errMsg.set('系統發生錯誤');
+          throw err;
+        }),
+        finalize(() => this.loading.set(false)),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe(res => {
+        const { returnMessage, data } = res;
+        if (this.apiSrv.ifSuccess(res, false)) {
+          const { token, userId } = data;
+          this.userSrv.setToken(token);
+          this.userSrv.setUserId(userId);
+          this.userSrv.isLogin.set(true);
+          this.ref.close(true);
+        } else {
+          this.errMsg.set(returnMessage);
+        }
+      });
   }
 }

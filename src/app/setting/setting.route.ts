@@ -29,6 +29,14 @@ export const routes: Routes = [
     loadChildren: () => import('./code-type/code-type.route').then(m => m.routes),
   },
   {
+    path: 'project-experience',
+    loadComponent: () =>
+      import('./project-experience/project-experience.component').then(
+        m => m.ProjectExperienceComponent,
+      ),
+    loadChildren: () => import('./project-experience/project-experience.route').then(m => m.routes),
+  },
+  {
     path: '**',
     pathMatch: 'full',
     redirectTo: '',

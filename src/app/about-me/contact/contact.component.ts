@@ -51,37 +51,38 @@ export class ContactComponent {
 
   submit() {
     this.form.markAllAsTouched();
-    if (this.form.valid) {
-      const subject = this.form.get('subject')!.value as string;
-      const email = this.form.get('email')!.value as string;
-      const message = this.form.get('message')!.value as string;
-      this.loading.set(true);
-      from(grecaptcha.execute(environment.grecaptchaToken, { action: 'contactUs' }))
-        .pipe(
-          switchMap(clientToken =>
-            this.contactUs.sendContactUsMail({
-              subject,
-              body: message,
-              email,
-              clientToken,
-            }),
-          ),
-          takeUntilDestroyed(this._destroyRef),
-          finalize(() => this.loading.set(false)),
-        )
-        .subscribe(({ returnCode, returnMessage }) => {
-          if (returnCode === ReturnCode.Success) {
-            this.swal.alert({
-              title: returnMessage,
-              icon: SwalIcon.Success,
-            });
-          } else {
-            this.swal.alert({
-              title: returnMessage,
-              icon: SwalIcon.Error,
-            });
-          }
-        });
+    if (this.form.invalid) {
+      return;
     }
+    const subject = this.form.controls.subject.value!;
+    const email = this.form.controls.email.value!;
+    const message = this.form.controls.message.value!;
+    this.loading.set(true);
+    from(grecaptcha.execute(environment.grecaptchaToken, { action: 'contactUs' }))
+      .pipe(
+        switchMap(clientToken =>
+          this.contactUs.sendContactUsMail({
+            subject,
+            body: message,
+            email,
+            clientToken,
+          }),
+        ),
+        takeUntilDestroyed(this._destroyRef),
+        finalize(() => this.loading.set(false)),
+      )
+      .subscribe(({ returnCode, returnMessage }) => {
+        if (returnCode === ReturnCode.Success) {
+          this.swal.alert({
+            title: returnMessage,
+            icon: SwalIcon.Success,
+          });
+        } else {
+          this.swal.alert({
+            title: returnMessage,
+            icon: SwalIcon.Error,
+          });
+        }
+      });
   }
 }

@@ -67,8 +67,8 @@ export class CodeCreateComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(params => {
       const codeTypeId = params.get('code-type-id');
-      this.form.get('codeTypeId')!.setValue(codeTypeId);
-      this.form.get('codeTypeName')!.setValue(history?.state?.codeTypeName);
+      this.form.controls.codeTypeId.setValue(codeTypeId);
+      this.form.controls.codeTypeName.setValue(history?.state?.codeTypeName);
     });
   }
 
@@ -78,9 +78,9 @@ export class CodeCreateComponent implements OnInit {
       return;
     }
     const req = {
-      codeTypeId: this.form.get('codeTypeId')!.value,
-      codeId: this.form.get('codeId')!.value,
-      codeName: this.form.get('codeName')!.value,
+      codeTypeId: this.form.controls.codeTypeId.value,
+      codeId: this.form.controls.codeId.value,
+      codeName: this.form.controls.codeName.value,
       userId: this.userSrv.getUserId(),
     } as CreateAdminCodeRequest;
     this.isLoading.set(true);
@@ -98,7 +98,7 @@ export class CodeCreateComponent implements OnInit {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(() =>
-        this.router.navigate([`/setting/code-type/${this.form.get('codeTypeId')!.value}`]),
+        this.router.navigate([`/setting/code-type/${this.form.controls.codeTypeId}`]),
       );
   }
 }

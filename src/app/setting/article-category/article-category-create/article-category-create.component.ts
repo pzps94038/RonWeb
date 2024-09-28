@@ -36,7 +36,7 @@ export class ArticleCategoryCreateComponent {
       return;
     }
     const req = {
-      categoryName: this.form.get('categoryName')!.value,
+      categoryName: this.form.controls.categoryName.value,
       userId: this.userSrv.getUserId(),
     } as CreateArticleCategoryRequest;
     this.isLoading.set(true);

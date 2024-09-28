@@ -72,11 +72,11 @@ export class CodeEditComponent implements OnInit {
       )
       .subscribe(res => {
         const { id, codeId, codeName, codeTypeId, codeTypeName } = res as Code;
-        this.form.get('id')?.setValue(id);
-        this.form.get('codeId')?.setValue(codeId);
-        this.form.get('codeName')?.setValue(codeName);
-        this.form.get('codeTypeId')?.setValue(codeTypeId);
-        this.form.get('codeTypeName')?.setValue(codeTypeName);
+        this.form.controls.id.setValue(id);
+        this.form.controls.codeId.setValue(codeId);
+        this.form.controls.codeName.setValue(codeName);
+        this.form.controls.codeTypeId.setValue(codeTypeId);
+        this.form.controls.codeTypeName.setValue(codeTypeName);
         this.isLoading.set(false);
       });
   }
@@ -87,14 +87,14 @@ export class CodeEditComponent implements OnInit {
       return;
     }
     const req = {
-      codeTypeId: this.form.get('codeTypeId')!.value,
-      codeId: this.form.get('codeId')!.value,
-      codeName: this.form.get('codeName')!.value,
+      codeTypeId: this.form.controls.codeTypeId!.value,
+      codeId: this.form.controls.codeId.value,
+      codeName: this.form.controls.codeName.value,
       userId: this.userSrv.getUserId(),
     } as UpdateAdminCodeRequest;
     this.editIsLoading.set(true);
     this.adminCodeSrv
-      .updateAdminCode(this.form.get('id')!.value!, req)
+      .updateAdminCode(this.form.controls.id.value!, req)
       .pipe(
         filter(res => this.apiSrv.ifSuccess(res, true)),
         switchMap(({ returnMessage }) =>
@@ -107,7 +107,7 @@ export class CodeEditComponent implements OnInit {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(() =>
-        this.router.navigate([`/setting/code-type/${this.form.get('codeTypeId')!.value}`]),
+        this.router.navigate([`/setting/code-type/${this.form.controls.codeTypeId.value}`]),
       );
   }
 }

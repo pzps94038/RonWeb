@@ -25,12 +25,15 @@ import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/a
 import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
 import { ToggleComponent } from 'src/app/shared/component/form/toggle/toggle.component';
 import { DynamicInputComponent } from 'src/app/shared/component/form/dynamic-input/dynamic-input.component';
+import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
+import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
+import { UploadAdapterService } from 'src/app/shared/service/upload-adapter.service';
 
 @Component({
   selector: 'app-article-create',
-  standalone: true,
   templateUrl: './article-create.component.html',
   styleUrls: ['./article-create.component.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     InputComponent,
@@ -48,9 +51,10 @@ export class ArticleCreateComponent implements OnInit {
   apiSrv = inject(ApiService);
   userSrv = inject(UserService);
   swalSrv = inject(SwalService);
-  articleCategorySrv = inject(AdminArticleCategoryService);
-  articleLabelSrv = inject(AdminArticleLabelService);
+  articleCategorySrv = inject(ArticleCategoryService);
+  articleLabelSrv = inject(ArticleLabelService);
   articleSrv = inject(AdminArticleService);
+  uploadAdapterSrv = inject(UploadAdapterService);
   router = inject(Router);
   location = inject(Location);
   isLoading = signal(false);
@@ -59,6 +63,7 @@ export class ArticleCreateComponent implements OnInit {
   labelOptions = signal<Options>([]);
   prevFiles = signal<UploadFiles>([]);
   contentFiles = signal<UploadFiles>([]);
+  uploadAdapter = this.uploadAdapterSrv.createArticleAdapter();
   form = new FormGroup({
     articleTitle: new FormControl('', [Validators.required]),
     labels: new FormControl([], []),
@@ -72,7 +77,7 @@ export class ArticleCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading.set(true);
-    const category$ = this.articleCategorySrv.getArticleCategory(undefined).pipe(
+    const category$ = this.articleCategorySrv.getArticleCategory().pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { categorys } }) => categorys),
       map(array =>
@@ -95,7 +100,7 @@ export class ArticleCreateComponent implements OnInit {
         this.categoryOptions.set(options);
       }),
     );
-    const label$ = this.articleLabelSrv.getArticleLabel(undefined).pipe(
+    const label$ = this.articleLabelSrv.getArticleLabel().pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { labels } }) => labels),
       map(array =>
@@ -121,7 +126,7 @@ export class ArticleCreateComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    const labelIds = (this.form.get('labels')?.value ?? []) as number[];
+    const labelIds = (this.form.controls.labels.value ?? []) as number[];
     const labels = this.labelOptions()
       .filter(a => labelIds.includes(a.value))
       .map(
@@ -132,16 +137,16 @@ export class ArticleCreateComponent implements OnInit {
           } as ArticleLabel),
       );
     const req = {
-      articleTitle: this.form.get('articleTitle')!.value,
-      previewContent: this.form.get('previewContent')!.value,
-      content: this.form.get('content')!.value,
-      categoryId: this.form.get('categoryId')!.value,
-      flag: this.form.get('flag')!.value,
+      articleTitle: this.form.controls.articleTitle.value,
+      previewContent: this.form.controls.previewContent.value,
+      content: this.form.controls.content.value,
+      categoryId: this.form.controls.categoryId.value,
+      flag: this.form.controls.flag.value,
       userId: this.userSrv.getUserId(),
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),
       labels,
-      references: this.form.get('references')!.value,
+      references: this.form.controls.references.value,
     } as CreateArticleRequest;
     this.createIsLoading.set(true);
     this.articleSrv

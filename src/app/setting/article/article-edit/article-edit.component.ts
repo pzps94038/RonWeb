@@ -25,12 +25,15 @@ import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label
 import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
 import { ToggleComponent } from 'src/app/shared/component/form/toggle/toggle.component';
 import { DynamicInputComponent } from 'src/app/shared/component/form/dynamic-input/dynamic-input.component';
+import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
+import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
+import { UploadAdapterService } from 'src/app/shared/service/upload-adapter.service';
 
 @Component({
   selector: 'app-article-edit',
-  standalone: true,
   templateUrl: './article-edit.component.html',
   styleUrls: ['./article-edit.component.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     InputComponent,
@@ -48,9 +51,10 @@ export class ArticleEditComponent {
   apiSrv = inject(ApiService);
   userSrv = inject(UserService);
   swalSrv = inject(SwalService);
-  articleCategorySrv = inject(AdminArticleCategoryService);
-  articleLabelSrv = inject(AdminArticleLabelService);
+  articleCategorySrv = inject(ArticleCategoryService);
+  articleLabelSrv = inject(ArticleLabelService);
   articleSrv = inject(AdminArticleService);
+  uploadAdapterSrv = inject(UploadAdapterService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   location = inject(Location);
@@ -61,6 +65,7 @@ export class ArticleEditComponent {
   labelOptions = signal<Options>([]);
   prevFiles = signal<UploadFiles>([]);
   contentFiles = signal<UploadFiles>([]);
+  uploadAdapter = this.uploadAdapterSrv.createArticleAdapter();
   form = new FormGroup({
     articleId: new FormControl<undefined | number>(undefined, [Validators.required]),
     articleTitle: new FormControl('', [Validators.required]),
@@ -74,7 +79,7 @@ export class ArticleEditComponent {
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
-    const category$ = this.articleCategorySrv.getArticleCategory(undefined).pipe(
+    const category$ = this.articleCategorySrv.getArticleCategory().pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { categorys } }) => categorys),
       map(array =>
@@ -97,7 +102,7 @@ export class ArticleEditComponent {
         this.categoryOptions.set(options);
       }),
     );
-    const label$ = this.articleLabelSrv.getArticleLabel(undefined).pipe(
+    const label$ = this.articleLabelSrv.getArticleLabel().pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { labels } }) => labels),
       map(array =>
@@ -129,15 +134,15 @@ export class ArticleEditComponent {
             flag,
             references,
           } = data;
-          this.form.get('articleId')?.setValue(articleId);
-          this.form.get('articleTitle')?.setValue(articleTitle);
-          this.form.get('content')?.setValue(content);
-          this.form.get('categoryId')?.setValue(categoryId);
-          this.form.get('previewContent')?.setValue(previewContent);
-          this.form.get('flag')?.setValue(flag);
+          this.form.controls.articleId.setValue(articleId);
+          this.form.controls.articleTitle.setValue(articleTitle);
+          this.form.controls.content.setValue(content);
+          this.form.controls.categoryId.setValue(categoryId);
+          this.form.controls.previewContent.setValue(previewContent);
+          this.form.controls.flag.setValue(flag);
           const labelVal = labels.map(({ labelId }) => labelId);
-          this.form.get('labels')?.setValue(labelVal);
-          this.form.get('references')?.setValue(references);
+          this.form.controls.labels.setValue(labelVal);
+          this.form.controls.references.setValue(references);
         }),
         switchMap(() => forkJoin([category$, label$])),
         takeUntilDestroyed(this._destroyRef),
@@ -150,7 +155,7 @@ export class ArticleEditComponent {
     if (this.form.invalid) {
       return;
     }
-    const labelIds = (this.form.get('labels')?.value ?? []) as number[];
+    const labelIds = (this.form.controls.labels.value ?? []) as number[];
     const labels = this.labelOptions()
       .filter(a => labelIds.includes(a.value))
       .map(
@@ -161,16 +166,16 @@ export class ArticleEditComponent {
           } as ArticleLabel),
       );
     const req = {
-      articleId: this.form.get('articleId')!.value,
-      articleTitle: this.form.get('articleTitle')!.value,
-      previewContent: this.form.get('previewContent')!.value,
-      content: this.form.get('content')!.value,
-      categoryId: this.form.get('categoryId')!.value,
-      flag: this.form.get('flag')!.value,
+      articleId: this.form.controls.articleId.value,
+      articleTitle: this.form.controls.articleTitle.value,
+      previewContent: this.form.controls.previewContent.value,
+      content: this.form.controls.content.value,
+      categoryId: this.form.controls.categoryId.value,
+      flag: this.form.controls.flag.value,
       userId: this.userSrv.getUserId(),
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),
-      references: this.form.get('references')!.value,
+      references: this.form.controls.references.value,
       labels,
     } as UpdateArticleRequest;
     this.editIsLoading.set(true);
