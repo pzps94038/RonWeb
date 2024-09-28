@@ -8,6 +8,7 @@
     "start:local:win32": "ng serve --open --proxy-config proxy.conf.local.json --configuration development",
     "start:local:darwin": "ng serve --open --proxy-config proxy.conf.local.json --configuration development",
     "start:default": "ng serve --open --proxy-config proxy.conf.local.json",
+    "start:prod": "ng serve --open --configuration production",
     "build": "ng build",
     "build:gitHubPage": "ng build --base-href /RonWeb/ && npm run sitemap && node rename-script.js RonWeb true true",
     "watch": "ng build --watch --configuration development",

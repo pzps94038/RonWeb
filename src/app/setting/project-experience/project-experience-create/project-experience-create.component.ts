@@ -77,7 +77,7 @@ export class ProjectExperienceCreateComponent {
       map(array =>
         array.map(code => {
           return {
-            value: code.id,
+            value: code.codeId,
             text: code.codeName,
           } as Option;
         }),
@@ -90,7 +90,7 @@ export class ProjectExperienceCreateComponent {
       map(array =>
         array.map(code => {
           return {
-            value: code.id,
+            value: code.codeId,
             text: code.codeName,
           } as Option;
         }),

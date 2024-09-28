@@ -22,27 +22,13 @@ describe('ArticleCategoryService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('測試分類緩存', fakeAsync(() => {
-    const page = 1;
-    const fake = of({
-      returnCode: ReturnCode.Success,
-      returnMessage: 'msg',
-    }) as Observable<GetArticleCategoryResponse>;
-    spyOn(service.articleCategoryMap, 'has').and.returnValue(true);
-    const spy = spyOn(service.articleCategoryMap, 'get').and.returnValue(fake);
-    service.getArticleCategory(page);
-    tick();
-    expect(spy).toHaveBeenCalled();
-  }));
-
   it('測試分類無緩存', fakeAsync(() => {
-    const page = 1;
     const fake = of({
       returnCode: ReturnCode.Success,
       returnMessage: 'msg',
     }) as Observable<GetArticleCategoryResponse>;
     const spy = spyOn((service as any).http as HttpClient, 'get').and.returnValue(fake);
-    service.getArticleCategory(page, false);
+    service.getArticleCategory();
     tick();
     expect(spy).toHaveBeenCalled();
   }));
