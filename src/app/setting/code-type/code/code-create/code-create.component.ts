@@ -97,8 +97,8 @@ export class CodeCreateComponent implements OnInit {
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() =>
-        this.router.navigate([`/setting/code-type/${this.form.controls.codeTypeId}`]),
-      );
+      .subscribe(() => {
+        this.router.navigate([`/setting/code-type/${this.form.controls.codeTypeId.value}`]);
+      });
   }
 }
