@@ -25,6 +25,11 @@ describe('UploadService', () => {
         returnMessage: '',
       } as BaseMessageResponse),
     );
-    service.upload(new FormData()).subscribe(res => expect(res.returnCode).toBe(returnCode));
+    service
+      .uploadArticleFile(new FormData())
+      .subscribe(res => expect(res.returnCode).toBe(returnCode));
+    service
+      .uploadProjectExperienceFile(new FormData())
+      .subscribe(res => expect(res.returnCode).toBe(returnCode));
   });
 });
