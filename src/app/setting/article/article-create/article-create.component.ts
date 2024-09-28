@@ -63,7 +63,8 @@ export class ArticleCreateComponent implements OnInit {
   labelOptions = signal<Options>([]);
   prevFiles = signal<UploadFiles>([]);
   contentFiles = signal<UploadFiles>([]);
-  uploadAdapter = this.uploadAdapterSrv.createArticleAdapter();
+  previewContentUploadAdapter = this.uploadAdapterSrv.createArticleAdapter();
+  contentUploadAdapter = this.uploadAdapterSrv.createArticleAdapter();
   form = new FormGroup({
     articleTitle: new FormControl('', [Validators.required]),
     labels: new FormControl([], []),

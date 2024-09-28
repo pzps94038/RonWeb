@@ -33,7 +33,7 @@
     </div>
     <div class="my-5">
       <app-editor
-        [adapter]="uploadAdapter"
+        [adapter]="previewContentUploadAdapter"
         (upload)="previewUpload($event)"
         labelName="預覽內容"
         labelClass="text-lg my-2 text-center md:text-left"
@@ -42,7 +42,7 @@
     </div>
     <div class="my-5">
       <app-editor
-        [adapter]="uploadAdapter"
+        [adapter]="contentUploadAdapter"
         (upload)="contentUpload($event)"
         labelName="文章內容"
         labelClass="text-lg my-2 text-center md:text-left"

@@ -61,7 +61,8 @@ export class ProjectExperienceEditComponent {
   technologyToolOptions = signal<Options>([]);
   descriptionFiles = signal<UploadFiles>([]);
   contributionsFiles = signal<UploadFiles>([]);
-  uploadAdapter = this.uploadAdapterSrv.createProjectExperienceAdapter();
+  descriptionUploadAdapter = this.uploadAdapterSrv.createProjectExperienceAdapter();
+  contributionsUploadAdapter = this.uploadAdapterSrv.createProjectExperienceAdapter();
   form = new FormGroup({
     projectExperienceId: new FormControl<undefined | number>(undefined, [Validators.required]),
     name: new FormControl('', [Validators.required]),

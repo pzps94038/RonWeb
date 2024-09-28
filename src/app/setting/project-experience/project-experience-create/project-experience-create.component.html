@@ -28,7 +28,7 @@
     </div>
     <div class="my-5">
       <app-editor
-        [adapter]="uploadAdapter"
+        [adapter]="contributionsUploadAdapter"
         (upload)="contributionsUpload($event)"
         labelName="專案貢獻"
         labelClass="text-lg my-2 text-center md:text-left"
@@ -36,7 +36,7 @@
     </div>
     <div class="my-5">
       <app-editor
-        [adapter]="uploadAdapter"
+        [adapter]="descriptionUploadAdapter"
         (upload)="descriptionUpload($event)"
         labelName="專案描述"
         labelClass="text-lg my-2 text-center md:text-left"
