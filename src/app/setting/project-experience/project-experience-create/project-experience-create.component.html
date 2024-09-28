@@ -29,19 +29,19 @@
     <div class="my-5">
       <app-editor
         [adapter]="uploadAdapter"
+        (upload)="contributionsUpload($event)"
+        labelName="專案貢獻"
+        labelClass="text-lg my-2 text-center md:text-left"
+        formControlName="contributions" />
+    </div>
+    <div class="my-5">
+      <app-editor
+        [adapter]="uploadAdapter"
         (upload)="descriptionUpload($event)"
         labelName="專案描述"
         labelClass="text-lg my-2 text-center md:text-left"
         placeholder="請輸入專案描述"
         formControlName="description" />
-    </div>
-    <div class="my-5">
-      <app-editor
-        [adapter]="uploadAdapter"
-        (upload)="contributionsUpload($event)"
-        labelName="專案經歷"
-        labelClass="text-lg my-2 text-center md:text-left"
-        formControlName="contributions" />
     </div>
     <div class="flex justify-end items-center">
       <button
