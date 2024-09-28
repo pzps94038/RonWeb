@@ -61,7 +61,7 @@ export class ArticleCreateComponent implements OnInit {
   contentFiles = signal<UploadFiles>([]);
   form = new FormGroup({
     articleTitle: new FormControl('', [Validators.required]),
-    labels: new FormControl([], [Validators.required]),
+    labels: new FormControl([], []),
     flag: new FormControl('Y', [Validators.required]),
     previewContent: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),

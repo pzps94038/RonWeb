@@ -68,7 +68,7 @@ export class ArticleEditComponent {
     previewContent: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<string | number>('', [Validators.required]),
-    labels: new FormControl<number[]>([], [Validators.required]),
+    labels: new FormControl<number[]>([]),
     references: new FormControl<string[]>([]),
   });
   private _destroyRef = inject(DestroyRef);
