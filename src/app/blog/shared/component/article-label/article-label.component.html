@@ -1,9 +1,8 @@
-<div class="p-5 bg-base-100 border border-base-content/10 text-base-content rounded-md mb-5">
-  <div class="flex justify-between items-center">
-    <h3 class="text-xl">標籤</h3>
-    <ng-icon [name]="open() ? 'heroMinus' : 'heroPlus'" (click)="open.set(!open())" />
-  </div>
-  <div class="overflow-hidden" [ngClass]="{'h-0': !open(), 'h-100': open() }">
+<div
+  class="bg-base-100 border border-base-content/10 text-base-content rounded-md mb-5 collapse collapse-plus">
+  <input type="checkbox" [checked]="true" />
+  <div class="collapse-title text-xl font-medium">標籤</div>
+  <div class="collapse-content">
     <ng-container *ngIf="!isError(); else error">
       <ng-container *ngIf="!isLoading(); else loading">
         <div class="my-1" *ngFor="let label of labels()">
