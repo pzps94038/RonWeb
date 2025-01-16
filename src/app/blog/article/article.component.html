@@ -19,7 +19,7 @@
                 </a>
               </li>
               <li *ngIf="isLogin()" class="cursor-pointer w-full flex">
-                <a class="w-full flex" [routerLink]="['/setting', 'article', 'edit', articleId]">
+                <a class="w-full flex" [routerLink]="['/setting', 'article', 'edit', articleId()]">
                   <div class="flex justify-center items-center">
                     <ng-icon name="heroPencilSquare" />
                   </div>
