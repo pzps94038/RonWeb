@@ -33,6 +33,7 @@ import { SeoService } from 'src/app/shared/service/seo.service';
 import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-highlight.service';
 import { featherMaximize2, featherMaximize } from '@ng-icons/feather-icons';
 import { UserService } from 'src/app/shared/service/user.service';
+import { DeviceService } from 'src/app/shared/service/device.service';
 @Component({
   selector: 'app-article',
   standalone: true,
@@ -57,7 +58,6 @@ import { UserService } from 'src/app/shared/service/user.service';
     DayJsPipe,
     RouterLink,
     SafePipe,
-    DisqusComponent,
     GiscusComponent,
   ],
 })
@@ -66,6 +66,7 @@ export class ArticleComponent {
   route = inject(ActivatedRoute);
   apiSrv = inject(ApiService);
   seoSrv = inject(SeoService);
+  deviceSrv = inject(DeviceService);
   codeBlockSrv = inject(CodeBlockHighlightService);
   el = inject(ElementRef);
   router = inject(Router);
@@ -88,9 +89,11 @@ export class ArticleComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(id => this.getArticleById(id));
-    fromEvent(document, 'fullscreenchange')
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => this.isFullscreen.set(!!document.fullscreenElement));
+    if (this.deviceSrv.isClient && document) {
+      fromEvent(document, 'fullscreenchange')
+        .pipe(takeUntilDestroyed(this._destroyRef))
+        .subscribe(() => this.isFullscreen.set(!!document.fullscreenElement));
+    }
   }
 
   getArticleById(id: number, cache: boolean = true) {
