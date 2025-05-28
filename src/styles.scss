@@ -14,7 +14,7 @@ html[data-theme='business'] {
 @tailwind utilities;
 @layer base {
   body {
-    @apply text-base-content bg-base-100;
+    @apply text-base-content bg-base-200;
   }
   ul {
     @apply list-disc;

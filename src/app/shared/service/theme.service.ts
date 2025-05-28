@@ -14,11 +14,6 @@ export class ThemeService {
       if (theme) {
         this.toggleTheme(JSON.parse(theme) as boolean);
       } else {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          this.darkMode.set(true);
-        } else {
-          this.darkMode.set(false);
-        }
         this.toggleTheme(this.darkMode());
       }
     }
