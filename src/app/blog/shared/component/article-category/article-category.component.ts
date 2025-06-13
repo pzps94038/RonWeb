@@ -1,8 +1,16 @@
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  TransferState,
+  inject,
+  makeStateKey,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, finalize } from 'rxjs';
+import { catchError, filter, finalize, map, Observable, of } from 'rxjs';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
 import { RouterLink } from '@angular/router';
@@ -10,6 +18,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroFolder, heroMinus, heroPlus } from '@ng-icons/heroicons/outline';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { FormsModule } from '@angular/forms';
+import { TransferStateKey } from 'src/app/shared/model/transfer-state-key.model';
 
 @Component({
   selector: 'app-article-category',
@@ -23,38 +32,44 @@ export class ArticleCategoryComponent implements OnInit {
   open = signal(true);
   articleCategorySrv = inject(ArticleCategoryService);
   apiSrv = inject(ApiService);
-  categorys = signal<ArticleCategorys>([]);
+  transferState = inject(TransferState);
+  categorys$?: Observable<ArticleCategorys>;
   isLoading = signal(false);
   isError = signal(false);
-  private _destroyRef = inject(DestroyRef);
 
   ngOnInit() {
-    this.getArticleCategory();
+    const stateKey = makeStateKey<ArticleCategorys>(TransferStateKey.ArticleCategory);
+    const category = this.transferState.get(stateKey, undefined);
+    if (category) {
+      this.categorys$ = of(category);
+      this.isError.set(false);
+      this.isLoading.set(false);
+    } else {
+      this.categorys$ = this.getArticleCategory();
+    }
   }
 
+  /**
+   * 取得文章分類
+   */
   getArticleCategory() {
     this.isLoading.set(true);
     this.isError.set(false);
-    this.articleCategorySrv
-      .getArticleCategory()
-      .pipe(
-        finalize(() => this.isLoading.set(false)),
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe({
-        next: res => {
-          if (this.apiSrv.ifSuccess(res, false)) {
-            const {
-              data: { categorys },
-            } = res;
-            this.categorys.set(categorys);
-          } else {
-            this.isError.set(true);
-          }
-        },
-        error: () => {
+    return this.articleCategorySrv.getArticleCategory().pipe(
+      filter(res => {
+        if (this.apiSrv.ifSuccess(res, false)) {
+          return true;
+        } else {
           this.isError.set(true);
-        },
-      });
+          return false;
+        }
+      }),
+      catchError(err => {
+        this.isError.set(true);
+        throw err;
+      }),
+      map(({ data }) => data),
+      map(({ categorys }) => categorys),
+    );
   }
 }
