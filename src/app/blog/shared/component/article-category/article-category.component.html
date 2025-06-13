@@ -5,7 +5,7 @@
   <div class="collapse-content">
     <ng-container *ngIf="!isError(); else error">
       <ng-container *ngIf="!isLoading(); else loading">
-        <div class="my-1" *ngFor="let category of categorys$ | async">
+        <div class="my-1" *ngFor="let category of categorys()">
           <a
             class="link link-secondary w-full flex"
             [routerLink]="['category', category.categoryId]">
