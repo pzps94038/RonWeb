@@ -122,26 +122,5 @@ npm run compodoc
 
 在此列出專案使用的主要技術和相關套件。
 
-- Angular 版本: 16.0.4
-- 部署相關套件或工具：
-  - ckeditor 版本: 37.1.0
-  - ng-icons 版本: 23.3.0
-  - ng-select 版本: 11.0.0
-  - @ngneat/dialog 版本: 4.0.0
-  - angular/universal 版本: 16.0.0
-  - animate.css 版本: 4.1.1
-  - daisyui 版本: 2.51.5
-  - dayjs 版本: 1.11.7
-  - express 版本: 4.15.2
-  - highlight.js 版本: 11.8.0
-  - lottie-web 版本: 5.11.0
-  - sweetalert2 版本: 11.7.5
-  - swiper 版本: 9.2.2
-- 本機相關套件或工具
-  - autoprefixer 版本: 10.4.14
-  - axios 版本: 1.4.0
-  - cypress 版本: latest
-  - husky 版本: 8.0.3
-  - sitemap 版本: 7.1.1
-  - tailwindcss 版本: 3.3.2
-  - compodoc 版本: 1.1.21
+- Angular 版本: 17
+- Node 版本: 18.19.0
