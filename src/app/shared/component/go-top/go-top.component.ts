@@ -15,12 +15,16 @@ import { heroChevronUp } from '@ng-icons/heroicons/outline';
 export class GoTopComponent {
   deviceSrv = inject(DeviceService);
 
+  /**
+   * 滾回最上面
+   */
   goTop() {
-    if (this.deviceSrv.isClient) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
+    if (this.deviceSrv.isServer) {
+      return;
     }
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   }
 }

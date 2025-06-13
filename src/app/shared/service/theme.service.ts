@@ -8,14 +8,18 @@ export class ThemeService {
   deviceSrv = inject(DeviceService);
   darkMode = signal(false);
 
+  /**
+   * 初始化樣式
+   */
   initTheme() {
-    if (this.deviceSrv.isClient) {
-      const theme = localStorage.getItem('theme');
-      if (theme) {
-        this.toggleTheme(JSON.parse(theme) as boolean);
-      } else {
-        this.toggleTheme(this.darkMode());
-      }
+    if (this.deviceSrv.isServer) {
+      return;
+    }
+    const theme = localStorage.getItem('theme');
+    if (theme) {
+      this.toggleTheme(JSON.parse(theme) as boolean);
+    } else {
+      this.toggleTheme(this.darkMode());
     }
   }
 
@@ -24,6 +28,9 @@ export class ThemeService {
    * @param darkMode
    */
   toggleTheme(darkMode: boolean) {
+    if (this.deviceSrv.isServer) {
+      return;
+    }
     this.darkMode.set(darkMode);
     const html = document.getElementsByTagName('html')[0];
     if (darkMode) {

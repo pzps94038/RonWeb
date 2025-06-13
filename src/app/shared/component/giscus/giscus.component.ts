@@ -55,7 +55,7 @@ export class GiscusComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   generateComment() {
-    if (!this.deviceSrv.isClient) {
+    if (this.deviceSrv.isServer) {
       return;
     }
     const element = this.elementRef.nativeElement;

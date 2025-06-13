@@ -26,17 +26,16 @@ export class UserService {
    * @returns
    */
   getToken() {
-    if (this.deviceSrv.isClient) {
-      const localToken = localStorage.getItem('token');
-      if (localToken) {
-        const token = JSON.parse(localToken) as Token;
-        const accessToken = token?.accessToken;
-        const refreshToken = token?.refreshToken;
-        if (accessToken && refreshToken) {
-          return token;
-        } else {
-          return undefined;
-        }
+    if (this.deviceSrv.isServer) {
+      return undefined;
+    }
+    const localToken = localStorage.getItem('token');
+    if (localToken) {
+      const token = JSON.parse(localToken) as Token;
+      const accessToken = token?.accessToken;
+      const refreshToken = token?.refreshToken;
+      if (accessToken && refreshToken) {
+        return token;
       } else {
         return undefined;
       }
@@ -50,18 +49,20 @@ export class UserService {
    * @param token
    */
   setToken(token: Token) {
-    if (this.deviceSrv.isClient) {
-      localStorage.setItem('token', JSON.stringify(token));
+    if (this.deviceSrv.isServer) {
+      return;
     }
+    localStorage.setItem('token', JSON.stringify(token));
   }
 
   /**
    * 移除token
    */
   removeToken() {
-    if (this.deviceSrv.isClient) {
-      localStorage.removeItem('token');
+    if (this.deviceSrv.isServer) {
+      return;
     }
+    localStorage.removeItem('token');
   }
 
   /**
@@ -69,16 +70,15 @@ export class UserService {
    * @returns
    */
   getUserId() {
-    if (this.deviceSrv.isClient) {
-      const localUserId = localStorage.getItem('userId');
-      if (localUserId) {
-        const userId = parseInt(localUserId);
-        const id = isNaN(userId) ? undefined : userId;
-        if (id) {
-          return id;
-        } else {
-          return undefined;
-        }
+    if (this.deviceSrv.isServer) {
+      return undefined;
+    }
+    const localUserId = localStorage.getItem('userId');
+    if (localUserId) {
+      const userId = parseInt(localUserId);
+      const id = isNaN(userId) ? undefined : userId;
+      if (id) {
+        return id;
       } else {
         return undefined;
       }
@@ -92,17 +92,19 @@ export class UserService {
    * @param
    */
   setUserId(userId: number) {
-    if (this.deviceSrv.isClient) {
-      localStorage.setItem('userId', JSON.stringify(userId));
+    if (this.deviceSrv.isServer) {
+      return;
     }
+    localStorage.setItem('userId', JSON.stringify(userId));
   }
 
   /**
    * 移除token
    */
   removeUserId() {
-    if (this.deviceSrv.isClient) {
-      localStorage.removeItem('userId');
+    if (this.deviceSrv.isServer) {
+      return;
     }
+    localStorage.removeItem('userId');
   }
 }

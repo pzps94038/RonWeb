@@ -14,35 +14,42 @@ export class ScrollAnimateDirective implements OnInit, OnDestroy {
   @Input() speed?: Speed;
   @Input() once = false;
   private _isLoading = false;
-  private _observer = new IntersectionObserver(([entry]) => {
-    const el = entry.target as Element;
-    if (this.once) {
-      if (entry.isIntersecting && !this._isLoading) {
-        this.addClass(el);
-        this._isLoading = true;
-      }
-    } else {
-      if (entry.isIntersecting) {
-        this.addClass(el);
-        this._isLoading = true;
-      } else {
-        this.removeClass(el);
-        this._isLoading = false;
-      }
-    }
-  });
+  private _observer?: IntersectionObserver;
   el = inject(ElementRef<Element>);
   render = inject(Renderer2);
   device = inject(DeviceService);
 
   ngOnInit() {
-    if (this.el.nativeElement && this.device.isClient) {
+    if (this.device.isServer) {
+      return;
+    }
+    if (this.el.nativeElement) {
+      this._observer = new IntersectionObserver(([entry]) => {
+        const el = entry.target as Element;
+        if (this.once) {
+          if (entry.isIntersecting && !this._isLoading) {
+            this.addClass(el);
+            this._isLoading = true;
+          }
+        } else {
+          if (entry.isIntersecting) {
+            this.addClass(el);
+            this._isLoading = true;
+          } else {
+            this.removeClass(el);
+            this._isLoading = false;
+          }
+        }
+      });
       this._observer.observe(this.el.nativeElement);
     }
   }
 
   ngOnDestroy() {
-    this._observer.disconnect();
+    if (this.device.isServer) {
+      return;
+    }
+    this._observer?.disconnect();
   }
 
   /**

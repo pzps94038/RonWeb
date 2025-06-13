@@ -3,12 +3,14 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  inject,
   Inject,
   Input,
   Output,
   Renderer2,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
+import { DeviceService } from '../../service/device.service';
 
 export interface DisqusComment {
   id: number;
@@ -26,6 +28,7 @@ export interface DisqusReady {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DisqusComponent {
+  deviceSrv = inject(DeviceService);
   /** DISQUS options */
   @Input({ required: true }) url!: string;
   @Input({ required: true }) identifier!: string;
@@ -57,6 +60,9 @@ export class DisqusComponent {
   ) {}
 
   ngOnChanges() {
+    if (this.deviceSrv.isServer) {
+      return;
+    }
     if (!this.DISQUS) {
       this.addDisqusScript();
     } else {

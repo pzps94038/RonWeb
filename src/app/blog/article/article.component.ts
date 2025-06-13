@@ -89,11 +89,12 @@ export class ArticleComponent {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(id => this.getArticleById(id));
-    if (this.deviceSrv.isClient && document) {
-      fromEvent(document, 'fullscreenchange')
-        .pipe(takeUntilDestroyed(this._destroyRef))
-        .subscribe(() => this.isFullscreen.set(!!document.fullscreenElement));
+    if (this.deviceSrv.isServer) {
+      return;
     }
+    fromEvent(document, 'fullscreenchange')
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => this.isFullscreen.set(!!document.fullscreenElement));
   }
 
   /**
@@ -146,6 +147,9 @@ export class ArticleComponent {
    * 切換全螢幕模式
    */
   toggleFullscreenMode() {
+    if (this.deviceSrv.isServer) {
+      return;
+    }
     if (document.fullscreenElement) {
       document.exitFullscreen();
       this.el.nativeElement?.style?.removeProperty('overflow');
