@@ -65,6 +65,7 @@
     "@ng-icons/heroicons": "^23.3.0",
     "@ng-select/ng-select": "^11.0.0",
     "@ngneat/dialog": "^4.0.0",
+    "@rx-angular/isr": "^19.0.0",
     "animate.css": "^4.1.1",
     "daisyui": "^2.51.5",
     "dayjs": "^1.11.7",

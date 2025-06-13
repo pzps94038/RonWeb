@@ -6,6 +6,7 @@ import * as express from 'express';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import bootstrap from './src/main.server';
+import { ISRHandler } from '@rx-angular/isr/server';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -16,6 +17,17 @@ export function app(): express.Express {
     : join(distFolder, 'index.html');
 
   const commonEngine = new CommonEngine();
+
+  // ISR 設定
+  const isr = new ISRHandler({
+    indexHtml,
+    // server 環境變數
+    invalidateSecretToken: process.env.REVALIDATE_SECRET_TOKEN!,
+    enableLogging: true,
+  });
+
+  server.use(express.json());
+  server.post('/api/invalidate', async (req, res) => await isr.invalidate(req, res));
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
@@ -31,20 +43,13 @@ export function app(): express.Express {
   );
 
   // All regular routes use the Angular engine
-  server.get('*', (req, res, next) => {
-    const { protocol, originalUrl, baseUrl, headers } = req;
-
-    commonEngine
-      .render({
-        bootstrap,
-        documentFilePath: indexHtml,
-        url: `${protocol}://${headers.host}${originalUrl}`,
-        publicPath: distFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
-      })
-      .then(html => res.send(html))
-      .catch(err => next(err));
-  });
+  server.get(
+    '*',
+    // 1. 嘗試從快取讀取 ISR 頁面
+    async (req, res, next) => await isr.serveFromCache(req, res, next),
+    // 2. 若沒有快取，進行 SSR 並快取
+    async (req, res, next) => await isr.render(req, res, next),
+  );
 
   return server;
 }
