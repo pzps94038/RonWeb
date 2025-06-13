@@ -10,7 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, filter, finalize, map, Observable, of } from 'rxjs';
+import { catchError, filter, finalize, map, Observable, of, tap } from 'rxjs';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
 import { RouterLink } from '@angular/router';
@@ -29,6 +29,7 @@ import { TransferStateKey } from 'src/app/shared/model/transfer-state-key.model'
   styleUrls: ['./article-category.component.scss'],
 })
 export class ArticleCategoryComponent implements OnInit {
+  stateKey = makeStateKey<ArticleCategorys>(TransferStateKey.ArticleCategory);
   open = signal(true);
   articleCategorySrv = inject(ArticleCategoryService);
   apiSrv = inject(ApiService);
@@ -38,8 +39,7 @@ export class ArticleCategoryComponent implements OnInit {
   isError = signal(false);
 
   ngOnInit() {
-    const stateKey = makeStateKey<ArticleCategorys>(TransferStateKey.ArticleCategory);
-    const category = this.transferState.get(stateKey, undefined);
+    const category = this.transferState.get(this.stateKey, undefined);
     if (category) {
       this.categorys$ = of(category);
       this.isError.set(false);
@@ -70,6 +70,8 @@ export class ArticleCategoryComponent implements OnInit {
       }),
       map(({ data }) => data),
       map(({ categorys }) => categorys),
+      tap(categorys => this.transferState.set(this.stateKey, categorys)),
+      tap(() => this.isLoading.set(true)),
     );
   }
 }
