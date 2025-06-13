@@ -1,5 +1,4 @@
 import 'zone.js/node';
-
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr';
 import * as express from 'express';
@@ -12,6 +11,7 @@ import { ISRHandler } from '@rx-angular/isr/server';
 export function app(): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/RonWeb/browser');
+  const serverDistFolder = join(process.cwd(), 'dist/RonWeb/server');
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? join(distFolder, 'index.original.html')
     : join(distFolder, 'index.html');
@@ -24,13 +24,17 @@ export function app(): express.Express {
     // server 環境變數
     invalidateSecretToken: process.env['REVALIDATE_SECRET_TOKEN']!,
     enableLogging: true,
+    serverDistFolder,
+    browserDistFolder: distFolder,
+    bootstrap,
+    commonEngine,
   });
 
   server.use(express.json());
   server.post('/api/invalidate', async (req, res) => await isr.invalidate(req, res));
 
-  server.set('view engine', 'html');
-  server.set('views', distFolder);
+  // server.set('view engine', 'html');
+  // server.set('views', distFolder);
 
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
