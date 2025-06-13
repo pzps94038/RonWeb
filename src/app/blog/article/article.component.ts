@@ -96,6 +96,11 @@ export class ArticleComponent {
     }
   }
 
+  /**
+   * 取得文章
+   * @param id
+   * @param cache
+   */
   getArticleById(id: number, cache: boolean = true) {
     this.articleSrv
       .getArticleById(id, cache)
@@ -103,9 +108,9 @@ export class ArticleComponent {
         tap(() => this.isLoading.set(true)),
         catchError(err => {
           this.isError.set(true);
+          this.isLoading.set(false);
           throw err;
         }),
-        finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
@@ -125,13 +130,21 @@ export class ArticleComponent {
         } else {
           this.isError.set(true);
         }
+        this.isLoading.set(false);
       });
   }
 
+  /**
+   * 更新文章瀏覽次數
+   * @param id
+   */
   updateArticleViews(id: number) {
     this.articleSrv.updateArticleViews(id).pipe(takeUntilDestroyed(this._destroyRef)).subscribe();
   }
 
+  /**
+   * 切換全螢幕模式
+   */
   toggleFullscreenMode() {
     if (document.fullscreenElement) {
       document.exitFullscreen();
