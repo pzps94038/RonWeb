@@ -22,7 +22,7 @@ export function app(): express.Express {
   const isr = new ISRHandler({
     indexHtml,
     // server 環境變數
-    invalidateSecretToken: process.env.REVALIDATE_SECRET_TOKEN!,
+    invalidateSecretToken: process.env['REVALIDATE_SECRET_TOKEN']!,
     enableLogging: true,
   });
 
