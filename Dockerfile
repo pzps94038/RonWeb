@@ -3,5 +3,5 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npm run build:ssr
+RUN npm run prerender
 CMD ["npm", "run", "serve:ssr"]

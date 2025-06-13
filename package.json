@@ -18,8 +18,7 @@
     "mock-service:darwin": "cd osprey-mock-service; osprey-mock-service -f api.raml -p 3000 &",
     "prestart:local:win32": "npm run mock-service:win32",
     "prestart:local:darwin": "npm run mock-service:darwin",
-    "dev:ssr:local": "ng run RonWeb:serve-ssr:development",
-    "dev:ssr:prod": "ng run RonWeb:serve-ssr:production",
+    "dev:ssr": "ng run RonWeb:serve-ssr",
     "serve:ssr": "node dist/RonWeb/server/main.js",
     "build:ssr": "ng build && ng run RonWeb:server && npm run sitemap && node rename-script.js RonWeb true true",
     "prerender": "ng run RonWeb:prerender --routes-file routes.txt && npm run sitemap && node rename-script.js RonWeb true true",
@@ -73,7 +72,7 @@
     "lottie-web": "^5.11.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.7.5",
-    "swiper": "^11.2.8",
+    "swiper": "^9.2.2",
     "tslib": "^2.3.0",
     "typed.js": "^2.0.15",
     "zone.js": "~0.13.0"

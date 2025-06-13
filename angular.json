@@ -173,8 +173,7 @@
           "configurations": {
             "development": {
               "browserTarget": "RonWeb:build:development",
-              "serverTarget": "RonWeb:server:development",
-              "proxyConfig": "proxy.conf.local.json"
+              "serverTarget": "RonWeb:server:development"
             },
             "production": {
               "browserTarget": "RonWeb:build:production",
