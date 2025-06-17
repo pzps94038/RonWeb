@@ -67,8 +67,8 @@ describe('Window DarkTheme Test', () => {
     if (service.deviceSrv.isClient) {
       spyOn(localStorage, 'getItem').and.returnValue(null);
       service.initTheme();
-      expect(service.darkMode()).toBe(true);
-      expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('business');
+      expect(service.darkMode()).toBe(false);
+      expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('corporate');
     }
   });
 });

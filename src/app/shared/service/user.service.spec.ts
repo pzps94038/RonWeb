@@ -95,7 +95,7 @@ describe('UserService ServerMode', () => {
     };
     service.setToken(token);
     service.setUserId(1);
-    spyOnProperty(service.deviceSrv, 'isClient', 'get').and.returnValue(false);
+    spyOnProperty(service.deviceSrv, 'isServer', 'get').and.returnValue(true);
     expect(service.getToken()).toBe(undefined);
     expect(service.getUserId()).toBe(undefined);
     service.logout();
