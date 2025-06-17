@@ -6,7 +6,7 @@ import { DeviceService } from './device.service';
 })
 export class ThemeService {
   deviceSrv = inject(DeviceService);
-  darkMode = signal(false);
+  darkMode = signal(true);
 
   /**
    * 初始化樣式
