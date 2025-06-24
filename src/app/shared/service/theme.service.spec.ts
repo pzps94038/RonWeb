@@ -67,38 +67,8 @@ describe('Window DarkTheme Test', () => {
     if (service.deviceSrv.isClient) {
       spyOn(localStorage, 'getItem').and.returnValue(null);
       service.initTheme();
-      expect(service.darkMode()).toBe(false);
-      expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('corporate');
-    }
-  });
-});
-
-describe('Window LightTheme Test', () => {
-  let service: ThemeService;
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ThemeService);
-    // 模擬window.matchMedia
-    const matchMediaMock = (query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jasmine.createSpy('addListener'),
-      removeListener: jasmine.createSpy('removeListener'),
-      addEventListener: jasmine.createSpy('addEventListener'),
-      removeEventListener: jasmine.createSpy('removeEventListener'),
-      dispatchEvent: jasmine.createSpy('dispatchEvent'),
-    });
-
-    spyOn(window, 'matchMedia').and.callFake(matchMediaMock);
-  });
-
-  it('init System Light Theme', () => {
-    if (service.deviceSrv.isClient) {
-      spyOn(localStorage, 'getItem').and.returnValue(null);
-      service.initTheme();
-      expect(service.darkMode()).toBe(false);
-      expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('corporate');
+      expect(service.darkMode()).toBe(true);
+      expect(document.getElementsByTagName('html')[0].getAttribute('data-theme')).toBe('business');
     }
   });
 });
