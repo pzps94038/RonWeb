@@ -186,19 +186,6 @@ export class ArticleComponent {
       img.addEventListener('click', () => {
         this.lightboxSrv.open(imageUrls, index);
       });
-      
-      // 添加cursor pointer樣式
-      img.style.cursor = 'pointer';
-      img.style.transition = 'opacity 0.2s ease';
-      
-      // 添加hover效果
-      img.addEventListener('mouseenter', () => {
-        img.style.opacity = '0.8';
-      });
-      
-      img.addEventListener('mouseleave', () => {
-        img.style.opacity = '1';
-      });
     });
   }
 }
