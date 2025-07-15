@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DialogRef } from '@ngneat/dialog';
-import { LightboxComponent, LightboxData } from './lightbox.component';
+import { LightboxComponent } from './lightbox.component';
+import { LightboxData } from '../../model/lightbox.model';
 
 describe('LightboxComponent', () => {
   let component: LightboxComponent;

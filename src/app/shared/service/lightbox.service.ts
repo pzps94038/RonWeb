@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { DialogService } from '@ngneat/dialog';
-import { LightboxComponent, LightboxData } from '../component/lightbox/lightbox.component';
+import { LightboxComponent } from '../component/lightbox/lightbox.component';
+import { LightboxData } from '../model/lightbox.model';
 
 @Injectable({
   providedIn: 'root'

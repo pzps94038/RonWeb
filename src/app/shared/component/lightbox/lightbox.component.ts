@@ -3,11 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DialogRef } from '@ngneat/dialog';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroXMark, heroChevronLeft, heroChevronRight } from '@ng-icons/heroicons/outline';
-
-export interface LightboxData {
-  images: string[];
-  currentIndex: number;
-}
+import { LightboxData } from '../../model/lightbox.model';
 
 @Component({
   selector: 'app-lightbox',
