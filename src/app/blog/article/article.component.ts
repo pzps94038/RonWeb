@@ -34,7 +34,7 @@ import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-hig
 import { featherMaximize2, featherMaximize } from '@ng-icons/feather-icons';
 import { UserService } from 'src/app/shared/service/user.service';
 import { DeviceService } from 'src/app/shared/service/device.service';
-import { LightboxService } from 'src/app/shared/service/lightbox.service';
+import { Lightbox, LightboxModule } from 'ngx-lightbox';
 @Component({
   selector: 'app-article',
   standalone: true,
@@ -60,6 +60,7 @@ import { LightboxService } from 'src/app/shared/service/lightbox.service';
     RouterLink,
     SafePipe,
     GiscusComponent,
+    LightboxModule,
   ],
 })
 export class ArticleComponent {
@@ -69,7 +70,7 @@ export class ArticleComponent {
   seoSrv = inject(SeoService);
   deviceSrv = inject(DeviceService);
   codeBlockSrv = inject(CodeBlockHighlightService);
-  lightboxSrv = inject(LightboxService);
+  lightbox = inject(Lightbox);
   el = inject(ElementRef);
   router = inject(Router);
   userSrv = inject(UserService);
@@ -177,14 +178,18 @@ export class ArticleComponent {
     }
 
     const images = this.el.nativeElement.querySelectorAll('.ck-content img');
-    const imageUrls: string[] = [];
+    const albums: { src: string; caption: string; thumb: string }[] = [];
     
     images.forEach((img: HTMLImageElement, index: number) => {
-      imageUrls.push(img.src);
+      albums.push({
+        src: img.src,
+        caption: img.alt || '',
+        thumb: img.src
+      });
       
       // 添加點擊事件監聽器
       img.addEventListener('click', () => {
-        this.lightboxSrv.open(imageUrls, index);
+        this.lightbox.open(albums, index);
       });
     });
   }
