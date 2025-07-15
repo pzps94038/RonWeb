@@ -58,4 +58,12 @@ html[data-theme='business'] {
   .text-huge {
     @apply text-2xl #{!important};
   }
+  
+  /* Enhanced image styles for lightbox */
+  img {
+    @apply cursor-pointer transition-opacity duration-200 #{!important};
+    &:hover {
+      @apply opacity-80 #{!important};
+    }
+  }
 }

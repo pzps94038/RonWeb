@@ -34,6 +34,7 @@ import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-hig
 import { featherMaximize2, featherMaximize } from '@ng-icons/feather-icons';
 import { UserService } from 'src/app/shared/service/user.service';
 import { DeviceService } from 'src/app/shared/service/device.service';
+import { LightboxService } from 'src/app/shared/service/lightbox.service';
 @Component({
   selector: 'app-article',
   standalone: true,
@@ -68,6 +69,7 @@ export class ArticleComponent {
   seoSrv = inject(SeoService);
   deviceSrv = inject(DeviceService);
   codeBlockSrv = inject(CodeBlockHighlightService);
+  lightboxSrv = inject(LightboxService);
   el = inject(ElementRef);
   router = inject(Router);
   userSrv = inject(UserService);
@@ -126,6 +128,7 @@ export class ArticleComponent {
           this.article.set(data);
           this.updateArticleViews(id);
           this.codeBlockSrv.highlightAllBlock();
+          this.setupImageLightbox();
         } else if (res.returnCode === ReturnCode.NotFound) {
           this.router.navigate(['blog', 'notFound']);
         } else {
@@ -159,5 +162,42 @@ export class ArticleComponent {
         this.el.nativeElement.style.overflow = 'auto';
       }
     }
+  }
+
+  /**
+   * 設置圖片燈箱功能
+   */
+  private setupImageLightbox() {
+    if (this.deviceSrv.isServer) {
+      return;
+    }
+
+    // 延遲執行，等待DOM完全渲染
+    setTimeout(() => {
+      const images = this.el.nativeElement.querySelectorAll('.ck-content img');
+      const imageUrls: string[] = [];
+      
+      images.forEach((img: HTMLImageElement, index: number) => {
+        imageUrls.push(img.src);
+        
+        // 添加點擊事件監聽器
+        img.addEventListener('click', () => {
+          this.lightboxSrv.open(imageUrls, index);
+        });
+        
+        // 添加cursor pointer樣式
+        img.style.cursor = 'pointer';
+        img.style.transition = 'opacity 0.2s ease';
+        
+        // 添加hover效果
+        img.addEventListener('mouseenter', () => {
+          img.style.opacity = '0.8';
+        });
+        
+        img.addEventListener('mouseleave', () => {
+          img.style.opacity = '1';
+        });
+      });
+    }, 100);
   }
 }
