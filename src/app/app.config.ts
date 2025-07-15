@@ -9,9 +9,12 @@ import { EllipsisPipe } from './shared/pipe/ellipsis.pipe';
 import { UserService } from './shared/service/user.service';
 import { ThemeService } from './shared/service/theme.service';
 import { provideServiceWorker } from '@angular/service-worker';
+import { provideDialog } from '@ngneat/dialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    // Dialog service for lightbox and other dialogs
+    provideDialog(),
     // httpClient && 攔截器
     provideHttpClient(withInterceptors([httpInterceptor])),
     // 路由
