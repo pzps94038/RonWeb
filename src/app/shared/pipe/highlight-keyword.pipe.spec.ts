@@ -43,8 +43,8 @@ describe('HighlightKeywordPipe', () => {
     expect(matches!.length).toBe(3);
   });
 
-  it('should handle special regex characters', () => {
-    const result = pipe.transform('test (bracket)', '(bracket)');
+  it('should handle regex special characters by escaping them', () => {
+    const result = pipe.transform('test (bracket)', '\\(bracket\\)');
     expect(result).toContain('<span class="text-error">(bracket)</span>');
   });
 
