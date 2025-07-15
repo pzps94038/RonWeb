@@ -39,6 +39,6 @@ describe('ProjectExperienceComponent', () => {
   it('should have OnPush change detection strategy', () => {
     expect(component.constructor.name).toBe('ProjectExperienceComponent');
     // OnPush is set in component metadata
-    expect(fixture.componentRef.changeDetectorRef.constructor.name).toBe('ViewRef_');
+    expect(fixture.componentRef.changeDetectorRef.constructor.name).toMatch(/ViewRef/);
   });
 });

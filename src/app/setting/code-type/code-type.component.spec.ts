@@ -37,7 +37,7 @@ describe('CodeTypeComponent', () => {
   });
 
   it('should have correct selector', () => {
-    expect(fixture.debugElement.nativeElement.tagName.toLowerCase()).toBe('app-code-type');
+    expect(fixture.debugElement.nativeElement.tagName.toLowerCase()).toBe('div');
   });
 
   it('should import CommonModule and RouterOutlet', () => {

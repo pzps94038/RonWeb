@@ -49,7 +49,7 @@ describe('HighlightKeywordPipe', () => {
   });
 
   it('should handle null or undefined values gracefully', () => {
-    expect(() => pipe.transform(null as any, 'test')).not.toThrow();
-    expect(() => pipe.transform(undefined as any, 'test')).not.toThrow();
+    expect(pipe.transform(null as any, 'test')).toBe('');
+    expect(pipe.transform(undefined as any, 'test')).toBe('');
   });
 });
