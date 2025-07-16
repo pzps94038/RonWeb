@@ -22,4 +22,38 @@ describe('ArticleComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should setup lightbox for images in .ck-content', () => {
+    // Mock the server check to return false (client side)
+    spyOnProperty(component.deviceSrv, 'isServer', 'get').and.returnValue(false);
+    
+    // Create a mock image element
+    const mockImg = document.createElement('img');
+    mockImg.src = 'test.jpg';
+    mockImg.alt = 'Test image';
+    
+    // Create a mock container with .ck-content class
+    const mockContainer = document.createElement('div');
+    mockContainer.className = 'ck-content';
+    mockContainer.appendChild(mockImg);
+    
+    // Add to component's element
+    component.el.nativeElement.appendChild(mockContainer);
+    
+    // Spy on lightbox.open method
+    spyOn(component.lightbox, 'open');
+    
+    // Call setupImageLightbox
+    component['setupImageLightbox']();
+    
+    // Simulate clicking the image
+    mockImg.click();
+    
+    // Verify lightbox was called with the full URL (DOM resolves relative URLs)
+    expect(component.lightbox.open).toHaveBeenCalledWith([{
+      src: mockImg.src, // This will be the full URL
+      caption: 'Test image',
+      thumb: mockImg.src
+    }], 0);
+  });
 });

@@ -13,8 +13,10 @@ https://ron-web.zeabur.app/blog
 3. 在專案目錄中，執行以下命令以安裝相依套件：
 
 ```
-npm ci
+npm ci --legacy-peer-deps
 ```
+
+> **注意**: 由於專案使用 Angular 17，但某些相依套件尚未完全支援，需要使用 `--legacy-peer-deps` 標誌來解決相依性衝突。
 
 ### 本機運行
 
