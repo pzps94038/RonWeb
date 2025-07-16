@@ -4,7 +4,7 @@ import {
   inject,
   signal,
   ChangeDetectorRef,
-  AfterViewInit,
+  AfterViewChecked,
   ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -63,7 +63,7 @@ import { Lightbox, LightboxModule } from 'ngx-lightbox';
     LightboxModule,
   ],
 })
-export class ArticleComponent {
+export class ArticleComponent implements AfterViewChecked {
   articleSrv = inject(ArticleService);
   route = inject(ActivatedRoute);
   apiSrv = inject(ApiService);
@@ -81,7 +81,16 @@ export class ArticleComponent {
   isLoading = signal(false);
   isError = signal(false);
   isFullscreen = signal(false);
+  private lightboxSetup = signal(false);
   private _destroyRef = inject(DestroyRef);
+
+  ngAfterViewChecked(): void {
+    // 只有在文章載入完成且燈箱尚未設置時才執行
+    if (this.article() && !this.lightboxSetup() && !this.isLoading()) {
+      this.setupImageLightbox();
+      this.lightboxSetup.set(true);
+    }
+  }
 
   ngOnInit(): void {
     this.route.paramMap
@@ -107,6 +116,9 @@ export class ArticleComponent {
    * @param cache
    */
   getArticleById(id: number, cache: boolean = true) {
+    // 重置燈箱設置標記
+    this.lightboxSetup.set(false);
+    
     this.articleSrv
       .getArticleById(id, cache)
       .pipe(
@@ -114,6 +126,7 @@ export class ArticleComponent {
         catchError(err => {
           this.isError.set(true);
           this.isLoading.set(false);
+          this.lightboxSetup.set(false);
           throw err;
         }),
         takeUntilDestroyed(this._destroyRef),
@@ -130,14 +143,14 @@ export class ArticleComponent {
           this.article.set(data);
           this.updateArticleViews(id);
           
-          // 確保 DOM 更新後再執行代碼高亮和燈箱設置
+          // 確保 DOM 更新後再執行代碼高亮
           this.cdr.detectChanges();
           this.codeBlockSrv.highlightAllBlock();
-          this.setupImageLightbox();
         } else if (res.returnCode === ReturnCode.NotFound) {
           this.router.navigate(['blog', 'notFound']);
         } else {
           this.isError.set(true);
+          this.lightboxSetup.set(false);
         }
         this.isLoading.set(false);
       });
