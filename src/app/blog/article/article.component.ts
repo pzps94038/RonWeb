@@ -10,7 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { ArticleService } from 'src/app/shared/api/article/article.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { tap, filter, map, catchError, finalize, fromEvent } from 'rxjs';
+import { tap, filter, map, catchError, finalize, fromEvent, throttleTime } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 import { Article } from 'src/app/shared/api/article/article.model';
@@ -77,6 +77,7 @@ export class ArticleComponent {
   isLoading = signal(false);
   isError = signal(false);
   isFullscreen = signal(false);
+  readingProgress = signal(0);
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
@@ -95,6 +96,16 @@ export class ArticleComponent {
     fromEvent(document, 'fullscreenchange')
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => this.isFullscreen.set(!!document.fullscreenElement));
+    fromEvent(window, 'scroll')
+      .pipe(
+        throttleTime(16, undefined, { leading: true, trailing: true }),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe(() => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        this.readingProgress.set(docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0);
+      });
   }
 
   /**
