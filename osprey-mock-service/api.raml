@@ -187,7 +187,14 @@ version: 0.1
         body:
           application/json:
             example: !include examples/search/label.json
-/api/upload:
+/api/upload/uploadArticleFile:
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/upload/upload.json
+/api/upload/uploadProjectExperienceFile:
   post:
     responses:
       200:
@@ -326,3 +333,135 @@ version: 0.1
         body:
           application/json:
             example: !include examples/admin-article-label/delete.json
+/api/adminCodeType:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code-type/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code-type/create.json
+/api/adminCodeType/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the article-code-type
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code-type/getId.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the article-code-type
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code-type/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the article-code-type
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code-type/delete.json
+/api/adminCode:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code/create.json
+/api/adminCode/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the article-code
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code/getId.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the article-code
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the article-code
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-code/delete.json
+/api/adminProjectExperience/{id}:
+  get:
+    uriParameters:
+      id:
+        description: The ID of the project-experience
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-project-experience/getId.json
+  patch:
+    uriParameters:
+      id:
+        description: The ID of the project-experience
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-project-experience/patch.json
+  delete:
+    uriParameters:
+      id:
+        description: The ID of the project-experience
+        type: number
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-project-experience/delete.json
+/api/adminProjectExperience:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-project-experience/get.json
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/admin-project-experience/create.json

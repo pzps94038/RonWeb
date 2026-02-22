@@ -78,7 +78,7 @@ export class ArticleLabelDetailComponent {
   }
 
   paginationChange(page: number) {
-    this.router.navigate(['/setting/article-label'], {
+    this.router.navigate(['/setting/article-label/detail'], {
       queryParams: {
         page,
       },

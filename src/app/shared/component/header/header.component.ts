@@ -80,9 +80,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    if (this.device.isServer) {
+      return;
+    }
     const header = this.header?.nativeElement;
     const mobile = this.mobile?.nativeElement;
-    if (header && mobile && this.device.isClient) {
+    if (header && mobile) {
       const observer = new IntersectionObserver(([{ isIntersecting, target }]) => {
         // 離開焦點
         if (!isIntersecting) {

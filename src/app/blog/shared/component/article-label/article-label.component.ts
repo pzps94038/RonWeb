@@ -31,11 +31,11 @@ export class ArticleLabelComponent implements OnInit {
     this.getArticleLabel();
   }
 
-  getArticleLabel(cache: boolean = true) {
+  getArticleLabel() {
     this.isLoading.set(true);
     this.isError.set(false);
     this.articleLabelSrv
-      .getArticleLabel(undefined, cache)
+      .getArticleLabel()
       .pipe(
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),

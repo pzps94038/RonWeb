@@ -1,9 +1,37 @@
 <div
+  class="fixed top-0 left-0 z-50 h-1 bg-base-content transition-[width] duration-150"
+  [style.width.%]="readingProgress()"></div>
+<div
   class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
   <ng-container *ngIf="!isError(); else error">
     <ng-container *ngIf="!isLoading() && article(); else loading">
       <div>
-        <h3 class="text-xl font-semibold">{{ article()!.articleTitle }}</h3>
+        <div class="flex justify-between">
+          <h3 class="text-xl font-semibold">{{ article()!.articleTitle }}</h3>
+          <div [class.dropdown-left]="isFullscreen()" class="dropdown dropdown-hover bg-base-100">
+            <div tabindex="0" role="button" class="m-1">
+              <ng-icon name="heroEllipsisVertical" size="24" />
+            </div>
+            <ul tabindex="0" class="dropdown-content menu z-[1] w-44 shadow border bg-base-100">
+              <li class="cursor-pointer w-full flex" (click)="toggleFullscreenMode()">
+                <a class="w-full flex">
+                  <div class="flex justify-center items-center">
+                    <ng-icon name="featherMaximize" />
+                  </div>
+                  {{ isFullscreen() ? '關閉全螢幕模式' : '全螢幕模式' }}
+                </a>
+              </li>
+              <li *ngIf="isLogin()" class="cursor-pointer w-full flex">
+                <a class="w-full flex" [routerLink]="['/setting', 'article', 'edit', articleId()]">
+                  <div class="flex justify-center items-center">
+                    <ng-icon name="heroPencilSquare" />
+                  </div>
+                  修改文章
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
         <div>
           <div class="flex items-center">
             <ng-icon name="heroCalendarDays" class="mr-1" />
@@ -28,10 +56,21 @@
       </div>
       <div class="divider my-1"></div>
       <div
-        class="ck-content break-words"
+        class="ck-content break-words overflow-x-auto py-3"
         [innerHTML]="article()!.previewContent | safe: 'html'"></div>
-      <div class="py-5"></div>
-      <div class="ck-content break-words" [innerHTML]="article()!.content| safe: 'html'"></div>
+      <div
+        class="ck-content break-words overflow-x-auto py-3"
+        [innerHTML]="article()!.content| safe: 'html'"></div>
+      <div *ngIf="article()!.references?.length">
+        參考文章:
+        <a
+          *ngFor="let references of article()!.references"
+          [href]="references | safe : 'url'"
+          class="link text-[#4C99E6] block overflow-hidden text-ellipsis"
+          target="_blank"
+          >{{ references }}</a
+        >
+      </div>
       <ng-container *ngIf="article()?.prevArticle || article()?.nextArticle">
         <div class="divider my-5"></div>
         <div class="flex justify-between">
@@ -39,10 +78,10 @@
             <a
               [routerLink]="['/blog','article',article()!.prevArticle?.articleId]"
               *ngIf="article()?.prevArticle">
-              <div class="w-full flex justify-start items-center">
+              <div class="w-full flex justify-start items-center text-left">
                 <span class="text-xl">←</span> 上一篇文章
               </div>
-              <div class="w-full py-1 flex justify-start items-center link link-info">
+              <div class="w-full py-1 flex justify-start items-center link link-info text-left">
                 {{ article()!.prevArticle!.articleTitle }}
               </div>
             </a>
@@ -51,10 +90,10 @@
             <a
               [routerLink]="['/blog','article',article()!.nextArticle!.articleId]"
               *ngIf="article()?.nextArticle">
-              <div class="w-full flex justify-end items-cente">
+              <div class="w-full flex justify-end items-center text-right">
                 下一篇文章 <span class="text-xl">→</span>
               </div>
-              <div class="w-full py-1 flex justify-end items-center link link-info">
+              <div class="w-full py-1 flex justify-end items-center link link-info text-right">
                 {{ article()!.nextArticle!.articleTitle }}
               </div>
             </a>

@@ -1,30 +1,40 @@
 import 'zone.js/node';
-
 import { APP_BASE_HREF } from '@angular/common';
-import { ngExpressEngine } from '@nguniversal/express-engine';
+import { CommonEngine } from '@angular/ssr';
 import * as express from 'express';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import bootstrap from './src/main.server';
+import { ISRHandler } from '@rx-angular/isr/server';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/RonWeb/browser');
+  const serverDistFolder = join(process.cwd(), 'dist/RonWeb/server');
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
-    ? 'index.original.html'
-    : 'index';
+    ? join(distFolder, 'index.original.html')
+    : join(distFolder, 'index.html');
 
-  // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
-  server.engine(
-    'html',
-    ngExpressEngine({
-      bootstrap,
-    }),
-  );
+  const commonEngine = new CommonEngine();
 
-  server.set('view engine', 'html');
-  server.set('views', distFolder);
+  // ISR 設定
+  const isr = new ISRHandler({
+    indexHtml,
+    // server 環境變數
+    invalidateSecretToken: process.env['REVALIDATE_SECRET_TOKEN']!,
+    enableLogging: true,
+    serverDistFolder,
+    browserDistFolder: distFolder,
+    bootstrap,
+    commonEngine,
+  });
+
+  server.use(express.json());
+  server.post('/api/invalidate', async (req, res) => await isr.invalidate(req, res));
+
+  // server.set('view engine', 'html');
+  // server.set('views', distFolder);
 
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
@@ -36,10 +46,14 @@ export function app(): express.Express {
     }),
   );
 
-  // All regular routes use the Universal engine
-  server.get('*', (req: any, res: any) => {
-    res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
-  });
+  // All regular routes use the Angular engine
+  server.get(
+    '*',
+    // 1. 嘗試從快取讀取 ISR 頁面
+    async (req, res, next) => await isr.serveFromCache(req, res, next),
+    // 2. 若沒有快取，進行 SSR 並快取
+    async (req, res, next) => await isr.render(req, res, next),
+  );
 
   return server;
 }
@@ -48,7 +62,7 @@ function run(): void {
   const port = process.env['PORT'] || 4000;
 
   // Start up the Node server
-  const server = app() as any;
+  const server = app();
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });

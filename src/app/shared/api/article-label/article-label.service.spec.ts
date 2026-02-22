@@ -22,26 +22,13 @@ describe('ArticleLabelService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('測試標籤緩存', fakeAsync(() => {
-    const fake = of({
-      returnCode: ReturnCode.Success,
-      returnMessage: 'msg',
-    }) as Observable<GetArticleLabelResponse>;
-    spyOn(service.articleLabelMap, 'has').and.returnValue(true);
-    const spy = spyOn(service.articleLabelMap, 'get').and.returnValue(fake);
-    service.getArticleLabel();
-    tick();
-    expect(spy).toHaveBeenCalled();
-  }));
-
   it('測試標籤無緩存', fakeAsync(() => {
-    const page = 1;
     const fake = of({
       returnCode: ReturnCode.Success,
       returnMessage: 'msg',
     }) as Observable<GetArticleLabelResponse>;
     const spy = spyOn((service as any).http as HttpClient, 'get').and.returnValue(fake);
-    service.getArticleLabel(page, false);
+    service.getArticleLabel();
     tick();
     expect(spy).toHaveBeenCalled();
   }));

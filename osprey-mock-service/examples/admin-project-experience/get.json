@@ -1,0 +1,36 @@
+{
+  "returnCode": "00",
+  "returnMessage": "string",
+  "data": {
+    "total": 23,
+    "projectExperiences": [
+      {
+        "projectExperienceId": 2,
+        "name": "string",
+        "description": "<p>1</p><p>&nbsp;</p><pre><code>scadfasdasd</code></pre>",
+        "contributions": "<p>1</p><p>&nbsp;</p><pre><code>scadfasdasd</code></pre>",
+        "projectRoles": [
+          {
+            "text": 1,
+            "value": "1"
+          },
+          {
+            "text": 2,
+            "value": "2"
+          }
+        ],
+        "technologyTools": [
+          {
+            "text": 1,
+            "value": "1"
+          },
+          {
+            "text": 2,
+            "value": "2"
+          }
+        ],
+        "createDate": "2023-05-08T13:22:00.124Z"
+      }
+    ]
+  }
+}

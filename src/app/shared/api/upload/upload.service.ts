@@ -10,7 +10,17 @@ import { environment } from 'src/environments/environment';
 export class UploadService {
   private http = inject(HttpClient);
 
-  upload(formData: FormData) {
-    return this.http.post<UploadResponse>(`${environment.baseUrl}/upload`, formData);
+  uploadArticleFile(formData: FormData) {
+    return this.http.post<UploadResponse>(
+      `${environment.baseUrl}/upload/uploadArticleFile`,
+      formData,
+    );
+  }
+
+  uploadProjectExperienceFile(formData: FormData) {
+    return this.http.post<UploadResponse>(
+      `${environment.baseUrl}/upload/uploadProjectExperienceFile`,
+      formData,
+    );
   }
 }

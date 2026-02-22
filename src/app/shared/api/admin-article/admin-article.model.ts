@@ -24,6 +24,7 @@ export type Article = {
   previewContent: string;
   labels: ArticleLabels;
   content: string;
+  references: string[];
   flag: string;
   viewCount: number;
   createDate: string;
@@ -43,6 +44,7 @@ export type CreateArticleRequest = {
   prevFiles: UploadFiles;
   contentFiles: UploadFiles;
   labels: ArticleLabels;
+  references: string[];
 };
 
 export type UpdateArticleRequest = {
@@ -56,4 +58,5 @@ export type UpdateArticleRequest = {
   prevFiles: UploadFiles;
   contentFiles: UploadFiles;
   labels: ArticleLabels;
+  references: string[];
 };

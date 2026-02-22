@@ -45,7 +45,7 @@ describe('GiscusComponent', () => {
 
   it('測試 Server Mode 阻擋', fakeAsync(() => {
     component.elementRef.nativeElement.innerHTML = '';
-    spyOnProperty(component.deviceSrv, 'isClient', 'get').and.returnValue(false);
+    spyOnProperty(component.deviceSrv, 'isServer', 'get').and.returnValue(true);
     component.generateComment();
     tick();
     expect(component.elementRef.nativeElement.querySelector('script')).toBe(null);

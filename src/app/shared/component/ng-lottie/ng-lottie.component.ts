@@ -37,7 +37,10 @@ export class NgLottieComponent implements AfterViewInit, OnDestroy {
   private _item?: AnimationItem;
   device = inject(DeviceService);
   ngAfterViewInit() {
-    if (this.el && this.device.isClient) {
+    if (this.device.isServer) {
+      return;
+    }
+    if (this.el) {
       if (this.lazyLoading) {
         const observer = new IntersectionObserver(([entry]) => {
           if (!this._isLoading && entry.isIntersecting) {

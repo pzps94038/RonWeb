@@ -1,9 +1,8 @@
-<div class="p-5 bg-base-100 border border-base-content/10 text-base-content rounded-md mb-5">
-  <div class="flex justify-between items-center">
-    <h3 class="text-xl">分類</h3>
-    <ng-icon [name]="open() ? 'heroMinus' : 'heroPlus'" (click)="open.set(!open())" />
-  </div>
-  <div class="overflow-hidden" [ngClass]="{'h-0': !open(), 'h-100': open() }">
+<div
+  class="bg-base-100 border border-base-content/10 text-base-content rounded-md mb-5 collapse collapse-plus">
+  <input type="checkbox" [checked]="true" />
+  <div class="collapse-title text-xl font-medium">分類</div>
+  <div class="collapse-content">
     <ng-container *ngIf="!isError(); else error">
       <ng-container *ngIf="!isLoading(); else loading">
         <div class="my-1" *ngFor="let category of categorys()">
@@ -24,7 +23,7 @@
         class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
     </ng-template>
     <ng-template #error>
-      <app-error (refresh)="getArticleCategory(false)" />
+      <app-error (refresh)="getArticleCategory()" />
     </ng-template>
   </div>
 </div>

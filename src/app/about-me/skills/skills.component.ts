@@ -29,7 +29,10 @@ export class SkillsComponent implements AfterViewInit, OnDestroy {
   constructor(private device: DeviceService, private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
-    if (this._el?.nativeElement && this.device.isClient) {
+    if (this.device.isServer) {
+      return;
+    }
+    if (this._el?.nativeElement) {
       const swiper = new Swiper(this._el?.nativeElement, {
         breakpoints: {
           320: {

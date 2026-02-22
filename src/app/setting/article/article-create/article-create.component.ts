@@ -1,11 +1,10 @@
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { InputComponent } from 'src/app/shared/component/form/input/input.component';
 import { TextAreaComponent } from 'src/app/shared/component/form/text-area/text-area.component';
 import { EditorComponent } from 'src/app/shared/component/form/editor/editor.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SwalIcon, SwalService } from 'src/app/shared/service/swal.service';
-import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import {
   Option,
   Options,
@@ -16,7 +15,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { LoadArticleComponent } from '../shared/component/load-article/load-article.component';
 import { UploadFile, UploadFiles } from 'src/app/shared/api/upload/upload.model';
-import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
 import { MultipleSelectComponent } from 'src/app/shared/component/form/multiple-select/multiple-select.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
 import { ApiService } from 'src/app/shared/service/api.service';
@@ -26,12 +24,16 @@ import { CreateArticleRequest } from 'src/app/shared/api/admin-article/admin-art
 import { AdminArticleCategoryService } from 'src/app/shared/api/admin-category/admin-article-category.service';
 import { AdminArticleLabelService } from 'src/app/shared/api/admin-article-label/admin-article-label.service';
 import { ToggleComponent } from 'src/app/shared/component/form/toggle/toggle.component';
+import { DynamicInputComponent } from 'src/app/shared/component/form/dynamic-input/dynamic-input.component';
+import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
+import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
+import { UploadAdapterService } from 'src/app/shared/service/upload-adapter.service';
 
 @Component({
   selector: 'app-article-create',
-  standalone: true,
   templateUrl: './article-create.component.html',
   styleUrls: ['./article-create.component.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     InputComponent,
@@ -42,35 +44,41 @@ import { ToggleComponent } from 'src/app/shared/component/form/toggle/toggle.com
     MultipleSelectComponent,
     LoadArticleComponent,
     ToggleComponent,
+    DynamicInputComponent,
   ],
 })
 export class ArticleCreateComponent implements OnInit {
   apiSrv = inject(ApiService);
   userSrv = inject(UserService);
   swalSrv = inject(SwalService);
-  articleCategorySrv = inject(AdminArticleCategoryService);
-  articleLabelSrv = inject(AdminArticleLabelService);
+  articleCategorySrv = inject(ArticleCategoryService);
+  articleLabelSrv = inject(ArticleLabelService);
   articleSrv = inject(AdminArticleService);
+  uploadAdapterSrv = inject(UploadAdapterService);
   router = inject(Router);
+  location = inject(Location);
   isLoading = signal(false);
   createIsLoading = signal(false);
   categoryOptions = signal<Options>([]);
   labelOptions = signal<Options>([]);
   prevFiles = signal<UploadFiles>([]);
   contentFiles = signal<UploadFiles>([]);
+  previewContentUploadAdapter = this.uploadAdapterSrv.createArticleAdapter();
+  contentUploadAdapter = this.uploadAdapterSrv.createArticleAdapter();
   form = new FormGroup({
     articleTitle: new FormControl('', [Validators.required]),
-    labels: new FormControl([], [Validators.required]),
+    labels: new FormControl([], []),
     flag: new FormControl('Y', [Validators.required]),
-    previewContent: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+    previewContent: new FormControl('', [Validators.required]),
     content: new FormControl('', [Validators.required]),
     categoryId: new FormControl<number | string>('', [Validators.required]),
+    references: new FormControl<string[]>([]),
   });
   private _destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.isLoading.set(true);
-    const category$ = this.articleCategorySrv.getArticleCategory(undefined).pipe(
+    const category$ = this.articleCategorySrv.getArticleCategory().pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { categorys } }) => categorys),
       map(array =>
@@ -93,7 +101,7 @@ export class ArticleCreateComponent implements OnInit {
         this.categoryOptions.set(options);
       }),
     );
-    const label$ = this.articleLabelSrv.getArticleLabel(undefined).pipe(
+    const label$ = this.articleLabelSrv.getArticleLabel().pipe(
       filter(res => this.apiSrv.ifSuccess(res)),
       map(({ data: { labels } }) => labels),
       map(array =>
@@ -116,10 +124,10 @@ export class ArticleCreateComponent implements OnInit {
 
   submit() {
     this.form.markAllAsTouched();
-    if (!this.form.valid) {
+    if (this.form.invalid) {
       return;
     }
-    const labelIds = (this.form.get('labels')?.value ?? []) as number[];
+    const labelIds = (this.form.controls.labels.value ?? []) as number[];
     const labels = this.labelOptions()
       .filter(a => labelIds.includes(a.value))
       .map(
@@ -130,15 +138,16 @@ export class ArticleCreateComponent implements OnInit {
           } as ArticleLabel),
       );
     const req = {
-      articleTitle: this.form.get('articleTitle')!.value,
-      previewContent: this.form.get('previewContent')!.value,
-      content: this.form.get('content')!.value,
-      categoryId: this.form.get('categoryId')!.value,
-      flag: this.form.get('flag')!.value,
+      articleTitle: this.form.controls.articleTitle.value,
+      previewContent: this.form.controls.previewContent.value,
+      content: this.form.controls.content.value,
+      categoryId: this.form.controls.categoryId.value,
+      flag: this.form.controls.flag.value,
       userId: this.userSrv.getUserId(),
       prevFiles: this.prevFiles(),
       contentFiles: this.contentFiles(),
       labels,
+      references: this.form.controls.references.value,
     } as CreateArticleRequest;
     this.createIsLoading.set(true);
     this.articleSrv
@@ -154,9 +163,7 @@ export class ArticleCreateComponent implements OnInit {
         finalize(() => this.createIsLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() => {
-        this.router.navigate(['/setting/article']);
-      });
+      .subscribe(() => this.location.back());
   }
 
   previewUpload(file: UploadFile) {

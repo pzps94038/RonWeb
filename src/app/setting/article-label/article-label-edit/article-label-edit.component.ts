@@ -44,31 +44,27 @@ export class ArticleLabelEditComponent implements OnInit {
         map(param => param.get('id')!),
         filter(id => !isNaN(parseInt(id))),
         map(id => parseInt(id)),
-        switchMap(id => this.articleLabelSrv.getArticleLabelById(id, false)),
+        switchMap(id => this.articleLabelSrv.getArticleLabelById(id)),
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
-        tap(({ labelId, labelName }) => {
-          this.form.get('labelId')?.setValue(labelId);
-          this.form.get('labelName')?.setValue(labelName);
-        }),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
         const { labelId, labelName } = res as ArticleLabel;
-        this.form.get('labelId')?.setValue(labelId);
-        this.form.get('labelName')?.setValue(labelName);
+        this.form.controls.labelId.setValue(labelId);
+        this.form.controls.labelName.setValue(labelName);
         this.isLoading.set(false);
       });
   }
 
   submit() {
     this.form.markAllAsTouched();
-    if (!this.form.valid) {
+    if (this.form.invalid) {
       return;
     }
     const req = {
-      labelId: this.form.get('labelId')!.value,
-      labelName: this.form.get('labelName')!.value,
+      labelId: this.form.controls.labelId.value,
+      labelName: this.form.controls.labelName.value,
       userId: this.userSrv.getUserId(),
     } as UpdateArticleLabelRequest;
     this.editIsLoading.set(true);
@@ -85,8 +81,6 @@ export class ArticleLabelEditComponent implements OnInit {
         finalize(() => this.editIsLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() => {
-        this.router.navigate(['/setting/article-label']);
-      });
+      .subscribe(() => this.router.navigate(['/setting/article-label']));
   }
 }

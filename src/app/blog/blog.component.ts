@@ -9,6 +9,7 @@ import { ArticleCategoryComponent } from './shared/component/article-category/ar
 import { FooterComponent } from '../shared/component/footer/footer.component';
 import { ArticleLabelComponent } from './shared/component/article-label/article-label.component';
 import { ValidService } from '../shared/service/valid.service';
+
 @Component({
   selector: 'app-blog',
   standalone: true,
@@ -37,9 +38,10 @@ export class BlogComponent {
 
   submit() {
     this.form.markAllAsTouched();
-    if (this.form.valid) {
-      const keyword = this.form.get('keyword')!.value;
-      this.router.navigate(['blog', 'search', keyword]);
+    if (this.form.invalid) {
+      return;
     }
+    const keyword = this.form.controls.keyword.value;
+    this.router.navigate(['blog', 'search', keyword]);
   }
 }

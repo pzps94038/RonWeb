@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'article',
+    redirectTo: 'code-type',
     pathMatch: 'full',
   },
   {
@@ -22,6 +22,19 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./article-label/article-label.component').then(m => m.ArticleLabelComponent),
     loadChildren: () => import('./article-label/article-label.route').then(m => m.routes),
+  },
+  {
+    path: 'code-type',
+    loadComponent: () => import('./code-type/code-type.component').then(m => m.CodeTypeComponent),
+    loadChildren: () => import('./code-type/code-type.route').then(m => m.routes),
+  },
+  {
+    path: 'project-experience',
+    loadComponent: () =>
+      import('./project-experience/project-experience.component').then(
+        m => m.ProjectExperienceComponent,
+      ),
+    loadChildren: () => import('./project-experience/project-experience.route').then(m => m.routes),
   },
   {
     path: '**',

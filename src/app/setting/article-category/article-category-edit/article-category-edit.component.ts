@@ -47,28 +47,24 @@ export class ArticleCategoryEditComponent {
         switchMap(id => this.articleCategorySrv.getArticleCategoryById(id)),
         filter(res => this.apiSrv.ifSuccess(res)),
         map(({ data }) => data),
-        tap(({ categoryId, categoryName }) => {
-          this.form.get('categoryId')?.setValue(categoryId);
-          this.form.get('categoryName')?.setValue(categoryName);
-        }),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe(res => {
         const { categoryId, categoryName } = res as ArticleCategory;
-        this.form.get('categoryId')?.setValue(categoryId);
-        this.form.get('categoryName')?.setValue(categoryName);
+        this.form.controls.categoryId.setValue(categoryId);
+        this.form.controls.categoryName.setValue(categoryName);
         this.isLoading.set(false);
       });
   }
 
   submit() {
     this.form.markAllAsTouched();
-    if (!this.form.valid) {
+    if (this.form.invalid) {
       return;
     }
     const req = {
-      categoryId: this.form.get('categoryId')!.value,
-      categoryName: this.form.get('categoryName')!.value,
+      categoryId: this.form.controls.categoryId.value,
+      categoryName: this.form.controls.categoryName.value,
       userId: this.userSrv.getUserId(),
     } as UpdateArticleCategoryRequest;
     this.editIsLoading.set(true);
@@ -85,8 +81,6 @@ export class ArticleCategoryEditComponent {
         finalize(() => this.editIsLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe(() => {
-        this.router.navigate(['/setting/article-category']);
-      });
+      .subscribe(() => this.router.navigate(['/setting/article-category/detail']));
   }
 }

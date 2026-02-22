@@ -1,11 +1,22 @@
 import { Injectable, inject, ChangeDetectorRef } from '@angular/core';
 import hljs from 'highlight.js';
+import { DeviceService } from './device.service';
 declare const window: any;
 @Injectable({
   providedIn: 'root',
 })
 export class CodeBlockHighlightService {
+  constructor(private deviceSrv: DeviceService) {}
+
+  /**
+   * 代碼高亮
+   * @param el
+   * @returns
+   */
   highlightAllBlock(el?: Element) {
+    if (this.deviceSrv.isServer) {
+      return;
+    }
     setTimeout(() => {
       (el ?? document)
         .querySelectorAll('pre code')

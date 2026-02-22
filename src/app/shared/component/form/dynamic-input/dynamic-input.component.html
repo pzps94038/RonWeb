@@ -1,0 +1,40 @@
+<div class="flex justify-between items-center">
+  <button class="btn btn-primary my-2" type="button" (click)="addRow()">
+    <ng-icon name="heroPlus" size="24"> </ng-icon>
+    新增{{ labelName }}
+  </button>
+</div>
+<ng-container [formGroup]="form">
+  <ng-container formArrayName="array">
+    <ng-container *ngFor="let item of form.controls['array'].controls; let idx = index">
+      <div class="flex items-center">
+        <input
+          [formControlName]="idx"
+          [type]="type"
+          [class]="class"
+          [ngClass]="{
+          'input-error': (control?.touched || (form.controls['array'].controls[idx] | abstractControl)?.touched) && (form.controls['array'].controls[idx] | abstractControl)?.errors,
+          'input-success': (control?.touched || (form.controls['array'].controls[idx] | abstractControl)?.touched) && !(form.controls['array'].controls[idx] | abstractControl)?.errors
+        }"
+          [class.input-xs]="size === 'xs'"
+          [class.input-sm]="size === 'sm'"
+          [class.input-md]="size === 'md'"
+          [class.input-lg]="size === 'lg'"
+          [inputMode]="inputmode"
+          class="input input-bordered border-2 w-11/12"
+          [placeholder]="placeholder" />
+        <button class="btn btn-error my-2 w-1/12 mx-2" type="button" (click)="removeRow(idx)">
+          <ng-icon name="heroMinus" size="24"> </ng-icon>
+        </button>
+      </div>
+      <ng-container
+        *ngIf="(control?.touched || (form.controls['array'].controls[idx] | abstractControl)?.touched) && (form.controls['array'].controls[idx] | abstractControl)?.errors && showErrorMsg">
+        <p
+          *ngIf="(form.controls['array'].controls[idx] | abstractControl)?.errors?.['required']"
+          class="mt-2 text-sm text-red-600 dark:text-red-500">
+          <span class="font-medium">此欄位必填</span>
+        </p>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-container>

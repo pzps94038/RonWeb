@@ -1,0 +1,90 @@
+<ng-container *ngIf="!isError(); else error">
+  <ng-container *ngIf="!isLoading(); else loading">
+    <div class="mb-5 flex justify-between items-center">
+      <div>
+        <p>代碼類型ID: {{ codeTypeId() }}</p>
+        <p>代碼類型名稱: {{ codeTypeName() }}</p>
+      </div>
+      <button
+        class="btn btn-primary"
+        [routerLink]="['/setting', 'code-type', codeTypeId(), 'create']"
+        [state]="{
+        codeTypeName: codeTypeName()
+      }">
+        新增代碼
+      </button>
+    </div>
+    <div class="overflow-x-auto w-full">
+      <table class="table table-zebra w-full">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="text-lg">代碼ID</th>
+            <th class="text-lg">代碼名稱</th>
+            <th class="text-lg">建立日期</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let code of codes()">
+            <th class="flex">
+              <a
+                class="btn btn-primary m-1 flex justify-center items-center"
+                [routerLink]="['/setting', 'code-type', codeTypeId(), 'edit', code.id]">
+                <ng-icon name="heroPencilSquare" />
+              </a>
+              <button
+                type="button"
+                class="btn btn-error m-1 flex justify-center items-center"
+                (click)="deleteCode(code.id)">
+                <ng-icon name="heroTrash" />
+              </button>
+            </th>
+            <td>{{ code.codeId }}</td>
+            <td>{{ code.codeName }}</td>
+            <td>{{ code.createDate| dayJs : 'YYYY/MM/DD' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)" />
+  </ng-container>
+</ng-container>
+<ng-template #loading>
+  <div class="overflow-x-auto w-full">
+    <table class="table table-zebra w-full">
+      <tbody>
+        <tr>
+          <td></td>
+          <th class="text-lg">代碼ID</th>
+          <th class="text-lg">代碼名稱</th>
+          <th class="text-lg">建立日期</th>
+        </tr>
+        <tr *ngFor="let i of [1,2,3,4,5]">
+          <td>
+            <div
+              class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+          </td>
+          <td>
+            <div
+              class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+          </td>
+          <td>
+            <div
+              class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+          </td>
+          <td>
+            <div
+              class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)" />
+</ng-template>
+<ng-template #error>
+  <div
+    class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
+    <app-error (refresh)="refreshCode()" />
+  </div>
+</ng-template>

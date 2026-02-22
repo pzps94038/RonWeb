@@ -17,6 +17,8 @@ import { AdminArticleService } from 'src/app/shared/api/admin-article/admin-arti
 
 @Component({
   selector: 'app-article-detail',
+  templateUrl: './article-detail.component.html',
+  styleUrls: ['./article-detail.component.scss'],
   standalone: true,
   providers: [provideIcons({ heroPencilSquare, heroTrash })],
   imports: [
@@ -30,8 +32,6 @@ import { AdminArticleService } from 'src/app/shared/api/admin-article/admin-arti
     FormsModule,
     InputComponent,
   ],
-  templateUrl: './article-detail.component.html',
-  styleUrls: ['./article-detail.component.scss'],
 })
 export class ArticleDetailComponent {
   articleSrv = inject(AdminArticleService);
@@ -89,7 +89,7 @@ export class ArticleDetailComponent {
   }
 
   paginationChange(page?: number) {
-    this.router.navigate(['/setting/article'], {
+    this.router.navigate(['/setting/article/detail'], {
       queryParams: {
         page,
         keyword: !!this.queryKeyword ? this.queryKeyword : undefined,

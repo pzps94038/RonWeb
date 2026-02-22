@@ -22,7 +22,13 @@
     "nextArticle": {
       "articleId": 13,
       "articleTitle": "2637. Promise Time Limit"
-    }
+    },
+    "flag": "Y",
+    "references": [
+      "連結1",
+      "連結2",
+      "連結3"
+    ]
   },
   "returnCode": "00",
   "returnMessage": "取得資料成功"
