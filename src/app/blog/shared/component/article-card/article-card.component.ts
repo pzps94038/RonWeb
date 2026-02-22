@@ -12,6 +12,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import {
   heroCalendarDays,
   heroEllipsisVertical,
+  heroEye,
   heroFolder,
   heroHashtag,
   heroPencilSquare,
@@ -35,6 +36,7 @@ import { RouterLink } from '@angular/router';
       heroFolder,
       heroPencilSquare,
       heroEllipsisVertical,
+      heroEye,
     }),
   ],
   templateUrl: './article-card.component.html',
@@ -50,6 +52,7 @@ export class ArticleCardComponent {
   @Input({ required: true }) category!: Category;
   @Input() labels: ArticleLabels = [];
   @Input({ required: true }) previewContent!: string;
+  @Input() viewCount = 0;
   @Input() highlightKeyword = false;
   @Input() keyword = '';
   @Output('showMore') showMore = new EventEmitter<boolean>();

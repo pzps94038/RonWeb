@@ -19,6 +19,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import {
   heroCalendarDays,
   heroEllipsisVertical,
+  heroEye,
   heroFolder,
   heroHashtag,
   heroPencilSquare,
@@ -49,6 +50,7 @@ import { DeviceService } from 'src/app/shared/service/device.service';
       featherMaximize,
       heroPencilSquare,
       heroEllipsisVertical,
+      heroEye,
     }),
   ],
   imports: [
