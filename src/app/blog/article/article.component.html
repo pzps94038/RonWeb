@@ -1,6 +1,6 @@
 <div
-  class="fixed top-0 left-0 z-50 h-1 bg-accent transition-[width] duration-150"
-  [style.width.%]="readingProgress()"></div>
+  class="fixed right-0 top-0 z-50 w-1 max-h-screen bg-primary transition-[height] duration-150"
+  [style.height.%]="readingProgress()"></div>
 <div
   class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
   <ng-container *ngIf="!isError(); else error">
