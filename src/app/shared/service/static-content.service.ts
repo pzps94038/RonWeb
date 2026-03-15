@@ -76,7 +76,11 @@ export class StaticContentService {
       const article$ = this.http.get(`assets/posts/${slug}.md`, { responseType: 'text' }).pipe(
         map(raw => {
           const { data, content } = this.parseFrontmatter(raw);
-          const htmlContent = marked(content, { async: false }) as string;
+          // 將絕對路徑 /assets/ 轉為相對路徑 assets/，讓 <base href> 正確解析
+          const htmlContent = (marked(content, { async: false }) as string).replace(
+            /src="\/assets\//g,
+            'src="assets/',
+          );
 
           // 從索引中取得前後篇資訊
           const indexItem = POSTS_INDEX.find(a => a.slug === slug);
