@@ -1,60 +1,49 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  Renderer2,
-  ViewChild,
-  signal,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import Swiper from 'swiper';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroArrowLeftCircle, heroArrowRightCircle } from '@ng-icons/heroicons/outline';
-import { DeviceService } from 'src/app/shared/service/device.service';
-import { ScrollAnimateDirective } from 'src/app/shared/directive/scroll-animate.directive';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+/**
+ * 技能分類資料介面
+ */
+interface SkillCategory {
+  /** 分類名稱 */
+  category: string;
+  /** 該分類下的技能列表 */
+  items: string[];
+}
+
+/**
+ * 技能展示區塊元件
+ * 以分類網格方式呈現開發者的技術技能
+ */
 @Component({
   selector: 'app-skills',
   standalone: true,
-  imports: [CommonModule, NgIconComponent, ScrollAnimateDirective],
-  providers: [provideIcons({ heroArrowLeftCircle, heroArrowRightCircle })],
+  imports: [],
   templateUrl: './skills.component.html',
   styleUrls: ['./skills.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SkillsComponent implements AfterViewInit, OnDestroy {
-  swiper = signal<Swiper | undefined>(undefined);
-  @ViewChild('el') private _el?: ElementRef<HTMLDivElement>;
-  constructor(private device: DeviceService, private cdr: ChangeDetectorRef) {}
-
-  ngAfterViewInit() {
-    if (this.device.isServer) {
-      return;
-    }
-    if (this._el?.nativeElement) {
-      const swiper = new Swiper(this._el?.nativeElement, {
-        breakpoints: {
-          320: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
-          768: {
-            slidesPerView: 3,
-            spaceBetween: 20,
-          },
-          1024: {
-            slidesPerView: 4,
-            spaceBetween: 20,
-          },
-        },
-      });
-      this.swiper.set(swiper);
-      this.cdr.detectChanges();
-    }
-  }
-
-  ngOnDestroy() {
-    this.swiper()?.destroy();
-  }
+export class SkillsComponent {
+  /** 技能分類靜態資料 */
+  skillCategories: SkillCategory[] = [
+    {
+      category: '前端',
+      items: ['Angular', 'TypeScript', 'JavaScript', 'HTML5', 'CSS3', 'RxJS', 'TailwindCSS'],
+    },
+    {
+      category: '後端',
+      items: ['C#', '.NET Core', 'Node.js'],
+    },
+    {
+      category: '資料庫',
+      items: ['SQL Server', 'MySQL', 'PostgreSQL', 'Redis'],
+    },
+    {
+      category: 'DevOps',
+      items: ['Docker', 'Git', 'GitHub Actions', 'Nginx', 'IIS'],
+    },
+    {
+      category: '雲端',
+      items: ['AWS EC2'],
+    },
+  ];
 }

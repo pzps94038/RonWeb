@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import * as dayjs from 'dayjs';
 
 import { FooterComponent } from './footer.component';
 
-describe('FooterComponent', () => {
+describe('FooterComponent - 頁尾元件', () => {
   let component: FooterComponent;
   let fixture: ComponentFixture<FooterComponent>;
 
@@ -15,7 +16,11 @@ describe('FooterComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('應建立元件', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('顯示當前年份', () => {
+    expect(component.year()).toBe(dayjs().format('YYYY'));
   });
 });

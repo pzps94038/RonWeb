@@ -1,47 +1,39 @@
 <div
-  class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
-  <div>
-    <div class="flex items-center justify-between">
-      <h3 class="text-xl font-semibold">{{ title }}</h3>
-      <div *ngIf="isLogin()" class="dropdown dropdown-hover bg-base-100">
-        <div tabindex="0" role="button" class="m-1">
-          <ng-icon name="heroEllipsisVertical" size="24" />
-        </div>
-        <ul tabindex="0" class="dropdown-content menu z-[1] w-40 shadow border bg-base-100">
-          <li class="cursor-pointer w-full flex">
-            <a class="w-full flex" [routerLink]="['/setting', 'article', 'edit', articleId]">
-              <div class="flex justify-center items-center">
-                <ng-icon name="heroPencilSquare" />
-              </div>
-              修改文章
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div>
-      <div class="flex items-center">
-        <ng-icon name="heroCalendarDays" class="mr-1" />
-        <h4>{{ date | dayJs : 'YYYY/MM/DD' }}</h4>
-      </div>
-      <div class="flex items-center link link-secondary" (click)="clickCategory.emit(category)">
-        <ng-icon name="heroFolder" class="mr-1" />
-        <h5>{{ category.categoryName }}</h5>
-      </div>
-      <div class="flex flex-wrap">
-        <div
-          *ngFor="let label of labels"
-          class="flex items-center link link-secondary mr-1"
-          (click)="clickLabel.emit(label)">
-          <ng-icon name="heroHashtag" />
-          <h5>{{ label.labelName }}</h5>
-        </div>
-      </div>
-    </div>
+  class="group relative rounded-xl bg-base-200/50 p-5 mb-4 border border-base-content/5 border-ember card-glow cursor-pointer animate-fade-in-up"
+  (click)="showMore.emit(true)">
+  <h3 class="text-lg font-bold mb-2 group-hover:text-primary transition-colors duration-300">
+    {{ title }}
+  </h3>
+  <div class="flex flex-wrap items-center gap-2 text-xs text-base-content/40 mb-3">
+    <span class="flex items-center gap-1 font-mono bg-base-300/50 px-2 py-0.5 rounded-md">
+      <ng-icon name="heroCalendarDays" size="14" />
+      {{ date | dayJs: 'YYYY/MM/DD' }}
+    </span>
+    <span
+      class="flex items-center gap-1 bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-md hover:bg-amber-500/20 transition-colors cursor-pointer"
+      (click)="$event.stopPropagation(); clickCategory.emit(category)">
+      <ng-icon name="heroFolder" size="14" />
+      {{ category.categoryName }}
+    </span>
+    <span
+      *ngFor="let label of labels"
+      class="flex items-center gap-0.5 bg-red-500/10 text-red-400 px-2 py-0.5 rounded-md hover:bg-red-500/20 transition-colors cursor-pointer"
+      (click)="$event.stopPropagation(); clickLabel.emit(label)">
+      <ng-icon name="heroHashtag" size="12" />
+      {{ label.labelName }}
+    </span>
   </div>
-  <div class="divider my-1"></div>
-  <div
-    class="ck-content break-words overflow-x-auto py-3"
-    [innerHTML]="(highlightKeyword ? (previewContent | highlightKeyword : keyword) : previewContent) | safe : 'html'"></div>
-  <span class="link link-secondary" (click)="showMore.emit(true)">... 繼續閱讀 ...</span>
+  <p
+    class="text-sm text-base-content/50 line-clamp-3 break-words overflow-hidden leading-relaxed"
+    [innerHTML]="
+      highlightKeyword
+        ? (previewContent | highlightKeyword: keyword)
+        : previewContent
+    "></p>
+  <span
+    class="inline-flex items-center gap-1.5 mt-4 text-xs font-mono text-primary group-hover:gap-2.5 transition-all duration-300"
+    (click)="showMore.emit(true)">
+    繼續閱讀
+    <span class="transition-transform duration-300 group-hover:translate-x-2">&rarr;</span>
+  </span>
 </div>

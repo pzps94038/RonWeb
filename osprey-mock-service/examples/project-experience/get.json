@@ -1,0 +1,82 @@
+{
+  "returnCode": "00",
+  "returnMessage": "取得資料成功",
+  "data": {
+    "total": 3,
+    "projectExperiences": [
+      {
+        "projectExperienceId": 1,
+        "name": "個人部落格平台",
+        "description": "<p>使用 Angular 17 + .NET 8 開發的全端部落格系統</p>",
+        "contributions": "<p>負責前後端架構設計與開發</p>",
+        "projectRoles": [
+          {
+            "text": "全端工程師",
+            "value": "fullstack"
+          }
+        ],
+        "technologyTools": [
+          {
+            "text": "Angular",
+            "value": "angular"
+          },
+          {
+            "text": ".NET 8",
+            "value": "dotnet8"
+          },
+          {
+            "text": "MySQL",
+            "value": "mysql"
+          }
+        ],
+        "createDate": "2024-01-01T00:00:00.000Z"
+      },
+      {
+        "projectExperienceId": 2,
+        "name": "運輸管理系統",
+        "description": "<p>企業級運輸任務管理與派車系統</p>",
+        "contributions": "<p>開發司機端派車任務回報功能</p>",
+        "projectRoles": [
+          {
+            "text": "前端工程師",
+            "value": "frontend"
+          }
+        ],
+        "technologyTools": [
+          {
+            "text": "Angular",
+            "value": "angular"
+          },
+          {
+            "text": "C# MVC",
+            "value": "csharp-mvc"
+          }
+        ],
+        "createDate": "2023-06-15T00:00:00.000Z"
+      },
+      {
+        "projectExperienceId": 3,
+        "name": "線上測驗系統",
+        "description": "<p>線上提供檢驗乾眼症的測驗平台</p>",
+        "contributions": "<p>C# MVC 架構開發</p>",
+        "projectRoles": [
+          {
+            "text": "後端工程師",
+            "value": "backend"
+          }
+        ],
+        "technologyTools": [
+          {
+            "text": "C# MVC",
+            "value": "csharp-mvc"
+          },
+          {
+            "text": "SQL Server",
+            "value": "sqlserver"
+          }
+        ],
+        "createDate": "2023-03-01T00:00:00.000Z"
+      }
+    ]
+  }
+}

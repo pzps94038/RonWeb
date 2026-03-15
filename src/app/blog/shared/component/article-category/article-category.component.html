@@ -1,26 +1,23 @@
-<div
-  class="bg-base-100 border border-base-content/10 text-base-content rounded-md mb-5 collapse collapse-plus">
-  <input type="checkbox" [checked]="true" />
-  <div class="collapse-title text-xl font-medium">分類</div>
-  <div class="collapse-content">
+<div class="rounded-lg border border-base-content/10 bg-base-100 overflow-hidden">
+  <div class="px-4 py-3 border-b border-base-content/10">
+    <span class="font-mono text-sm font-semibold">分類</span>
+  </div>
+  <div class="p-3">
     <ng-container *ngIf="!isError(); else error">
       <ng-container *ngIf="!isLoading(); else loading">
-        <div class="my-1" *ngFor="let category of categorys()">
-          <a
-            class="link link-secondary w-full flex"
-            [routerLink]="['category', category.categoryId]">
-            <div class="mr-1 flex justify-center items-center">
-              <ng-icon name="heroFolder" />
-            </div>
-            {{ category.categoryName }}
-          </a>
-        </div>
+        <a
+          *ngFor="let category of categorys()"
+          class="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-base-content/70 hover:bg-base-200 hover:text-base-content transition-colors"
+          [routerLink]="['category', category.categoryId]">
+          <ng-icon name="heroFolder" size="14" />
+          {{ category.categoryName }}
+        </a>
       </ng-container>
     </ng-container>
     <ng-template #loading>
       <div
         *ngFor="let i of [1, 2, 3, 4, 5]"
-        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+        class="h-4 my-2 rounded bg-base-content/5 animate-pulse"></div>
     </ng-template>
     <ng-template #error>
       <app-error (refresh)="getArticleCategory()" />

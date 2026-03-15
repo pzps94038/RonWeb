@@ -1,19 +1,20 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, DestroyRef, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleCardComponent } from '../shared/component/article-card/article-card.component';
 import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';
-import { ArticleService } from 'src/app/shared/api/article/article.service';
-import { Articles } from 'src/app/shared/api/article/article.model';
-import { catchError, finalize } from 'rxjs';
+import { finalize } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from 'src/app/shared/api/article-category/article-category.model';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { LoadingCardComponent } from '../shared/component/loading-card/loading-card.component';
-import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
-import { ApiService } from 'src/app/shared/service/api.service';
+import { PostIndexItem, StaticContentService } from 'src/app/shared/service/static-content.service';
 import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-highlight.service';
 
+/**
+ * 首頁元件
+ * 顯示分頁文章列表，資料來源為預編譯的靜態 JSON。
+ */
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -28,13 +29,12 @@ import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-hig
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  articleSrv = inject(ArticleService);
-  apiSrv = inject(ApiService);
+  contentSrv = inject(StaticContentService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   codeBlockSrv = inject(CodeBlockHighlightService);
   total = signal(0);
-  articles = signal<Articles>([]);
+  articles = signal<PostIndexItem[]>([]);
   isLoading = signal(false);
   isError = signal(false);
   page = signal(1);
@@ -45,55 +45,66 @@ export class HomeComponent implements OnInit {
       const page = params.get('page');
       const num = page ? parseInt(page) : 1;
       this.page.set(isNaN(num) ? 1 : num);
-      this.getArticle(this.page());
+      this.getArticles(this.page());
     });
   }
 
-  getArticle(page?: number) {
+  /**
+   * 取得文章列表
+   * @param page - 頁碼
+   */
+  getArticles(page: number = 1) {
     this.isError.set(false);
     this.isLoading.set(true);
-    this.articleSrv
-      .getArticle(page)
+    this.contentSrv
+      .getArticles(page)
       .pipe(
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe({
         next: res => {
-          if (this.apiSrv.ifSuccess(res, false)) {
-            const {
-              data: { total, articles },
-            } = res;
-            this.total.set(total);
-            this.articles.set(articles);
-            this.codeBlockSrv.highlightAllBlock();
-          } else {
-            this.isError.set(true);
-          }
+          this.total.set(res.total);
+          this.articles.set(res.items);
+          this.codeBlockSrv.highlightAllBlock();
         },
-        error: err => {
+        error: () => {
           this.isError.set(true);
         },
       });
   }
 
-  showMore(id: number) {
-    this.router.navigateByUrl(`/blog/article/${id}`);
+  /**
+   * 導向文章詳情頁
+   * @param slug - 文章 slug
+   */
+  showMore(slug: string) {
+    this.router.navigateByUrl(`/blog/article/${slug}`);
   }
 
+  /**
+   * 導向分類頁
+   * @param category - 分類物件
+   */
   navigateCategory({ categoryId }: Category) {
     this.router.navigateByUrl(`/blog/category/${categoryId}`);
   }
 
-  navigateLabel({ labelId }: ArticleLabel) {
+  /**
+   * 導向標籤頁
+   * @param label - 標籤物件
+   */
+  navigateLabel({ labelId }: { labelId: number }) {
     this.router.navigateByUrl(`/blog/label/${labelId}`);
   }
 
+  /**
+   * 分頁切換
+   * @param page - 目標頁碼
+   */
   paginationChange(page: number) {
-    this.router.navigate(['/blog/home'], {
-      queryParams: {
-        page,
-      },
+    this.router.navigate(['/blog'], {
+      queryParams: { page },
     });
   }
 }

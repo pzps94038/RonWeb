@@ -1,196 +1,47 @@
-<div class="container mx-auto">
-  <h3 class="text-center text-2xl font-bold mt-5">專案經歷</h3>
-  <div class="flex flex-wrap">
-    <div class="w-full md:w-1/2 lg:w-1/3 mb-5">
-      <div
-        scrollAnimate="animate__fadeIn"
-        [once]="true"
-        class="card card-compact m-5 bg-base-100 border border-base-content/10 text-base-content shadow-xl h-full">
-        <figure>
-          <img
-            loading="lazy"
-            src="assets/images/project/hypernew/yln.png"
-            class="object-cover h-32 my-5"
-            alt="yln" />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">曜麟資訊-產品線開發</h2>
-          <ul class="list-none">
-            <li>1. 前後端分離</li>
-            <li>2. 後台管理-動態參數元件</li>
-            <li>3. 圖形化數據</li>
-          </ul>
-        </div>
-      </div>
+<section class="py-10 md:py-14">
+  <div class="container mx-auto px-4">
+    <!-- 標題 -->
+    <div class="text-center mb-12 animate-fade-in">
+      <h2 class="text-3xl md:text-4xl font-bold text-base-content mb-3">專案經歷</h2>
+      <div class="w-12 h-1 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full"></div>
     </div>
-    <div class="w-full md:w-1/2 lg:w-1/3 mb-5">
+
+    <!-- 卡片列表 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      @for (project of projects; track project.name) {
       <div
-        scrollAnimate="animate__fadeIn"
-        [once]="true"
-        class="card card-compact m-5 bg-base-100 border border-base-content/10 text-base-content shadow-xl h-full">
-        <figure>
-          <img
-            loading="lazy"
-            src="assets/images/project/hypernew/cooperative_bank.png"
-            alt="cooperative_bank"
-            class="object-cover h-32 my-5" />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">合庫銀行-停車費管理系統</h2>
-          <ul class="list-none">
-            <li>1. 前後端分離</li>
-            <li>2. 基於曜麟資訊產品線擴充</li>
-            <li>3. 後台管理-動態參數元件</li>
-          </ul>
+        class="group rounded-xl border border-base-content/10 bg-base-200/50 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 animate-fade-in-up"
+        [style.animation-delay]="($index * 150) + 'ms'">
+        <!-- 角色與時間 -->
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-mono text-primary bg-primary/10 px-2 py-1 rounded">
+            {{ project.role }}
+          </span>
+          <span class="text-xs text-base-content/40 font-mono"> {{ project.period }} </span>
+        </div>
+
+        <!-- 專案名稱 -->
+        <h3
+          class="text-lg font-bold text-base-content mb-2 group-hover:text-primary transition-colors">
+          {{ project.name }}
+        </h3>
+
+        <!-- 描述（Markdown 轉 HTML） -->
+        <div
+          class="text-sm text-base-content/60 leading-relaxed mb-4 [&>p]:m-0 [&>p+p]:mt-2"
+          [innerHTML]="project.description | safe: 'html'"></div>
+
+        <!-- 技術標籤 -->
+        <div class="flex flex-wrap gap-2">
+          @for (tech of project.techs; track tech) {
+          <span
+            class="text-xs px-2 py-1 rounded border border-base-content/10 text-base-content/50">
+            {{ tech }}
+          </span>
+          }
         </div>
       </div>
-    </div>
-    <div class="w-full md:w-1/2 lg:w-1/3 mb-5">
-      <div
-        scrollAnimate="animate__fadeIn"
-        [once]="true"
-        class="card card-compact m-5 bg-base-100 border border-base-content/10 text-base-content shadow-xl h-full">
-        <figure>
-          <img
-            loading="lazy"
-            src="assets/images/project/knsh/knsh.jpg"
-            alt="knsh"
-            class="object-cover h-32 my-5" />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">康軒-課程設計系統</h2>
-          <ul class="list-none">
-            <li>1. C# MVC架構</li>
-            <li>2. 透過User上傳的來源資料文件，輸出成各縣市的課綱、學期活動等</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="w-full md:w-1/2 lg:w-1/3 mb-5">
-      <div
-        scrollAnimate="animate__fadeIn"
-        [once]="true"
-        class="card card-compact m-5 bg-base-100 border border-base-content/10 text-base-content shadow-xl h-full">
-        <figure>
-          <img
-            loading="lazy"
-            src="assets/images/project/ucc_tms/ucc_tms.jpg"
-            alt="ucc_tms"
-            class="object-cover h-32 my-5" />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">環球水泥-運輸管理系統</h2>
-          <ul class="list-none">
-            <li>1. 前後端分離</li>
-            <li>2. 開發司機端派車任務回報</li>
-            <li>3. 後台管理透過時訊資料，產生每日運輸任務</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="w-full md:w-1/2 lg:w-1/3 mb-5">
-      <div
-        scrollAnimate="animate__fadeIn"
-        [once]="true"
-        class="card card-compact m-5 bg-base-100 border border-base-content/10 text-base-content shadow-xl h-full">
-        <figure>
-          <img
-            loading="lazy"
-            src="assets/images/project/e-post/e-post.png"
-            alt="e-post"
-            class="object-cover h-32 my-5" />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">行動郵局APP</h2>
-          <ul class="list-none">
-            <li>1. 修復系統問題</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="w-full md:w-1/2 lg:w-1/3 mb-5">
-      <div
-        scrollAnimate="animate__fadeIn"
-        [once]="true"
-        class="card card-compact m-5 bg-base-100 border border-base-content/10 text-base-content shadow-xl h-full">
-        <figure>
-          <img
-            loading="lazy"
-            src="assets/images/project/sinopac/Dcard.png"
-            alt="DCard"
-            class="object-cover h-32 my-5" />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">永豐銀行-大咖DaCard APP</h2>
-          <ul class="list-none">
-            <li>1. 預借現金</li>
-            <li>2. 繳費分析-圖形化</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="w-full md:w-1/2 lg:w-1/3 mb-5">
-      <div
-        scrollAnimate="animate__fadeIn"
-        [once]="true"
-        class="card card-compact m-5 bg-base-100 border border-base-content/10 text-base-content shadow-xl h-full">
-        <figure>
-          <img
-            loading="lazy"
-            src="assets/images/project/abbvie/abbvie.jpg"
-            alt="abbvie"
-            class="object-cover h-32 my-5" />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">OSDI-線上測驗系統</h2>
-          <ul class="list-none">
-            <li>1. C# MVC架構</li>
-            <li>2. 線上提供檢驗乾眼症的測驗平台</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="w-full md:w-1/2 lg:w-1/3 mb-5">
-      <div
-        scrollAnimate="animate__fadeIn"
-        [once]="true"
-        class="card card-compact m-5 bg-base-100 border border-base-content/10 text-base-content shadow-xl h-full">
-        <figure>
-          <img
-            loading="lazy"
-            src="assets/images/project/sinopac/sinopac.jpg"
-            alt="sinopac"
-            class="object-cover h-32 my-5" />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">永豐銀行-智慧帳本</h2>
-          <ul class="list-none">
-            <li>1. 緩存式元件，保留頁面使用狀態</li>
-            <li>2. 消費記帳，紀錄收支消費習慣</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="w-full md:w-1/2 lg:w-1/3 mb-5">
-      <div
-        scrollAnimate="animate__fadeIn"
-        [once]="true"
-        class="card card-compact m-5 bg-base-100 border border-base-content/10 text-base-content shadow-xl h-full">
-        <figure>
-          <img
-            loading="lazy"
-            src="assets/images/project/sinopac/sinopac.jpg"
-            alt="sinopac"
-            class="object-cover h-32 my-5" />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">永豐銀行-新網銀</h2>
-          <ul class="list-none">
-            <li>1. 預借現金</li>
-            <li>2. 虛擬卡額度</li>
-          </ul>
-        </div>
-      </div>
+      }
     </div>
   </div>
-</div>
+</section>

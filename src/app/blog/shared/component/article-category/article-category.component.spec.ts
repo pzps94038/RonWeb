@@ -1,59 +1,46 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { ArticleCategoryComponent } from './article-category.component';
 import { of, throwError } from 'rxjs';
-import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 
-describe('ArticleCategoryComponent', () => {
+describe('ArticleCategoryComponent - 文章分類側邊欄元件', () => {
   let component: ArticleCategoryComponent;
   let fixture: ComponentFixture<ArticleCategoryComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ArticleCategoryComponent, HttpClientTestingModule],
+      imports: [ArticleCategoryComponent, HttpClientTestingModule, RouterTestingModule],
     });
     fixture = TestBed.createComponent(ArticleCategoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('應建立元件', () => {
     expect(component).toBeTruthy();
   });
 
-  it('測試初始化', fakeAsync(() => {
-    const fake = {
-      returnCode: ReturnCode.Success,
-      returnMessage: 'msg',
-      data: {
-        total: 0,
-        categorys: [],
-      },
-    };
-    spyOn(component.articleCategorySrv, 'getArticleCategory').and.returnValue(of(fake) as never);
-    component.ngOnInit();
+  it('初始化成功載入分類', fakeAsync(() => {
+    const fakeCategories = [
+      { categoryId: 1, categoryName: '前端', createDate: '2024-01-01' },
+      { categoryId: 2, categoryName: '後端', createDate: '2024-01-01' },
+    ];
+    spyOn(component.contentSrv, 'getCategories').and.returnValue(of(fakeCategories));
+    component.getArticleCategory();
     tick();
-    expect(component.categorys()).toEqual(fake.data.categorys);
+    expect(component.categorys()).toEqual(fakeCategories);
+    expect(component.isLoading()).toBe(false);
   }));
 
-  it('測試API 後端回傳錯誤', fakeAsync(() => {
-    const fake = {
-      returnCode: ReturnCode.Fail,
-      returnMessage: 'msg',
-    };
-    spyOn(component.articleCategorySrv, 'getArticleCategory').and.returnValue(of(fake) as never);
-    component.ngOnInit();
-    tick();
-    expect(component.isError()).toBe(true);
-  }));
-
-  it('測試API異常', fakeAsync(() => {
-    spyOn(component.articleCategorySrv, 'getArticleCategory').and.returnValue(
-      throwError(() => new Error('API異常')) as never,
+  it('API 異常時設定 isError', fakeAsync(() => {
+    spyOn(component.contentSrv, 'getCategories').and.returnValue(
+      throwError(() => new Error('API異常')),
     );
-    component.ngOnInit();
+    component.getArticleCategory();
     tick();
     expect(component.isError()).toBe(true);
+    expect(component.isLoading()).toBe(false);
   }));
 });

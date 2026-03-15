@@ -11,21 +11,18 @@ export type ArticleResponse = {
 export type GetArticleByIdResponse = BaseResponse<Article>;
 
 export type BlogPagination = {
-  articleId: number;
+  slug: string;
   articleTitle: string;
 };
 
 export type Article = {
-  articleId: number;
+  slug: string;
   articleTitle: string;
   categoryId: number;
   categoryName: string;
-  previewContent: string;
-  flag: string;
   labels: ArticleLabels;
   content: string;
   references: string[];
-  viewCount: number;
   createDate: string;
   nextArticle?: BlogPagination;
   prevArticle?: BlogPagination;

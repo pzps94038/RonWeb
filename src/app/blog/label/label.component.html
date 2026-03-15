@@ -1,12 +1,28 @@
 <ng-container *ngIf="!isError(); else error">
   <ng-container *ngIf="!isLoading(); else loading">
     <div
-      class="p-5 bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 mb-5">
-      <h3>以下是{{ label() }}的搜尋結果：</h3>
+      class="flex items-center justify-between p-4 bg-base-200/50 border border-base-content/10 text-base-content rounded-xl mb-4">
+      <h3 class="text-sm font-mono">
+        <span class="text-base-content/50">標籤：</span>
+        <span class="text-primary font-semibold">{{ label() }}</span>
+      </h3>
+      <button
+        class="p-1.5 rounded-lg hover:bg-base-content/10 text-base-content/40 hover:text-base-content transition-all duration-200"
+        (click)="router.navigateByUrl('/blog')"
+        aria-label="清除篩選">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
     </div>
     <app-article-card
       *ngFor="let article of articles()"
-      [articleId]="article.articleId"
       [title]="article.articleTitle"
       [date]="article.createDate"
       [category]="{
@@ -17,7 +33,7 @@
       [previewContent]="article.previewContent"
       (category)="navigateCategory($event)"
       (label)="navigateLabel($event)"
-      (showMore)="showMore(article.articleId)" />
+      (showMore)="showMore(article.slug)" />
   </ng-container>
 </ng-container>
 <ng-template #loading>
@@ -27,8 +43,7 @@
   <app-loading-card></app-loading-card>
 </ng-template>
 <ng-template #error>
-  <div
-    class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
+  <div class="bg-base-100 border border-base-content/10 text-base-content rounded-xl p-5 mb-5">
     <app-error (refresh)="searchLabel(labelId()!, page())" />
   </div>
 </ng-template>
