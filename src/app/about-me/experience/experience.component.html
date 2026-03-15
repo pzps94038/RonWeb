@@ -1,34 +1,47 @@
-<div class="container mx-auto">
-  <h3 class="text-center text-2xl font-bold mt-5">專案經歷</h3>
-  @if (isLoading()) {
-  <div class="flex justify-center items-center py-20">
-    <span class="loading loading-spinner loading-lg"></span>
-  </div>
-  } @else if (isError()) {
-  <app-error />
-  } @else {
-  <div class="flex flex-wrap">
-    @for (item of projectExperiences(); track item.projectExperienceId) {
-    <div class="w-full md:w-1/2 lg:w-1/3 mb-5">
+<section class="py-10 md:py-14">
+  <div class="container mx-auto px-4">
+    <!-- 標題 -->
+    <div class="text-center mb-12 animate-fade-in">
+      <h2 class="text-3xl md:text-4xl font-bold text-base-content mb-3">專案經歷</h2>
+      <div class="w-12 h-1 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full"></div>
+    </div>
+
+    <!-- 卡片列表 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      @for (project of projects; track project.name) {
       <div
-        scrollAnimate="animate__fadeIn"
-        [once]="true"
-        class="card card-compact m-5 bg-base-100 border border-base-content/10 text-base-content shadow-xl h-full">
-        <div class="card-body">
-          <h2 class="card-title">{{ item.name }}</h2>
-          @if (item.description) {
-          <div [innerHTML]="item.description | safe: 'html'"></div>
-          } @if (item.technologyTools && item.technologyTools.length > 0) {
-          <div class="flex flex-wrap gap-2 mt-2">
-            @for (tool of item.technologyTools; track tool.value) {
-            <span class="badge badge-outline badge-sm">{{ tool.text }}</span>
-            }
-          </div>
+        class="group rounded-xl border border-base-content/10 bg-base-200/50 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 animate-fade-in-up"
+        [style.animation-delay]="($index * 150) + 'ms'">
+        <!-- 角色與時間 -->
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-mono text-primary bg-primary/10 px-2 py-1 rounded">
+            {{ project.role }}
+          </span>
+          <span class="text-xs text-base-content/40 font-mono"> {{ project.period }} </span>
+        </div>
+
+        <!-- 專案名稱 -->
+        <h3
+          class="text-lg font-bold text-base-content mb-2 group-hover:text-primary transition-colors">
+          {{ project.name }}
+        </h3>
+
+        <!-- 描述（Markdown 轉 HTML） -->
+        <div
+          class="text-sm text-base-content/60 leading-relaxed mb-4 [&>p]:m-0 [&>p+p]:mt-2"
+          [innerHTML]="project.description | safe: 'html'"></div>
+
+        <!-- 技術標籤 -->
+        <div class="flex flex-wrap gap-2">
+          @for (tech of project.techs; track tech) {
+          <span
+            class="text-xs px-2 py-1 rounded border border-base-content/10 text-base-content/50">
+            {{ tech }}
+          </span>
           }
         </div>
       </div>
+      }
     </div>
-    }
   </div>
-  }
-</div>
+</section>

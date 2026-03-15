@@ -2,7 +2,6 @@
   <ng-container *ngIf="!isLoading(); else loading">
     <app-article-card
       *ngFor="let article of articles()"
-      [articleId]="article.articleId"
       [title]="article.articleTitle"
       [date]="article.createDate"
       [category]="{
@@ -13,19 +12,17 @@
       [previewContent]="article.previewContent"
       (category)="navigateCategory($event)"
       (label)="navigateLabel($event)"
-      (showMore)="showMore(article.articleId)" />
+      (showMore)="showMore(article.slug)" />
   </ng-container>
 </ng-container>
 <ng-template #loading>
-  <app-loading-card></app-loading-card>
-  <app-loading-card></app-loading-card>
-  <app-loading-card></app-loading-card>
+  <app-loading-card />
+  <app-loading-card />
+  <app-loading-card />
 </ng-template>
 <ng-template #error>
-  <div
-    class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
-    <app-error (refresh)="getArticle(page())" />
+  <div class="rounded-lg border border-base-content/10 bg-base-100 p-5">
+    <app-error (refresh)="getArticles(page())" />
   </div>
 </ng-template>
-<app-pagination [total]="total()" [currentPage]="page()" (change)=" paginationChange($event)">
-</app-pagination>
+<app-pagination [total]="total()" [currentPage]="page()" (change)="paginationChange($event)" />

@@ -5,30 +5,25 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { CategoryComponent } from './category.component';
 import { ParamMap, ActivatedRoute } from '@angular/router';
 import { of, Observable, throwError } from 'rxjs';
-import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
-import { SearchResponse } from 'src/app/shared/api/search/search.model';
 
-describe('CategoryComponent', () => {
+describe('CategoryComponent - 分類搜尋元件', () => {
   let component: CategoryComponent;
   let fixture: ComponentFixture<CategoryComponent>;
-  const fakePage = 'NAN';
   const fakeId = '1';
   const paramMap = of({
     get: (key: string) => fakeId,
   }) as Observable<ParamMap>;
   const queryParamMap = of({
-    get: (key: string) => fakePage,
+    get: (key: string) => null,
   }) as Observable<ParamMap>;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CategoryComponent, RouterTestingModule, HttpClientTestingModule],
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: {
-            paramMap,
-            queryParamMap,
-          } as ActivatedRoute,
+          useValue: { paramMap, queryParamMap } as ActivatedRoute,
         },
       ],
     });
@@ -37,122 +32,101 @@ describe('CategoryComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('應建立元件', () => {
     expect(component).toBeTruthy();
   });
 
-  it('測試初始化', fakeAsync(() => {
-    const fake = {
-      returnCode: ReturnCode.Success,
-      returnMessage: 'msg',
-      data: {
+  it('初始化成功載入分類文章', fakeAsync(() => {
+    spyOn(component.contentSrv, 'getArticlesByCategory').and.returnValue(
+      of({
         total: 1,
-        articles: [
+        items: [
           {
-            articleId: 2,
+            slug: '2024-01-01-test-article',
             articleTitle: 'title',
-            previewContent: 'previewContent',
             categoryId: 1,
-            categoryName: 'categoryName',
-            labels: [
-              {
-                labelId: 1,
-                labelName: '標籤1',
-                createDate: '2023-05-08T13:22:00.124Z',
-              },
-            ],
+            categoryName: '前端',
+            labels: [],
             viewCount: 0,
-            createDate: '2023-05-08T13:22:00.124Z',
+            createDate: '2024-01-01',
+            previewContent: 'preview',
+            flag: 'Y',
           },
         ],
-        keyword: 'keyword',
-      },
-    } as SearchResponse;
-    spyOn(component.searchSrv, 'category').and.returnValue(of(fake) as never);
+        keyword: '前端',
+      }),
+    );
     component.ngOnInit();
     tick();
-    expect(component.categoryId()).toBe(parseInt(fakeId));
-    expect(component.articles()).toEqual(fake.data.articles);
-    expect(component.total()).toBe(fake.data.total);
+    expect(component.categoryId()).toBe(1);
+    expect(component.articles().length).toBe(1);
+    expect(component.category()).toBe('前端');
   }));
 
-  it('測試查無分類', fakeAsync(() => {
-    const fake = {
-      returnCode: ReturnCode.NotFound,
-      returnMessage: 'msg',
-      data: {},
-    };
-    spyOn(component.searchSrv, 'category').and.returnValue(of(fake) as never);
+  it('查無分類時導向 notFound', fakeAsync(() => {
+    spyOn(component.contentSrv, 'getArticlesByCategory').and.returnValue(
+      of({ total: 0, items: [], keyword: '' }),
+    );
     const spy = spyOn(component.router, 'navigate');
-    component.searchCategory(1);
+    component.searchCategory(999);
     tick();
     expect(spy).toHaveBeenCalledWith(['blog', 'notFound']);
   }));
 
-  it('測試API 有錯誤', fakeAsync(() => {
-    const fake = {
-      returnCode: ReturnCode.Fail,
-      returnMessage: 'msg',
-      data: {},
-    };
-    spyOn(component.searchSrv, 'category').and.returnValue(of(fake) as never);
+  it('API 異常時設定 isError', fakeAsync(() => {
+    spyOn(component.contentSrv, 'getArticlesByCategory').and.returnValue(
+      throwError(() => new Error('異常錯誤')),
+    );
     component.searchCategory(1);
     tick();
     expect(component.isError()).toBe(true);
   }));
 
-  it('測試API 有異常', fakeAsync(() => {
-    spyOn(component.searchSrv, 'category').and.returnValue(
-      throwError(() => new Error('異常錯誤')) as never,
-    );
-    component.searchCategory(1);
-    expect(component.isError()).toBe(true);
-  }));
-
-  it('測試查看明細', () => {
+  it('導向文章詳情頁', () => {
     const spy = spyOn(component.router, 'navigateByUrl');
-    component.showMore(1);
-    expect(spy).toHaveBeenCalled();
+    component.showMore('2024-01-01-test-article');
+    expect(spy).toHaveBeenCalledWith('/blog/article/2024-01-01-test-article');
   });
 
-  it('測試轉址分類', () => {
+  it('導向分類頁', () => {
     const spy = spyOn(component.router, 'navigateByUrl');
-    component.navigateCategory({ categoryId: 1, categoryName: '測試' });
-    expect(spy).toHaveBeenCalled();
+    component.navigateCategory({ categoryId: 2, categoryName: '後端' });
+    expect(spy).toHaveBeenCalledWith('/blog/category/2');
   });
 
-  it('測試轉址標籤', () => {
+  it('導向標籤頁', () => {
     const spy = spyOn(component.router, 'navigateByUrl');
-    component.navigateLabel({ labelId: 1, labelName: '測試', createDate: '' });
-    expect(spy).toHaveBeenCalled();
+    component.navigateLabel({ labelId: 1 });
+    expect(spy).toHaveBeenCalledWith('/blog/label/1');
   });
 
-  it('測試分頁功能', () => {
-    const spy = spyOn(component.router, 'navigateByUrl');
-    component.paginationChange(1);
-    expect(spy).toHaveBeenCalled();
+  it('分頁切換', () => {
+    const spy = spyOn(component.router, 'navigate');
+    component.categoryId.set(1);
+    component.paginationChange(2);
+    expect(spy).toHaveBeenCalledWith(['blog', 'category', 1], {
+      queryParams: { page: 2 },
+    });
   });
 });
 
-describe('測試無效類別ID 及 無效分頁', () => {
+describe('CategoryComponent - 無效分類 ID', () => {
   let component: CategoryComponent;
   let fixture: ComponentFixture<CategoryComponent>;
   const paramMap = of({
     get: (key: string) => 'NAN',
   }) as Observable<ParamMap>;
   const queryParamMap = of({
-    get: (key: string) => 'NAN',
+    get: (key: string) => null,
   }) as Observable<ParamMap>;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CategoryComponent, RouterTestingModule, HttpClientTestingModule],
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: {
-            paramMap,
-            queryParamMap,
-          } as ActivatedRoute,
+          useValue: { paramMap, queryParamMap } as ActivatedRoute,
         },
       ],
     });
@@ -161,10 +135,10 @@ describe('測試無效類別ID 及 無效分頁', () => {
     fixture.detectChanges();
   });
 
-  it('測試初始化', fakeAsync(() => {
+  it('無效 ID 導向 blog 首頁', fakeAsync(() => {
     const spy = spyOn(component.router, 'navigate');
     component.ngOnInit();
     tick();
-    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith(['blog']);
   }));
 });

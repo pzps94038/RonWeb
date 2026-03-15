@@ -9,7 +9,7 @@ import { finalize, filter, switchMap } from 'rxjs';
 import { AdminArticleService } from 'src/app/shared/api/admin-article/admin-article.service';
 import { ProjectExperiences } from 'src/app/shared/api/admin-project-experience/admin-project-experience.model';
 import { AdminProjectExperienceService } from 'src/app/shared/api/admin-project-experience/admin-project-experience.service';
-import { Articles } from 'src/app/shared/api/article/article.model';
+import { Articles } from 'src/app/shared/api/admin-article/admin-article.model';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { InputComponent } from 'src/app/shared/component/form/input/input.component';
 import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';

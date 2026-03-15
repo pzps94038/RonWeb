@@ -3,26 +3,27 @@ import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroHashtag, heroMinus, heroPlus } from '@ng-icons/heroicons/outline';
-import { catchError, finalize } from 'rxjs';
+import { heroHashtag } from '@ng-icons/heroicons/outline';
+import { finalize } from 'rxjs';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
-import { ArticleLabelService } from 'src/app/shared/api/article-label/article-label.service';
-import { ArticleLabels } from 'src/app/shared/api/article-label/article-label.model';
-import { ApiService } from 'src/app/shared/service/api.service';
+import { LabelItem } from 'src/app/shared/data/posts-index';
+import { StaticContentService } from 'src/app/shared/service/static-content.service';
 
+/**
+ * 文章標籤側邊欄元件（標籤雲）
+ * 從靜態 JSON 讀取標籤列表並顯示。
+ */
 @Component({
   selector: 'app-article-label',
   standalone: true,
   imports: [CommonModule, ErrorComponent, RouterLink, NgIconComponent],
-  providers: [provideIcons({ heroHashtag, heroPlus, heroMinus })],
+  providers: [provideIcons({ heroHashtag })],
   templateUrl: './article-label.component.html',
   styleUrls: ['./article-label.component.scss'],
 })
 export class ArticleLabelComponent implements OnInit {
-  open = signal(true);
-  articleLabelSrv = inject(ArticleLabelService);
-  apiSrv = inject(ApiService);
-  labels = signal<ArticleLabels>([]);
+  contentSrv = inject(StaticContentService);
+  labels = signal<LabelItem[]>([]);
   isLoading = signal(false);
   isError = signal(false);
   private _destroyRef = inject(DestroyRef);
@@ -31,27 +32,23 @@ export class ArticleLabelComponent implements OnInit {
     this.getArticleLabel();
   }
 
+  /**
+   * 取得文章標籤
+   */
   getArticleLabel() {
     this.isLoading.set(true);
     this.isError.set(false);
-    this.articleLabelSrv
-      .getArticleLabel()
+    this.contentSrv
+      .getLabels()
       .pipe(
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe({
-        next: res => {
-          if (this.apiSrv.ifSuccess(res, false)) {
-            const {
-              data: { labels },
-            } = res;
-            this.labels.set(labels);
-          } else {
-            this.isError.set(true);
-          }
+        next: labels => {
+          this.labels.set(labels);
         },
-        error: err => {
+        error: () => {
           this.isError.set(true);
         },
       });

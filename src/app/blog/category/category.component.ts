@@ -1,24 +1,22 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, DestroyRef, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationComponent } from 'src/app/shared/component/pagination/pagination.component';
-import { catchError, combineLatest, delay, filter, finalize, map } from 'rxjs';
-import { SearchService } from 'src/app/shared/api/search/search.service';
-import { Articles } from 'src/app/shared/api/article/article.model';
+import { combineLatest, filter, finalize } from 'rxjs';
+import { Category } from 'src/app/shared/api/article-category/article-category.model';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
 import { ArticleCardComponent } from '../shared/component/article-card/article-card.component';
 import { LoadingCardComponent } from '../shared/component/loading-card/loading-card.component';
-import {
-  ArticleCategory,
-  Category,
-} from 'src/app/shared/api/article-category/article-category.model';
-import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 import { LoadingKeywordComponent } from '../shared/component/loading-keyword/loading-keyword.component';
 import { ArticleLabel } from 'src/app/shared/api/article-label/article-label.model';
-import { ApiService } from 'src/app/shared/service/api.service';
 import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-highlight.service';
+import { PostIndexItem, StaticContentService } from 'src/app/shared/service/static-content.service';
 
+/**
+ * 分類搜尋元件
+ * 依據分類 ID 篩選並顯示文章列表。
+ */
 @Component({
   selector: 'app-category',
   standalone: true,
@@ -36,13 +34,12 @@ import { CodeBlockHighlightService } from 'src/app/shared/service/code-block-hig
 export class CategoryComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
-  searchSrv = inject(SearchService);
-  apiSrv = inject(ApiService);
+  contentSrv = inject(StaticContentService);
   codeBlockSrv = inject(CodeBlockHighlightService);
   category = signal('');
   categoryId = signal<number | undefined>(undefined);
   total = signal(0);
-  articles = signal<Articles>([]);
+  articles = signal<PostIndexItem[]>([]);
   isLoading = signal(false);
   isError = signal(false);
   page = signal(1);
@@ -71,29 +68,28 @@ export class CategoryComponent implements OnInit {
       });
   }
 
+  /**
+   * 依分類 ID 搜尋文章
+   * @param id - 分類 ID
+   * @param page - 頁碼
+   */
   searchCategory(id: number, page?: number) {
     this.isError.set(false);
     this.isLoading.set(true);
-    this.searchSrv
-      .category(id, page)
+    this.contentSrv
+      .getArticlesByCategory(id, page)
       .pipe(
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe({
         next: res => {
-          if (this.apiSrv.ifSuccess(res, false)) {
-            const {
-              data: { total, articles, keyword },
-            } = res;
-            this.total.set(total);
-            this.articles.set(articles);
-            this.category.set(keyword);
-            this.codeBlockSrv.highlightAllBlock();
-          } else if (res.returnCode === ReturnCode.NotFound) {
+          this.total.set(res.total);
+          this.articles.set(res.items);
+          this.category.set(res.keyword);
+          this.codeBlockSrv.highlightAllBlock();
+          if (res.total === 0) {
             this.router.navigate(['blog', 'notFound']);
-          } else {
-            this.isError.set(true);
           }
         },
         error: () => {
@@ -102,23 +98,25 @@ export class CategoryComponent implements OnInit {
       });
   }
 
-  showMore(id: number) {
-    this.router.navigateByUrl(`/blog/article/${id}`);
+  /**
+   * 導向文章詳情頁
+   * @param slug - 文章 slug
+   */
+  showMore(slug: string) {
+    this.router.navigateByUrl(`/blog/article/${slug}`);
   }
 
   navigateCategory({ categoryId }: Category) {
     this.router.navigateByUrl(`/blog/category/${categoryId}`);
   }
 
-  navigateLabel({ labelId }: ArticleLabel) {
+  navigateLabel({ labelId }: { labelId: number }) {
     this.router.navigateByUrl(`/blog/label/${labelId}`);
   }
 
   paginationChange(page: number) {
     this.router.navigate(['blog', 'category', this.categoryId()], {
-      queryParams: {
-        page,
-      },
+      queryParams: { page },
     });
   }
 }

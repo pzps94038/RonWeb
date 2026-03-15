@@ -41,7 +41,7 @@ export class SeoService {
       { property: 'og:site_name', content: siteName },
       { property: 'og:description', content: this.ellipsisPipe.transform(description) },
       { property: 'og:locale', content: 'zh-tw' },
-      { name: 'og:image', content: 'assets/images/logo.jpg' },
+      { name: 'og:image', content: 'assets/icons/icon-192x192.png' },
       { name: 'twitter:card', content: 'summary' },
       { name: 'twitter:title', content: title },
       { name: 'twitter:description', content: this.ellipsisPipe.transform(description) },

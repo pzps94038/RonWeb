@@ -1,20 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
 @use 'sass:meta';
 
-html[data-theme='corporate'] {
-  @include meta.load-css('highlight.js/styles/github.css');
-}
-
-html[data-theme='business'] {
-  @include meta.load-css('highlight.js/styles/github-dark-dimmed.css');
-}
+/* 固定深色主題的程式碼高亮 */
+@include meta.load-css('highlight.js/styles/github-dark-dimmed.css');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
+  html {
+    data-theme: 'dark';
+  }
   body {
-    @apply text-base-content bg-base-200;
+    @apply text-base-content font-sans antialiased;
   }
   ul {
     @apply list-disc;
@@ -24,17 +22,154 @@ html[data-theme='business'] {
   }
 }
 
-.grecaptcha-badge {
-  visibility: hidden;
+/* ═══════════════════════════════════════════
+   Warm Amber 深色背景 — 暖色光暈
+   ═══════════════════════════════════════════ */
+body {
+  background: radial-gradient(
+      ellipse 80% 50% at 50% -20%,
+      rgba(245, 158, 11, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(ellipse 50% 40% at 85% 60%, rgba(239, 68, 68, 0.04) 0%, transparent 40%),
+    radial-gradient(ellipse 40% 30% at 10% 80%, rgba(251, 146, 60, 0.03) 0%, transparent 35%),
+    #18181b;
+  background-attachment: fixed;
 }
 
-.ck.ck-balloon-panel.ck-balloon-panel_visible {
-  display: none !important;
+/* ═══════════════════════════════════════════
+   工具類別
+   ═══════════════════════════════════════════ */
+@layer utilities {
+  /* 暖色漸層文字 */
+  .text-gradient {
+    background: linear-gradient(135deg, #f59e0b, #fb923c, #ef4444);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Glow 卡片 hover */
+  .card-glow {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-glow:hover {
+    box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.15), 0 8px 32px rgba(245, 158, 11, 0.08),
+      0 2px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+  }
+
+  /* 火光邊框 */
+  .border-ember {
+    position: relative;
+  }
+  .border-ember::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      rgba(245, 158, 11, 0.3),
+      rgba(239, 68, 68, 0.15),
+      rgba(251, 146, 60, 0.2)
+    );
+    z-index: -1;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    padding: 1px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .border-ember:hover::after {
+    opacity: 1;
+  }
 }
 
+/* ═══════════════════════════════════════════
+   Markdown 文章內容
+   ═══════════════════════════════════════════ */
+.article-content {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold mt-8 mb-4 scroll-mt-20;
+  }
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl pb-2 border-b border-amber-500/20;
+  }
+  h3 {
+    @apply text-lg;
+    color: rgba(251, 191, 36, 0.9);
+  }
+  h4 {
+    @apply text-base font-semibold;
+  }
+  p {
+    @apply my-3 leading-relaxed text-base-content/80;
+  }
+  a {
+    @apply text-primary underline underline-offset-2 decoration-primary/30 hover:decoration-primary hover:text-amber-300 transition-colors;
+  }
+  img {
+    @apply rounded-xl my-4 max-w-full shadow-lg shadow-black/20 border border-base-content/5;
+  }
+  blockquote {
+    @apply border-l-4 border-primary/50 pl-4 my-4 text-base-content/60 italic bg-primary/5 py-3 pr-4 rounded-r-lg;
+  }
+  ul,
+  ol {
+    @apply pl-6 my-3;
+  }
+  li {
+    @apply my-1 text-base-content/80;
+  }
+  li::marker {
+    color: #f59e0b;
+  }
+  table {
+    @apply w-full my-4 border-collapse overflow-hidden rounded-lg;
+    th,
+    td {
+      @apply border border-base-content/10 px-3 py-2.5 text-sm;
+    }
+    th {
+      @apply bg-primary/10 font-semibold text-primary;
+    }
+    tr:hover td {
+      @apply bg-base-300/50;
+    }
+  }
+  pre {
+    @apply rounded-xl my-4 p-0 overflow-hidden #{!important};
+    border: 1px solid rgba(245, 158, 11, 0.1) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    code {
+      @apply overflow-x-auto block p-4 text-sm font-mono #{!important};
+    }
+  }
+  code:not(pre code) {
+    @apply bg-primary/10 px-1.5 py-0.5 rounded text-sm font-mono;
+    color: #fcd34d;
+    border: 1px solid rgba(245, 158, 11, 0.15);
+  }
+  hr {
+    @apply my-8 border-base-content/10;
+  }
+}
+
+/* CKEditor 相容 */
 .ck-content {
   pre {
-    @apply border rounded-sm m-4 p-0 whitespace-pre #{!important};
+    @apply border rounded-lg m-4 p-0 whitespace-pre #{!important};
     tab-size: 4;
     code {
       @apply overflow-x-auto;
@@ -43,7 +178,7 @@ html[data-theme='business'] {
   .table {
     table th,
     table td {
-      @apply border-2 border-base-content whitespace-pre-wrap p-2 #{!important};
+      @apply border-2 border-base-content/20 whitespace-pre-wrap p-2 #{!important};
     }
   }
   .text-tiny {
@@ -58,4 +193,28 @@ html[data-theme='business'] {
   .text-huge {
     @apply text-2xl #{!important};
   }
+}
+
+/* ═══════════════════════════════════════════
+   隱藏滾動條但保留滾動功能
+   ═══════════════════════════════════════════ */
+html {
+  scrollbar-width: none; /* Firefox */
+}
+::-webkit-scrollbar {
+  display: none; /* Chrome / Safari / Edge */
+}
+
+/* 文字選取 */
+::selection {
+  background: rgba(245, 158, 11, 0.25);
+  color: inherit;
+}
+
+/* 行數限制 */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

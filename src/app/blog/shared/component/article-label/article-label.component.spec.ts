@@ -1,65 +1,46 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { ArticleLabelComponent } from './article-label.component';
 import { of, throwError } from 'rxjs';
-import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
 
-describe('ArticleLabelComponent', () => {
+describe('ArticleLabelComponent - 文章標籤側邊欄元件', () => {
   let component: ArticleLabelComponent;
   let fixture: ComponentFixture<ArticleLabelComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ArticleLabelComponent, HttpClientTestingModule],
+      imports: [ArticleLabelComponent, HttpClientTestingModule, RouterTestingModule],
     });
     fixture = TestBed.createComponent(ArticleLabelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('應建立元件', () => {
     expect(component).toBeTruthy();
   });
 
-  it('測試初始化', fakeAsync(() => {
-    const fake = {
-      returnCode: ReturnCode.Success,
-      returnMessage: 'msg',
-      data: {
-        total: 1,
-        labels: [
-          {
-            labelId: 1,
-            labelName: '標籤',
-            createDate: '2023-05-08T13:22:00.124Z',
-          },
-        ],
-      },
-    };
-    spyOn(component.articleLabelSrv, 'getArticleLabel').and.returnValue(of(fake) as never);
-    component.ngOnInit();
+  it('初始化成功載入標籤', fakeAsync(() => {
+    const fakeLabels = [
+      { labelId: 1, labelName: 'Angular', createDate: '2024-01-01' },
+      { labelId: 2, labelName: 'React', createDate: '2024-01-01' },
+    ];
+    spyOn(component.contentSrv, 'getLabels').and.returnValue(of(fakeLabels));
+    component.getArticleLabel();
     tick();
-    expect(component.labels()).toEqual(fake.data.labels);
+    expect(component.labels()).toEqual(fakeLabels);
+    expect(component.isLoading()).toBe(false);
   }));
 
-  it('測試API 後端回傳錯誤', fakeAsync(() => {
-    const fake = {
-      returnCode: ReturnCode.Fail,
-      returnMessage: 'msg',
-    };
-    spyOn(component.articleLabelSrv, 'getArticleLabel').and.returnValue(of(fake) as never);
-    component.ngOnInit();
-    tick();
-    expect(component.isError()).toBe(true);
-  }));
-
-  it('測試API異常', fakeAsync(() => {
-    spyOn(component.articleLabelSrv, 'getArticleLabel').and.returnValue(
-      throwError(() => new Error('API異常')) as never,
+  it('API 異常時設定 isError', fakeAsync(() => {
+    spyOn(component.contentSrv, 'getLabels').and.returnValue(
+      throwError(() => new Error('API異常')),
     );
-    component.ngOnInit();
+    component.getArticleLabel();
     tick();
     expect(component.isError()).toBe(true);
+    expect(component.isLoading()).toBe(false);
   }));
 });

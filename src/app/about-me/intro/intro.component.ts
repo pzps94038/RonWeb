@@ -1,37 +1,18 @@
-import { ScrollAnimateDirective } from '../../shared/directive/scroll-animate.directive';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgTypedComponent } from 'src/app/shared/component/ng-typed/ng-typed.component';
-import { TypedOptions } from 'typed.js';
-import {
-  AnimationPathConfig,
-  NgLottieComponent,
-} from 'src/app/shared/component/ng-lottie/ng-lottie.component';
-import { HeaderComponent } from '../../shared/component/header/header.component';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { featherGithub } from '@ng-icons/feather-icons';
 
+/**
+ * 個人介紹區塊元件
+ * 顯示開發者名稱、身份、簡短自我介紹及 GitHub 連結
+ */
 @Component({
   selector: 'app-intro',
   standalone: true,
-  imports: [
-    CommonModule,
-    NgTypedComponent,
-    NgLottieComponent,
-    HeaderComponent,
-    ScrollAnimateDirective,
-  ],
+  imports: [NgIconComponent],
+  providers: [provideIcons({ featherGithub })],
   templateUrl: './intro.component.html',
   styleUrls: ['./intro.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IntroComponent {
-  typedOptions: TypedOptions = {
-    strings: ['Full-Stack Developer'],
-    loop: true,
-    typeSpeed: 100,
-    backSpeed: 30,
-  };
-
-  astronotOptions: AnimationPathConfig = {
-    path: 'assets/lottie/astronot.json',
-  };
-}
+export class IntroComponent {}
