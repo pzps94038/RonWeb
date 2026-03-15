@@ -42,19 +42,16 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/assets/css/all.min.css",
-              "node_modules/swiper/swiper-bundle.min.css",
-              "node_modules/animate.css/animate.min.css",
-              "node_modules/@ng-select/ng-select/themes/default.theme.css"
+              "src/assets/css/all.min.css"
             ],
             "scripts": [
-              "node_modules/@ckeditor/ckeditor5-language/build/translations/zh.js",
               "src/assets/js/highlightjs-badge.min.js"
             ],
             "allowedCommonJsDependencies": [
               "lottie-web",
               "sweetalert2",
-              "dayjs"
+              "dayjs",
+              "marked"
             ],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
@@ -128,80 +125,13 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/assets/css/all.min.css",
-              "node_modules/swiper/swiper-bundle.min.css",
-              "node_modules/animate.css/animate.min.css",
-              "node_modules/@ng-select/ng-select/themes/default.theme.css"
+              "src/assets/css/all.min.css"
             ],
             "scripts": [
-              "node_modules/@ckeditor/ckeditor5-language/build/translations/zh.js",
               "src/assets/js/highlightjs-badge.min.js"
             ],
             "karmaConfig": "karma.conf.js"
           }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/RonWeb/server",
-            "main": "server.ts",
-            "tsConfig": "tsconfig.server.json",
-            "inlineStyleLanguage": "scss"
-          },
-          "configurations": {
-            "production": {
-              "outputHashing": "media",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ]
-            },
-            "development": {
-              "buildOptimizer": false,
-              "optimization": false,
-              "sourceMap": true,
-              "extractLicenses": false,
-              "vendorChunk": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve-ssr": {
-          "builder": "@angular-devkit/build-angular:ssr-dev-server",
-          "configurations": {
-            "development": {
-              "browserTarget": "RonWeb:build:development",
-              "serverTarget": "RonWeb:server:development",
-              "proxyConfig": "proxy.conf.local.json"
-            },
-            "production": {
-              "browserTarget": "RonWeb:build:production",
-              "serverTarget": "RonWeb:server:production"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "prerender": {
-          "builder": "@angular-devkit/build-angular:prerender",
-          "options": {
-            "routes": [
-              "/about-me",
-              "/login"
-            ]
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "RonWeb:build:production",
-              "serverTarget": "RonWeb:server:production"
-            },
-            "development": {
-              "browserTarget": "RonWeb:build:development",
-              "serverTarget": "RonWeb:server:development"
-            }
-          },
-          "defaultConfiguration": "production"
         },
         "cypress-run": {
           "builder": "@cypress/schematic:cypress",

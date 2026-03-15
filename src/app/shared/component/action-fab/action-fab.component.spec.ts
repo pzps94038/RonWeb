@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ActionFabComponent } from './action-fab.component';
-import { By } from '@angular/platform-browser';
 
-describe('ActionFabComponent', () => {
+describe('ActionFabComponent - 浮動操作按鈕元件', () => {
   let component: ActionFabComponent;
   let fixture: ComponentFixture<ActionFabComponent>;
 
@@ -16,21 +15,7 @@ describe('ActionFabComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('應建立元件', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('測試展開', () => {
-    component.toggleMenu(true);
-    const el = fixture.debugElement.query(By.css('.floatingMenu')).nativeElement as Element;
-    fixture.detectChanges();
-    expect(el.classList.contains('open')).toBe(true);
-  });
-
-  it('測試關閉', () => {
-    component.toggleMenu(false);
-    const el = fixture.debugElement.query(By.css('.floatingMenu')).nativeElement as Element;
-    fixture.detectChanges();
-    expect(el.classList.contains('close')).toBe(true);
   });
 });

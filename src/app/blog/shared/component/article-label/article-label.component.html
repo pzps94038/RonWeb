@@ -1,26 +1,27 @@
-<div
-  class="bg-base-100 border border-base-content/10 text-base-content rounded-md mb-5 collapse collapse-plus">
-  <input type="checkbox" [checked]="true" />
-  <div class="collapse-title text-xl font-medium">標籤</div>
-  <div class="collapse-content">
+<div class="rounded-lg border border-base-content/10 bg-base-100 overflow-hidden">
+  <div class="px-4 py-3 border-b border-base-content/10">
+    <span class="font-mono text-sm font-semibold">標籤</span>
+  </div>
+  <div class="p-3">
     <ng-container *ngIf="!isError(); else error">
       <ng-container *ngIf="!isLoading(); else loading">
-        <div class="my-1" *ngFor="let label of labels()">
+        <div class="flex flex-wrap gap-1.5">
           <a
-            class="link link-secondary w-full flex items-center"
+            *ngFor="let label of labels()"
+            class="inline-flex items-center gap-1 rounded-full border border-base-content/10 px-2.5 py-1 text-xs text-base-content/70 hover:bg-base-200 hover:text-base-content transition-colors"
             [routerLink]="['label', label.labelId]">
-            <div class="mr-1 flex items-center">
-              <ng-icon name="heroHashtag" />
-            </div>
+            <ng-icon name="heroHashtag" size="12" />
             {{ label.labelName }}
           </a>
         </div>
       </ng-container>
     </ng-container>
     <ng-template #loading>
-      <div
-        *ngFor="let i of [1, 2, 3, 4, 5]"
-        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+      <div class="flex flex-wrap gap-2">
+        <div
+          *ngFor="let i of [1, 2, 3, 4, 5]"
+          class="h-6 w-16 rounded-full bg-base-content/5 animate-pulse"></div>
+      </div>
     </ng-template>
     <ng-template #error>
       <app-error (refresh)="getArticleLabel()" />

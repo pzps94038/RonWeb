@@ -1,33 +1,17 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { IntroComponent } from './intro/intro.component';
-import { ContactComponent } from './contact/contact.component';
-import { NgTypedComponent } from '../shared/component/ng-typed/ng-typed.component';
 import { SkillsComponent } from './skills/skills.component';
-import { ExperienceComponent } from './experience/experience.component';
-import { HeaderComponent } from '../shared/component/header/header.component';
 import { FooterComponent } from '../shared/component/footer/footer.component';
 
+/**
+ * 關於我頁面主元件
+ * 整合個人介紹與技能子元件
+ */
 @Component({
   selector: 'app-about-me',
   standalone: true,
-  imports: [
-    HeaderComponent,
-    CommonModule,
-    IntroComponent,
-    SkillsComponent,
-    ExperienceComponent,
-    ContactComponent,
-    NgTypedComponent,
-    FooterComponent,
-  ],
+  imports: [IntroComponent, SkillsComponent, FooterComponent],
   templateUrl: './about-me.component.html',
   styleUrls: ['./about-me.component.scss'],
 })
-export class AboutMeComponent {
-  options = {
-    strings: ['Web Full-stack Develope'],
-    typeSpeed: 100,
-    loop: true,
-  };
-}
+export class AboutMeComponent {}

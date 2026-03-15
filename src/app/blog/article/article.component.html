@@ -1,124 +1,213 @@
-<div
-  class="fixed top-0 left-0 z-50 h-1 bg-base-content transition-[width] duration-150"
-  [style.width.%]="readingProgress()"></div>
-<div
-  class="bg-base-100 border border-base-content/10 text-base-content rounded-md mx-0 md:mx-5 p-5 mb-5">
-  <ng-container *ngIf="!isError(); else error">
-    <ng-container *ngIf="!isLoading() && article(); else loading">
-      <div>
-        <div class="flex justify-between">
-          <h3 class="text-xl font-semibold">{{ article()!.articleTitle }}</h3>
-          <div [class.dropdown-left]="isFullscreen()" class="dropdown dropdown-hover bg-base-100">
-            <div tabindex="0" role="button" class="m-1">
-              <ng-icon name="heroEllipsisVertical" size="24" />
-            </div>
-            <ul tabindex="0" class="dropdown-content menu z-[1] w-44 shadow border bg-base-100">
-              <li class="cursor-pointer w-full flex" (click)="toggleFullscreenMode()">
-                <a class="w-full flex">
-                  <div class="flex justify-center items-center">
-                    <ng-icon name="featherMaximize" />
-                  </div>
-                  {{ isFullscreen() ? '關閉全螢幕模式' : '全螢幕模式' }}
-                </a>
-              </li>
-              <li *ngIf="isLogin()" class="cursor-pointer w-full flex">
-                <a class="w-full flex" [routerLink]="['/setting', 'article', 'edit', articleId()]">
-                  <div class="flex justify-center items-center">
-                    <ng-icon name="heroPencilSquare" />
-                  </div>
-                  修改文章
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div>
-          <div class="flex items-center">
-            <ng-icon name="heroCalendarDays" class="mr-1" />
-            <h4>{{ article()!.createDate| dayJs : 'YYYY/MM/DD' }}</h4>
-          </div>
+<!-- 閱讀進度條 -->
+<div class="fixed top-0 left-0 z-[60] w-full h-[3px] pointer-events-none">
+  <div
+    class="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 transition-[width] duration-150 ease-out shadow-[0_0_10px_rgba(245,158,11,0.5)]"
+    [style.width.%]="readingProgress()"></div>
+</div>
+
+<!-- 手機版 TOC 浮動按鈕 -->
+<ng-container *ngIf="tocItems().length > 0">
+  <button
+    class="fixed bottom-20 right-6 z-50 xl:hidden w-10 h-10 rounded-xl bg-base-300/80 backdrop-blur-sm border border-base-content/10 flex items-center justify-center hover:bg-primary/20 hover:border-primary/30 transition-all duration-300 shadow-lg"
+    (click)="tocOpen.set(!tocOpen())"
+    aria-label="目錄">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-4 w-4 text-base-content/50"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+    </svg>
+  </button>
+
+  <!-- 手機版 TOC 面板 -->
+  <div *ngIf="tocOpen()" class="fixed inset-0 z-[55] xl:hidden" (click)="tocOpen.set(false)">
+    <!-- 背景遮罩 -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <!-- TOC 面板 -->
+    <div
+      class="absolute bottom-0 left-0 right-0 max-h-[60vh] overflow-y-auto bg-base-100 border-t border-base-content/10 rounded-t-2xl p-5 animate-fade-in"
+      (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm font-mono font-semibold text-base-content/50">目錄</span>
+        <button
+          class="p-1.5 rounded-lg hover:bg-base-content/10 text-base-content/40"
+          (click)="tocOpen.set(false)">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <ul class="space-y-1 border-l border-base-content/10">
+        <li *ngFor="let item of tocItems()">
           <a
-            class="flex items-center link link-secondary"
-            [routerLink]="['/blog', 'category', article()!.categoryId]">
-            <ng-icon name="heroFolder" class="mr-1" />
-            <h5>{{ article()!.categoryName }}</h5>
+            (click)="scrollToHeading(item.id); tocOpen.set(false)"
+            class="flex items-baseline gap-2 cursor-pointer text-sm text-base-content/60 hover:text-primary transition-colors py-1.5 border-l-2 border-transparent hover:border-primary"
+            [style.padding-left.rem]="(item.level - 1) * 0.75 + 0.75">
+            <span class="text-primary/40 font-mono text-xs shrink-0">{{ item.index }}.</span>
+            <span>{{ item.text }}</span>
           </a>
-          <div class="flex flex-wrap">
-            <a
-              *ngFor="let label of article()?.labels ?? []"
-              class="flex items-center link link-secondary mr-1"
-              [routerLink]="['/blog', 'label', label.labelId]">
-              <ng-icon name="heroHashtag" />
-              <h5>{{ label.labelName }}</h5>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="divider my-1"></div>
-      <div
-        class="ck-content break-words overflow-x-auto py-3"
-        [innerHTML]="article()!.previewContent | safe: 'html'"></div>
-      <div
-        class="ck-content break-words overflow-x-auto py-3"
-        [innerHTML]="article()!.content| safe: 'html'"></div>
-      <div *ngIf="article()!.references?.length">
-        參考文章:
-        <a
-          *ngFor="let references of article()!.references"
-          [href]="references | safe : 'url'"
-          class="link text-[#4C99E6] block overflow-hidden text-ellipsis"
-          target="_blank"
-          >{{ references }}</a
-        >
-      </div>
-      <ng-container *ngIf="article()?.prevArticle || article()?.nextArticle">
-        <div class="divider my-5"></div>
-        <div class="flex justify-between">
-          <div class="w-1/2 flex justify-start">
-            <a
-              [routerLink]="['/blog','article',article()!.prevArticle?.articleId]"
-              *ngIf="article()?.prevArticle">
-              <div class="w-full flex justify-start items-center text-left">
-                <span class="text-xl">←</span> 上一篇文章
-              </div>
-              <div class="w-full py-1 flex justify-start items-center link link-info text-left">
-                {{ article()!.prevArticle!.articleTitle }}
-              </div>
-            </a>
-          </div>
-          <div class="w-1/2 flex justify-end flex-wrap">
-            <a
-              [routerLink]="['/blog','article',article()!.nextArticle!.articleId]"
-              *ngIf="article()?.nextArticle">
-              <div class="w-full flex justify-end items-center text-right">
-                下一篇文章 <span class="text-xl">→</span>
-              </div>
-              <div class="w-full py-1 flex justify-end items-center link link-info text-right">
-                {{ article()!.nextArticle!.articleTitle }}
-              </div>
-            </a>
-          </div>
-        </div>
-      </ng-container>
-      <div class="divider my-5"></div>
-      <app-giscus />
-    </ng-container>
-  </ng-container>
-  <ng-template #loading>
-    <div>
-      <div class="flex items-center" *ngFor="let i of [1, 2]">
-        <div
-          class="h-5 my-2 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
-      </div>
+        </li>
+      </ul>
     </div>
-    <div class="divider my-1"></div>
-    <div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!isError(); else error">
+  <ng-container *ngIf="!isLoading() && article(); else loading">
+    <div class="flex gap-6">
+      <!-- 左側目錄 (桌面) -->
+      <nav
+        *ngIf="tocItems().length > 0"
+        class="hidden xl:block w-56 shrink-0 sticky top-20 self-start max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <div class="text-xs font-mono font-semibold text-primary/60 uppercase mb-3 tracking-wider">
+          目錄
+        </div>
+        <ul class="space-y-0.5 border-l border-base-content/10">
+          <li *ngFor="let item of tocItems()">
+            <a
+              (click)="scrollToHeading(item.id)"
+              class="flex items-baseline gap-1.5 cursor-pointer text-xs transition-all duration-200 py-1 border-l-2 rounded-r-md"
+              [ngClass]="activeTocId() === item.id
+                ? 'border-primary text-primary font-medium toc-active'
+                : 'border-transparent text-base-content/40 hover:text-primary hover:border-primary'"
+              [style.padding-left.rem]="(item.level - 1) * 0.75 + 0.5">
+              <span
+                class="font-mono text-[10px] shrink-0"
+                [ngClass]="activeTocId() === item.id ? 'text-primary' : 'text-base-content/30'"
+                >{{ item.index }}.</span
+              >
+              <span>{{ item.text }}</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- 文章主體 -->
+      <article
+        class="flex-1 min-w-0 rounded-xl border border-base-content/5 bg-base-200/30 p-6 animate-fade-in">
+        <!-- 標題 -->
+        <h1 class="text-2xl font-bold mb-3">{{ article()!.articleTitle }}</h1>
+
+        <!-- 元資料 -->
+        <div class="flex flex-wrap items-center gap-2 text-sm text-base-content/50 mb-4">
+          <span
+            class="flex items-center gap-1 font-mono bg-base-300/50 px-2 py-0.5 rounded-md text-xs">
+            <ng-icon name="heroCalendarDays" size="14" />
+            {{ article()!.createDate | dayJs: 'YYYY/MM/DD' }}
+          </span>
+          <a
+            class="flex items-center gap-1 bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-md text-xs hover:bg-amber-500/20 transition-colors"
+            [routerLink]="['/blog', 'category', article()!.categoryId]">
+            <ng-icon name="heroFolder" size="14" />
+            {{ article()!.categoryName }}
+          </a>
+          <a
+            *ngFor="let label of article()?.labels ?? []"
+            class="flex items-center gap-0.5 bg-red-500/10 text-red-400 px-2 py-0.5 rounded-md text-xs hover:bg-red-500/20 transition-colors"
+            [routerLink]="['/blog', 'label', label.labelId]">
+            <ng-icon name="heroHashtag" size="12" />
+            {{ label.labelName }}
+          </a>
+        </div>
+
+        <div
+          class="h-px w-full bg-gradient-to-r from-primary/20 via-transparent to-transparent my-4"></div>
+
+        <!-- 文章內容 -->
+        <div
+          class="article-content max-w-none break-words overflow-x-auto"
+          [innerHTML]="article()!.content | safe: 'html'"></div>
+
+        <!-- 參考文章 -->
+        <div *ngIf="article()!.references?.length" class="mt-8">
+          <div class="text-sm font-semibold text-base-content/50 mb-2 font-mono">參考文章</div>
+          <div class="space-y-1">
+            <a
+              *ngFor="let ref of article()!.references"
+              [href]="ref | safe: 'url'"
+              class="block text-sm text-primary/70 hover:text-primary truncate transition-colors"
+              target="_blank"
+              rel="noopener noreferrer">
+              {{ ref }}
+            </a>
+          </div>
+        </div>
+
+        <!-- 上下篇導航 -->
+        <ng-container *ngIf="article()?.prevArticle || article()?.nextArticle">
+          <div
+            class="h-px w-full bg-gradient-to-r from-transparent via-base-content/10 to-transparent my-8"></div>
+          <div class="flex flex-col sm:flex-row justify-between gap-3">
+            <div class="flex-1">
+              <a
+                *ngIf="article()?.prevArticle"
+                [routerLink]="['/blog', 'article', article()!.prevArticle?.slug]"
+                class="group block rounded-xl border border-base-content/5 p-4 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                <div class="text-xs text-base-content/40 mb-1 font-mono">
+                  <span class="mr-1 inline-block group-hover:-translate-x-1 transition-transform"
+                    >&larr;</span
+                  >
+                  上一篇
+                </div>
+                <div
+                  class="text-sm font-medium group-hover:text-primary transition-colors line-clamp-1">
+                  {{ article()!.prevArticle!.articleTitle }}
+                </div>
+              </a>
+            </div>
+            <div class="flex-1 text-right">
+              <a
+                *ngIf="article()?.nextArticle"
+                [routerLink]="['/blog', 'article', article()!.nextArticle!.slug]"
+                class="group block rounded-xl border border-base-content/5 p-4 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+                <div class="text-xs text-base-content/40 mb-1 font-mono">
+                  下一篇
+                  <span class="ml-1 inline-block group-hover:translate-x-1 transition-transform"
+                    >&rarr;</span
+                  >
+                </div>
+                <div
+                  class="text-sm font-medium group-hover:text-primary transition-colors line-clamp-1">
+                  {{ article()!.nextArticle!.articleTitle }}
+                </div>
+              </a>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- 留言板 -->
+        <div
+          class="h-px w-full bg-gradient-to-r from-transparent via-base-content/10 to-transparent my-8"></div>
+        <app-giscus />
+      </article>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <div class="rounded-xl border border-base-content/5 bg-base-200/30 p-6">
+    <div class="space-y-3">
+      <div *ngFor="let i of [1, 2]" class="h-5 w-2/3 rounded bg-base-content/5 animate-pulse"></div>
+    </div>
+    <div class="h-px bg-base-content/5 my-4"></div>
+    <div class="space-y-3">
       <div
         *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-        class="h-5 my-3 w-full rounded-lg bg-slate-300/10 relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:border-t before:border-slate-300/10 before:bg-gradient-to-r before:from-transparent before:bg-slate-300/10 before:to-transparent overflow-hidden"></div>
+        class="h-4 rounded bg-base-content/5 animate-pulse"></div>
     </div>
-  </ng-template>
-  <ng-template #error>
-    <app-error (refresh)="getArticleById(articleId()!, false)" />
-  </ng-template>
-</div>
+  </div>
+</ng-template>
+<ng-template #error>
+  <div class="rounded-xl border border-base-content/5 bg-base-200/30 p-6">
+    <app-error (refresh)="getArticleBySlug(articleSlug()!)" />
+  </div>
+</ng-template>

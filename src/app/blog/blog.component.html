@@ -1,26 +1,33 @@
-<div
-  class="bg-banner bg-cover bg-fixed bg-center h-80 md:h-96 flex justify-center items-center"></div>
-<div class="container mx-auto mt-5 flex flex-wrap">
-  <div class="w-full md:w-3/5 lg:w-9/12 order-2 md:order-1">
-    <router-outlet />
-  </div>
-  <div class="w-full md:w-2/5 lg:w-3/12 flex flex-col flex-wrap order-1 md:order-2">
-    <form [formGroup]="form" class="w-full flex" (ngSubmit)="submit()">
-      <div class="w-8/12 mx-2">
-        <app-input
-          [showErrorMsg]="false"
+<div class="container mx-auto px-4 py-6">
+  <div class="flex flex-col lg:flex-row gap-6">
+    <!-- 主要內容區 -->
+    <main class="w-full lg:w-3/4 order-2 lg:order-1">
+      <router-outlet />
+    </main>
+
+    <!-- 側邊欄 -->
+    <aside class="w-full lg:w-1/4 order-1 lg:order-2 flex flex-col gap-4">
+      <!-- 搜尋欄 -->
+      <form
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        class="flex items-center gap-2 rounded-xl border border-base-content/10 bg-base-200/50 p-2">
+        <input
           type="search"
-          class="w-full"
-          placeholder="搜尋關鍵字"
-          inputmode="search"
-          formControlName="keyword" />
-      </div>
-      <button class="btn btn-primary w-4/12">搜尋</button>
-    </form>
-    <div class="mt-5 w-full">
+          formControlName="keyword"
+          placeholder="搜尋文章..."
+          class="flex-1 min-w-0 bg-transparent border-0 outline-none text-sm font-mono text-base-content placeholder:text-base-content/30 px-2 py-1.5" />
+        <button
+          type="submit"
+          class="shrink-0 px-3 py-1.5 rounded-lg bg-primary/15 text-primary text-xs font-mono font-medium hover:bg-primary/25 transition-colors duration-200">
+          搜尋
+        </button>
+      </form>
+
+      <!-- 分類 & 標籤 -->
       <app-article-category />
       <app-article-label />
-    </div>
+    </aside>
   </div>
 </div>
 <app-footer />

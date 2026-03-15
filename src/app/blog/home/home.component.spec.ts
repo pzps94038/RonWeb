@@ -3,44 +3,46 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
-import { catchError, of, switchMap, throwError, Observable } from 'rxjs';
-import { GetArticleResponse } from 'src/app/shared/api/article/article.model';
-import { ReturnCode } from 'src/app/shared/api/shared/shared.model';
+import { of, throwError, Observable } from 'rxjs';
 import { ArticleComponent } from '../article/article.component';
 import { CategoryComponent } from '../category/category.component';
 import { LabelComponent } from '../label/label.component';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  ParamMap,
-  convertToParamMap,
-} from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { StaticContentService, PostIndexItem } from 'src/app/shared/service/static-content.service';
 
-describe('HomeComponent', () => {
+/**
+ * 產生假文章索引資料
+ * @param count - 筆數
+ * @returns 假文章陣列
+ */
+function createFakeArticles(count: number): PostIndexItem[] {
+  return Array.from({ length: count }, (_, i) => ({
+    slug: `2024-01-01-article-${i + 1}`,
+    articleTitle: `title${i + 1}`,
+    categoryId: 1,
+    categoryName: 'categoryName',
+    labels: [{ labelId: 1, labelName: '標籤1' }],
+    viewCount: 0,
+    createDate: '2023-05-08T13:22:00.124Z',
+    previewContent: 'previewContent',
+    flag: 'Y',
+  }));
+}
+
+describe('HomeComponent - 首頁元件', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         HomeComponent,
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([
-          {
-            path: 'blog/home',
-            component: HomeComponent,
-          },
-          {
-            path: 'blog/article/:id',
-            component: ArticleComponent,
-          },
-          {
-            path: 'blog/category/:id',
-            component: CategoryComponent,
-          },
-          {
-            path: 'blog/label/:id',
-            component: LabelComponent,
-          },
+          { path: 'blog', component: HomeComponent },
+          { path: 'blog/article/:slug', component: ArticleComponent },
+          { path: 'blog/category/:id', component: CategoryComponent },
+          { path: 'blog/label/:id', component: LabelComponent },
         ]),
       ],
     });
@@ -49,147 +51,74 @@ describe('HomeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('應建立元件', () => {
     expect(component).toBeTruthy();
   });
 
-  it('測試初始化', fakeAsync(() => {
-    const fake = {
-      returnCode: '00',
-      returnMessage: 'success',
-      data: {
-        total: 1,
-        articles: [
-          {
-            articleId: 1,
-            articleTitle: 'title',
-            previewContent: 'previewContent',
-            categoryId: 1,
-            categoryName: 'categoryName',
-            labels: [
-              {
-                labelId: 1,
-                labelName: '標籤1',
-                createDate: '2023-05-08T13:22:00.124Z',
-              },
-            ],
-            viewCount: 0,
-            createDate: '2023-05-08T13:22:00.124Z',
-          },
-        ],
-      },
-    } as GetArticleResponse;
-    spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(of(fake) as never);
-    component.ngOnInit();
+  it('取得文章列表成功', fakeAsync(() => {
+    const fakeItems = createFakeArticles(3);
+    spyOn(component.contentSrv, 'getArticles').and.returnValue(of({ total: 3, items: fakeItems }));
+    component.getArticles(1);
     tick();
-    expect(component.total()).toBe(fake.data.total);
-    expect(component.articles()).toBe(fake.data.articles);
+    expect(component.total()).toBe(3);
+    expect(component.articles().length).toBe(3);
+    expect(component.isLoading()).toBe(false);
   }));
 
-  it('測試取得文章', fakeAsync(() => {
-    const fake = {
-      returnCode: ReturnCode.Success,
-      returnMessage: 'success',
-      data: {
-        total: 10,
-        articles: [
-          {
-            articleId: 2,
-            articleTitle: 'title',
-            previewContent: 'previewContent',
-            categoryId: 1,
-            categoryName: 'categoryName',
-            labels: [
-              {
-                labelId: 1,
-                labelName: '標籤1',
-                createDate: '2023-05-08T13:22:00.124Z',
-              },
-            ],
-            viewCount: 0,
-            createDate: '2023-05-08T13:22:00.124Z',
-          },
-        ],
-      },
-    } as GetArticleResponse;
-    spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(of(fake) as never);
-    component.getArticle();
-    tick();
-    expect(component.total()).toBe(fake.data.total);
-    expect(component.articles()).toBe(fake.data.articles);
-  }));
-
-  it('測試取得文章API有錯誤', fakeAsync(() => {
-    const mask = {
-      returnCode: ReturnCode.Fail,
-      returnMessage: 'error',
-    } as unknown as GetArticleResponse;
-    spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(of(mask) as never);
-    component.getArticle();
+  it('取得文章列表失敗', fakeAsync(() => {
+    spyOn(component.contentSrv, 'getArticles').and.returnValue(
+      throwError(() => new Error('Error')),
+    );
+    component.getArticles(1);
     tick();
     expect(component.isError()).toBe(true);
+    expect(component.isLoading()).toBe(false);
   }));
 
-  it('測試取得文章有異常錯誤', fakeAsync(() => {
-    const error = new Error('Test error');
-    const errorObservable = throwError(() => error);
-    spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(errorObservable as never);
-    component.getArticle();
-    expect(component.isError()).toBe(true);
-  }));
-
-  it('測試轉址到文章', () => {
+  it('導向文章詳情頁', () => {
     spyOn(component.router, 'navigateByUrl');
-    const id = 1;
-    component.showMore(id);
-    expect(component.router.navigateByUrl).toHaveBeenCalledWith(`/blog/article/${id}`);
+    component.showMore('2024-01-01-test-article');
+    expect(component.router.navigateByUrl).toHaveBeenCalledWith(
+      '/blog/article/2024-01-01-test-article',
+    );
   });
 
-  it('測試轉址到類別', () => {
+  it('導向分類頁', () => {
     spyOn(component.router, 'navigateByUrl');
-    const categoryId = 1;
-    const categoryName = 'categoryName';
-    component.navigateCategory({ categoryId, categoryName });
-    expect(component.router.navigateByUrl).toHaveBeenCalledWith(`/blog/category/${categoryId}`);
+    component.navigateCategory({ categoryId: 2, categoryName: '後端' });
+    expect(component.router.navigateByUrl).toHaveBeenCalledWith('/blog/category/2');
   });
 
-  it('測試轉址到標籤', () => {
+  it('導向標籤頁', () => {
     spyOn(component.router, 'navigateByUrl');
-    const labelId = 1;
-    const labelName = 'labelName';
-    const createDate = '2023-05-08T13:22:00.124Z';
-    component.navigateLabel({ labelId, labelName, createDate });
-    expect(component.router.navigateByUrl).toHaveBeenCalledWith(`/blog/label/${labelId}`);
+    component.navigateLabel({ labelId: 3 });
+    expect(component.router.navigateByUrl).toHaveBeenCalledWith('/blog/label/3');
   });
 
-  it('測試轉址', () => {
-    const page = 2;
+  it('分頁切換', () => {
     spyOn(component.router, 'navigate');
-    component.paginationChange(page);
-    expect(component.router.navigate).toHaveBeenCalledWith(['/blog/home'], {
-      queryParams: {
-        page,
-      },
+    component.paginationChange(2);
+    expect(component.router.navigate).toHaveBeenCalledWith(['/blog'], {
+      queryParams: { page: 2 },
     });
   });
 });
 
-describe('測試初始化可選頁面網址', () => {
+describe('HomeComponent - 初始化帶頁碼參數', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
-  const fakePage = '13';
+  const fakePage = '5';
   const queryParamMap = of({
     get: (key: string) => fakePage,
   }) as Observable<ParamMap>;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HomeComponent, HttpClientTestingModule],
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: {
-            queryParamMap,
-          } as ActivatedRoute,
+          useValue: { queryParamMap } as ActivatedRoute,
         },
       ],
     });
@@ -198,40 +127,28 @@ describe('測試初始化可選頁面網址', () => {
     fixture.detectChanges();
   });
 
-  it('測試初始化可選頁面網址', fakeAsync(() => {
-    const fake = {
-      returnCode: '00',
-      returnMessage: 'success',
-      data: {
-        total: 0,
-        articles: [],
-      },
-    } as GetArticleResponse;
-    spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(of(fake) as never);
+  it('正確解析頁碼參數', fakeAsync(() => {
+    spyOn(component.contentSrv, 'getArticles').and.returnValue(of({ total: 0, items: [] }));
     component.ngOnInit();
     tick();
-    expect(component.total()).toBe(fake.data.total);
-    expect(component.articles()).toBe(fake.data.articles);
-    expect(component.page()).toBe(parseInt(fakePage));
+    expect(component.page()).toBe(5);
   }));
 });
 
-describe('測試初始化可選頁面轉型失敗網址', () => {
+describe('HomeComponent - 無效頁碼參數', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
-  const fakePage = 'NAN';
   const queryParamMap = of({
-    get: (key: string) => fakePage,
+    get: (key: string) => 'NAN',
   }) as Observable<ParamMap>;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HomeComponent, HttpClientTestingModule],
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: {
-            queryParamMap,
-          } as ActivatedRoute,
+          useValue: { queryParamMap } as ActivatedRoute,
         },
       ],
     });
@@ -240,20 +157,10 @@ describe('測試初始化可選頁面轉型失敗網址', () => {
     fixture.detectChanges();
   });
 
-  it('測試初始化可選頁面轉型失敗網址', fakeAsync(() => {
-    const fake = {
-      returnCode: '00',
-      returnMessage: 'success',
-      data: {
-        total: 0,
-        articles: [],
-      },
-    } as GetArticleResponse;
-    spyOn(component.articleSrv, 'getArticle' as never).and.returnValue(of(fake) as never);
+  it('無效頁碼回退為第1頁', fakeAsync(() => {
+    spyOn(component.contentSrv, 'getArticles').and.returnValue(of({ total: 0, items: [] }));
     component.ngOnInit();
     tick();
-    expect(component.total()).toBe(fake.data.total);
-    expect(component.articles()).toBe(fake.data.articles);
     expect(component.page()).toBe(1);
   }));
 });

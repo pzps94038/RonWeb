@@ -9,7 +9,7 @@ import { PaginationComponent } from 'src/app/shared/component/pagination/paginat
 import { DayJsPipe } from 'src/app/shared/pipe/day-js.pipe';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, filter, switchMap } from 'rxjs';
-import { Articles } from 'src/app/shared/api/article/article.model';
+import { Articles } from 'src/app/shared/api/admin-article/admin-article.model';
 import { SwalService, SwalIcon } from 'src/app/shared/service/swal.service';
 import { ApiService } from 'src/app/shared/service/api.service';
 import { InputComponent } from 'src/app/shared/component/form/input/input.component';

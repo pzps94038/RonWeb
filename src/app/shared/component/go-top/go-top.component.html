@@ -1,5 +1,14 @@
-<div
-  class="w-14 h-14 bg-base-content rounded-full flex justify-center items-center text-base-100 text-2xl cursor-pointer z-50 border-2 border-solid border-base-content"
-  (click)="goTop()">
-  <ng-icon name="heroChevronUp" class="animate__bounceIn" />
-</div>
+<button
+  class="group w-10 h-10 rounded-xl bg-base-300/80 backdrop-blur-sm border border-base-content/10 flex justify-center items-center cursor-pointer hover:bg-primary/20 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-0.5"
+  (click)="goTop()"
+  aria-label="回到頂部">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-4 w-4 text-base-content/50 group-hover:text-primary transition-colors"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    stroke-width="2.5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+  </svg>
+</button>

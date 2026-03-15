@@ -1,29 +1,29 @@
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ArticleCategoryService } from 'src/app/shared/api/article-category/article-category.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, finalize } from 'rxjs';
+import { finalize } from 'rxjs';
 import { ErrorComponent } from 'src/app/shared/component/error/error.component';
-import { ArticleCategorys } from 'src/app/shared/api/article-category/article-category.model';
+import { CategoryItem } from 'src/app/shared/data/posts-index';
 import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroFolder, heroMinus, heroPlus } from '@ng-icons/heroicons/outline';
-import { ApiService } from 'src/app/shared/service/api.service';
-import { FormsModule } from '@angular/forms';
+import { heroFolder } from '@ng-icons/heroicons/outline';
+import { StaticContentService } from 'src/app/shared/service/static-content.service';
 
+/**
+ * 文章分類側邊欄元件
+ * 從靜態 JSON 讀取分類列表並顯示。
+ */
 @Component({
   selector: 'app-article-category',
   standalone: true,
-  imports: [CommonModule, ErrorComponent, RouterLink, NgIconComponent, FormsModule],
-  providers: [provideIcons({ heroFolder, heroPlus, heroMinus })],
+  imports: [CommonModule, ErrorComponent, RouterLink, NgIconComponent],
+  providers: [provideIcons({ heroFolder })],
   templateUrl: './article-category.component.html',
   styleUrls: ['./article-category.component.scss'],
 })
 export class ArticleCategoryComponent implements OnInit {
-  open = signal(true);
-  articleCategorySrv = inject(ArticleCategoryService);
-  apiSrv = inject(ApiService);
-  categorys = signal<ArticleCategorys>([]);
+  contentSrv = inject(StaticContentService);
+  categorys = signal<CategoryItem[]>([]);
   isLoading = signal(false);
   isError = signal(false);
   private _destroyRef = inject(DestroyRef);
@@ -32,25 +32,21 @@ export class ArticleCategoryComponent implements OnInit {
     this.getArticleCategory();
   }
 
+  /**
+   * 取得文章分類
+   */
   getArticleCategory() {
     this.isLoading.set(true);
     this.isError.set(false);
-    this.articleCategorySrv
-      .getArticleCategory()
+    this.contentSrv
+      .getCategories()
       .pipe(
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe({
-        next: res => {
-          if (this.apiSrv.ifSuccess(res, false)) {
-            const {
-              data: { categorys },
-            } = res;
-            this.categorys.set(categorys);
-          } else {
-            this.isError.set(true);
-          }
+        next: categories => {
+          this.categorys.set(categories);
         },
         error: () => {
           this.isError.set(true);

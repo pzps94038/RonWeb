@@ -19,4 +19,8 @@ describe('SkillsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('應包含五個技能分類', () => {
+    expect(component.skillCategories.length).toBe(5);
+  });
 });
