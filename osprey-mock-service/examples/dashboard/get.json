@@ -1,0 +1,136 @@
+{
+  "returnCode": "00",
+  "returnMessage": "取得資料成功",
+  "data": {
+    "totalArticles": 42,
+    "totalCategories": 8,
+    "totalLabels": 15,
+    "totalViewCount": 12580,
+    "topViewedArticles": [
+      {
+        "articleId": 1,
+        "articleTitle": "Angular 17 新功能介紹",
+        "categoryName": "前端開發",
+        "viewCount": 1520,
+        "createDate": "2024-01-15T10:30:00.000Z"
+      },
+      {
+        "articleId": 2,
+        "articleTitle": "C# .NET 8 效能優化",
+        "categoryName": "後端開發",
+        "viewCount": 1280,
+        "createDate": "2024-02-20T08:00:00.000Z"
+      },
+      {
+        "articleId": 3,
+        "articleTitle": "Docker 容器化部署實戰",
+        "categoryName": "DevOps",
+        "viewCount": 980,
+        "createDate": "2024-03-10T14:00:00.000Z"
+      },
+      {
+        "articleId": 4,
+        "articleTitle": "MySQL 查詢效能調校",
+        "categoryName": "資料庫",
+        "viewCount": 870,
+        "createDate": "2024-01-28T09:15:00.000Z"
+      },
+      {
+        "articleId": 5,
+        "articleTitle": "TailwindCSS 實用技巧",
+        "categoryName": "前端開發",
+        "viewCount": 750,
+        "createDate": "2024-04-05T11:00:00.000Z"
+      }
+    ],
+    "monthlyArticleTrend": [
+      {
+        "year": 2025,
+        "month": 4,
+        "count": 3
+      },
+      {
+        "year": 2025,
+        "month": 5,
+        "count": 5
+      },
+      {
+        "year": 2025,
+        "month": 6,
+        "count": 2
+      },
+      {
+        "year": 2025,
+        "month": 7,
+        "count": 4
+      },
+      {
+        "year": 2025,
+        "month": 8,
+        "count": 6
+      },
+      {
+        "year": 2025,
+        "month": 9,
+        "count": 3
+      },
+      {
+        "year": 2025,
+        "month": 10,
+        "count": 4
+      },
+      {
+        "year": 2025,
+        "month": 11,
+        "count": 2
+      },
+      {
+        "year": 2025,
+        "month": 12,
+        "count": 5
+      },
+      {
+        "year": 2026,
+        "month": 1,
+        "count": 3
+      },
+      {
+        "year": 2026,
+        "month": 2,
+        "count": 4
+      },
+      {
+        "year": 2026,
+        "month": 3,
+        "count": 1
+      }
+    ],
+    "categoryDistribution": [
+      {
+        "categoryId": 1,
+        "categoryName": "前端開發",
+        "articleCount": 15
+      },
+      {
+        "categoryId": 2,
+        "categoryName": "後端開發",
+        "articleCount": 12
+      },
+      {
+        "categoryId": 3,
+        "categoryName": "DevOps",
+        "articleCount": 6
+      },
+      {
+        "categoryId": 4,
+        "categoryName": "資料庫",
+        "articleCount": 5
+      },
+      {
+        "categoryId": 5,
+        "categoryName": "其他",
+        "articleCount": 4
+      }
+    ]
+  }
+}

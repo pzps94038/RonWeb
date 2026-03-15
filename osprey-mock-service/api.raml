@@ -421,6 +421,20 @@ version: 0.1
         body:
           application/json:
             example: !include examples/admin-code/delete.json
+/api/dashboard:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/dashboard/get.json
+/api/projectExperience:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/project-experience/get.json
 /api/adminProjectExperience/{id}:
   get:
     uriParameters:
