@@ -164,8 +164,10 @@ function build() {
     }
     if (data.flag !== 'Y') continue;
 
-    // 複製 .md 到 assets（以 slug 為檔名）
-    fs.copyFileSync(filePath, path.join(ASSETS_POSTS_DIR, slug + '.md'));
+    // 將 .md 寫入 assets，frontmatter 重新序列化為標準雙引號 JSON
+    // 確保前端 JSON.parse 可正確解析（原始檔可能使用單引號 JSON）
+    const normalizedMd = '---\n' + JSON.stringify(data, null, 2) + '\n---\n' + content;
+    fs.writeFileSync(path.join(ASSETS_POSTS_DIR, slug + '.md'), normalizedMd, 'utf-8');
 
     // 從 Markdown body 自動生成純文字摘要（取前 200 字）
     const previewContent = extractPreview(content, 200);

@@ -32,12 +32,9 @@ describe('ArticleComponent - 文章詳情元件', () => {
       articleTitle: '測試文章',
       categoryId: 1,
       categoryName: '前端',
-      previewContent: '預覽',
-      flag: 'Y',
       labels: [],
       content: '<h2>標題</h2><p>內容</p>',
       references: [],
-      viewCount: 10,
       createDate: '2024-01-01T00:00:00.000Z',
     };
     spyOn(component.contentSrv, 'getArticleBySlug').and.returnValue(of(fakeArticle));
@@ -104,12 +101,9 @@ describe('ArticleComponent - 帶路由參數初始化', () => {
       articleTitle: '文章42',
       categoryId: 1,
       categoryName: '前端',
-      previewContent: '預覽',
-      flag: 'Y',
       labels: [],
       content: '<p>42</p>',
       references: [],
-      viewCount: 0,
       createDate: '2024-01-01',
     };
     spyOn(component.contentSrv, 'getArticleBySlug').and.returnValue(of(fakeArticle));

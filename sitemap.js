@@ -1,141 +1,136 @@
-const { createWriteStream, writeFile, mkdirSync, existsSync } = require('fs');
-const { resolve, dirname } = require('path');
-const axios = require('axios');
-const { createGzip } = require('zlib');
+/**
+ * 靜態 Sitemap 產生腳本
+ * 從 content/posts/*.md 的 frontmatter 讀取文章、分類、標籤資訊，
+ * 產生 sitemap XML 檔案至 dist/RonWeb/browser/。
+ */
+const { createWriteStream, readdirSync, readFileSync, existsSync, mkdirSync } = require('fs');
+const { resolve, join, basename, dirname } = require('path');
+const matter = require('gray-matter');
 const { SitemapAndIndexStream, SitemapStream } = require('sitemap');
 
+const POSTS_DIR = join(__dirname, 'content', 'posts');
+const OUTPUT_DIR = './dist/RonWeb/browser';
+const hostName = 'https://pzps94038.github.io/RonWeb';
 const lastmod = new Date();
 
-let urls = [
-  { url: '/login', changefreq: 'monthly', priority: 0.8, lastmod },
-  { url: '/about-me', changefreq: 'weekly', priority: 1.0, lastmod },
-  { url: '/blog', changefreq: 'daily', priority: 1.0, lastmod },
-  { url: '/notFound', changefreq: 'monthly', priority: 0.5, lastmod },
-];
-
-const hostName = 'https://ron-web.zeabur.app';
-
-const apiPath = 'https://ron-web-api.zeabur.app/api';
-
-(async () => {
-  const [articles, categorys, labels] = await Promise.all([
-    axios(`${apiPath}/siteMap/article`)
-      .then(({ data }) => data)
-      .then(({ data }) => data ?? [])
-      .then(array => {
-        const path = array.map(({ id }) => ({
-          url: `/blog/article/${id}`,
-          changefreq: 'daily',
-          priority: 0.9,
-          lastmod,
-        }));
-        const totalItems = array.length;
-        const itemsPerPage = 10; // 每頁筆數
-        const totalPages = Math.ceil(totalItems / itemsPerPage);
-        for (let i = 1; i <= totalPages; i++) {
-          path.push({
-            url: `/blog?page=${i}`,
-            changefreq: 'daily',
-            priority: 0.9,
-            lastmod,
-          });
-        }
-        return path;
-      })
-      .catch(error => {
-        // 處理錯誤
-        console.error(error);
-        return [];
-      }),
-    axios(`${apiPath}/siteMap/category`)
-      .then(({ data }) => data)
-      .then(({ data }) => data ?? [])
-      .then(array =>
-        array.map(({ id }) => ({
-          url: `/blog/category/${id}`,
-          changefreq: 'weekly',
-          priority: 0.8,
-          lastmod,
-        })),
-      )
-      .catch(error => {
-        // 處理錯誤
-        console.error(error);
-        return [];
-      }),
-    axios(`${apiPath}/siteMap/label`)
-      .then(({ data }) => data)
-      .then(({ data }) => data ?? [])
-      .then(array =>
-        array.map(({ id }) => ({
-          url: `/blog/label/${id}`,
-          changefreq: 'weekly',
-          priority: 0.8,
-          lastmod,
-        })),
-      )
-      .catch(error => {
-        // 處理錯誤
-        console.error(error);
-        return [];
-      }),
-  ]);
-  urls = [...urls, ...articles, ...categorys, ...labels];
-  // 每幾個網址分割成一個 sitemap 檔案
-  const urlsPerSitemap = 20000;
-  // 計算 sitemap 檔案數量
-  let sitemapCount = 0;
-  // 建立 SitemapAndIndexStream
-  const sms = new SitemapAndIndexStream({
-    limit: urlsPerSitemap,
-    getSitemapStream: i => {
-      const sitemapStream = new SitemapStream({ hostname: hostName });
-      const path = `./dist/RonWeb/browser/sitemap-${i + 1}.xml`;
-      checkDir(path);
-      // 每次產生新的 sitemap 檔案時增加計數
-      sitemapCount = sitemapCount + 1;
-      const ws = sitemapStream.pipe(createWriteStream(resolve(path)));
-
-      return [new URL(`sitemap-${i + 1}.xml`, `${hostName}/`).toString(), sitemapStream, ws];
-    },
-  });
-
-  // 添加網址資訊到 SitemapAndIndexStream
-  urls.forEach(url => {
-    sms.write(url);
-  });
-  // // 產生prerender route map
-  // const routes = urls
-  //   .map(({ url }) => url)
-  //   .filter(url => !url.includes('?'))
-  //   .join('\r\n');
-  // writeFile('routes.txt', '\r\n' + routes, err => {
-  //   if (err) {
-  //     console.error(err);
-  //   }
-  // });
-
-  // 結束 SitemapAndIndexStream 並建立 sitemap-index 檔案
-  sms.end();
-  const path = './dist/RonWeb/browser/sitemap-index.xml';
-  checkDir(path);
-  sms.pipe(createWriteStream(resolve(path)));
-  // 等待 SitemapAndIndexStream 結束事件
-  sms.on('end', () => {
-    console.log(`產生了 ${sitemapCount} 個 sitemap 檔案。`);
-  });
-})();
-
+/**
+ * 確保目錄存在，若不存在則建立
+ * @param {string} targetPath - 檔案路徑
+ */
 const checkDir = targetPath => {
   const targetDir = dirname(targetPath);
-  // 使用 fs.existsSync() 檢查目標路徑的資料夾是否存在
   if (!existsSync(targetDir)) {
-    try {
-      // 使用 fs.mkdirSync() 建立資料夾
-      mkdirSync(targetDir, { recursive: true });
-      console.log('資料夾已建立:', targetDir);
-    } catch (err) {
-      console.error('無法建立資料夾:', err);
-    }
+    mkdirSync(targetDir, { recursive: true });
+    console.log('資料夾已建立:', targetDir);
   }
 };
+
+/**
+ * 從 content/posts/*.md 讀取所有已發佈文章的 frontmatter
+ * @returns {{ slugs: string[], categoryIds: Set<number>, labelIds: Set<number> }}
+ */
+function readPosts() {
+  const files = readdirSync(POSTS_DIR).filter(f => f.endsWith('.md'));
+  const slugs = [];
+  const categoryIds = new Set();
+  const labelIds = new Set();
+
+  for (const file of files) {
+    const raw = readFileSync(join(POSTS_DIR, file), 'utf-8');
+    const { data } = matter(raw, {
+      engines: { json: s => JSON.parse(s) },
+    });
+    if (!data || !data.title || data.flag !== 'Y') continue;
+
+    const slug = basename(file, '.md');
+    slugs.push(slug);
+
+    if (data.categoryId != null) {
+      categoryIds.add(data.categoryId);
+    }
+    if (Array.isArray(data.labels)) {
+      for (const l of data.labels) {
+        if (l.labelId != null) {
+          labelIds.add(l.labelId);
+        }
+      }
+    }
+  }
+
+  return { slugs, categoryIds, labelIds };
+}
+
+// 主流程
+const { slugs, categoryIds, labelIds } = readPosts();
+
+// 靜態頁面
+let urls = [
+  { url: '/about-me', changefreq: 'weekly', priority: 1.0, lastmod },
+  { url: '/blog', changefreq: 'daily', priority: 1.0, lastmod },
+];
+
+// 文章頁面
+for (const slug of slugs) {
+  urls.push({
+    url: `/blog/article/${slug}`,
+    changefreq: 'daily',
+    priority: 0.9,
+    lastmod,
+  });
+}
+
+// 文章分頁
+const itemsPerPage = 10;
+const totalPages = Math.ceil(slugs.length / itemsPerPage);
+for (let i = 1; i <= totalPages; i++) {
+  urls.push({
+    url: `/blog?page=${i}`,
+    changefreq: 'daily',
+    priority: 0.9,
+    lastmod,
+  });
+}
+
+// 分類頁面
+for (const id of categoryIds) {
+  urls.push({
+    url: `/blog/category/${id}`,
+    changefreq: 'weekly',
+    priority: 0.8,
+    lastmod,
+  });
+}
+
+// 標籤頁面
+for (const id of labelIds) {
+  urls.push({
+    url: `/blog/label/${id}`,
+    changefreq: 'weekly',
+    priority: 0.8,
+    lastmod,
+  });
+}
+
+// 產生 Sitemap
+let sitemapCount = 0;
+const sms = new SitemapAndIndexStream({
+  limit: 20000,
+  getSitemapStream: i => {
+    const sitemapStream = new SitemapStream({ hostname: hostName });
+    const path = `${OUTPUT_DIR}/sitemap-${i + 1}.xml`;
+    checkDir(path);
+    sitemapCount++;
+    const ws = sitemapStream.pipe(createWriteStream(resolve(path)));
+    return [new URL(`sitemap-${i + 1}.xml`, `${hostName}/`).toString(), sitemapStream, ws];
+  },
+});
+
+urls.forEach(url => sms.write(url));
+sms.end();
+
+const indexPath = `${OUTPUT_DIR}/sitemap-index.xml`;
+checkDir(indexPath);
+sms.pipe(createWriteStream(resolve(indexPath)));
+sms.on('end', () => {
+  console.log(`產生了 ${sitemapCount} 個 sitemap 檔案，共 ${urls.length} 個網址。`);
+});

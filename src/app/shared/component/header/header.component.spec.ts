@@ -53,11 +53,11 @@ describe('HeaderComponent - 導航列元件', () => {
     expect(component.mobileMenuOpen()).toBe(false);
   });
 
-  it('toggleTheme 切換主題', () => {
-    const spy = spyOn(component.themeSrv, 'toggleTheme');
-    const currentDarkMode = component.themeSrv.darkMode();
-    component.toggleTheme();
-    expect(spy).toHaveBeenCalledWith(!currentDarkMode);
+  it('toggleMobileMenu 可重複切換', () => {
+    component.toggleMobileMenu();
+    expect(component.mobileMenuOpen()).toBe(true);
+    component.toggleMobileMenu();
+    expect(component.mobileMenuOpen()).toBe(false);
   });
 
   it('NavigationStart 時關閉行動選單', fakeAsync(() => {
