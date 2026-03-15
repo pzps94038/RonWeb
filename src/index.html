@@ -25,18 +25,24 @@
     <title>Ron Web - 探索學習的無限可能，分享技術的無盡價值</title>
     <link rel="manifest" href="manifest.webmanifest" />
     <meta name="theme-color" content="#18181b" />
+    <script>
+      // GitHub Pages SPA 重導向（參考 github.com/rafgraph/spa-github-pages）
+      // 從 404.html 傳來的 query string 還原為正確的前端路由路徑
+      (function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&');
+            })
+            .join('?');
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+        }
+      })(window.location);
+    </script>
   </head>
   <body>
-    <script>
-      // GitHub Pages SPA 重導向：從 404.html 存入的路徑還原 Angular 路由
-      (function () {
-        var redirect = sessionStorage.redirect;
-        delete sessionStorage.redirect;
-        if (redirect && redirect !== '/') {
-          history.replaceState(null, null, './' + redirect);
-        }
-      })();
-    </script>
     <app-root></app-root>
     <noscript>Please enable JavaScript to continue using this application.</noscript>
   </body>

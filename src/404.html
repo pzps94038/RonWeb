@@ -9,17 +9,10 @@
     <meta property="og:site_name" content="Ron Web" />
     <title>Ron Web - 探索學習的無限可能，分享技術的無盡價值</title>
     <script>
-      // GitHub Pages SPA 重導向
-      // 將當前路徑與查詢參數存入 sessionStorage，再導回首頁由 Angular 接管路由
+      // GitHub Pages SPA 重導向（參考 github.com/rafgraph/spa-github-pages）
+      // 將當前路徑編碼後透過 query string 傳回首頁，由 index.html 的腳本還原路由
       var pathSegmentsToKeep = 1; // '/RonWeb' 佔一段
       var l = window.location;
-      sessionStorage.redirect =
-        l.pathname
-          .split('/')
-          .slice(pathSegmentsToKeep + 1)
-          .join('/') +
-        l.search +
-        l.hash;
       l.replace(
         l.protocol +
           '//' +
@@ -29,7 +22,10 @@
             .split('/')
             .slice(0, pathSegmentsToKeep + 1)
             .join('/') +
-          '/',
+          '/?' +
+          l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('&') +
+          (l.search ? '&' + l.search.slice(1) : '') +
+          l.hash,
       );
     </script>
   </head>
