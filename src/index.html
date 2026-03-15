@@ -27,6 +27,16 @@
     <meta name="theme-color" content="#18181b" />
   </head>
   <body>
+    <script>
+      // GitHub Pages SPA 重導向：從 404.html 存入的路徑還原 Angular 路由
+      (function () {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== '/') {
+          history.replaceState(null, null, './' + redirect);
+        }
+      })();
+    </script>
     <app-root></app-root>
     <noscript>Please enable JavaScript to continue using this application.</noscript>
   </body>
