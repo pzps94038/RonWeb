@@ -31,10 +31,8 @@ describe('SearchComponent - 搜尋結果元件', () => {
         categoryId: 1,
         categoryName: '前端',
         labels: [],
-        viewCount: 0,
         createDate: '2024-01-01',
         previewContent: '預覽',
-        flag: 'Y',
       },
     ];
     spyOn(component.contentSrv, 'searchArticles').and.returnValue(
