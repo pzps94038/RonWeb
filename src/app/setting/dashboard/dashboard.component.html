@@ -1,0 +1,81 @@
+@if (isLoading()) {
+<div class="flex justify-center items-center py-20">
+  <span class="loading loading-spinner loading-lg"></span>
+</div>
+} @else if (isError()) {
+<app-error />
+} @else {
+<!-- 統計卡片 -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 p-4">
+  <div class="stat bg-base-100 shadow rounded-box">
+    <div class="stat-title">文章總數</div>
+    <div class="stat-value text-primary">{{ dashboardData()?.totalArticles }}</div>
+  </div>
+  <div class="stat bg-base-100 shadow rounded-box">
+    <div class="stat-title">分類總數</div>
+    <div class="stat-value text-secondary">{{ dashboardData()?.totalCategories }}</div>
+  </div>
+  <div class="stat bg-base-100 shadow rounded-box">
+    <div class="stat-title">標籤總數</div>
+    <div class="stat-value text-accent">{{ dashboardData()?.totalLabels }}</div>
+  </div>
+  <div class="stat bg-base-100 shadow rounded-box">
+    <div class="stat-title">總瀏覽量</div>
+    <div class="stat-value text-info">{{ dashboardData()?.totalViewCount }}</div>
+  </div>
+</div>
+
+<!-- 圖表區域 -->
+@if (isBrowser) {
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 px-4">
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <h2 class="card-title">文章發佈趨勢</h2>
+      <canvas baseChart [type]="'line'" [data]="trendChartData" [options]="chartOptions"></canvas>
+    </div>
+  </div>
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <h2 class="card-title">分類分佈</h2>
+      <canvas
+        baseChart
+        [type]="'doughnut'"
+        [data]="categoryChartData"
+        [options]="doughnutOptions"></canvas>
+    </div>
+  </div>
+</div>
+}
+
+<!-- 熱門文章表格 -->
+<div class="card bg-base-100 shadow mx-4 mb-4">
+  <div class="card-body">
+    <h2 class="card-title">熱門文章 Top 10</h2>
+    <div class="overflow-x-auto">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>排名</th>
+            <th>標題</th>
+            <th>分類</th>
+            <th>瀏覽量</th>
+            <th>發佈日期</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (article of dashboardData()?.topViewedArticles; track article.articleId; let i =
+          $index) {
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ article.articleTitle }}</td>
+            <td>{{ article.categoryName }}</td>
+            <td>{{ article.viewCount }}</td>
+            <td>{{ article.createDate | date: 'yyyy/MM/dd' }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+}

@@ -1,5 +1,6 @@
 import { DeviceService } from './shared/service/device.service';
 import { ApplicationConfig, APP_INITIALIZER, importProvidersFrom, isDevMode } from '@angular/core';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.route';
@@ -37,6 +38,8 @@ export const appConfig: ApplicationConfig = {
       deps: [UserService, ThemeService, DeviceService],
       multi: true,
     },
+    // Chart.js 圖表
+    provideCharts(withDefaultRegisterables()),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
